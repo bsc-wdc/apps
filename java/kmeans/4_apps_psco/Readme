@@ -1,0 +1,29 @@
+This is the Readme for:
+KMeansDC
+
+[Name]: KMeansDC
+[Contact Person]: support-compss@bsc.es
+[Access Level]: private
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+KMeans using PSCOs with DataClay
+
+
+== Execution instructions ==
+Usage:
+
+== Execution Example ==
+
+== Build ==
+=== Option 1: Ant ===
+cd ~/workspace_java/kmeansPSCO/
+ant clean
+ant
+
+=== Option 2: Maven ===
+cd ~/workspace_java/kmeansPSCO/
+mvn clean package
+
