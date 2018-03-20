@@ -1,0 +1,53 @@
+This is the Readme for:
+Sparse LU factorization
+
+[Name]: Sparse LU
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+[Body]
+ == Description ==
+The Sparse LU application computes an LU matrix factorization on a sparse blocked matrix. The matrix size (number of blocks) and the block size are parameters of the application.
+
+As the algorithm progresses, the area of the matrix that is accessed is smaller; concretely, at each iteration, the 0th row and column of the current matrix are discarded. On the other hand, due to the sparseness of the matrix, some of its blocks might not be allocated and, therefore, no work is generated for them.
+
+When executed with COMPSs, Sparse LU produces several types of task with different granularity and numerous dependencies between them.
+
+
+== Versions ==
+There are three versions of Sparse LU, depending on the data types used to store the blocks.
+=== Version 1 ===
+''files'', where the matrix blocks are stored in files.
+=== Version 2 ===
+''objects'', where the matrix blocks are represented by objects.
+=== Version 3 ===
+''arrays'', where the matrix blocks are stored in arrays.
+
+
+== Execution instructions ==
+Usage:
+runcompss sparseLU.objects.SparseLU <MSIZE> <BSIZE>
+runcompss sparseLU.files.SparseLU <MSIZE> <BSIZE>
+runcompss sparseLU.arrays.SparseLU <MSIZE> <BSIZE>
+
+
+where:
+                 * - MSIZE: Number of blocks of the matrix
+		 * - BSIZE: Number of elements per block
+
+
+== Execution Example ==
+runcompss sparseLU.SparseLU 16 4
+
+
+== Build ==
+=== Option 1: Native java ===
+cd ~/workspace_java/sparseLU/; javac src/main/java/sparseLU/*.java
+cd src/main/java/; jar cf sparseLU.jar sparseLU/
+cd ../../../; mv src/main/java/sparseLU.jar jar/
+
+=== Option 2: Maven ===
+cd ~/workspace_java/sparseLU/
+mvn clean package
