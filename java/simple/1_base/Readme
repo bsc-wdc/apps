@@ -1,0 +1,37 @@
+This is the Readme for:
+Simple
+
+[Name]: Simple
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Example of a simple application with only one task.
+
+The application stores a counter value in a file, increments that counter in a task method (''increment'') and then prints the final value in the main program.
+
+
+== Execution instructions ==
+Usage:
+runcompss simple.Simple <counterValue>
+
+where:
+                 * - counterValue: Initial value of the counter to increase
+
+
+== Execution Example ==
+runcompss simple.Simple 1
+
+
+== Build ==
+=== Option 1: Native java ===
+cd ~/workspace_java/simple/; javac src/main/java/simple/*.java
+cd src/main/java/; jar cf simple.jar simple/
+cd ../../../; mv src/main/java/simple.jar jar/
+
+=== Option 2: Maven ===
+cd ~/workspace_java/simple/
+mvn clean package
