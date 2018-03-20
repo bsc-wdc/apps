@@ -1,0 +1,86 @@
+
+Dockerized dataClay instructions
+================================
+
+
+0. 'Docker' setup 
+-------------------
+
+ - "Up-to-date" Docker Engine: https://docs.docker.com/engine/installation/linux/ 
+ - "Up-to-date" Docker Compose. 
+	Option1: Get it from the official Docker website 
+	Option2: From the GitHub releases page: https://github.com/docker/compose/releases
+
+ - Add your user to docker group ('sudo' is not needed anymore)
+
+	sudo usermod -aG docker <username>
+	(you will need to logout and login again)
+
+ - The dataClay image (e.g. dataclay_java) obtained from dataClay guys and loaded this way: 
+
+	docker load -i dataclay_java
+
+
+
+1. Orchestration files
+----------------------
+
+[docker-compose.yml] 
+	Main file, intended to be used with docker-compose (based on standard `postgres` and `Java` images)
+
+	This orchestrating file uses some extra files for environment variables:
+
+		[PG.environment] For the `postgres` containers and parameters for the rest of containers.
+		[LM.environment] Used both by the LogicModule and the DataServices (to know about LogicModule).
+		[DS.environment] For DataService nodes. Certain values are hardcoded in the docker-compose file (node dependant).
+
+
+
+2. Init dataClay
+----------------
+
+Run initDC.sh. (some sleep times in the script are required for the correct orchestration).
+
+
+
+3. Details 
+----------
+
+By executing
+
+	docker-compose ps
+
+You can see dataClay ports mapped to high-valued ports in the localhost.
+Although by default these ports are picked randomly, we use static mapping for Logic Module
+in order to facilitate the configuration of the client.properties (required for client lib).
+
+In docker-compose.yml (below) localhost ports 11024 and 11034 are mapped to 1024 and 1034 LogicModule ports:
+
+    services:
+      logicmodule:
+        image: dataclay_java
+        ports:
+          - 11024:1024
+          - 11034:1034
+
+4. Logs & Debugging
+-------------------
+
+In order to print logs from any docker container you can use:
+	
+	docker-compose logs <container>
+
+In order to debug JVMs executing in the different docker containers of dataClay you can use statically defined ports with loopback address:
+
+	[LM]: 18000
+	[DS1]: 28000
+	[DS2]: 38000
+
+
+ANNEX. Other tools
+------------------
+
+	[bashDocker.sh]  Opens a bash terminal in the selected docker. This emulates a ssh connection.
+
+	[exportTexts.sh] Copies the indicated path (file or directory) into /tmp of DataService nodes.
+			 This makes all DS nodes to see same inputs (as if they were in MN with GPFS).

@@ -1,0 +1,83 @@
+version: '2'
+
+networks:
+  lm:
+  ds:  # Note that this is shared between all DS
+
+services:
+  lmpostgres:
+    image: postgres
+    env_file:
+      - ./PG.environment
+    networks:
+      - lm
+
+  logicmodule:
+    image: dataclay_java
+    ports:
+      - 11024:1024
+      - 11034:1034
+      # Debugging port
+      - 18000:8000
+    env_file:
+      - ./LM.environment
+      - ./PG.environment
+    environment:
+      - DATACLAY_ADMIN_USER=admin
+      - DATACLAY_ADMIN_PASSWORD=admin
+      - POSTGRES_HOST=lmpostgres
+    networks:
+      - lm
+      - ds
+    command: ["-Xdebug", "-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n", "logic.server.LogicModuleSrv"]
+
+  ds1postgres:
+    image: postgres
+    env_file:
+      - ./PG.environment
+    networks:
+      - ds
+
+  ds1java:
+    image: dataclay_java
+    ports:
+      - 2117
+      - 2127
+      # Debugging port
+      - 28000:8000
+    env_file:
+      - ./DS.environment
+      - ./PG.environment
+      - ./LM.environment
+    environment:
+      - DATASERVICE_NAME=DS1
+      - POSTGRES_HOST=ds1postgres
+    networks:
+      - ds
+    command: ["-Xdebug", "-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n", "dataservice.server.DataServiceSrv"]
+
+  ds2postgres:
+    image: postgres
+    env_file:
+      - ./PG.environment
+    networks:
+      - ds
+
+  ds2java:
+    image: dataclay_java
+    ports:
+      - 2117
+      - 2127
+      # Debugging port
+      - 38000:8000
+    env_file:
+      - ./DS.environment
+      - ./PG.environment
+      - ./LM.environment
+    environment:
+      - DATASERVICE_NAME=DS2
+      - POSTGRES_HOST=ds2postgres
+    networks:
+      - ds
+    command: ["-Xdebug", "-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n", "dataservice.server.DataServiceSrv"]
+
