@@ -1,0 +1,1317 @@
+
+<html>
+<head>
+<link rel="image_src" href="http://www.coderanch.com/templates/default/images/moosefly.gif" />
+<meta property="og:image" content="http://www.coderanch.com/templates/default/images/moosefly.gif"/>
+<meta property="og:url" content="http://www.coderanch.com/t/326804/java/java/make-Tar-java"/>
+<meta property="og:title" content="How to make a Tar in java (Java in General forum at JavaRanch)"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="-1" />
+        <link rel="alternate" type="application/rss+xml" title="JavaRanch: How to make a Tar in java" href="/forums/rss/topicPosts/326804" />
+    <meta name="description" content="Hallo expert people, i write a tar program under java but it did not work, can someone give a hint. Any Help will be appreciated. This Example should " />
+        <meta name="keywords" content="buffer,bufferedinputstream,byte,catch,class,continue,count,directory,exception,file" />
+
+<style type="text/css">@import url( /templates/default/styles/style.css?1339352897054 );</style>
+<style type="text/css">@import url( /templates/default/styles/en_US.css?1339352897054 );</style>
+
+    <style type="text/css">@import url( /templates/default/styles/SyntaxHighlighter.css?1339352897054 );</style>
+
+<title>How to make a Tar in java (Java in General forum at JavaRanch)</title>
+
+    <link rel="canonical" href="http://www.coderanch.com/t/326804/java/java/make-Tar-java" />
+    <link rel="alternate" media="handheld" href="http://www.coderanch.com/mobile/t/326804/java/java/make-Tar-java?foo=a" />
+<link rel="search" type="application/opensearchdescription+xml" href="http://www.coderanch.com/how-to/javaranch-saloon-os.xml" title="JavaRanch Saloon" />
+<link rel="search" type="application/opensearchdescription+xml" href="http://www.coderanch.com/how-to/javaranch-faq-os.xml" title="JavaRanch FAQ" />
+</head>
+
+<body class="en_US">
+
+    <div align="center" class="shngl">
+        <a href="/forums/banner/redirect/312" target="_blank"><img src="http://www.coderanch.com/intellij.png"  border="0" alt="IntelliJ Java IDE"  /></a>
+    </div>
+
+<table width="100%" border="0">
+    <tr>
+        <td>
+            <table cellspacing="0" cellpadding="0" width="100%" border="0">
+                <tr>
+                    <td align="center">
+
+                            <img src="http://www.coderanch.com/mooseImages/moosefly.gif"  vspace="1" border="0" alt="The moose likes Java in General and the fly likes How to make a Tar in java" title="" />
+                    </td>
+                    <td class="logo" valign="middle">
+                        A friendly place for programming greenhorns!
+                    </td>
+
+                    <td width="100%" align="center" valign="middle">
+                        <span class="boardtitle">Big Moose Saloon</span>
+                        <table cellspacing="0" cellpadding="2" border="0">
+                            <tr>
+                                <td valign="top" nowrap="nowrap" align="center">&nbsp;
+                                    <a id="search" class="mainmenu" href="/forums/search/filters/1"><b>Search</b></a>
+                                    | <a id="faq" class="mainmenu nonForumLink" href="http://www.coderanch.com/how-to/java/Java-FAQ"><b>Java FAQ</b></a>
+                                    | <a id="latest" class="mainmenu" href="/forums/recentTopics/list">Recent Topics</a>
+
+                                    <br />
+
+
+
+                                        <a id="login" class="mainmenu" href="/forums/user/login">Register / Login</a>
+                                        <br />
+
+                                    </td>
+                                </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+
+
+<script type="text/javascript" src="/templates/default/js/userLocalTime.js?1339352897054"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.2.3/jquery.min.js"></script>
+<script type="text/javascript" src="/templates/default/js/jquery.jeditable.pack.js?1339352897054"></script>
+<script type="text/javascript" src="/templates/default/js/post_show.js?1339352897054"></script>
+<script type="text/javascript" src="/templates/default/js/post.js?1339352897054"></script>
+<script type="text/javascript" src="/templates/default/js/pagination.js?1339352897054"></script>
+<script type="text/javascript" src="/templates/default/js/wz_tooltip.js"></script>
+<script type="text/javascript" src="/templates/default/js/social.js"></script>
+
+
+<script type="text/javascript">
+function showEmail(beforeAt, afterAt)
+{
+	return beforeAt + "@" + afterAt;
+}
+
+function addBookmark(relationType, relationId)
+{
+	var w = window.open('/forums/bookmarks/insert/' + relationType + '/' + relationId + '', 'bookmark_add', 'width=700, height=200, scrollbars=auto, resizable=true');
+	w.focus();
+}
+
+
+    function reportToModerationPrompt(postId) {
+        var reason = prompt("Reason for reporting this post:");
+
+        if (reason == null || reason == "") {
+            alert("Please specify a reason for reporting this post");
+            return false;
+        } else {
+            var link = document.getElementById("report" + postId);
+            link.href += "&reason=" + encodeURIComponent(reason);
+        }
+
+        return true;
+    }
+
+    var watchImage = "http://cache-www.coderanch.com/templates/default/images/watch_topic_start.gif";
+    var unwatchImage = "http://cache-www.coderanch.com/templates/default/images/stop_watching.gif";
+    var watchURL = "/forums/posts/watch/0/326804";
+    var unwatchURL = "/forums/posts/unwatch/0/326804";
+    var unwatchHandler = function() { turnOn=false; toggleWatch(); return false; };
+    var watchHandler = function() { turnOn=true; toggleWatch(); return false; };
+    var turnOn, remove;
+
+    function toggleWatch () {
+        $.ajax({
+            url: turnOn ? watchURL : unwatchURL,
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                //$("#messages").html(data.message);
+                if (turnOn) {
+                    $(".toggleWatchImage")[0].src = unwatchImage;
+                    $(".toggleWatchImage")[1].src = unwatchImage;
+                    $(".toggleWatchLink")[0].href = unwatchURL;
+                    $(".toggleWatchLink")[1].href = unwatchURL;
+                    $(".toggleWatchLink")[0].onclick = unwatchHandler;
+                    $(".toggleWatchLink")[1].onclick = unwatchHandler;
+                } else {
+                    if (remove) {
+                        // for unwatching locked topics
+                        $(".toggleWatchImage")[0].style.visibility = "hidden";
+                        $(".toggleWatchImage")[1].style.visibility = "hidden";
+                        $(".toggleWatchLink")[0].href = "#";
+                        $(".toggleWatchLink")[1].href = "#";
+                        $(".toggleWatchLink")[0].onclick = "return false;";
+                        $(".toggleWatchLink")[1].onclick = "return false;";
+                    } else {
+                        $(".toggleWatchImage")[0].src = watchImage;
+                        $(".toggleWatchImage")[1].src = watchImage;
+                        $(".toggleWatchLink")[0].href = watchURL;
+                        $(".toggleWatchLink")[1].href = watchURL;
+                        $(".toggleWatchLink")[0].onclick = watchHandler;
+                        $(".toggleWatchLink")[1].onclick = watchHandler;
+                    }
+                }
+            }
+        });
+    }
+
+    var likeImage = "http://cache-www.coderanch.com/templates/default/images/jr.button.plus.1.thumb.gif";
+    var unlikeImage = "http://cache-www.coderanch.com/templates/default/images/jr.button.minus.1.thumb.gif";
+
+    function toggleLike (postId) {
+        var likeURL = "/forums/posts/like/" + postId + "";
+        var unlikeURL = "/forums/posts/unlike/" + postId + "";
+
+        var unlikeHandler = function() { turnOn=false; toggleLike(postId); return false; };
+        var likeHandler = function() { turnOn=true; toggleLike(postId); return false; };
+
+        $.ajax({
+            url: turnOn ? likeURL : unlikeURL,
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                $("#like_message_" + postId).html("<img src='http://cache-www.coderanch.com/templates/default/images/thumbs-up.gif'"
+                                                    +" title='"+data.message+"'/> "+data.count);
+                if (turnOn) {
+                    $(".toggleLikeImage_"+postId)[0].src = unlikeImage;
+                    $(".toggleLikeLink_"+postId)[0].href = unlikeURL;
+                    $(".toggleLikeLink_"+postId)[0].onclick = unlikeHandler;
+                    $("#like_message_" + postId).css("visibility", "visible");
+                } else {
+                    $(".toggleLikeImage_"+postId)[0].src = likeImage;
+                    $(".toggleLikeLink_"+postId)[0].href = likeURL;
+                    $(".toggleLikeLink_"+postId)[0].onclick = likeHandler;
+                    if (data.count == 0)
+                        $("#like_message_" + postId).css("visibility", "hidden");
+                }
+            }
+        });
+    }
+
+</script>
+
+
+
+<table cellspacing="0" cellpadding="10" width="97%" align="center" border="0">
+    <tr>
+        <td class="bodyline">
+        <span class="nav">
+            <a class="maintitle" href="http://www.javaranch.com/">JavaRanch</a> &raquo; <a class="maintitle" href="http://www.coderanch.com/forums">Java Forums</a> &raquo;
+            <a class="maintitle" href="/forums/c/1/java">Java</a> &raquo;
+            <a class="maintitle" href="/forums/f-1/java">Java in General</a>
+        </span>
+
+
+
+            
+<table cellspacing="2" cellpadding="2" width="100%" border="0" class="threadbar">
+  <tr>
+    <td align="left" valign="middle">
+    			<img class="opaque" title="You must login or register" alt="Reply" src="http://cache-www.coderanch.com/templates/default/images/reply.gif" width="82px" height="25px" />
+			<img class="opaque" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/bookmark_it.gif" alt='Bookmark "How to make a Tar in java"' width="82" height="25" />
+		<img class="opaque" title="You must login or register" 
+		  	src="http://cache-www.coderanch.com/templates/default/images/watch_topic_start.gif"
+			alt='Watch "How to make a Tar in java"' width="82" height="25" />
+    </td>
+    <td align="right">
+      	<img class="opaque" title="You must login or register" alt="New topic" src="http://cache-www.coderanch.com/templates/default/images/post.gif" width="82px" height="25px" />
+    </td>    
+  </tr>
+</table>
+            <table id="postTable" class="forumline" cellspacing="0" cellpadding="0" width="100%" border="0">
+                                <a name="1456104">
+                </a><tr>
+                    <th class="author" nowrap="nowrap" width="18%">Author</th>
+                    <th class="subject">
+                        <h1>
+                            <span id="topicSubject">How to make a Tar in java</span>
+                        </h1>
+                    </th>
+                </tr>
+                                </a>
+
+
+
+
+
+                    <tr class="firstRowOfPost">
+
+
+
+                        <td class="row1 userPostInfo" valign="top" align="left" rowspan="2">
+                            <a name="1456104"></a>
+<span class="authorNameNoLink" title="You must login or register">benny rusli</span>
+
+
+<br />
+
+<span class="gensmall">
+    Ranch Hand
+    <br />
+
+<br />
+
+
+    Joined: Jan 15, 2005<br />
+    Posts: 72
+<br />
+
+
+</span>
+
+                        </td>
+
+                        <td colspan="1" class="row1" valign="top">
+<div class="postinfo row1">
+	<div class="date">
+		<span class="postdetails">posted <script>"Feb 27, 2005 00:46:00".toLocaleDateTime();</script><noscript><span class="lastPostTime">Feb 26, 2005 17:46:00</span></noscript></span>                
+
+		<img class="opaque" alt="private message" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_pm.gif" width="59px" height="18px" />
+
+
+    </div>
+	<div class="action">
+			<div id="like_message_1456104"
+					class="likesHiddenDiv"
+			>
+				<img src="http://cache-www.coderanch.com/templates/default/images/thumbs-up.gif"
+				/>
+				0        
+			</div>
+			<img class="opaque" alt="Quote" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_quote.gif" width="59" height="18px" />
+	</div>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr class="messageRow">
+
+                        <td class="row1 postbody" valign="top" id="post_text_1456104">
+                            <span class="postbody">
+                                    Hallo expert people,<br /> i write a tar program under <a href="http://www.javaranch.com" class="faq" title="JavaRanch" target="_new">java</a> but it did not work, can someone give a hint. Any Help will be appreciated. This Example should tar only directory recusively. Thanks<br />  <br /> <textarea name="code" class="java" cols="60" rows="10">
+import java.io.*;
+import java.util.*;
+import java.util.zip.*;
+//import com.ice.tar.*;
+import org.apache.tools.tar.*; 
+import java.util.zip.GZIPInputStream;
+ 
+public class tar 
+{
+  public static void main(String[] args) throws Exception
+  {
+  try
+  {
+      File tarFile = new File("c:\\aa\\tartest.tar");     
+         TarOutputStream tos = new TarOutputStream(new FileOutputStream(tarFile));           
+         tartar("c:\\java",tos);
+         //tos.finish();
+ //tos.closeEntry(); 
+ tos.close();
+ }
+ catch(IOException ioe)
+ {
+    System.out.println(ioe); 
+ }
+  }    
+      
+      public static void tartar(String dir,TarOutputStream tos) throws IOException
+      {
+ File f = new File(dir);      
+ String[] flist = f.list();
+ int buffersize = 1024;
+ byte[] buf = new byte[buffersize];
+ for(int i=0; i&lt;flist.length; i++)
+ {
+    File f2 = new File(f,flist[i]);
+    if(f2.isDirectory())
+    {
+tartar(f2.getPath(),tos);  
+continue;
+    }
+    
+    FileInputStream fis = new FileInputStream(f2);
+    //BufferedInputStream bis = new BufferedInputStream(fis,buffersize);
+    TarEntry te = new TarEntry(f2.getPath());
+    tos.putNextEntry(te);
+    int count = 0;
+            while((count = fis.read(buf,0,buffersize)) != -1)     
+    {
+tos.write(buf,0,count);    
+    }
+    tos.closeEntry();
+    fis.close();
+ }
+      }
+}
+</textarea>
+                            </span>
+
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="spacerow row1" colspan="2" height="1"><img src="http://cache-www.coderanch.com/templates/default/images/spacer.gif" alt="" width="1" height="1" /></td>
+                    </tr>
+
+
+
+
+                    <tr class="firstRowOfPost">
+
+
+
+                        <td class="row2 userPostInfo" valign="top" align="left" rowspan="2">
+                            <a name="1456105"></a>
+<span class="authorNameNoLink" title="You must login or register">benny rusli</span>
+
+
+<br />
+
+<span class="gensmall">
+    Ranch Hand
+    <br />
+
+<br />
+
+
+    Joined: Jan 15, 2005<br />
+    Posts: 72
+<br />
+
+
+</span>
+
+                        </td>
+
+                        <td colspan="1" class="row2" valign="top">
+<div class="postinfo row2">
+	<div class="date">
+		<span class="postdetails">posted <script>"Feb 27, 2005 00:48:00".toLocaleDateTime();</script><noscript><span class="lastPostTime">Feb 26, 2005 17:48:00</span></noscript></span>                
+
+		<img class="opaque" alt="private message" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_pm.gif" width="59px" height="18px" />
+
+
+    </div>
+	<div class="action">
+			<div id="like_message_1456105"
+					class="likesHiddenDiv"
+			>
+				<img src="http://cache-www.coderanch.com/templates/default/images/thumbs-up.gif"
+				/>
+				0        
+			</div>
+			<img class="opaque" alt="Quote" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_quote.gif" width="59" height="18px" />
+	</div>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr class="messageRow">
+
+                        <td class="row2 postbody" valign="top" id="post_text_1456105">
+                            <span class="postbody">
+                                    sorry i forgot to write the error, here is the error displayed on the command line : request to write 1024 bytes exceeds size in header of 0 bytes
+                            </span>
+
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="spacerow row2" colspan="2" height="1"><img src="http://cache-www.coderanch.com/templates/default/images/spacer.gif" alt="" width="1" height="1" /></td>
+                    </tr>
+
+
+
+
+                    <tr class="firstRowOfPost">
+
+
+
+                        <td class="row1 userPostInfo" valign="top" align="left" rowspan="3">
+                            <a name="1456106"></a>
+<span class="authorNameNoLink" title="You must login or register">Jim Yingst</span>
+
+
+<br />
+
+<span class="gensmall">
+    Wanderer
+    <br />
+    Sheriff
+    <br />
+
+<br />
+
+
+    Joined: Jan 30, 2000<br />
+    Posts: 18652
+<br />
+
+
+</span>
+
+                        </td>
+
+                        <td colspan="1" class="row1" valign="top">
+<div class="postinfo row1">
+	<div class="date">
+		<span class="postdetails">posted <script>"Feb 27, 2005 08:43:00".toLocaleDateTime();</script><noscript><span class="lastPostTime">Feb 27, 2005 01:43:00</span></noscript></span>                
+
+		<img class="opaque" alt="private message" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_pm.gif" width="59px" height="18px" />
+
+
+    </div>
+	<div class="action">
+			<div id="like_message_1456106"
+					class="likesHiddenDiv"
+			>
+				<img src="http://cache-www.coderanch.com/templates/default/images/thumbs-up.gif"
+				/>
+				0        
+			</div>
+			<img class="opaque" alt="Quote" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_quote.gif" width="59" height="18px" />
+	</div>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr class="messageRow">
+
+                        <td class="row1 postbody" valign="top" id="post_text_1456106">
+                            <span class="postbody">
+                                    "request to write 1024 bytes exceeds size in header of 0 bytes"<br />  <br /> Well, based on this and this alone, my guess is that you need to set the size in the header to some number greater than 1024 before you write.<br />  <br /> I guess you're using the <a href="http://www.jajakarta.org/ant/ant-1.6.1/docs/ja/manual/api/org/apache/tools/tar/package-summary.html" target="_blank" rel="nofollow">org.apache.tools.tar package</a> that is part of <a href="http://www.coderanch.com/forums/f-67/tools" class="api" title="ant forum on CodeRanch" target="_new">Ant</a>?  And the line numbers in the stack trace are pointing to the line that says<br /> <textarea name="code" class="java" cols="60" rows="10">tos.write(buf,0,count); </textarea><br /> right?  From the message, it looks like the tar tool expects you to specify the size of an entry before you write to it.  I see that <a href="http://www.jajakarta.org/ant/ant-1.6.1/docs/ja/manual/api/org/apache/tools/tar/TarEntry.html" target="_blank" rel="nofollow">TarEntry</a> has a setSize() method.  I imagine you should try inserting a line like <br /> <textarea name="code" class="java" cols="60" rows="10">te.setSize(f2.length());</textarea><br /> Depending on what other messages you get, you may have to set other fields in the TarEntry before you write the contents.  <br />  <br /> I note that TarEntry has other constructors, and one of these takes a File as an argument.  And the documentation says that it constructs the header for you based on the information in the file.  To me, this sounds like less work for the programmer.  Less work is good.<br />  <br /> I also see that you're doing this:<br /> <textarea name="code" class="java" cols="60" rows="10">
+    File f = new File(dir);      
+    String[] flist = f.list();
+    // ...     
+    for(int i=0; i&lt;flist.length; i++)
+    {
+      File f2 = new File(f,flist[i]);</textarea><br /> You might want to check out the method listFiles() (in the File class).  My experience is that if the thing you're talking about is a file, then a File object is much more useful that a <a href="http://www.coderanch.com/t/410859/java/java/String-StringBuffer-StringBuilder-Performance" class="api" title="String vs. StringBuilder/StringBuffer" target="_new">String</a> representing a file name.  If you use a File rather than a String, you usually end up doing less work.  Again, less work is good.  <img src="http://www.coderanch.com/images/smilies/3b63d1616c5dfcf29f8a7a031aaa7cad.gif" />
+                            </span>
+
+
+                        </td>
+                    </tr>
+
+                        <tr>
+                            <td colspan="2" class="row1" width="100%" height="28">
+                            <br />
+                                <hr/>
+                                <span class="userSignature">"I'm not back." - Bill Harding, <i>Twister</i></span>
+                            </td>
+                        </tr>
+                    <tr>
+                        <td class="spacerow row1" colspan="2" height="1"><img src="http://cache-www.coderanch.com/templates/default/images/spacer.gif" alt="" width="1" height="1" /></td>
+                    </tr>
+
+
+
+
+                    <tr class="firstRowOfPost">
+
+
+
+                        <td class="row2 userPostInfo" valign="top" align="left" rowspan="2">
+                            <a name="1456107"></a>
+<span class="authorNameNoLink" title="You must login or register">benny rusli</span>
+
+
+<br />
+
+<span class="gensmall">
+    Ranch Hand
+    <br />
+
+<br />
+
+
+    Joined: Jan 15, 2005<br />
+    Posts: 72
+<br />
+
+
+</span>
+
+                        </td>
+
+                        <td colspan="1" class="row2" valign="top">
+<div class="postinfo row2">
+	<div class="date">
+		<span class="postdetails">posted <script>"Feb 27, 2005 20:13:00".toLocaleDateTime();</script><noscript><span class="lastPostTime">Feb 27, 2005 13:13:00</span></noscript></span>                
+
+		<img class="opaque" alt="private message" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_pm.gif" width="59px" height="18px" />
+
+
+    </div>
+	<div class="action">
+			<div id="like_message_1456107"
+					class="likesHiddenDiv"
+			>
+				<img src="http://cache-www.coderanch.com/templates/default/images/thumbs-up.gif"
+				/>
+				0        
+			</div>
+			<img class="opaque" alt="Quote" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_quote.gif" width="59" height="18px" />
+	</div>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr class="messageRow">
+
+                        <td class="row2 postbody" valign="top" id="post_text_1456107">
+                            <span class="postbody">
+                                    After some changes from what you have said, i got the following error :<br /> com.ice.tar.InvalidHeaderException : file name is greater than 100 characters, <br /> c:\csharpzip\SharpZipLibSample\samples\DIME\DimeDataSetServiceConsumer\DimeDataSetServiceConsumer.csproj<br />  <br /> If i use apache ant package, the same error occured too :<br /> Exception in thread "main" <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/RuntimeException.html" class="api" title="Java API" target="_new">java.lang.RuntimeException</a> : <br /> file name 'c:\csharpzip\SharpZipLibSample\samples\DIME\DimeDataSetServiceConsumer\DimeDataSetServiceConsumer.csproj' is too long &lt;&gt; 100 bytes)<br />  <br /> Can someone give me a hint, how to overcome the problem, thanks very much<br />  <br /> Note : now i use listFiles what you suggested(and recommended), is this implementation true, i mean the code.<br />  <br /> <textarea name="code" class="java" cols="60" rows="10">
+import java.io.*;
+import java.util.*;
+import java.util.zip.*;
+import com.ice.tar.*;
+//import org.apache.tools.tar.*; 
+import java.util.zip.GZIPInputStream;
+ 
+public class tar 
+{
+  public static void main(String[] args) throws Exception
+  {
+  try
+  {
+            File tarFile = new File("c:\\aa\\tartest.tar");     
+            TarOutputStream tos = new TarOutputStream(new FileOutputStream(tarFile));         
+            tartar(new File("c:\\csharpzip"),tos);
+    tos.close();
+ }
+ catch(IOException ioe)
+ {
+    System.out.println(ioe); 
+ }
+  }
+    
+      
+      public static void tartar(File dir,TarOutputStream tos) throws IOException
+      {
+ File[] flist = dir.listFiles();
+ int buffersize = 1024;
+ byte[] buf = new byte[buffersize];
+ for(int i=0; i&lt;flist.length; i++)
+ {
+    if(flist[i].isDirectory())
+    {
+tartar(flist[i],tos);  
+continue;
+    }
+    
+    FileInputStream fis = new FileInputStream(flist[i]);
+    TarEntry te = new TarEntry(flist[i].getPath());
+    te.setSize(flist[i].length());
+    tos.putNextEntry(te);
+    int count = 0;
+            while((count = fis.read(buf,0,buffersize)) != -1)     
+    {
+tos.write(buf,0,count);    
+    }
+    tos.closeEntry();
+    fis.close();
+ }
+      }
+}
+</textarea>
+                            </span>
+
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="spacerow row2" colspan="2" height="1"><img src="http://cache-www.coderanch.com/templates/default/images/spacer.gif" alt="" width="1" height="1" /></td>
+                    </tr>
+
+
+
+
+                    <tr class="firstRowOfPost">
+
+
+
+                        <td class="row1 userPostInfo" valign="top" align="left" rowspan="2">
+                            <a name="1456108"></a>
+<span class="authorNameNoLink" title="You must login or register">Jim Yingst</span>
+
+
+<br />
+
+<span class="gensmall">
+    Wanderer
+    <br />
+    Sheriff
+    <br />
+
+<br />
+
+
+    Joined: Jan 30, 2000<br />
+    Posts: 18652
+<br />
+
+
+</span>
+
+                        </td>
+
+                        <td colspan="1" class="row1" valign="top">
+<div class="postinfo row1">
+	<div class="date">
+		<span class="postdetails">posted <script>"Feb 27, 2005 23:38:00".toLocaleDateTime();</script><noscript><span class="lastPostTime">Feb 27, 2005 16:38:00</span></noscript></span>                
+
+		<img class="opaque" alt="private message" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_pm.gif" width="59px" height="18px" />
+
+
+    </div>
+	<div class="action">
+			<div id="like_message_1456108"
+					class="likesHiddenDiv"
+			>
+				<img src="http://cache-www.coderanch.com/templates/default/images/thumbs-up.gif"
+				/>
+				0        
+			</div>
+			<img class="opaque" alt="Quote" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_quote.gif" width="59" height="18px" />
+	</div>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr class="messageRow">
+
+                        <td class="row1 postbody" valign="top" id="post_text_1456108">
+                            <span class="postbody">
+                                    Some versions of tar do not support names (paths, really) longer than 100 chars.  If you've got paths longer than that, you won't be able to use a version that doesn't allow lengths &gt; 100 chars.  Fortunately there seem to be other choices.  I don't see a way to use com.ice.tar for this.  But it looks like org.apache.tools.tar will work.  Try this:<br /> <textarea name="code" class="java" cols="60" rows="10">tos.setLongFileMode(TarOutputStream.LONGFILE_GNU);</textarea><br /> Note also that you may want to put in some logic to modify the names a bit when you create entries.  If you're tarring up everything from c:\csharpzip (as the base directory) you probably don't want to include the c:\csharpzip in the name.  Because when someone untars the files, they will probably be on another machine with a different root directory.  Insead you want a relative path name.  Which means replacing<br />  <br /> c:\csharpzip\SharpZipLibSample\samples\DIME\DimeDataSetServiceConsumer\DimeDataSetServiceConsumer.csproj<br />  <br /> with<br />  <br /> SharpZipLibSample\samples\DIME\DimeDataSetServiceConsumer\DimeDataSetServiceConsumer.csproj<br />  <br /> <b>[now i use listFiles what you suggested(and recommended), is this implementation true, i mean the code.</b><br />  <br /> It looks correct, yes.  I haven't tested it carefully though - you'll have to do that.
+                            </span>
+
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="spacerow row1" colspan="2" height="1"><img src="http://cache-www.coderanch.com/templates/default/images/spacer.gif" alt="" width="1" height="1" /></td>
+                    </tr>
+
+
+
+
+                    <tr class="firstRowOfPost">
+
+
+
+                        <td class="row2 userPostInfo" valign="top" align="left" rowspan="2">
+                            <a name="1456109"></a>
+<span class="authorNameNoLink" title="You must login or register">benny rusli</span>
+
+
+<br />
+
+<span class="gensmall">
+    Ranch Hand
+    <br />
+
+<br />
+
+
+    Joined: Jan 15, 2005<br />
+    Posts: 72
+<br />
+
+
+</span>
+
+                        </td>
+
+                        <td colspan="1" class="row2" valign="top">
+<div class="postinfo row2">
+	<div class="date">
+		<span class="postdetails">posted <script>"Feb 28, 2005 07:05:00".toLocaleDateTime();</script><noscript><span class="lastPostTime">Feb 28, 2005 00:05:00</span></noscript></span>                
+
+		<img class="opaque" alt="private message" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_pm.gif" width="59px" height="18px" />
+
+
+    </div>
+	<div class="action">
+			<div id="like_message_1456109"
+					class="likesHiddenDiv"
+			>
+				<img src="http://cache-www.coderanch.com/templates/default/images/thumbs-up.gif"
+				/>
+				0        
+			</div>
+			<img class="opaque" alt="Quote" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_quote.gif" width="59" height="18px" />
+	</div>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr class="messageRow">
+
+                        <td class="row2 postbody" valign="top" id="post_text_1456109">
+                            <span class="postbody">
+                                    first thanks sheriff(Jim), you guide me in right paths, how can i modify the code using relative path ? (below is the modified code with relative path but still error when i untar it, all will be extracted in one directory, can you correct my fault ?)<br /> 2. Is it better to use rekursive method if i want to backup more than 100 GB(until 500 GB) for my backup programm, i am afraid that they eat much ram and cause memory defect. Or it is better to use iterative one, but more slower.<br /> 3. Is it better to save all the paths recusively in Java Collection, example List, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html" class="api" title="Java API" target="_new">ArrayList</a>, Vector. But i dont know which is better, if the paths more than 1.000.000.000 which one is better ? after it, retrieve all the paths from the Collection and throw it to <a href="http://docs.oracle.com/javase/7/docs/api/java/io/FileInputStream.html" class="api" title="Java API" target="_new">FileInputStream</a> and TarEntry.<br />  <br /> Note : -&gt; is the changes<br />  <br /> <textarea name="code" class="java" cols="60" rows="10">
+import java.io.*;
+import java.util.*;
+import java.util.zip.*;
+//import com.ice.tar.*;
+import org.apache.tools.tar.*; 
+import java.util.zip.GZIPInputStream;
+ 
+public class tar 
+{
+  public static void main(String[] args) throws Exception
+  {
+  try
+  {
+            File tarFile = new File("c:\\aa\\tartest.tar");     
+            TarOutputStream tos = new TarOutputStream(new FileOutputStream(tarFile));         
+            tartar(new File("c:\\csharpzip"),tos);
+    tos.close();
+ }
+ catch(IOException ioe)
+ {
+    System.out.println(ioe); 
+ }
+  }
+    
+      
+      public static void tartar(File dir,TarOutputStream tos) throws IOException
+      {
+ File[] flist = dir.listFiles();
+ int buffersize = 1024;
+ byte[] buf = new byte[buffersize];
+ for(int i=0; i&lt;flist.length; i++)
+ {
+    if(flist[i].isDirectory())
+    {
+tartar(flist[i],tos);  
+continue;
+    }
+    
+       -&gt;   String abs = dir.getAbsolutePath();
+       -&gt;   String fabs = flist[i].getAbsolutePath();
+       -&gt;   if(fabs.startsWith(abs))
+       -&gt;      fabs = fabs.substring(abs.length()); 
+    FileInputStream fis = new FileInputStream(flist[i]);
+       -&gt;   TarEntry te = new TarEntry(fabs);
+    te.setSize(flist[i].length());
+       -&gt;   tos.setLongFileMode(TarOutputStream.LONGFILE_GNU);
+    tos.putNextEntry(te);
+    int count = 0;
+            while((count = fis.read(buf,0,buffersize)) != -1)     
+    {
+tos.write(buf,0,count);    
+    }
+    tos.closeEntry();
+    fis.close();
+ }
+      }
+}
+</textarea>
+                            </span>
+
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="spacerow row2" colspan="2" height="1"><img src="http://cache-www.coderanch.com/templates/default/images/spacer.gif" alt="" width="1" height="1" /></td>
+                    </tr>
+
+
+
+
+                    <tr class="firstRowOfPost">
+
+
+
+                        <td class="row1 userPostInfo" valign="top" align="left" rowspan="2">
+                            <a name="1456110"></a>
+<span class="authorNameNoLink" title="You must login or register">benny rusli</span>
+
+
+<br />
+
+<span class="gensmall">
+    Ranch Hand
+    <br />
+
+<br />
+
+
+    Joined: Jan 15, 2005<br />
+    Posts: 72
+<br />
+
+
+</span>
+
+                        </td>
+
+                        <td colspan="1" class="row1" valign="top">
+<div class="postinfo row1">
+	<div class="date">
+		<span class="postdetails">posted <script>"Mar 03, 2005 01:04:00".toLocaleDateTime();</script><noscript><span class="lastPostTime">Mar 02, 2005 18:04:00</span></noscript></span>                
+
+		<img class="opaque" alt="private message" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_pm.gif" width="59px" height="18px" />
+
+
+    </div>
+	<div class="action">
+			<div id="like_message_1456110"
+					class="likesHiddenDiv"
+			>
+				<img src="http://cache-www.coderanch.com/templates/default/images/thumbs-up.gif"
+				/>
+				0        
+			</div>
+			<img class="opaque" alt="Quote" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_quote.gif" width="59" height="18px" />
+	</div>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr class="messageRow">
+
+                        <td class="row1 postbody" valign="top" id="post_text_1456110">
+                            <span class="postbody">
+                                    Hello expert people,<br /> i want to retrieve the long name of entry, how can i use the method from TarEntry : isGNULongNameEntry().<br /> If i try "if(tarentryobject.isGNULongNameEntry())" then a error will be thrown, "invalid method declaration; return type required", ';' expected isGNULongNameEntry(). Any Help will be appreciated.
+                            </span>
+
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="spacerow row1" colspan="2" height="1"><img src="http://cache-www.coderanch.com/templates/default/images/spacer.gif" alt="" width="1" height="1" /></td>
+                    </tr>
+
+
+
+
+                    <tr class="firstRowOfPost">
+
+
+
+                        <td class="row2 userPostInfo" valign="top" align="left" rowspan="2">
+                            <a name="1456111"></a>
+<span class="authorNameNoLink" title="You must login or register">benny rusli</span>
+
+
+<br />
+
+<span class="gensmall">
+    Ranch Hand
+    <br />
+
+<br />
+
+
+    Joined: Jan 15, 2005<br />
+    Posts: 72
+<br />
+
+
+</span>
+
+                        </td>
+
+                        <td colspan="1" class="row2" valign="top">
+<div class="postinfo row2">
+	<div class="date">
+		<span class="postdetails">posted <script>"Mar 04, 2005 22:46:00".toLocaleDateTime();</script><noscript><span class="lastPostTime">Mar 04, 2005 15:46:00</span></noscript></span>                
+
+		<img class="opaque" alt="private message" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_pm.gif" width="59px" height="18px" />
+
+
+    </div>
+	<div class="action">
+			<div id="like_message_1456111"
+					class="likesHiddenDiv"
+			>
+				<img src="http://cache-www.coderanch.com/templates/default/images/thumbs-up.gif"
+				/>
+				0        
+			</div>
+			<img class="opaque" alt="Quote" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_quote.gif" width="59" height="18px" />
+	</div>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr class="messageRow">
+
+                        <td class="row2 postbody" valign="top" id="post_text_1456111">
+                            <span class="postbody">
+                                    Hallo expert people,<br /> i think, there is a bug in package org.apache.tools.tar, if i try to tar a path longer than 100 chars, it will be success with method tos.setLongFileMode(TarOutputStream.LONGFILE_GNU); , but i try to untar it again there is a following error :<br />  <br /> <a href="http://docs.oracle.com/javase/7/docs/api/java/io/FileNotFoundException.html" class="api" title="Java API" target="_new">java.io.FileNotFoundException</a>: c:\tar2\BEST BYTE AP_NET Mania_ @8&lt;5@ :&gt;40 !60BL ViewState.htm<br /> at java.io.FileOutputStream.open&lt;Native Method&gt;<br /> at <a href="http://docs.oracle.com/javase/7/docs/api/java/io/FileOutputStream.html" class="api" title="Java API" target="_new">java.io.FileOutputStream</a>.&lt;init&gt;&lt;FileOutputStream.java:179&gt;<br /> at <a href="http://docs.oracle.com/javase/7/docs/api/java/io/FileOutputStream.html" class="api" title="Java API" target="_new">java.io.FileOutputStream</a>.&lt;init&gt;&lt;FileOutputStream.java:131&gt;<br /> at UntarBest.untar&lt;UntarBest.java:48&gt;<br /> at UntarBest.main&lt;UntarBest.java:11&gt;<br />  <br /> and i try in csharp, there is error too :<br /> System.ArgumentException : IILEGAL characters in path.<br />  <br /> I think, i should use method isGNULongNameEntry() from TarEntry, but i dont know how use it rightly. Here is my untar code. Any Help will be appreciated.<br />  <br /> <br /> [code]<br /> import java.io.*;<br /> import java.util.*;<br /> import java.util.zip.*;<br /> import org.apache.tools.tar.*;  <br />  <br /> public class UntarBest <br /> {<br />   public static void main(String[] args) throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html" class="api" title="Java API" target="_new">IOException</a><br />   {<br />       untar("c:\\t.tar","c:\\tar");<br />   }<br />   <br />    public static void untar(String tarfile,String extracttopath)<br />   {<br />     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html" class="api" title="Java API" target="_new">java.io.File</a> file = null;  <br />     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html" class="api" title="Java API" target="_new">java.io.InputStream</a> is = null; <br />     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/BufferedInputStream.html" class="api" title="Java API" target="_new">java.io.BufferedInputStream</a> bis = null;<br />     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/BufferedOutputStream.html" class="api" title="Java API" target="_new">java.io.BufferedOutputStream</a> bos = null;<br />     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html" class="api" title="Java API" target="_new">java.io.OutputStream</a> os = null;<br />     org.apache.tools.tar.TarInputStream tis = null;<br />     org.apache.tools.tar.TarEntry te = null;<br />     int buffersize = 1024; <br />     byte[] buffer = null;<br />     try <br />     {<br /> file = new <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html" class="api" title="Java API" target="_new">java.io.File</a>(tarfile);    <br /> is = new <a href="http://docs.oracle.com/javase/7/docs/api/java/io/FileInputStream.html" class="api" title="Java API" target="_new">java.io.FileInputStream</a>(file);   <br /> bis = new <a href="http://docs.oracle.com/javase/7/docs/api/java/io/BufferedInputStream.html" class="api" title="Java API" target="_new">java.io.BufferedInputStream</a>(is);<br />         tis = new org.apache.tools.tar.TarInputStream(bis);<br />         <br />         while((te = tis.getNextEntry()) != null) <br />         {<br />    String filepath = extracttopath + java.io.File.separator + te.getName();<br />    <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html" class="api" title="Java API" target="_new">java.io.File</a> file2 = new <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html" class="api" title="Java API" target="_new">java.io.File</a>(filepath);<br />    <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html" class="api" title="Java API" target="_new">java.io.File</a> dirParent = new <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html" class="api" title="Java API" target="_new">java.io.File</a>(file2.getParent());<br />    System.err.println("Extracting file: " + te.getName());<br />            dirParent.mkdirs();<br />   <br />    if(te.isDirectory()) <br />    {      <br />       file2.mkdirs();<br />       continue;<br />    }<br />            buffer = new byte[buffersize];<br />    os = new <a href="http://docs.oracle.com/javase/7/docs/api/java/io/FileOutputStream.html" class="api" title="Java API" target="_new">java.io.FileOutputStream</a>(file2);<br />    bos = new <a href="http://docs.oracle.com/javase/7/docs/api/java/io/BufferedOutputStream.html" class="api" title="Java API" target="_new">java.io.BufferedOutputStream</a>(os,buffersize);<br />            tis.copyEntryContents(bos); <br />    bos.close();<br />            os.close();<br />  }<br />    bos.flush();<br />            tis.close();<br />       } <br />       catch(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html" class="api" title="Java API" target="_new">IOException</a> ioe) <br />       {<br />         System.err.println("Unhandled exception:");<br />         ioe.printStackTrace();<br />       }<br />     }<br /> }<br /> [/code
+                            </span>
+
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="spacerow row2" colspan="2" height="1"><img src="http://cache-www.coderanch.com/templates/default/images/spacer.gif" alt="" width="1" height="1" /></td>
+                    </tr>
+
+
+
+
+                    <tr class="firstRowOfPost">
+
+
+
+                        <td class="row1 userPostInfo" valign="top" align="left" rowspan="2">
+                            <a name="2312703"></a>
+<span class="authorNameNoLink" title="You must login or register">Riyaz Karime</span>
+
+
+<br />
+
+<span class="gensmall">
+    Greenhorn
+    <br />
+
+<br />
+
+
+    Joined: Sep 08, 2010<br />
+    Posts: 2
+<br />
+
+
+</span>
+
+                        </td>
+
+                        <td colspan="1" class="row1" valign="top">
+<div class="postinfo row1">
+	<div class="date">
+		<span class="postdetails">posted <script>"Sep 24, 2010 15:48:56".toLocaleDateTime();</script><noscript><span class="lastPostTime">Sep 24, 2010 09:48:56</span></noscript></span>                
+
+		<img class="opaque" alt="private message" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_pm.gif" width="59px" height="18px" />
+
+
+    </div>
+	<div class="action">
+			<div id="like_message_2312703"
+					class="likesHiddenDiv"
+			>
+				<img src="http://cache-www.coderanch.com/templates/default/images/thumbs-up.gif"
+				/>
+				0        
+			</div>
+			<img class="opaque" alt="Quote" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_quote.gif" width="59" height="18px" />
+	</div>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr class="messageRow">
+
+                        <td class="row1 postbody" valign="top" id="post_text_2312703">
+                            <span class="postbody">
+                                    Hello Jim
+<br /> 
+<br /> i have added your code 
+<br /> <textarea name="code" class="java" cols="60" rows="10">public static void tartar(File dir,TarOutputStream tos) throws IOException   
+		{   
+			File[] flist = dir.listFiles();   
+			int buffersize = 1024;   
+			byte[] buf = new byte[buffersize];   
+			for(int i=0; i&lt;flist.length; i++)   
+			{   
+			   if(flist[i].isDirectory())   
+			   {   
+			tartar(flist[i],tos);     
+			continue;   
+			   }   
+			      
+			         String abs = dir.getAbsolutePath();   
+			         String fabs = flist[i].getAbsolutePath();   
+			         if(fabs.startsWith(abs))   
+			            fabs = fabs.substring(abs.length());    
+			   FileInputStream fis = new FileInputStream(flist[i]);   
+			         TarEntry te = new TarEntry(fabs);   
+			   te.setSize(flist[i].length());   
+			         tos.setLongFileMode(TarOutputStream.LONGFILE_GNU);   
+			   tos.putNextEntry(te);   
+			   int count = 0;   
+			           while((count = fis.read(buf,0,buffersize)) != -1)        
+			   {   
+			tos.write(buf,0,count);       
+			   }   
+			   tos.closeEntry();   
+			   fis.close();   
+			}   
+	}   </textarea>
+<br /> 
+<br /> it is working, thanks for that post...
+<br /> Now i am facing the issue like tar file does not have directories created inside it.....
+<br /> 
+<br /> Any way to add the directory in the tar file 
+<br /> 
+<br /> 
+<br /> any help will be appreciated
+<br /> 
+<br /> cheers
+<br /> Riyaz
+<br /> 
+<br /> 
+                            </span>
+
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="spacerow row1" colspan="2" height="1"><img src="http://cache-www.coderanch.com/templates/default/images/spacer.gif" alt="" width="1" height="1" /></td>
+                    </tr>
+
+
+
+
+                    <tr class="firstRowOfPost">
+
+
+
+                        <td class="row2 userPostInfo" valign="top" align="left" rowspan="2">
+                            <a name="2312711"></a>
+<span class="authorNameNoLink" title="You must login or register">Campbell Ritchie</span>
+
+
+<br />
+
+<span class="gensmall">
+    Sheriff
+    <br />
+
+<br />
+
+
+    Joined: Oct 13, 2005<br />
+    Posts: 26986
+<br />
+
+
+</span>
+
+                        </td>
+
+                        <td colspan="1" class="row2" valign="top">
+<div class="postinfo row2">
+	<div class="date">
+		<span class="postdetails">posted <script>"Sep 24, 2010 16:04:29".toLocaleDateTime();</script><noscript><span class="lastPostTime">Sep 24, 2010 10:04:29</span></noscript></span>                
+
+		<img class="opaque" alt="private message" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_pm.gif" width="59px" height="18px" />
+
+
+    </div>
+	<div class="action">
+			<div id="like_message_2312711"
+					class="likesHiddenDiv"
+			>
+				<img src="http://cache-www.coderanch.com/templates/default/images/thumbs-up.gif"
+				/>
+				0        
+			</div>
+			<img class="opaque" alt="Quote" title="You must login or register" src="http://cache-www.coderanch.com/templates/default/images/icon_quote.gif" width="59" height="18px" />
+	</div>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr class="messageRow">
+
+                        <td class="row2 postbody" valign="top" id="post_text_2312711">
+                            <span class="postbody">
+                                    Sorry, we forgot to welcome you to the Ranch earlier. Welcome now <img src="http://www.coderanch.com/images/smilies/3b63d1616c5dfcf29f8a7a031aaa7cad.gif" />
+<br /> Please use the <a class="snap_shots" href="http://faq.javaranch.com/java/UseCodeTags" target="_new" >code button</a>; since you are new I have edited your post and you can see how much better it looks.
+                            </span>
+
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="spacerow row2" colspan="2" height="1"><img src="http://cache-www.coderanch.com/templates/default/images/spacer.gif" alt="" width="1" height="1" /></td>
+                    </tr>
+            <tr>
+            <td width="18%" bgcolor="#DEC7A4"><img src="/images/bunkhouse_smoke.gif"/></td>
+            <td width="82%" align="left" valign="top"  bgcolor="#DEC7A4">
+                &nbsp;<BR>
+                    <div align="left" class="shngl">
+                        <script type="text/javascript"><!--
+google_ad_client = "pub-4768842087373098";
+/* crf/s1/ss */
+google_ad_slot = "3954018497";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
+                    </div>
+                &nbsp;<BR>
+                </td>
+                </tr>
+                <tr class="postbody" align="left">
+                    <td colspan="2">
+                    subject: How to make a Tar in java
+                    </td>
+                </tr>
+
+                <tr align="center">
+                    <td class="catbottom" colspan="2" height="28">
+                        <table cellspacing="0" cellpadding="0" border="0">
+                            <tr>
+                                <td align="center"><span class="gensmall">&nbsp;</span></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+             
+            
+            <table width="100%" align="center">
+
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table class="highlights" align="center">
+<tr><th colspan="2">Threads others viewed</th></tr>
+<tr>
+  <tr><td class="row1 gen"><a href="/t/370546/java/java/Read-structure-java"> 
+  Read C structure in java</a></td></tr>
+  <tr><td class="row1 gen"><a href="/t/522817/java/java/Copy-file"> 
+  Copy file</a></td></tr>
+  <tr><td class="row1 gen"><a href="/t/366444/Servlets/java/Client-Server-file-upload-servlet"> 
+  Client-to-Server file upload using servlet</a></td></tr>
+  <tr><td class="row1 gen"><a href="/t/321925/java/java/Java-ZIP-UNZIP"> 
+  Java --- ZIP &amp; UNZIP</a></td></tr>
+  <tr><td class="row1 gen"><a href="/t/326652/java/java/zip-multiple-files-directory-one"> 
+  how to zip multiple files and directory into one output</a></td></tr>
+</tr>
+</table>
+
+<a name="quick"></a>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    limitURLSize();
+});
+</script>
+
+		</td>
+	</tr>
+</table>
+<div class="gensmall center">
+<script>
+document.write("All times above are in your local time zone & format.");
+document.write("The current ranch time (not your local time) is ");
+document.write("Jun 11, 2012 08:48:06".bold() + ".");
+</script><noscript>All times are in JavaRanch time: GMT-6 in summer, GMT-7 in winter</noscript>
+</div>
+
+	<div align="center" class="shngl">
+		<a href="/forums/banner/redirect/284" target="_blank"><img src="http://www.coderanch.com/aspose15.gif"  border="0" alt="developer file tools"  /></a>
+	</div>
+
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ?  "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+if (typeof _gat !== "undefined") {
+	var pageTracker = _gat._getTracker("UA-2371260-2");
+	pageTracker._trackPageview();
+
+	dt = new Date();
+	pageTracker._setVar("hour: " + dt.getHours());
+}
+</script>
+
+<br />
+<div class="float-divider"></div>
+<div id="footer">
+ <div class="footerLinksDiv center">
+	<a class="nonForumLink" href="http://www.coderanch.com/how-to/code/ContactUs">Contact Us</a>
+	| Powered by <a href="http://www.jforum.net/" target="_blank">JForum</a>
+	| <span class="copyrightOwner">Copyright &copy; 1998-2012 <a href="http://www.javaranch.com/paul-wheaton.jsp">Paul Wheaton</a></span>
+ </div>
+</div>
+<div class="float-divider"></div>
+<!-- SyntaxHighlighter 1.5.1 -->
+<script type="text/javascript" src="/templates/default/js/shCore.js"></script>
+<script type="text/javascript" src="/templates/default/js/shBrushCss.js"></script>
+<script type="text/javascript" src="/templates/default/js/shBrushJava.js"></script>
+<script type="text/javascript" src="/templates/default/js/shBrushCpp.js"></script>
+<script type="text/javascript" src="/templates/default/js/shBrushJScript.js"></script>
+<script type="text/javascript" src="/templates/default/js/shBrushPython.js"></script>
+<script type="text/javascript" src="/templates/default/js/shBrushRuby.js"></script>
+<script type="text/javascript" src="/templates/default/js/shBrushSql.js"></script>
+<script type="text/javascript" src="/templates/default/js/shBrushXml.js"></script>
+<script type="text/javascript" src="/templates/default/js/shBrushPlain.js"></script>
+                                                
+
+<script type="text/javascript">
+<!--
+dp.sh.ClipboardSwf = '/templates/default/js/clipboard.swf';
+dp.sh.HighlightAll('code');
+-->
+</script>
+
+<div align="center" class="shngl">
+	<table>
+    <tr>
+        <td>
+            <script type="text/javascript"><!--
+            google_ad_client = "pub-4768842087373098";
+            /* 125x125, created 11/20/09 */
+            google_ad_slot = "6061358209";
+            google_ad_width = 125;
+            google_ad_height = 125;
+            //-->
+            </script>
+            <script type="text/javascript"
+            src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+            </script>
+        </td>
+
+<td>
+<div style="margin-left:25px; width:600px;">
+
+<img src="/images/cast-iron-skillet-49er-wide.png" alt="cast iron skillet 49er" title="if you don't behave, this guy will whack you on the head with his cast iron skillet" style="float:left; margin-right:15px;"/>
+
+<p>
+more from paul wheaton's glorious empire of web junk: 
+<a href="http://www.richsoil.com/cast-iron.jsp">cast iron skillet</a>
+<a href="http://www.richsoil.com/diatomaceous-earth.jsp">diatomaceous earth</a>
+<a href="http://www.richsoil.com/rocket-stove-mass-heater.jsp">rocket mass heater</a>
+<a href="http://www.richsoil.com/sepp-holzer/sepp-holzer-permaculture.jsp">sepp holzer</a>
+<a href="http://www.richsoil.com/hugelkultur/">raised garden beds</a>
+<a href="http://www.richsoil.com/raising-chickens.jsp">raising chickens</a>
+<a href="http://www.richsoil.com/lawn-care.jsp">lawn care</a>
+<a href="http://www.richsoil.com/CFL-fluorescent-light-bulbs.jsp">light bulbs</a>
+<a href="http://www.richsoil.com/flea-control.jsp">flea control</a>
+<a href="http://www.permies.com/missoula">missoula</a>
+<a href="http://www.richsoil.com/electric-heat.jsp">electric heaters</a>
+<a href="http://www.permies.com/permaculture-forums">permaculture</a>
+</p>
+
+</div>
+
+</td>
+    </tr>
+</table>
+</div>
+
+</body>
+</html>
