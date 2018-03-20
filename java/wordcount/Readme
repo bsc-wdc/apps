@@ -1,0 +1,62 @@
+This is the Readme for:
+Wordcount for MN
+
+[Name]: Wordcount MN
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+[Body]
+ == Description ==
+Wordcount application
+
+== Versions ==
+There are 5 versions of Wordcount:
+
+=== Version 1 ===
+wordcount.multipleFiles               - Performs a distributed wordcount from multiple files within de same folder.
+=== Version 2 ===
+wordcount.multipleFilesDiffFolders    - Performs a distributed wordcount of multiple files stored in different folders within a main folder.
+=== Version 3 ===
+wordcount.multipleFilesNTimes         - Performs a distributed wordcount of multiple files within the same folder. Each file is considered N times.
+=== Version 4 ===
+wordcount.multipleFilesReadWriteTasks - Performs a distributed wordcount of multiple files (like version 1) but performs the file reading and result writting as tasks.
+=== Version 5 ===
+wordcount.uniqueFile                  - Perform a distributed wordcount from a single file. Splits the file into blocks of N bytes (this version does not check if a word is splitted).
+
+== Execution instructions ==
+Usage:
+runcompss wordcount.multipleFiles.Wordcount <DATA_FOLDER> <OUTPUT_FOLDER> <OUTPUT_FILE_NAME>
+runcompss wordcount.multipleFilesDiffFolders.Wordcount <DATA_FOLDER> <OUTPUT_FOLDER> <OUTPUT_FILE_NAME>
+runcompss wordcount.multipleFilesNTimes.Wordcount <DATA_FOLDER> <OUTPUT_FOLDER> <OUTPUT_FILE_NAME> <N_TIMES>
+runcompss wordcount.multipleFilesReadWriteTasks.Wordcount <DATA_FOLDER> <OUTPUT_FOLDER> <OUTPUT_FILE_NAME>
+runcompss wordcount.uniqueFile.Wordcount <DATA_FILE> <OUTPUT_FOLDER> <OUTPUT_FILE_NAME> <BLOCK_SIZE>
+
+Where:
+                 * - DATA_FOLDER: Absolute path to the base folder of the dataset files
+                 * - OUTPUT_FOLDER: Absolute path where to store the results
+                 * - OUTPUT_FILE_NAME: File name of the output file.
+                 * - N_TIMES: Number of times to process each file
+                 * - DATA_FILE: Absolute path to the dataset file
+                 * - BLOCK_SIZE: Number of bytes of each block
+
+== Execution Example ==
+runcompss wordcount.multipleFiles.Wordcount ~/multipleFilesDataset/ ~/outputfolder/ result.txt
+runcompss wordcount.multipleFilesDiffFolders.Wordcount ~/multipleFilesDataset/ ~/outputfolder/ result.txt
+runcompss wordcount.multipleFilesNTimes.Wordcount ~/multipleFilesDataset/ ~/outputfolder/ result.txt 8
+runcompss wordcount.multipleFilesReadWriteTasks.Wordcount ~/multipleFilesDataset ~/outputfolder/ result.txt
+runcompss wordcount.uniqueFile.Wordcount ~/singleFileDataset/data.txt ~/outputfolder/ result.txt 1024000
+
+
+== Build ==
+=== Option 1: Native java ===
+cd ~/workspace_java/wordcount/; 
+javac src/main/java/wordcount/multipleFiles/*.java; javac src/main/java/wordcount/multipleFilesDiffFolders/*.java; javac src/main/java/wordcount/multipleFilesNTimes/*.java; javac src/main/java/wordcount/multipleFilesReadWriteTasks/*.java;  javac src/main/java/wordcount/uniqueFile/*.java; 
+
+cd src/main/java/; jar cf wordcount.jar wordcount/
+cd ../../../; mv src/main/java/wordcount.jar jar/
+
+=== Option 2: Maven ===
+cd ~/workspace_java/wordcount/
+mvn clean package
