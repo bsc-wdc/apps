@@ -3,7 +3,7 @@
   	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>es.bsc.compss.mn-apps.sortbykey</groupId>
+		<groupId>es.bsc.compss.apps.sortbykey</groupId>
 		<artifactId>compss-mn-apps-sortbykey</artifactId>
 		<version>2.2</version>
 	</parent>

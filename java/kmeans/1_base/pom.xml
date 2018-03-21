@@ -6,7 +6,7 @@
 	<artifactId>kmeans_frag</artifactId>
 	<packaging>jar</packaging>
 	<parent>
-		<groupId>es.bsc.compss.mn-apps.kmeans</groupId>
+		<groupId>es.bsc.compss.apps.kmeans</groupId>
 		<artifactId>compss-mn-apps-kmeans</artifactId>
 		<version>2.2</version>
 	</parent>

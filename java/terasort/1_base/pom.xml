@@ -6,7 +6,7 @@
 	<artifactId>terasort</artifactId>
 	<packaging>jar</packaging>
 	<parent>
-		<groupId>es.bsc.compss.mn-apps.terasort</groupId>
+		<groupId>es.bsc.compss.apps.terasort</groupId>
 		<artifactId>compss-mn-apps-terasort</artifactId>
 		<version>2.2</version>
 	</parent>

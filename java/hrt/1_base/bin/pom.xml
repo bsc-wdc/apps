@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- GENERAL INFORMATION -->
-	<groupId>es.bsc.compss.compss-tutorial-apps</groupId>
+	<groupId>es.bsc.compss.apps.hrt</groupId>
 	<artifactId>hrt</artifactId>
 	<packaging>jar</packaging>
 	<parent>		

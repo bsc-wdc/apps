@@ -6,7 +6,7 @@
 	<artifactId>wordcount</artifactId>
 	<packaging>jar</packaging>
 	<parent>
-        	<groupId>es.bsc.compss.mn-apps.wordcount</groupId>
+        	<groupId>es.bsc.compss.apps.wordcount</groupId>
         	<artifactId>compss-mn-apps-wordcount</artifactId>
 		<version>2.2</version>
                 <relativePath>..</relativePath>
