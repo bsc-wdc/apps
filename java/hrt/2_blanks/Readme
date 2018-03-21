@@ -1,0 +1,24 @@
+This is the Readme for:
+HRT Blanks
+
+[Name]: HRT Blanks
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+
+== Build Instructions ==
+=== Option 1: Native java ===
+cd ~/workspace_java/hrtblanks/; javac src/main/java/hrt/*.java
+cd src/main/java/; jar cf hrtblanks.jar hrt/
+cd ../../../; mv src/main/java/hrtblanks.jar jar/
+
+=== Option 2: Maven ===
+cd ~/workspace_java/hrtblanks/
+mvn clean package
+
+== Execution Instructions ==
+
