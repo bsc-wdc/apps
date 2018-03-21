@@ -1,0 +1,169 @@
+property_list_with_nulls: [x, y, z]
+domainName: RegistratorDomain
+metaClassID: !dataClay.ID 'a70da678-d64e-474f-a4ce-3e839757b95a'
+contracts: !!set {!dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea': null}
+properties:
+  !dataClay.ID '14121871-7a87-4764-8e1c-a9bcae6eb8ff': {getterOperationID: !dataClay.ID '37b7d7d0-181b-426b-8d7d-ad4fe04b3ea9',
+    propertyName: x, propertyType: F, propertyID: !dataClay.ID '14121871-7a87-4764-8e1c-a9bcae6eb8ff',
+    setterOperationID: !dataClay.ID '9713bd39-7568-446d-901e-6363f05b4ef9'}
+  !dataClay.ID '334aed3d-6bfd-4f10-8c16-3e97d04e4300': {getterOperationID: !dataClay.ID '8542433b-173d-470c-87ca-5aafa7a4f6b5',
+    propertyName: y, propertyType: F, propertyID: !dataClay.ID '334aed3d-6bfd-4f10-8c16-3e97d04e4300',
+    setterOperationID: !dataClay.ID 'cf0b18fd-35cc-42f9-aa0d-9bc68fea1045'}
+  !dataClay.ID '49761f9d-9124-436c-bb07-db0e65e56f69': {getterOperationID: !dataClay.ID '9bced00e-6460-4362-968b-082c69f3a4d8',
+    propertyName: z, propertyType: F, propertyID: !dataClay.ID '49761f9d-9124-436c-bb07-db0e65e56f69',
+    setterOperationID: !dataClay.ID '2892aab2-53ae-4fae-959a-eb6f630353f1'}
+operations:
+  !dataClay.ID '2892aab2-53ae-4fae-959a-eb6f630353f1':
+    operationName: $$setz
+    operationSignature: $$setz(F)V
+    localImplID: !dataClay.ID '9f4dc7ff-c110-4c58-99fa-a1dbceac14c4'
+    remoteImplInfo: [!dataClay.ID '9f4dc7ff-c110-4c58-99fa-a1dbceac14c4', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: [param0]
+      types: [F]
+    operationID: !dataClay.ID '2892aab2-53ae-4fae-959a-eb6f630353f1'
+    returnType: V
+  !dataClay.ID 'cf0b18fd-35cc-42f9-aa0d-9bc68fea1045':
+    operationName: $$sety
+    operationSignature: $$sety(F)V
+    localImplID: !dataClay.ID '35b5015f-32f7-41c9-b8bc-afd343571c28'
+    remoteImplInfo: [!dataClay.ID '35b5015f-32f7-41c9-b8bc-afd343571c28', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: [param0]
+      types: [F]
+    operationID: !dataClay.ID 'cf0b18fd-35cc-42f9-aa0d-9bc68fea1045'
+    returnType: V
+  !dataClay.ID '4c49f2fa-1900-4300-9d84-33a162da7468':
+    operationName: getX
+    operationSignature: getX()F
+    localImplID: !dataClay.ID 'f0c02724-3475-4668-a171-d7ccf4865250'
+    remoteImplInfo: [!dataClay.ID 'f0c02724-3475-4668-a171-d7ccf4865250', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID '4c49f2fa-1900-4300-9d84-33a162da7468'
+    returnType: F
+  !dataClay.ID '70d06d5d-114f-4626-bf31-daa417124b43':
+    operationName: setZ
+    operationSignature: setZ(F)V
+    localImplID: !dataClay.ID '72019b68-8929-40e5-8a0e-2bbe97835578'
+    remoteImplInfo: [!dataClay.ID '72019b68-8929-40e5-8a0e-2bbe97835578', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: [param0]
+      types: [F]
+    operationID: !dataClay.ID '70d06d5d-114f-4626-bf31-daa417124b43'
+    returnType: V
+  !dataClay.ID '9713bd39-7568-446d-901e-6363f05b4ef9':
+    operationName: $$setx
+    operationSignature: $$setx(F)V
+    localImplID: !dataClay.ID '2922c52d-c9ec-432e-ae15-986276d90182'
+    remoteImplInfo: [!dataClay.ID '2922c52d-c9ec-432e-ae15-986276d90182', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: [param0]
+      types: [F]
+    operationID: !dataClay.ID '9713bd39-7568-446d-901e-6363f05b4ef9'
+    returnType: V
+  !dataClay.ID '33765355-4281-41d8-8783-35d290faa5af':
+    operationName: <init>
+    operationSignature: <init>(FFF)V
+    localImplID: !dataClay.ID '9a750ee7-d4aa-409c-8991-bedbacfd1702'
+    remoteImplInfo: [!dataClay.ID '9a750ee7-d4aa-409c-8991-bedbacfd1702', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: [param0, param1, param2]
+      types: [F, F, F]
+    operationID: !dataClay.ID '33765355-4281-41d8-8783-35d290faa5af'
+    returnType: V
+  !dataClay.ID '4cf2eb55-c73a-4f9a-b6b9-5773c7b8488a':
+    operationName: setY
+    operationSignature: setY(F)V
+    localImplID: !dataClay.ID 'f695c6bc-da72-4b7c-a0ff-063fa4edc422'
+    remoteImplInfo: [!dataClay.ID 'f695c6bc-da72-4b7c-a0ff-063fa4edc422', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: [param0]
+      types: [F]
+    operationID: !dataClay.ID '4cf2eb55-c73a-4f9a-b6b9-5773c7b8488a'
+    returnType: V
+  !dataClay.ID '8542433b-173d-470c-87ca-5aafa7a4f6b5':
+    operationName: $$gety
+    operationSignature: $$gety()F
+    localImplID: !dataClay.ID 'a9bab278-6472-4d1f-972d-5dd77b4e5297'
+    remoteImplInfo: [!dataClay.ID 'a9bab278-6472-4d1f-972d-5dd77b4e5297', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID '8542433b-173d-470c-87ca-5aafa7a4f6b5'
+    returnType: F
+  !dataClay.ID '9d63d20d-1efc-45ce-a754-ed843b42ccd7':
+    operationName: getZ
+    operationSignature: getZ()F
+    localImplID: !dataClay.ID '9aa35e03-06e8-4654-9897-7857687897f7'
+    remoteImplInfo: [!dataClay.ID '9aa35e03-06e8-4654-9897-7857687897f7', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID '9d63d20d-1efc-45ce-a754-ed843b42ccd7'
+    returnType: F
+  !dataClay.ID '42f0a590-d354-4cfd-99ce-dbb802bbf41d':
+    operationName: setX
+    operationSignature: setX(F)V
+    localImplID: !dataClay.ID '50191af1-9572-41fb-92ae-bc5e6a1cc4cf'
+    remoteImplInfo: [!dataClay.ID '50191af1-9572-41fb-92ae-bc5e6a1cc4cf', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: [param0]
+      types: [F]
+    operationID: !dataClay.ID '42f0a590-d354-4cfd-99ce-dbb802bbf41d'
+    returnType: V
+  !dataClay.ID 'a2afe47b-fb3f-4c67-989e-aa6fa373198a':
+    operationName: <init>
+    operationSignature: <init>()V
+    localImplID: !dataClay.ID '8b3d57e1-868c-45ea-a90a-d14b0a138f67'
+    remoteImplInfo: [!dataClay.ID '8b3d57e1-868c-45ea-a90a-d14b0a138f67', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID 'a2afe47b-fb3f-4c67-989e-aa6fa373198a'
+    returnType: V
+  !dataClay.ID '86ff0acd-35e2-452c-9ef6-2044f085e061':
+    operationName: getY
+    operationSignature: getY()F
+    localImplID: !dataClay.ID '827a5643-32b4-4c0b-8d96-bf0cfb02fec4'
+    remoteImplInfo: [!dataClay.ID '827a5643-32b4-4c0b-8d96-bf0cfb02fec4', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID '86ff0acd-35e2-452c-9ef6-2044f085e061'
+    returnType: F
+  !dataClay.ID '9bced00e-6460-4362-968b-082c69f3a4d8':
+    operationName: $$getz
+    operationSignature: $$getz()F
+    localImplID: !dataClay.ID '73a89b92-d339-4497-9139-f8f4bf2d2c09'
+    remoteImplInfo: [!dataClay.ID '73a89b92-d339-4497-9139-f8f4bf2d2c09', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID '9bced00e-6460-4362-968b-082c69f3a4d8'
+    returnType: F
+  !dataClay.ID '37b7d7d0-181b-426b-8d7d-ad4fe04b3ea9':
+    operationName: $$getx
+    operationSignature: $$getx()F
+    localImplID: !dataClay.ID 'e282d2ce-3d64-4150-bffd-000c1a914016'
+    remoteImplInfo: [!dataClay.ID 'e282d2ce-3d64-4150-bffd-000c1a914016', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID 'd72d581d-e7bf-49cf-92e3-acb96ffb9225']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID '37b7d7d0-181b-426b-8d7d-ad4fe04b3ea9'
+    returnType: F

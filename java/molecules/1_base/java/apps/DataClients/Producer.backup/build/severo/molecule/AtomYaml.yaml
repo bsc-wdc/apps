@@ -1,0 +1,158 @@
+property_list_with_nulls: [point, elementName, mass]
+domainName: RegistratorDomain
+metaClassID: !dataClay.ID '7d5956aa-7f56-4d47-87fd-2945ad4daae1'
+contracts: !!set {!dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea': null}
+properties:
+  !dataClay.ID '720ecb9e-646c-44a4-a1f0-e76b48098fbd': {getterOperationID: !dataClay.ID '524818a4-0e1b-4853-87ea-f93582144355',
+    propertyName: mass, propertyType: F, propertyID: !dataClay.ID '720ecb9e-646c-44a4-a1f0-e76b48098fbd',
+    setterOperationID: !dataClay.ID '867e5bbc-00cf-42fd-849f-520101c9b841'}
+  !dataClay.ID '83ec0b6d-782b-47f4-a509-befcae3d476c': {getterOperationID: !dataClay.ID 'af85c5cc-cfcb-430e-8368-92dd39b88751',
+    propertyName: point, propertyType: Lsevero/molecule/Point;, propertyID: !dataClay.ID '83ec0b6d-782b-47f4-a509-befcae3d476c',
+    setterOperationID: !dataClay.ID '09f39014-b398-4fa5-ae9b-97c6248de932'}
+  !dataClay.ID 'a86dd7a9-ed8c-48b9-9236-eacefb1dbfdc': {getterOperationID: !dataClay.ID '851d5b27-327f-44be-9ab1-e6868e93f936',
+    propertyName: elementName, propertyType: Ljava/lang/String;, propertyID: !dataClay.ID 'a86dd7a9-ed8c-48b9-9236-eacefb1dbfdc',
+    setterOperationID: !dataClay.ID 'd35fa5c8-1a4c-43b2-b549-84d6138a8426'}
+operations:
+  !dataClay.ID '804bb370-ee3a-4070-a1dc-6ed5e49bb290':
+    operationName: setElementName
+    operationSignature: setElementName(Ljava/lang/String;)V
+    localImplID: !dataClay.ID '61c6ad86-e9da-4ce7-a251-0e9ac729405d'
+    remoteImplInfo: [!dataClay.ID '61c6ad86-e9da-4ce7-a251-0e9ac729405d', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: [param0]
+      types: [Ljava/lang/String;]
+    operationID: !dataClay.ID '804bb370-ee3a-4070-a1dc-6ed5e49bb290'
+    returnType: V
+  !dataClay.ID '32fd7923-63fc-4045-873a-afb03b49bece':
+    operationName: getMass
+    operationSignature: getMass()F
+    localImplID: !dataClay.ID '3ec950a8-38a5-4789-a66d-cd0bdfc1e234'
+    remoteImplInfo: [!dataClay.ID '3ec950a8-38a5-4789-a66d-cd0bdfc1e234', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID '32fd7923-63fc-4045-873a-afb03b49bece'
+    returnType: F
+  !dataClay.ID 'af85c5cc-cfcb-430e-8368-92dd39b88751':
+    operationName: $$getpoint
+    operationSignature: $$getpoint()Lsevero/molecule/Point;
+    localImplID: !dataClay.ID '4bbdf31a-c591-4434-a042-e6eda308b229'
+    remoteImplInfo: [!dataClay.ID '4bbdf31a-c591-4434-a042-e6eda308b229', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID 'af85c5cc-cfcb-430e-8368-92dd39b88751'
+    returnType: Lsevero/molecule/Point;
+  !dataClay.ID '851d5b27-327f-44be-9ab1-e6868e93f936':
+    operationName: $$getelementName
+    operationSignature: $$getelementName()Ljava/lang/String;
+    localImplID: !dataClay.ID '64617a85-14e8-4a56-aba9-353fe103aa14'
+    remoteImplInfo: [!dataClay.ID '64617a85-14e8-4a56-aba9-353fe103aa14', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID '851d5b27-327f-44be-9ab1-e6868e93f936'
+    returnType: Ljava/lang/String;
+  !dataClay.ID '61a0c39e-009a-4607-882f-887791f38581':
+    operationName: setPoint
+    operationSignature: setPoint(Lsevero/molecule/Point;)V
+    localImplID: !dataClay.ID 'f77791fa-819b-41b3-b77b-bf85b3e31ea9'
+    remoteImplInfo: [!dataClay.ID 'f77791fa-819b-41b3-b77b-bf85b3e31ea9', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: [param0]
+      types: [Lsevero/molecule/Point;]
+    operationID: !dataClay.ID '61a0c39e-009a-4607-882f-887791f38581'
+    returnType: V
+  !dataClay.ID '0df63e98-7d77-4565-b8bb-9fd069150317':
+    operationName: getElementName
+    operationSignature: getElementName()Ljava/lang/String;
+    localImplID: !dataClay.ID '0a129325-fe07-45ab-b8e4-f424b0f48480'
+    remoteImplInfo: [!dataClay.ID '0a129325-fe07-45ab-b8e4-f424b0f48480', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID '0df63e98-7d77-4565-b8bb-9fd069150317'
+    returnType: Ljava/lang/String;
+  !dataClay.ID 'd35fa5c8-1a4c-43b2-b549-84d6138a8426':
+    operationName: $$setelementName
+    operationSignature: $$setelementName(Ljava/lang/String;)V
+    localImplID: !dataClay.ID 'a399ad5c-ac3e-4c24-9393-977ea7f1a150'
+    remoteImplInfo: [!dataClay.ID 'a399ad5c-ac3e-4c24-9393-977ea7f1a150', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: [param0]
+      types: [Ljava/lang/String;]
+    operationID: !dataClay.ID 'd35fa5c8-1a4c-43b2-b549-84d6138a8426'
+    returnType: V
+  !dataClay.ID '524818a4-0e1b-4853-87ea-f93582144355':
+    operationName: $$getmass
+    operationSignature: $$getmass()F
+    localImplID: !dataClay.ID 'fa6901c1-a8f0-4b97-9fb5-f486216c99b1'
+    remoteImplInfo: [!dataClay.ID 'fa6901c1-a8f0-4b97-9fb5-f486216c99b1', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID '524818a4-0e1b-4853-87ea-f93582144355'
+    returnType: F
+  !dataClay.ID '917869f1-c594-4538-9e19-d5ebe64935a1':
+    operationName: setMass
+    operationSignature: setMass(F)V
+    localImplID: !dataClay.ID 'e00c3126-57de-4e0b-8ded-2af961262a18'
+    remoteImplInfo: [!dataClay.ID 'e00c3126-57de-4e0b-8ded-2af961262a18', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: [param0]
+      types: [F]
+    operationID: !dataClay.ID '917869f1-c594-4538-9e19-d5ebe64935a1'
+    returnType: V
+  !dataClay.ID 'c4b2d55e-2f40-43d7-8297-3eff87d90149':
+    operationName: <init>
+    operationSignature: <init>(Ljava/lang/String;FFFF)V
+    localImplID: !dataClay.ID 'f5d13364-8940-47ae-ad4d-6d2e525cde0d'
+    remoteImplInfo: [!dataClay.ID 'f5d13364-8940-47ae-ad4d-6d2e525cde0d', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: [param0, param1, param2, param3, param4]
+      types: [Ljava/lang/String;, F, F, F, F]
+    operationID: !dataClay.ID 'c4b2d55e-2f40-43d7-8297-3eff87d90149'
+    returnType: V
+  !dataClay.ID 'c0d1a0ee-de2e-4e48-8a5d-85fcdabe691a':
+    operationName: getPoint
+    operationSignature: getPoint()Lsevero/molecule/Point;
+    localImplID: !dataClay.ID 'ce155e4b-0b79-4b25-b504-af8990be2510'
+    remoteImplInfo: [!dataClay.ID 'ce155e4b-0b79-4b25-b504-af8990be2510', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: []
+      types: []
+    operationID: !dataClay.ID 'c0d1a0ee-de2e-4e48-8a5d-85fcdabe691a'
+    returnType: Lsevero/molecule/Point;
+  !dataClay.ID '09f39014-b398-4fa5-ae9b-97c6248de932':
+    operationName: $$setpoint
+    operationSignature: $$setpoint(Lsevero/molecule/Point;)V
+    localImplID: !dataClay.ID '5bee476f-c40c-4093-9a3a-7c5baa9ff348'
+    remoteImplInfo: [!dataClay.ID '5bee476f-c40c-4093-9a3a-7c5baa9ff348', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: [param0]
+      types: [Lsevero/molecule/Point;]
+    operationID: !dataClay.ID '09f39014-b398-4fa5-ae9b-97c6248de932'
+    returnType: V
+  !dataClay.ID '867e5bbc-00cf-42fd-849f-520101c9b841':
+    operationName: $$setmass
+    operationSignature: $$setmass(F)V
+    localImplID: !dataClay.ID 'ee2af882-d367-43de-8ab5-a616700831aa'
+    remoteImplInfo: [!dataClay.ID 'ee2af882-d367-43de-8ab5-a616700831aa', !dataClay.ID 'd587170f-520f-43b8-b698-668f33a858ea',
+      !dataClay.ID '6fd91544-e342-4d35-b5a1-5622af91666d']
+    parameters:
+      names: [param0]
+      types: [F]
+    operationID: !dataClay.ID '867e5bbc-00cf-42fd-849f-520101c9b841'
+    returnType: V

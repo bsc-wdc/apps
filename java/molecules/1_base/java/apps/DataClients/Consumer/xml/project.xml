@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+	  <Worker Name="84.88.52.246">
+            <InstallDir>/home/cdiaz/opt/COMPSs/Runtime/scripts/system/</InstallDir>
+            <WorkingDir>/home/cdiaz/tmpConsumer/</WorkingDir>
+            <User>cdiaz</User>
+            <LimitOfTasks>4</LimitOfTasks>
+			<StorageConf>/home/cdiaz/workspaceJ/severo/apps/COMPSs-SCO/DataClients/Consumer/cfgfiles/consumer.properties</StorageConf>
+          </Worker>
+
+	  <Worker Name="84.88.52.247">
+            <InstallDir>/home/cdiaz/opt/COMPSs/Runtime/scripts/system/</InstallDir>
+            <WorkingDir>/home/cdiaz/tmpConsumer/</WorkingDir>
+            <User>cdiaz</User>
+            <LimitOfTasks>4</LimitOfTasks>
+			<StorageConf>/home/cdiaz/workspaceJ/severo/apps/COMPSs-SCO/DataClients/Consumer/cfgfiles/consumer.properties</StorageConf>
+          </Worker>
+</Project>
