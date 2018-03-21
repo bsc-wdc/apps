@@ -1,0 +1,60 @@
+This is the Readme for:
+Blast Blanks
+
+[Name]: Blast Blanks
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+ == Description ==
+BLAST (Basic Local Alignment Search Tool) is an algorithm for comparing primary biological sequence information, such as the amino-acid sequences of different proteins or nucleotides of DNA sequences. BLAST enables a researcher to compare a query sequence with a library or database of sequences, and identify sequences that resemble the query sequence above a certain threshold.
+
+The COMPSs application contains three main blocks:
+
+– Split: the query sequences file is splitted in N fragments.
+
+– Alignment: each sequence fragment is compared against the database by the blast binary.
+
+- Assembly: assembly process combines all intermediate files into a single result file.
+
+Only for tutorial purposes.
+
+
+== Versions ==
+There are two versions of the BLAST application, varying on how the merge operation is performed
+=== Version 1 ===
+''2-by-2'', the results of the Alignment tasks are merged 2 by 2
+=== Version 2 ===
+''All-to-One'', this version processes the merge operation in one final step
+
+
+== Execution instructions ==
+Usage:
+runcompss blast.Blast <debug> <binary> <database> <sequences> <#fragments> <tmpdir> <output> <cmd_args>
+
+where:
+		 * - debug: Set the debug mode on
+		 * - binary: Blast binary location
+		 * - database: Database Name
+		 * - sequences: Input sequences path
+		 * - #fragments: Fragments number
+		 * - tmpdir: Temporary directory
+		 * - output: Output file
+		 * - cmd_args: Command line Arguments of the Blast binary
+
+
+== Execution Example ==
+runcompss blast.Blast true /home/user/workspace/blast/binary/blastall /sharedDisk/blast/databases/swissprot/swissprot /sharedDisk/blast/sequences/sargasso_test.fasta 4 /tmp/ /home/user/out.txt
+
+
+== Build ==
+=== Option 1: Native java ===
+cd ~/workspace_java/blastblanks/; javac src/main/java/blast/*.java
+cd src/main/java/; jar cf blastblanks.jar blast/
+cd ../../../; mv src/main/java/blastblanks.jar jar/
+
+=== Option 2: Maven ===
+cd ~/workspace_java/blastblanks/
+mvn clean package
