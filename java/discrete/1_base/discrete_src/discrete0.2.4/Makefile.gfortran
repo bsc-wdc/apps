@@ -1,0 +1,37 @@
+DEBUG =
+DEBUG = -g -fbacktrace -fbounds-check 
+PROFILE =
+PROFILE = -pg
+PARALLEL =
+# OMP
+#PARALLEL =  -fopenmp -DOMP
+#
+# Binary format
+#BINFMT = -fconvert=big-endian
+BINFMT =
+#
+#OPTIONS = -O3 -132  $(PARALLEL)   -fpp -cm -unroll -align -align commons  -ip 
+OPTIONS = -O3 $(PARALLEL) -fimplicit-none -funroll-loops -mtune=native -march=native -Wall -ftree-vectorizer-verbose=1 -ffast-math  
+#
+#LOPTIONS=   $(PARALLEL)  -Vaxlib  -static-libcxa
+LOPTIONS=   $(PARALLEL) 
+OBJS = IO.o random.o energy.o colisio.o
+MODS = commLine.o geometry.o geometryDP.o stepPotentials.o intList.o paramSet.o
+INCS = namelist.h vars.h
+#F77= ifort
+F77= gfortran
+CPP= cpp
+CFLAGS = -c $(DEBUG) $(PROFILE) 
+LFLAGS = $(PROFILE)
+
+discrete: ${MODS} $(OBJS) main.o
+	$(F77) $(LFLAGS) -o ../../exe/discrete0.2 $(LOPTIONS) $(OBJS) $(MODS) main.o
+openFiles.o: $(INCS)
+	$(F77) -ffree-form $(OPTIONS) $(PC32) $(CFLAGS) openFiles.F
+
+.f.o: $(INCS) $<
+	$(F77) -ffree-form $(OPTIONS) $(PC32) $(CFLAGS) $<
+.F.o: $(INCS) $<
+	$(F77) -ffree-form $(OPTIONS) $(PC32) $(CFLAGS) $<
+clean: 
+	rm *.o *.mod ../../exe/discrete0.2

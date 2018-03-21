@@ -1,0 +1,34 @@
+This is the Readme for:
+Discrete Blanks
+
+[Name]: Discrete Blanks
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+ == Description ==
+Discrete application
+
+Only for tutorial purposes.
+
+== Execution instructions ==
+Usage:
+runcompss discrete.Discrete <...>
+
+where:
+		 * - debug: Set the debug mode on
+
+Example:
+runcompss discrete.Discrete <...>
+
+== Build ==
+=== Option 1: Native java ===
+cd ~/workspace_java/discreteblanks/; javac src/main/java/discreteblanks/*.java
+cd src/main/java/; jar cf discreteblanks.jar discrete/
+cd ../../../; mv src/main/java/discreteblanks.jar jar/
+
+=== Option 2: Maven ===
+cd ~/workspace_java/discreteblanks/
+mvn clean package
