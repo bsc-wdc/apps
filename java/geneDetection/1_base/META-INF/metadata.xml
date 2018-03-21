@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project_metadata main_package="es.bsc.genedetection" name="GeneDetection" runtime_location="/opt/COMPSs/" source_dir="src">
+  <orchestration_class class="es.bsc.genedetection.GeneDetection" type="Web Service Interface Class"/>
+  <dependency location="${blast.location}" type="Normal Folder">
+    <element label="runNCBIFormatdb(STRING_T,FILE_T)core.genedetect.GeneDetectMethods"/>
+    <element label="runNCBIBlastAgainstDBFromFASTA(FILE_T,OBJECT_T,OBJECT_T)core.genedetect.GeneDetectMethods"/>
+    <element label="runNCBIBlastp(OBJECT_T,OBJECT_T)core.genedetect.GeneDetectMethods"/>
+</dependency>
+<dependency location="/home/cramonco/svn/bar/apps/java/geneDetection/data/sequence" type="Normal Folder">
+    <element label="detectGenes(java.lang.String, java.lang.String):java.lang.String"/>
+<element label="detectGenes(core.genedetect.NemusString, core.genedetect.NemusString):core.genedetect.NemusString"/>
+
+  <element label="detectGenes(java.lang.String, java.lang.String, java.lang.String, int, int, float, java.lang.String, java.lang.String, java.lang.String, int, int, float)es.bsc.genedetection.GeneDetection"/>
+  </dependency>
+<elasticity element="mergeBlastResults(OBJECT_T,OBJECT_T)core.genedetect.GeneDetectMethods" max="6" min="2"/>
+<elasticity element="mergeGenewiseResults(OBJECT_T)core.genedetect.GenewiseReport" max="6" min="2"/>
+<elasticity element="runNCBIFormatdb(OBJECT_T,FILE_T)core.genedetect.GeneDetectMethods" max="1" min="1"/>
+<elasticity element="runNCBIFormatdb(STRING_T,FILE_T)core.genedetect.GeneDetectMethods" max="1" min="1"/>
+<elasticity element="fromFastaToCommentedNASequence(STRING_T,FILE_T)core.genedetect.GeneDetectMethods" max="1" min="1"/>
+<elasticity element="test(OBJECT_T)Test" max="1" min="1"/>
+<elasticity element="test(OBJECT_T)es.bsc.genedetection.coreelements.Test" max="1" min="1"/>
+
+<elasticity element="runNCBIBlastAgainstDBFromFASTA(FILE_T,OBJECT_T,OBJECT_T)core.genedetect.GeneDetectMethods" max="9" min="3"/>
+<elasticity element="runNCBIBlastp(OBJECT_T,OBJECT_T)core.genedetect.GeneDetectMethods" max="10" min="5"/>
+<elasticity element="runNCBIFormatdb(OBJECT_T,OBJECT_T)core.genedetect.GeneDetectMethods" max="1" min="1"/>
+<elasticity element="fromFastaToCommentedNASequence(OBJECT_T,OBJECT_T)core.genedetect.GeneDetectMethods" max="1" min="1"/>
+ 
+<elasticity element="runNCBIBlastAgainstDBFromFASTA(OBJECT_T,OBJECT_T,OBJECT_T)core.genedetect.GeneDetectMethods" max="1" min="1"/>
+
+
+<elasticity element="prepareGenewiseFiles(OBJECT_T,OBJECT_T,OBJECT_T,OBJECT_T,OBJECT_T,OBJECT_T)core.genedetect.GeneDetectMethods" max="1" min="1"/>
+<dependency location="/home/cramonco/svn/bar/apps/java/geneDetection/data/genome.zip" type="ZIP File">
+    <element label="runNCBIFormatdb(STRING_T,FILE_T)core.genedetect.GeneDetectMethods"/>
+  
+  </dependency>
+  <dependency location="/home/cramonco/svn/bar/apps/java/geneDetection/data/sequence" type="Normal Folder">
+    <element label="detectGenes(core.genedetect.NemusString, core.genedetect.NemusString, int, int, float):core.genedetect.NemusString"/>
+  <element label="detectGenes(java.lang.String, java.lang.String, int, int, float)es.bsc.genedetection.GeneDetection"/>
+  <element label="detectGenes(java.lang.String, java.lang.String, java.lang.String, int, int, float)es.bsc.genedetection.GeneDetection"/>
+  </dependency>
+  <dependency location="/home/cramonco/svn/bar/apps/java/geneDetection/data/scripts/fromFastaToCommentedNASequence" type="Normal Folder">
+    <element label="fromFastaToCommentedNASequence(STRING_T,FILE_T)core.genedetect.GeneDetectMethods"/>
+  </dependency>
+  <dependency location="${wise.location}" type="Normal Folder">
+	  <element label="runGenewise(FILE_T,OBJECT_T,OBJECT_T,OBJECT_T)core.genedetect.GeneDetectMethods"/>
+	  <element label="runGeneWise(FILE_T,FILE_T,OBJECT_T)es.bsc.genedetection.coreelements.GeneWise"/>
+  </dependency>
+
+<elasticity element="postProcessGenewise(OBJECT_T,OBJECT_T)core.genedetect.GeneDetectMethods" max="1" min="1"/>
+  
+<elasticity element="runGeneWise(FILE_T,FILE_T,OBJECT_T)es.bsc.genedetection.coreelements.GeneWise" max="4" min="2"/>
+
+<elasticity element="prepareGenewiseFiles(FILE_T,OBJECT_T,OBJECT_T,OBJECT_T,FILE_T,FILE_T)core.genedetect.GeneDetectMethods" max="1" min="1"/>
+  
+<elasticity element="detectGenes(java.lang.String, java.lang.String, int, int, float)es.bsc.genedetection.GeneDetection" max="1" min="1"/>
+  
+<elasticity element="getDatabase()core.genedetect.GeneDetectMethods" max="1" min="1"/>
+
+  
+<elasticity element="detectGenes(java.lang.String, java.lang.String, java.lang.String, int, int, float)es.bsc.genedetection.GeneDetection" max="1" min="1"/>
+<dependency location="/home/cramonco/svn/bar/apps/java/geneDetection/data/ApplicationGlobalCheckings-1.0-jar-with-dependencies.jar" other_info="" type="JAR Library">
+    <element label="detectGenes(java.lang.String, java.lang.String, java.lang.String, int, int, float)es.bsc.genedetection.GeneDetection"/>
+  </dependency>
+  <dependency location="/home/cramonco/svn/bar/apps/java/geneDetection/data/GeneDetectionGUI.war" other_info="" type="WAR File">
+    <element label="detectGenes(java.lang.String, java.lang.String, java.lang.String, int, int, float)es.bsc.genedetection.GeneDetection"/>
+  </dependency>
+
+<dependency imported="false" location="/opt/COMPSs/Runtime/rt/compss-rt.jar" other_info="" type="JAR Library"/>
+<elasticity element="detectGenes(java.lang.String, java.lang.String, java.lang.String, int, int, float, java.lang.String, java.lang.String, java.lang.String, int, int, float)es.bsc.genedetection.GeneDetection" max="1" min="1"/>
+</project_metadata>

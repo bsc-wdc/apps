@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ResourceList>
+<Service wsdl="http://bscgrid05.bsc.es:20390/biotools/biotools?wsdl">
+    <Name>BioTools</Name>
+    <Namespace>http://genedetect.core</Namespace>
+    <Port>BioToolsPort</Port>
+  </Service>
+</ResourceList>
