@@ -7,7 +7,7 @@
 	<packaging>jar</packaging>
 	<parent>
 		<groupId>es.bsc.compss.apps.matmul</groupId>
-		<artifactId>compss-mn-apps-matmul</artifactId>
+		<artifactId>compss-apps-matmul</artifactId>
 		<version>2.2</version>
 	        <relativePath>..</relativePath>
 	</parent>
