@@ -1,3 +1,10 @@
-# Intellij 
-.idea
+# IntelliJ files
 *.iml
+*.idea
+
+# Eclipse files
+target/
+.settings/
+.classpath
+.project
+
