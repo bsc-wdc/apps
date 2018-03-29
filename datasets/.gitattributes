@@ -1,0 +1,5 @@
+wordcount/shakespeare.txt filter=lfs diff=lfs merge=lfs -text
+wordcount/all.txt filter=lfs diff=lfs merge=lfs -text
+wordcount/compss.txt filter=lfs diff=lfs merge=lfs -text
+wordcount/shakespeare2.txt filter=lfs diff=lfs merge=lfs -text
+wordcount/shakespeare4.txt filter=lfs diff=lfs merge=lfs -text
