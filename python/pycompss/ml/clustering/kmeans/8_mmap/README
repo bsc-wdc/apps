@@ -1,0 +1,1 @@
+./launch_1_3.sh 33 false 10000000 1000 100 512 "random" /gpfs/projects/bsc19/COMPSs_APPS/kmeans/data/spark/dataset_10M_100C_1000D_512F

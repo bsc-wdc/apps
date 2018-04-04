@@ -1,0 +1,38 @@
+This is the Readme for:
+kmeans
+
+[Name]: kmeans
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+kmeans
+
+== Versions ==
+* - 1_base: base version
+* - 2_2steps: Base algorithm version 2: better task granularity 
+* - 3_2stepsnotwait:  
+* - 4_nruns: execute n runs of kmeans function.
+* - 5_initMode: 3 ways to initialize centers: random, kmeans++||, kmeans++ 
+* - 6_spark: 
+* - 7_merge:
+* - 8_mmap:   
+* - 9_genData: generates data and runs kmeans
+* - 10_genData:
+* - 11_tensorflow
+* - 12_latest: common version with dataClay 
+                                                                                                                    
+== Execution instructions ==                                                                                        
+Usage:                                                                                                                             
+kmeans.py <numPoints> <dim> <k> <fragments>                                                      
+                                                                                                                    
+where:                                                                                                              
+                 * - numPoints: number of points                                                                    
+                 * - dim: dimension of the points (2)                                                               
+                 * - fragments: number of fragments                                                                 
+                 * - k: number of centers                                                                                                                                        
+== Build ==                                                                                                         
+No build is required
