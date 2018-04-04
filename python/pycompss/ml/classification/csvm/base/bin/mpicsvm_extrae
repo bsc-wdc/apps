@@ -1,0 +1,16 @@
+#!/bin/bash
+
+export EXTRAE_HOME=/opt/extrae
+export EXTRAE_CONFIG_FILE=${pwd}../cfg/extrae_local.xml
+export LD_PRELOAD=${EXTRAE_HOME}/lib/libpttrace.so
+export PYTHONPATH=${PYTHONPATH}:${EXTRAE_HOME}/lib:${EXTRAE_HOME}/libexec
+#export LD_PRELOAD=${EXTRAE_HOME}/lib/libmpitrace.so
+
+    python $(pwd)/../src/mpi/mpi_csvm.py train \
+    -f csv \
+    -r 10 \
+    -C 10000 \
+    -g 0.01 \
+    -k rbf \
+    -s model \
+    $(pwd)/../data/sample.csv
