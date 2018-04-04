@@ -1,0 +1,24 @@
+This is the Readme for:
+PCA
+
+[Name]: PCA
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+PCA
+
+== Versions ==
+* - 1_base: base version
+ 
+== Execution instructions ==                                                                                        
+Usage:                                                                                                                             
+pca_distributed.py                                                      
+                                                                                                                    
+where:                                                                                                              
+                 * -                                                                                                                                        
+== Build ==                                                                                                         
+No build is required

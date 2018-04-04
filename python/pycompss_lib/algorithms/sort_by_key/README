@@ -1,0 +1,39 @@
+This is the Readme for:
+sortByKey
+
+[Name]: sortByKey
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+sortByKey
+
+== Versions ==
+* - 1_base: base version
+* - 2_hash
+* - 3_files
+* - 4_sortNumpy
+* - 5_sortTotal
+* - 6_sortByKey
+ 
+== Execution instructions ==                                                                                        
+Usage:                                                                                                                             
+sort.py <numKeys> <uniqueKeys> <keyLenght> <uniqueValues> <valueLenght>
+<numFragments> <keysPerFragment> <randomSeed> <fromFiles> <path>                                                      
+                                                                                                                    
+where:                                                                                                              
+                 * - numKeys:
+                 * - uniqueKeys:
+                 * - keyLenght:
+                 * - uniqueValues:
+                 * - valueLenght:
+                 * - numFragments:
+                 * - keysPerFragment:
+                 * - randomSeed:
+                 * - fromFiles:
+                 * - path:                                                                                                                                       
+== Build ==                                                                                                         
+No build is required

@@ -1,0 +1,31 @@
+This is the Readme for:
+qr
+
+[Name]: qr
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+QR decomposition of a square matrix, MxM blocks, NxN each one
+The computation cost is calculated as follows (links to Wolfram Alpha to compute the amount of executions of each instruction). Look up the code to see the implementation of each function.
+qr: M
+dot: M^2 + 0.5*(M - 1)*M
+https://www.wolframalpha.com/input/?i=(sum+from+i+%3D+1+to+M+sum+from+j+%3D+i+%2B+1+to+M+1)++%2B+(sum+from+i+%3D+1+to+M+sum+from+j+%3D+1+to+M+1)
+littleQR: 0.5*(M-1)*M
+https://www.wolframalpha.com/input/?i=sum+from+i+%3D+1+to+M+sum+from+j+%3D+i+%2B+1+to+M+1
+multiplyBlocked: 0.5*(M^2)*(M-1) + (1/6)*M*((2*M^2)-3*M+1)
+https://www.wolframalpha.com/input/?i=(sum+from+i+%3D+1+to+M+(sum+from+j+%3D+i+%2B+1+to+M+(sum+from+k+%3D+i+%2B+1+to+M+(1))))
+https://www.wolframalpha.com/input/?i=(sum+from+i+%3D+1+to+M+(sum+from+j+%3D+i+%2B+1+to+M+(sum+from+k+%3D+1+to+M+(1))))
+
+== Versions ==
+* - 1_base: distributed initialisation 
+
+== Execution instructions ==
+Usage:
+
+== Build ==
+No build is required
+

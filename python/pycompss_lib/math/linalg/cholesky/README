@@ -1,0 +1,22 @@
+This is the Readme for:
+cholesky
+
+[Name]: cholesky
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Cholesky decomposition
+
+== Versions ==
+* - 1_base: distributed initialisation 
+
+== Execution instructions ==
+Usage:
+
+== Build ==
+No build is required
+

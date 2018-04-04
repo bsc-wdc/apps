@@ -1,0 +1,27 @@
+This is the Readme for:
+Terasort
+
+[Name]: terasort
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Terasort
+
+== Versions ==
+* - 1_base: base version
+* - 2_base_oo: object oriented implementation of the base version
+
+== Execution instructions ==
+Usage:
+terasort.py <numFragments> <numEntries>
+
+where:
+                 * - numFragments: number of fragments
+                 * - numEntries: number of (k,v) pairs within each fragment
+                 
+== Build ==
+No build is required
