@@ -1,0 +1,41 @@
+This is the Readme for:
+Word Count
+
+[Name]: Word Count
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+ == Description ==
+Parallel Word Count. Read file by the worker.
+
+== Versions ==
+There are three versions of wordcount, depending on the reduce type and the number of files used in the algorithm.
+=== Version 1 ===
+''reduce'', where the reduce task is done by a sequential algorithm.
+=== Version 2 ===
+''merge'', where the reduce task is done by a merge tree algorithm.
+=== Version 3 ===
+''chunkFile'', where the input can be a single file or multiple files. If it's a single file, the wordcount task reads a chunk.
+
+
+== Execution instructions ==
+Usage:
+runcompss reduce/wordcount.py <path>
+runcompss merge/wordcount.py <path>
+runcompss chunkFile/wordcount.py <path> <multipleFiles> [<sizeChunk>]
+
+where:
+                 * - path: Dataset path
+                 * - multipleFiles: True or False
+                 * - sizeChunk: if Multiple Files, chunk's size in bytes
+
+
+== Execution Example ==
+runcompss chunkFile/wordcount.py /data/text_15500.txt False 1024
+
+
+== Build ==
+No build is required
