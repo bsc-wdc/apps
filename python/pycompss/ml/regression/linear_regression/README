@@ -1,0 +1,26 @@
+This is the Readme for:
+linearRegression
+
+[Name]: linearRegression
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+LinearRegression
+
+== Versions ==
+* - 1_base: base version
+* - 2_noWaitOns: Improve 
+* - 3_initParallel: Init data in parallel tasks                                                                                                                    
+== Execution instructions ==                                                                                        
+Usage:                                                                                                                             
+linearRegression.py <numPoints> <fragments>                                                      
+                                                                                                                    
+where:                                                                                                              
+                 * - numPoints: number of points                                                                                                        
+                 * - fragments: number of fragments                                                                                                                                                                    
+== Build ==                                                                                                         
+No build is required
