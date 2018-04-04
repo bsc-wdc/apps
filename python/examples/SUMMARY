@@ -1,0 +1,14 @@
+
+=== Applications ===
+
+- gaussQuadrature: Numerical integration
+- linearRegression: linear regression
+- matmul: matrix multiplication
+- mnum: root finding numerical methods with high precision
+- mandelbrot: Mandelbrot Fractal 
+- geneticAlgorithm: genetic algorithm
+- kmeans: clustering method
+- PCA: principal componen analysis
+- max: find point with maximum norm
+- sortNumbers: sort n numbers
+- wordcount: Count the words appearances.

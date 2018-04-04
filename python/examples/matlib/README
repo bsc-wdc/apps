@@ -1,0 +1,3 @@
+The modules hierarchy should be equal to the one used by numpy.
+On OpenSUSE, this hierarchy can be found in the following path:
+/usr/lib64/python2.7/site-packages/numpy

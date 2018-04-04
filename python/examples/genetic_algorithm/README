@@ -1,0 +1,26 @@
+This is the Readme for:
+geneticAlgorithm
+
+[Name]: geneticAlgorithm
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+GeneticAlgorithm
+
+== Versions ==
+* - 1_base: base version                                                                                                                    
+== Execution instructions ==                                                                                        
+Usage:                                                                                                                             
+gen.py <numIndividuals> <sizeIndividual> <Target> <LifeCycles>                                                      
+                                                                                                                    
+where:                                                                                                              
+                 * - numIndividuals: number of individuals                                                                    
+                 * - sizeIndividual: dimension of the individual                                                               
+                 * - Target: goal                                                                 
+                 * - lifeCycles: steps                                                                                                                                        
+== Build ==                                                                                                         
+No build is required

@@ -1,0 +1,23 @@
+This is the Readme for:
+mandelbrot
+
+[Name]: mandelbrot
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Mandelbrot fractal. Every row of the image is computed using a task.
+
+== Versions ==
+* - 1_base: base version                                                                                                                    
+== Execution instructions ==                                                                                        
+Usage:                                                                                                                             
+mandel.py <numPoints>                                                      
+                                                                                                                    
+where:                                                                                                              
+                 * - numPoints: number of points                                                                                                                                                                           
+== Build ==                                                                                                         
+No build is required

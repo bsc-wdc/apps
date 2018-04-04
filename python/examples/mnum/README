@@ -1,0 +1,25 @@
+This is the Readme for:
+mnum
+
+[Name]: mnum
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+MNUM is a system to solve non-linear equations using iterative methods and
+divided difference.
+
+== Versions ==
+* - 1_base: base version                                                                                                                    
+== Execution instructions ==                                                                                        
+Usage:                                                                                                                             
+mnum.py <numPoints> <precision>                                                      
+                                                                                                                    
+where:                                                                                                              
+                 * - numPoints: number of points                                                                    
+                 * - precision: precision                                                                                                                                                                                                                                                       
+== Build ==                                                                                                         
+No build is required

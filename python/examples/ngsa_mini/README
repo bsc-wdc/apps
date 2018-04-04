@@ -1,0 +1,37 @@
+This is the Readme for:
+NGSA-mini (PyCOMPSS version)
+
+[Name]: NGSA-mini
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+NGS Analyzer-Mini adapted to PyCOMPSs
+
+== Versions ==
+* - 0_initial: First version of the original MPI workflow respecting the original tasks structure
+* - 1_compssify: this version has been changed and adapted to COMPSs' potentiality by creating more tasks
+* - 2_compssify_buckets: (UNFINISHED) like 1_compssify but grouping tasks in the second part of the workflow (remove duplicates and analyze)
+
+== Execution instructions ==                                                                                        
+Usage: 
+runcompss --pythonpath=PATH_TO_BIN PATH_TO_BIN/ngsa-mini-py BWA_DB_FILE CONTIG_FILE REFERENCE_FILE REFERENCE_INDEX_FILE INPUT_DIR NUM_FOLDERS
+
+where:
+	 * - PATH_TO_BIN: full path to workflow.py file, ie /full/path/to/this/folder/0_initial/src or /full/path/to/this/folder/1_compssify/src
+	 * - BWA_DB_FILE, CONTIG_FILE, REFERENCE_FILE, REFERENCE_INDEX_FILE: paths to different input files
+	 * - INPUT_DIR: path to folder containing rank-based inputs
+	 * - NUM_FOLDERS: number of folders in INPUT_DIR
+
+Example:
+runcompss --pythonpath=/home/compss/apps/ngsa-mini-py/bin /home/compss/apps/ngsa-mini-py/bin/workflow.py ./input/bwa_db/reference.fa ./input/seq_contig.md ./input/reference.fa ./input/reference.fa.fai ./input/00-read-rank/ 8
+
+*** In Mare Nostrum, check launch_mn.sh script to enqueue the execution.
+
+
+== Build ==                                                                                                         
+No build is required
+
