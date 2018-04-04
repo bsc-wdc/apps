@@ -1,0 +1,43 @@
+== Description of the JOB folders ==
+
+--- Java Version ---
+
+- 2923591
+        Sequential
+
+- 2923594
+        Graph   YES
+        Trace   NO
+        Level   DEBUG
+
+- 2923597
+        Graph   NO
+        Trace   NO
+        Level   OFF
+
+- 2923602
+        Graph   NO
+        Trace   YES
+        Level   OFF
+
+--- Python version ---
+
+- 3088422 
+        Graph   YES
+        Trace   NO
+        Level   DEBUG
+
+- 3088509 
+        Graph   NO
+        Trace   NO
+        Level   OFF
+
+- 3088606
+        Graph   NO
+        Trace   YES  (only PyCOMPSs trace)
+        Level   OFF
+
+- 3088607
+        Graph   NO
+        Trace   YES  (PyCOMPSs trace + mpi task trace in GPFS projects)
+        Level   OFF
