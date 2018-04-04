@@ -288,7 +288,7 @@ def update(clusters, possibleClusters, returnCluster):
                 defCluster[i].append(point)
     return defCluster
 
-def DBSCAN(dataFile, fragSize, epsilon, minPoints, numParts):
+def DBScan(dataFile, fragSize, epsilon, minPoints, numParts):
     """
     Main DBSCAN algorithm.
     :param dataFile:    path to the dataset.    

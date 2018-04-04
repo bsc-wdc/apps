@@ -94,7 +94,7 @@ def init_board_gauss(N, k):
 
 
 
-if __name__ == "__main__":
+def Kmeans():
     import sys
     from pycompss.api.api import compss_wait_on
     #from kmeans.experiment_params_800 import nList,kList,n,k
@@ -187,3 +187,6 @@ if __name__ == "__main__":
     plt.autoscale(enable=True, axis='both', tight=False)
     plt.savefig(rfile)
     '''
+
+if __name__ == "__main__":
+    kmeans()
