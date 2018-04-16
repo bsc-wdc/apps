@@ -8,10 +8,10 @@
 	<artifactId>compss-apps-molecules</artifactId>
 	<packaging>pom</packaging>
 	<parent>
-		<groupId>es.bsc.compss.apps</groupId>
-		<artifactId>compss-apps-all</artifactId>
-		<version>2.2</version>
-		<relativePath>..</relativePath>
+		<groupId>es.bsc.compss.apps.java</groupId>
+		<artifactId>compss-apps-java</artifactId>
+		<version>2.2.rc1803</version>
+		<relativePath>../..</relativePath>
 	</parent>
 
 

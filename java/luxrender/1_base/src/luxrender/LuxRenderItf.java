@@ -19,8 +19,8 @@ package luxrender;
 import es.bsc.compss.types.annotations.Constraints;
 import es.bsc.compss.types.annotations.Method;
 import es.bsc.compss.types.annotations.Parameter;
-import es.bsc.compss.types.annotations.Parameter.Direction;
-import es.bsc.compss.types.annotations.Parameter.Type;
+import es.bsc.compss.types.annotations.parameter.Direction;
+import es.bsc.compss.types.annotations.parameter.Type;
 
 public interface LuxRenderItf {
 	

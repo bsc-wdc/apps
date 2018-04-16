@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- GENERAL INFORMATION -->
+    <groupId>es.bsc.compss.apps.java</groupId>
+    <artifactId>compss-apps-java</artifactId>
+    <packaging>pom</packaging>
+    <parent>
+        <groupId>es.bsc.compss.apps</groupId>
+        <artifactId>compss-apps-all</artifactId>
+        <version>2.2.rc1803</version>
+        <relativePath>..</relativePath>
+    </parent>
+
+
+    <!-- PROJECT INFORMATION -->
+    <name>COMP Superscalar Applications</name>
+    <description>COMPSs Framework Applications</description>
+    <url>http://www.bsc.es</url>
+    <inceptionYear>2013</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        </license>
+    </licenses>
+    <organization>
+        <name>BSC</name>
+        <url>http://www.bsc.es</url>
+    </organization>
+
+    <!-- PROPERTIES -->
+    <properties>
+        <!-- JAX WS -->
+        <jaxws.version>2.2.10</jaxws.version>
+
+        <!-- Run properties -->
+        <worker.user>${user.name}</worker.user>
+        <worker.user.home>${user.home}/</worker.user.home>
+        <worker.app.dir>${project.build.directory}/</worker.app.dir>
+        <cloud.owner>jenkins-test</cloud.owner>
+        <cloud.app>${project.name}</cloud.app>
+        <cloud.master.ip>172.16.8.246</cloud.master.ip>
+        <cloud.min.vm>1</cloud.min.vm>
+        <cloud.max.vm>3</cloud.max.vm>
+        <cloud.creation.time>120</cloud.creation.time>
+        <cloud.image>test-vm</cloud.image>
+    </properties>
+
+    <!-- SOURCE CONTROL MANAGEMENT -->
+    <scm>
+        <connection>scm:git:http://compss.bsc.es/gitlab/bar/apps.git</connection>
+        <developerConnection>scm:git:http://compss.bsc.es/gitlab/bar/apps.git</developerConnection>
+        <url>http://compss.bsc.es/gitlab/bar/apps.git</url>
+    </scm>
+
+    <!-- REPOSITORIES -->
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>http://repo1.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>compss-repo</id>
+            <name>BSC Workflows and Distributed Computing group</name>
+            <url>http://compss.bsc.es/artifactory/libs-release</url>
+        </repository>
+    </repositories>
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>http://repo1.maven.apache.org/maven2</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <!-- DISTRIBUTION MANAGEMENT -->
+    <distributionManagement>
+        <repository>
+            <id>compss-repo</id>
+            <name>BSC Workflows and Distributed Computing group</name>
+            <url>http://compss.bsc.es/artifactory/libs-release</url>
+        </repository>
+    </distributionManagement>
+
+    <!-- DEPENDENCIES MANAGEMENT -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>jaxws-rt</artifactId>
+                <version>${jaxws.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.parent.basedir}/xml</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/xml/sources/</directory>
+                                    <filtering>true</filtering>
+                                    <includes>
+                                        <include>project_local.xml</include>
+                                        <include>project_grid.xml</include>
+                                        <include>project_cloud.xml</include>
+                                        <include>resources_cloud.xml</include>
+                                        <include>resources_cloud_old.xml</include>
+                                        <include>bsc_cloud.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- SUB-MODULES -->
+    <modules>
+        <module>blast/1_base</module>
+        <module>blast/2_allone</module>
+        <module>blast/3_binary</module>
+        <module>blast/4_blanks</module>
+        <module>COMPSsMolecule/1_base</module>
+        <module>molecules/1_base</module>
+        <module>terasort/1_base</module>
+        <module>discrete/1_base</module>
+        <module>discrete/2_blanks</module>
+        <module>geneDetection/1_base</module>
+        <module>geneDetection/2_blanks</module>
+        <module>hmmer/1_obj</module>
+        <module>hmmer/2_obj_blanks</module>
+        <module>hmmer/3_ws</module>
+        <module>hrt/1_base</module>
+        <module>hrt/2_blanks</module>
+        <module>kmeans/1_base</module>
+        <module>kmeans/2_apps</module>
+        <module>kmeans/3_apps_frag</module>
+        <module>kmeans/4_apps_psco</module>
+        <module>luxrender/1_base</module>
+        <module>matmul/1_base</module>
+        <module>matmul/2_apps</module>
+        <module>matmul/3_mpi</module>
+        <module>nmmb/1_base</module>
+        <module>npb/1_base</module>
+        <module>simple/1_base</module>
+        <module>sparseLU/1_base</module>
+        <module>sortByKey/1_base</module>
+        <module>wordcount/1_base</module>
+        <module>wordcount/2_psco</module>
+    </modules>
+</project>

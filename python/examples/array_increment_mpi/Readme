@@ -1,0 +1,35 @@
+This is the Readme for:
+Increment
+
+[Name]: Increment
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Array Increment is an application that takes three different arrays and increases them a number of given times. The purpose of this application is to show parallelism between the different increments. 
+
+
+== Execution instructions ==
+Usage:
+runcompss --project=project_localhost_XXX.xml --lang=python <install_path>/array_increment_mpi/arrayi-increment.py <number_of_increments> <initArrayValue1> <initArrayValue2> <initArrayValue3>
+
+where:
+		 * - N: Number of times to increase the counters
+		 * - initValue1: Initial value for array counter 1
+                 * - initValue2: Initial value for array counter 2
+                 * - initValue3: Initial value for array counter 3
+
+
+== Execution Example ==
+runcompss --project=project_localhost_1.4.xml --lang=python <install_path>/array_increment_mpi/array-increment.py 2 [1,2,3] [4,5,6] [7,8,9]
+
+
+== Build ==
+cd mpi
+mpicc -lm mpi_vector_inc.c -o mpi_vector
+modify project_localhost_XXX.xml seting the AppDir to the <install_path>
+
+

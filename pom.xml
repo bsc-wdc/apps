@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- GENERAL INFORMATION -->
+    <groupId>es.bsc.compss.apps</groupId>
+    <artifactId>compss-apps-all</artifactId>
+    <packaging>pom</packaging>
+    <version>2.2.rc1803</version>
+
+    <!-- PROJECT INFORMATION -->
+    <name>COMP Superscalar Apps all</name>
+    <description>Prepared Applications for COMPSs</description>
+    <url>http://compss.bsc.es</url>
+    <inceptionYear>2015</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        </license>
+    </licenses>
+    <organization>
+        <name>BSC</name>
+        <url>http://www.bsc.es</url>
+    </organization>
+
+    <!-- PROPERTIES -->
+    <properties>
+        <!-- COMPSs version -->
+        <compss.version>${project.version}</compss.version>
+
+        <!-- JUNIT Test -->
+        <junit.version>4.12</junit.version>
+
+                <!-- Log4j version -->
+                <log4j.version>2.7</log4j.version>
+
+                <!-- Apache commons versions -->
+                <apache-commons-configuration.version>1.10</apache-commons-configuration.version>
+
+                <!-- Version maven -->
+                <versions-maven-plugin.version>2.3</versions-maven-plugin.version>
+                <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+
+        <!-- Maven Plugins -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
+        <maven-shade-plugin.version>2.4.3</maven-shade-plugin.version>
+        <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
+        <maven-exec-plugin.version>1.4.0</maven-exec-plugin.version>
+                <maven-war-plugin.version>3.0.0</maven-war-plugin.version>
+
+        <!-- Project encoding -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <!-- SOURCE CONTROL MANAGEMENT -->
+    <scm>
+        <connection>scm:git:http://compss.bsc.es/gitlab/bar/apps.git</connection>
+        <developerConnection>scm:git:http://compss.bsc.es/gitlab/bar/apps.git</developerConnection>
+        <url>http://compss.bsc.es/gitlab/bar/apps.git</url>
+    </scm>
+
+    <!-- REPOSITORIES -->
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>http://repo1.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>compss-repo</id>
+            <name>BSC Workflows and Distributed Computing group</name>
+            <url>http://compss.bsc.es/artifactory/libs-release</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>http://repo1.maven.apache.org/maven2</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <!-- DISTRIBUTION MANAGEMENT -->
+    <distributionManagement>
+        <repository>
+            <id>compss-repo</id>
+            <name>BSC Workflows and Distributed Computing group</name>
+            <url>http://compss.bsc.es/artifactory/libs-release</url>
+        </repository>
+    </distributionManagement>
+
+    <!-- DEPENDENCIES MANAGEMENT -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- COMPSs -->
+            <dependency>
+                <groupId>es.bsc.compss</groupId>
+                <artifactId>compss-api</artifactId>
+                <version>${compss.version}</version>
+            </dependency>
+
+                        <!-- JUNIT -->
+                        <dependency>
+                                <groupId>junit</groupId>
+                                <artifactId>junit</artifactId>
+                                <version>${junit.version}</version>
+                                <scope>test</scope>                                                                                                                                                                                         
+                        </dependency>
+
+                    <!-- Log4j -->
+                    <dependency>
+                            <groupId>org.apache.logging.log4j</groupId>
+                            <artifactId>log4j-core</artifactId>
+                            <version>${log4j.version}</version>
+                    </dependency>
+
+                        <!-- Apache commons -->
+                       <dependency>
+                               <groupId>commons-configuration</groupId>
+                               <artifactId>commons-configuration</artifactId>
+                               <version>${apache-commons-configuration.version}</version>
+                       </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+        <!-- BUILD -->
+        <build>
+                <pluginManagement>
+                        <plugins>
+                        <!-- POM VERSION UPDATE -->
+                            <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-release-plugin</artifactId>
+                                    <version>${maven-release-plugin.version}</version>
+                            </plugin>
+                            <plugin>
+                                    <groupId>org.codehaus.mojo</groupId>
+                                    <artifactId>versions-maven-plugin</artifactId>
+                                    <version>${versions-maven-plugin.version}</version>
+                            </plugin>
+
+                <!-- MAVEN EXEC:EXEC -->
+                                <plugin>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>exec-maven-plugin</artifactId>
+                                        <version>${maven-exec-plugin.version}</version>
+                                        <configuration>
+                                                <executable>runcompss</executable>
+                                                <skip>true</skip>
+                                        </configuration>
+                                </plugin>
+                        </plugins>
+                </pluginManagement>
+
+        </build>
+
+    <!-- SUB-MODULES -->
+    <modules>
+        <!-- BLOCK 1 -->
+        <module>c</module>
+        <module>python</module>
+        <module>java</module>
+    </modules>
+</project>

@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- GENERAL INFORMATION -->
-	<artifactId>matmul</artifactId>
+	<artifactId>matmul_apps</artifactId>
 	<packaging>jar</packaging>
 	<parent>
 		<groupId>es.bsc.compss.apps.java</groupId>
 		<artifactId>compss-apps-java</artifactId>
-		<version>2.2</version>
-		<relativePath>..</relativePath>
+		<version>2.2.rc1803</version>
+		<relativePath>../..</relativePath>
 	</parent>
 
 	<!-- PROJECT INFORMATION -->

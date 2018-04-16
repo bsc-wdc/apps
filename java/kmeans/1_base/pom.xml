@@ -3,17 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- GENERAL INFORMATION -->
-	<artifactId>kmeans_frag</artifactId>
+	<artifactId>kmeans</artifactId>
 	<packaging>jar</packaging>
 	<parent>
-		<groupId>es.bsc.compss.apps.kmeans</groupId>
-		<artifactId>compss-apps-kmeans</artifactId>
-		<version>2.2</version>
+		<groupId>es.bsc.compss.apps.java</groupId>
+		<artifactId>compss-apps-java</artifactId>
+		<version>2.2.rc1803</version>
+		<relativePath>../..</relativePath>
 	</parent>
 
 	<!-- PROJECT INFORMATION -->
-	<name>Kmeans per fragments</name>
-	<description>Kmeans application</description>
+	<name>KMeans</name>
+	<description>K-means application</description>
 	<url>http://compss.bsc.es/projects/bar/wiki/application_pages/apps/java/kmeans</url>
 	<inceptionYear>2014</inceptionYear>
 	<licenses>
@@ -65,32 +66,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
-				<executions>
-					<execution>
-						<id>copy-final-jar</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/jar</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${project.build.directory}</directory>
-									<includes>
-										<include>${project.artifactId}.jar</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -131,5 +106,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
 </project>

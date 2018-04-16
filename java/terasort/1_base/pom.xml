@@ -6,9 +6,10 @@
 	<artifactId>terasort</artifactId>
 	<packaging>jar</packaging>
 	<parent>
-		<groupId>es.bsc.compss.apps.terasort</groupId>
-		<artifactId>compss-apps-terasort</artifactId>
-		<version>2.2</version>
+		<groupId>es.bsc.compss.apps.java</groupId>
+		<artifactId>compss-apps-java</artifactId>
+		<version>2.2.rc1803</version>
+		<relativePath>../..</relativePath>
 	</parent>
 
 	<!-- PROJECT INFORMATION -->

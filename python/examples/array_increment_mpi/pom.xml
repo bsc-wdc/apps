@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- GENERAL INFORMATION -->
+	<artifactId>array-increment-mpi</artifactId>
+	<packaging>pom</packaging>
+	<parent>
+	        <groupId>es.bsc.compss.apps.python</groupId>
+        	<artifactId>compss-apps-python</artifactId>
+    		<version>2.2.rc1803</version>
+    		<relativePath>../..</relativePath>
+	</parent>
+	
+	<!-- PROJECT INFORMATION -->
+	<name>Array-Increment-mpi</name>
+	<description>Increment of an array whose tasks run an mpi implementation</description>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+		</license>
+	</licenses>
+	<organization>
+		<name>BSC</name>
+		<url>http://www.bsc.es</url>
+	</organization>
+	
+	<!-- DEPENDENCIES -->
+	
+	<!-- BUILD SETTINGS -->
+	<build>
+		<plugins>
+			<plugin>
+                                <groupId>org.codehaus.mojo</groupId>
+                                <artifactId>exec-maven-plugin</artifactId>
+                                <version>${maven-exec-plugin.version}</version>
+                                        <executions>
+                                                <execution>
+                                                        <id>application-execution</id>
+                                                        <goals>
+                                                                <goal>exec</goal>
+                                                        </goals>
+                                                 </execution>
+						 <execution>
+                                                        <id>application-execution-clean</id>
+                                                        <phase>clean</phase>
+                                                        <goals>
+                                                                <goal>exec</goal>
+                                                        </goals>
+                                                        <configuration>
+                                                                <executable>bash</executable>
+                                                                <workingDirectory>${basedir}/</workingDirectory>
+                                                                <arguments>
+                                                                        <argument>-c</argument>
+                                                                        <argument>rm -rf array-increment.pyc file* pycompss*</argument>
+                                                                </arguments>
+                                                                <skip>false</skip>
+                                                        </configuration>
+                                                 </execution>
+
+                                        </executions>
+                                        <configuration>
+                                                  <executable>runcompss</executable>
+                                                  <workingDirectory>${basedir}/</workingDirectory>
+                                                  <arguments>
+							<argument>--lang=python</argument>
+                                                  	<argument>${basedir}/array-increment.py</argument>
+                                                        <argument>5</argument>
+							<argument>[1,2,3]</argument>
+							<argument>[4,5,6]</argument>
+							<argument>[7,8,9]</argument>
+                                                  </arguments>
+						  <skip>false</skip>
+                                        </configuration>
+                        </plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-dependency-plugin
+										</artifactId>
+										<versionRange>
+											[2.1,)
+										</versionRange>
+										<goals>
+											<goal>
+												copy-dependencies
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

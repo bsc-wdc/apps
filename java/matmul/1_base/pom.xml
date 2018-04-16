@@ -6,10 +6,10 @@
 	<artifactId>matmul</artifactId>
 	<packaging>jar</packaging>
 	<parent>
-		<groupId>es.bsc.compss.apps.matmul</groupId>
-		<artifactId>compss-apps-matmul</artifactId>
-		<version>2.2</version>
-	        <relativePath>..</relativePath>
+		<groupId>es.bsc.compss.apps.java</groupId>
+		<artifactId>compss-apps-java</artifactId>
+		<version>2.2.rc1803</version>
+		<relativePath>../..</relativePath>
 	</parent>
 
 	<!-- PROJECT INFORMATION -->

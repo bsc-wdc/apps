@@ -2,25 +2,25 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>es.bsc.compss.apps.sortbykey</groupId>
-		<artifactId>compss-apps-sortbykey</artifactId>
-		<version>2.2</version>
-	</parent>
-
-	<groupId>es.bsc.compss.mn-compss-apps</groupId>
 	<artifactId>sort_by_key</artifactId>
 	<packaging>jar</packaging>
+
+	<parent>
+        <groupId>es.bsc.compss.apps.java</groupId>
+		<artifactId>compss-apps-java</artifactId>
+		<version>2.2.rc1803</version>
+		<relativePath>../..</relativePath>
+	</parent>
+
 
 	<name>Sort By Key</name>
 	<description>Sort By Key application</description>
 	<url>http://compss.bsc.es/projects/bar/wiki/application_pages/apps/java/sort_by_key</url>
-
 	<dependencies>
-                <dependency>
-                        <groupId>es.bsc.compss</groupId>
-                        <artifactId>compss-api</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>es.bsc.compss</groupId>
+            <artifactId>compss-api</artifactId>
+        </dependency>
 	</dependencies>
 	<repositories>
 

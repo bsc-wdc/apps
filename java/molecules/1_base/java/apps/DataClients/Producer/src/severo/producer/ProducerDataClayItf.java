@@ -2,7 +2,7 @@ package severo.producer;
 
 import es.bsc.compss.types.annotations.Method;
 import es.bsc.compss.types.annotations.Parameter;
-import es.bsc.compss.types.annotations.Parameter.Type;
+import es.bsc.compss.types.annotations.parameter.Type;
 
 import severo.moleculeArray.Molecule;
 
