@@ -1,5 +1,8 @@
 #!/bin/bash
 
+  # Define script directory for relative calls
+  SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
   # Define NMMB Environment
   export PATH=$PATH:/gpfs/projects/bsc19/bsc19533/nmmb/MODEL-MN/exe
 
@@ -26,33 +29,43 @@
   export FNL=$GRB
   export GFS=$GRB
 
-  # Define script variables
-  scriptDir=$(pwd)/$(dirname $0)
-  propertiesFile=${scriptDir}/nmmb_compss_MN.properties
+  # Retrieve arguments
+  jobDependency=${1:-None}
+  numNodes=${2:-5}
+  cpusPerNode=${3:-16}
+  executionTime=${4:-15}
+
+  tracing=${5:-false}
+  graph=${6:-true}
+  logLevel=${7:-off}
+
+  propertiesFile=${8:-${SCRIPT_DIR}/nmmb_compss_MN.properties}
 
   # Define NMMB.jar environment constants
-  export NEMS_NODES=4
-  export NEMS_CUS_PER_NODE=16
+  NEMS_NODES=$((numNodes - 1))
+  export NEMS_NODES=${NEMS_NODES}
+  export NEMS_CUS_PER_NODE=${cpusPerNode}
 
   # Define MPI tricks
   export OMPI_MCA_coll_hcoll_enable=0
   export OMPI_MCA_mtl=^mxm
 
   # Enqueue
-  jobDepFlag="--job_dependency=None"
-  debugFlags="--log_level=debug --summary"
-  toolsFlags="--graph=true --tracing=false"
-
   enqueue_compss \
-    --exec_time=15 \
-    --num_nodes=5 \
-    --tasks_per_node=16 \
-    ${jobDepFlag} \
+    --num_nodes="${numNodes}" \
+    --cpus_per_node="${cpusPerNode}" \
+    --exec_time="${executionTime}" \
+    --job_dependency="${jobDependency}" \
+    \
+    --classpath="${SCRIPT_DIR}"/../nmmb.jar
     --master_working_dir=. \
     --worker_working_dir=scratch \
     --network=infiniband \
-    ${debugFlags} \
-    ${toolsFlags} \
-    --classpath=${scriptDir}/../nmmb.jar \
-    nmmb.Nmmb ${propertiesFile}
+    \
+    --tracing="${tracing}" \
+    --graph="${graph}" \
+    --summary \
+    --log_level="${logLevel}" \
+    \
+    nmmb.Nmmb "${propertiesFile}"
 
