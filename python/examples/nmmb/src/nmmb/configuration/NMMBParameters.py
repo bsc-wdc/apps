@@ -865,7 +865,7 @@ class NMMBParameters (object):
             os.symlink(globalPrdlosSrc, globalPrdlosTarget)
         except OSError, e:
             if e.errno == errno.EEXIST:
-                self.LOGGER_UMO_MODEL.debug("[DEBUG] The symlink " + globalPrdlosTarget + " from " + globalPrdlosSrc + "already exists.")
+                self.LOGGER_UMO_MODEL.debug("[DEBUG] The symlink " + globalPrdlosTarget + " from " + globalPrdlosSrc + " already exists.")
 
         globalClimSrc = NMMBEnvironment.DATMOD + "global_o3clim.txt"
         globalClimTarget = NMMBEnvironment.UMO_OUT + "fort.48"
@@ -873,7 +873,7 @@ class NMMBParameters (object):
             os.symlink(globalClimSrc, globalClimTarget)
         except OSError, e:
             if e.errno == errno.EEXIST:
-                self.LOGGER_UMO_MODEL.debug("[DEBUG] The symlink " + globalClimTarget + " from " + globalClimSrc + "already exists.")
+                self.LOGGER_UMO_MODEL.debug("[DEBUG] The symlink " + globalClimTarget + " from " + globalClimSrc + " already exists.")
 
     def postUMOModelExecution(self, currentDate):
         """

@@ -53,7 +53,7 @@ from pycompss.api.parameter import *
 @task(FNAME=FILE_IN,
       i1=FILE_OUT, i2=FILE_OUT, i3=FILE_OUT, i4=FILE_OUT, i5=FILE_OUT,
       i6=FILE_OUT, i7=FILE_OUT, i8=FILE_OUT, i9=FILE_OUT)
-def generate_figures(FNAME, VNAME, i1, i2, i3, i4, i5, i6, i7, i8, i9):
+def generate_figures(date, FNAME, VNAME, i1, i2, i3, i4, i5, i6, i7, i8, i9):
     """
     Generates the figures for the given variable.
     :param FNAME: Source file
@@ -113,7 +113,9 @@ def generate_figures(FNAME, VNAME, i1, i2, i3, i4, i5, i6, i7, i8, i9):
         m.contourf(x, y, var[i]*10e9, levels=BOUNDS, bounds=BOUNDS, cmap=cmap, norm=norm, extend='both')
         m.drawcoastlines(linewidth='.2')
         m.colorbar(ticks=BOUNDS, size='3%')
-        plt.title("NMMB %s $(\mu g/m^3)$\nRun: %s - Fcst: +%02dH" % (nam, unt.split()[2]+' '+unt.split()[3], int(step)))
-        # plt.savefig("%sNMMB-%s-%02d.png" % (folder, VNAME, step), dpi=200, bbox_inches='tight', pad_inches=0.2)
+        plt.title("NMMB %s $(\mu g/m^3)$\nRun: %s - Fcst: +%02dH" % (nam, date + ' ' + unt.split()[3], int(step)))
+        # # Does not keep the day
+        # plt.title("
+        # NMMB %s $(\mu g/m^3)$\nRun: %s - Fcst: +%02dH" % (nam, unt.split()[2]+' '+unt.split()[3], int(step)))
         plt.savefig(output[o], dpi=200, bbox_inches='tight', pad_inches=0.2)
-        o+=1
+        o += 1

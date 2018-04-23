@@ -68,8 +68,8 @@ class BashCMDExecutor(object):
         cmd = [self.command]
         cmd += self.arguments
 
-        # if "LD_PRELOAD" in os.environ:
-        #     del os.environ["LD_PRELOAD"]
+        if "LD_PRELOAD" in os.environ:
+            del os.environ["LD_PRELOAD"]
 
         stdoutf = subprocess.PIPE
         # Add redirection if needed

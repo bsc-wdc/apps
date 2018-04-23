@@ -876,6 +876,12 @@ def doImages(nmmbParams, simulation_results):
             'slp',
             'u10',
             'v10']
+    '''
+    vars = ['dust_drydep',
+            'dust_load',
+            'dust_sconc10',
+            'dust_wetdep']
+    '''
     LOGGER_IMAGE.info("Images to create: " + str(vars))
     LOGGER_IMAGE.info("Days to process: " + str(len(simulation_results)))
     # Define images output folder
@@ -904,6 +910,9 @@ def doImages(nmmbParams, simulation_results):
         i = 0
         for d in simulation_results:
             LOGGER_IMAGE.info(" - Simulation result: " + str(d))
+            folder_date = os.path.basename(os.path.dirname(d))
+            dt = datetime.datetime.strptime(folder_date[:-2], '%Y%m%d')
+            date = dt.strftime('%Y-%m-%d')
             i1 = var_folder + os.path.sep + str(i) + '_0.png'
             i2 = var_folder + os.path.sep + str(i) + '_1.png'
             i3 = var_folder + os.path.sep + str(i) + '_2.png'
@@ -914,7 +923,7 @@ def doImages(nmmbParams, simulation_results):
             i8 = var_folder + os.path.sep + str(i) + '_7.png'
             i9 = var_folder + os.path.sep + str(i) + '_8.png'
             imgs[v] += [i1, i2, i3, i4, i5, i6, i7, i8, i9]
-            generate_figures(d, v, i1, i2, i3, i4, i5, i6, i7, i8, i9)
+            generate_figures(date, d, v, i1, i2, i3, i4, i5, i6, i7, i8, i9)
             i += 1
 
     LOGGER_IMAGE.info("Finished images creation submission")
