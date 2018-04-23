@@ -48,6 +48,10 @@
 - The NEMS.x executable must be compiled in the target machine
 	- MODEL/SRC: make nmm
 
+- Some symbolic links must be created after the deployment:
+        - Use: JOB/prepare_files_mn.sh or JOB/prepare_files_mt.sh
+
+
 === EXECUTION ===
 - The execution is prepared on the enqueue_nmmb.sh script
 	The NMMB structure must be correctly exported in this script
