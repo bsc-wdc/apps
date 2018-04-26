@@ -236,10 +236,7 @@ class Cascade(object):
                 X, y = load_svmlight_file(filename)
                 X = X.toarray()
                 y = y.astype('int')
-                if shuffle:
-                    from data import shuffle_data
 
-                    X, y = shuffle_data(X, y)
             else:
                 X = None
                 y = None
@@ -260,13 +257,11 @@ class Cascade(object):
 
         elif file_format == "csv":
             if world_comm.rank == 0:
-                data = np.loadtxt(filename, delimiter=',')
-                X = np.ascontiguousarray(data[:, :-2], copy=True)
+                #print('Numpy version {}'.format(np.version.version))
+                data = np.loadtxt(filename, delimiter=',', dtype=float)
+                X = np.ascontiguousarray(data[:, :-2])
                 y = data[:, -1].astype('int')
-                if shuffle:
-                    from data import shuffle_data
 
-                    X, y = shuffle_data(X, y)
             else:
                 X = None
                 y = None
@@ -577,7 +572,8 @@ class Level(object):
             self.n_feedback += 1
             for root in self.procs:
                 exclude_procs = []#range(root+1, root+2**self.rank)
-
+                #print("world_comm.size: {}".format(world_comm.size))
+                #print("target_level.level_comm.size: {}".format(target_level.level_comm.size))
                 if target_level.level_comm.size < world_comm.size:
                     exclude_procs.extend(range(target_level.level_comm.size, world_comm.size))
 
@@ -625,6 +621,21 @@ class Level(object):
         """
         return self.global_to_level[gl]
 
+    def has_two_labels(self, y):
+        return len(set(y)) == 2
+
+    def all_chunks_correctly_divided(self, x, y):
+        chunk_size = x.shape[0] / world_comm.size
+        chunk_number = x.shape[0] / chunk_size
+        for idx in range(int(chunk_number)):
+            start = idx*chunk_size
+            end = (idx+1)*chunk_size
+            if end > len(y):
+                end = len(y)
+            if not self.has_two_labels(y[start:end]):
+                return False
+        return True
+
     def scatter_data(self, X, y):
         """ Scatter X and y to all processes of the level.
 
@@ -638,6 +649,13 @@ class Level(object):
             None
         """
         if world_comm.rank in self.procs:
+            if world_comm.rank == 0:
+                while not self.all_chunks_correctly_divided(X, y):
+                    import random
+                    s = np.arange(X.shape[0])
+                    random.shuffle(s)
+                    X, y = X[s], y[s]
+
             sX, sy = _scatter_data(X, y, comm=self.level_comm, root=self.root)
             self.X = sX
             self.y = sy

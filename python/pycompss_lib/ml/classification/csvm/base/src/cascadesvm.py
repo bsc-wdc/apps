@@ -10,7 +10,7 @@ from sklearn.svm import SVC
 
 import numpy as np
 from pycompss.api.api import compss_wait_on
-from pycompss.api.api import compss_barrier
+from pycompss.api.api import barrier
 from pycompss.api.api import compss_delete_object
 from operator import itemgetter
 import csv
@@ -28,11 +28,15 @@ class CascadeSVM(object):
 
     name_to_kernel = {"linear": "_linear_kernel", "rbf": "_rbf_kernel"}
 
-    def __init__(self, cascade_arity=2, n_chunks=4, cascade_iterations=5, C=1.0, kernel='rbf', gamma=None, convergence=10**-3):
+    def __init__(self, cascade_arity=2, n_chunks=4, cascade_iterations=5, C=1.0, kernel='rbf', gamma=None, convergence=10**-3, exec_time='total'):
+        """
+        :param exec_time: defines how to compute execution times. Accepted values are 'total' to compute overall execution time, and 'detailed' to compute read and fit time separately. Default is 'total'.
+        """
 
         self.iterations = 0
         self.read_time = 0
         self.fit_time = 0
+        self.total_time = 0
         self.converged = False                
 
         try:
@@ -48,6 +52,7 @@ class CascadeSVM(object):
 
         self._last_W = None
         self._clf = None
+        self._exec_time = exec_time        
 
         assert (gamma is None or type(gamma) == float or type(float(gamma)) == float), "Gamma is not a valid float"
         assert (kernel is None or kernel in self.name_to_kernel.keys()), \
@@ -85,16 +90,31 @@ class CascadeSVM(object):
         :param data_format: defines the format of the data in path. Default (None) is CSV with the label in the last column. Alternative formats are: libsvm
         """
         
-        # WARNING: when partitioning the data it is not guaranteed that all chunks contain vectors from both classes
         
+        s_time = time()
+        t_time = time()
+        
+        # WARNING: when partitioning the data it is not guaranteed that all chunks contain vectors from both classes               
         if path and os.path.isdir(path):
-            self._fit_dir(path, data_format, n_features)
+            chunks = self._read_dir(path, data_format, n_features)
         elif path:
-            self._fit_file(path, data_format, n_features)
+            chunks = self._read_file(path, data_format, n_features)
         else:
-            self._fit_data(X, y)      
-    
-    def _fit_dir(self, path, data_format, n_features):        
+            chunks = self._read_data(X, y)      
+            
+        if self._exec_time == 'detailed':
+            barrier()
+            self.read_time = time() - s_time
+            s_time = time()
+        
+        self._do_fit(chunks)
+        
+        if self._exec_time == 'detailed':
+            self.fit_time = time() - s_time
+            
+        self.total_time = time() - t_time     
+        
+    def _read_dir(self, path, data_format, n_features):
         files = os.listdir(path)                      
         
         if data_format == "libsvm":
@@ -112,11 +132,9 @@ class CascadeSVM(object):
         for f in files:    
             chunks.append(read_chunk(os.path.join(path, f), data_format=data_format, n_features=n_features))
             
-        fit_t = time()  
-        self._do_fit(chunks)
-        self.fit_time = time() - fit_t        
+        return chunks            
               
-    def _fit_file(self, path, data_format, n_features):        
+    def _read_file(self, path, data_format, n_features):        
         n_lines = self._count_lines(path) 
         
         assert n_lines > self._nchunks, "Not enough vectors to divide into %s chunks\n" \
@@ -134,13 +152,11 @@ class CascadeSVM(object):
         chunks = []       
         
         for s in range(len(steps)  - 1):    
-            chunks.append(read_chunk(path, steps[s], steps[s+1], data_format=data_format, n_features=n_features)) 
-                   
-        fit_t = time()  
-        self._do_fit(chunks)
-        self.fit_time = time() - fit_t      
+            chunks.append(read_chunk(path, steps[s], steps[s+1], data_format=data_format, n_features=n_features))                    
+            
+        return chunks
         
-    def _fit_data(self, X, y):
+    def _read_data(self, X, y):
         """
         Use the training data to fit a model. The model
         is represented by the self._clf parameter.
@@ -151,10 +167,8 @@ class CascadeSVM(object):
         
         if not self._clf_params["gamma"]:            
             self._check_and_set_gamma(X.shape[1])          
-
-        fit_t = time()  
-        self._do_fit(chunks)
-        self.fit_time = time() - fit_t        
+            
+        return chunks
         
     def _do_fit(self, chunks):
         iteration = 0                
