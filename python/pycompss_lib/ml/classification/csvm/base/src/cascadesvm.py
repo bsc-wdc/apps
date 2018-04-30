@@ -22,77 +22,140 @@ from copy import copy
 import os
 from sklearn.datasets import load_svmlight_file
 from scipy.sparse import vstack, issparse, lil_matrix
+import threading
 
 
 class CascadeSVM(object):
 
     name_to_kernel = {"linear": "_linear_kernel", "rbf": "_rbf_kernel"}
 
-    def __init__(self, cascade_arity=2, n_chunks=4, cascade_iterations=5, C=1.0, kernel='rbf', gamma=None, convergence=10**-3, exec_time='total'):
+    def __init__(self, split_times=False):
         """
-        :param exec_time: defines how to compute execution times. Accepted values are 'total' to compute overall execution time, and 'detailed' to compute read and fit time separately. Default is 'total'.
+        :param split_times: boolean, optional (default=False)
+        
+            Whether to compute read and fit times separately.
         """
-
-        self.iterations = 0
+                
+        self.iterations = []
+        self.converged = []
+        
         self.read_time = 0
         self.fit_time = 0
         self.total_time = 0
-        self.converged = False                
+        
+        self._split_times = split_times
+        
+        self._cascade_arity = []        
+        self._max_iterations = []
+        self._nchunks = []
+        self._tol = []       
+        self._last_W = []
+        self._clf = []        
+        self._data = []        
+        self._clf_params = []
+        self._kernel_f = []
 
+        
+    #def __str__(self):
+        #return (" * CascadeSVM\n"
+                #"\t- Gamma:  %s\n"
+                #"\t- Kernel: %s\n"
+                #"\t- Arity:  %s\n"                
+                #"\t- Chunks:  %s\n"
+                #"\t- Max iterations: %s\n"
+                #"\t- C: %s\n") \
+               #% (self._clf_params["gamma"],
+                  #self._clf_params["kernel"],
+                  #self._cascade_arity,                  
+                  #self._nchunks,
+                  #self._max_iterations,
+                  #self._clf_params["C"])       
+
+    def fit(self):
+        """
+        Fits one or more models using training data. The fit function uses data previously loaded with the load_data function. The training process of each dataset is performed in parallel. The resulting models are stored in self._clf in the order in which the datasets were loaded.      
+        """       
+            
+        if self._split_times:
+            barrier()
+            self.read_time = time() - self.read_time
+            self.fit_time = time()        
+           
+        self._fit_threaded()
+        
+        if self._split_times:
+            self.fit_time = time() - self.fit_time
+            
+        self.total_time = time() - self.total_time     
+        
+    def load_data(self, X=None, y=None, path=None, n_features=None, data_format='csv', cascade_arity=2, n_chunks=4, cascade_iterations=5, tol=10**-3, C=1.0, kernel='rbf', gamma='auto'):
+        """
+        Loads a set of vectors to be used in the training process through the fit function. Multiple calls to load_data will result in the fit function computing multiple decision functions in parallel.
+        
+        :param X: {array-like, sparse matrix}, shape (n_samples, n_features), optional (default=None)
+            Training vectors, where n_samples is the number of samples and n_features is the number of features. 
+            
+        :param y: array-like, shape (n_samples,), optional (default=None)
+            Class labels.
+        
+        :param path: string, optional (default=None)
+            Path to a file or a directory containing files with train data. If path is defined, X and y are ignored and train data is read from path. 
+            
+        :param n_features: int
+            Number of features. This parameter is mandatory only if path is a directory and data_format is 'libsvm'. Otherwise, the parameter is optional although setting it saves counting the number of features when train data is read from files.
+        
+        :param data_format: string, optional (default='csv')
+            The format of the data in path. It can be 'csv' for CSV with the label in the last column or 'libsvm'.
+        
+        :param cascade_arity: int, optional (default=2)
+            Arity of the reduction stage.
+        
+        :param n_chunks: int, optional (default=4)
+            Number of chunks in which to split the training data (ignored if path is a directory).
+        
+        :param cascade_iterations: int, optional (default=5)
+            Maximum number of iterations to perform.
+        
+        :param tol: float, optional (default=1e-3) 
+            Tolerance for the stopping criterion.
+            
+        :param C: float, optional (default=1.0)
+            Penalty parameter C of the error term.
+            
+        :param kernel: string, optional (default='rbf')
+            Specifies the kernel type to be used in the algorithm. It must be one of 'linear' or 'rbf'.
+            
+        :param: gamma: float, optional (default='auto')
+            Kernel coefficient for 'rbf'. If gamma is 'auto' then 1/n_features will be used instead.
+        """
+        
         try:
-            self._kernel_f = getattr(self, CascadeSVM.name_to_kernel[kernel])
+            self._kernel_f.append(getattr(self, CascadeSVM.name_to_kernel[kernel]))
         except AttributeError:
-            self._kernel_f = getattr(self, CascadeSVM.name_to_kernel['rbf'])
-
-        self._cascade_arity = cascade_arity        
-        self._max_iterations = cascade_iterations
-
-        self._nchunks = n_chunks
-        self._convergence_margin = convergence       
-
-        self._last_W = None
-        self._clf = None
-        self._exec_time = exec_time        
-
-        assert (gamma is None or type(gamma) == float or type(float(gamma)) == float), "Gamma is not a valid float"
+            self._kernel_f.append(getattr(self, CascadeSVM.name_to_kernel['rbf']))
+        
+        assert (gamma is 'auto' or type(gamma) == float or type(float(gamma)) == float), 'Gamma is not a valid float'
         assert (kernel is None or kernel in self.name_to_kernel.keys()), \
             "Incorrect kernel value [%s], available kernels are %s" % (kernel, self.name_to_kernel.keys())
         assert (C is None or type(C) == float or type(float(C)) == float), \
             "Incorrect C type [%s], type : %s" % (C, type(C))
-        assert self._cascade_arity > 1, "Cascade arity must be greater than 1"      
-        assert self._max_iterations > 0, "Max iterations must be greater than 0"
+        assert cascade_arity > 1, 'Cascade arity must be greater than 1'      
+        assert cascade_iterations > 0, 'Max iterations must be greater than 0'        
         
-        self._clf_params = {"gamma": gamma, "C": C, "kernel": kernel}
-
-        print(str(self))
-
-    def __str__(self):
-        return (" * CascadeSVM\n"
-                "\t- Gamma:  %s\n"
-                "\t- Kernel: %s\n"
-                "\t- Arity:  %s\n"                
-                "\t- Chunks:  %s\n"
-                "\t- Max iterations: %s\n"
-                "\t- C: %s\n") \
-               % (self._clf_params["gamma"],
-                  self._clf_params["kernel"],
-                  self._cascade_arity,                  
-                  self._nchunks,
-                  self._max_iterations,
-                  self._clf_params["C"])       
-
-    def fit(self, X=None, y=None, path=None, n_features=None, data_format=None):
-        """
-        Fit a model with training data. The model is stored in self._clf
-        :param X: input vectors
-        :param y: input labels
-        :param path: a file or a directory containing files with input vectors. If path is defined, X and y are ignored and input data is read from path. 
-        :param data_format: defines the format of the data in path. Default (None) is CSV with the label in the last column. Alternative formats are: libsvm
-        """
+        self._cascade_arity.append(cascade_arity)
+        self._nchunks.append(n_chunks)
+        self._max_iterations.append(cascade_iterations)
+        self._tol.append(tol)
+        self._clf_params.append({'gamma' : gamma, 'C' : C, 'kernel' : kernel})        
+        self.iterations.append(0)
+        self._last_W.append(None)
+        self._clf.append(None)
         
-        
-        s_time = time()
-        t_time = time()
+        if self._split_times and not self._data:
+            self.read_time = time()
+            
+        if not self._data:
+            self.total_time = time()
         
         # WARNING: when partitioning the data it is not guaranteed that all chunks contain vectors from both classes               
         if path and os.path.isdir(path):
@@ -100,32 +163,23 @@ class CascadeSVM(object):
         elif path:
             chunks = self._read_file(path, data_format, n_features)
         else:
-            chunks = self._read_data(X, y)      
+            chunks = self._read_data(X, y)
             
-        if self._exec_time == 'detailed':
-            barrier()
-            self.read_time = time() - s_time
-            s_time = time()
-        
-        self._do_fit(chunks)
-        
-        if self._exec_time == 'detailed':
-            self.fit_time = time() - s_time
-            
-        self.total_time = time() - t_time     
-        
+        self._data.append(chunks)        
+        self.converged.append(False)
+                
     def _read_dir(self, path, data_format, n_features):
         files = os.listdir(path)                      
         
-        if data_format == "libsvm":
-            assert n_features > 0, "Number of features is required to read from multiple files using libsvm format"
+        if data_format == 'libsvm':
+            assert n_features > 0, 'Number of features is required to read from multiple files using libsvm format'
         elif not n_features:
             n_features = self._count_features(os.path.join(path, files[0]), data_format)                         
         
-        if not self._clf_params["gamma"]:
-            self._check_and_set_gamma(n_features) 
+        if self._clf_params[-1]['gamma'] == 'auto':
+            self._clf_params[-1]['gamma'] = 1. / n_features
             
-        self._nchunks = len(files)                    
+        self._nchunks[-1] = len(files)                    
         
         chunks = []     
         
@@ -137,18 +191,18 @@ class CascadeSVM(object):
     def _read_file(self, path, data_format, n_features):        
         n_lines = self._count_lines(path) 
         
-        assert n_lines > self._nchunks, "Not enough vectors to divide into %s chunks\n" \
-                                                " - Minimum required elements: %s\n" \
-                                                " - Vectors available: %s\n" % \
-                                                (self._nchunks, self._nchunks, n_lines)
+        assert n_lines > self._nchunks[-1], 'Not enough vectors to divide into %s chunks\n' \
+                                                ' - Minimum required elements: %s\n' \
+                                                ' - Vectors available: %s\n' % \
+                                                (self._nchunks[-1], self._nchunks[-1], n_lines)
                
         if not n_features:
             n_features = self._count_features(path, data_format)   
                
-        if not self._clf_params["gamma"]:                
-            self._check_and_set_gamma(n_features)                
+        if self._clf_params[-1]['gamma'] == 'auto':                
+            self._clf_params[-1]['gamma'] = 1. / n_features                
             
-        steps = np.linspace(0, n_lines + 1, self._nchunks + 1, dtype=int)     
+        steps = np.linspace(0, n_lines + 1, self._nchunks[-1] + 1, dtype=int)     
         chunks = []       
         
         for s in range(len(steps)  - 1):    
@@ -165,24 +219,35 @@ class CascadeSVM(object):
         """                
         chunks = self._get_chunks(X, y)
         
-        if not self._clf_params["gamma"]:            
-            self._check_and_set_gamma(X.shape[1])          
+        if self._clf_params[-1]['gamma'] == 'auto':                
+            self._clf_params[-1]['gamma'] = 1. / X.shape[1]                        
             
         return chunks
         
-    def _do_fit(self, chunks):
+    def _fit_threaded(self):
+        threads = []
+        
+        for idx in range(len(self._data)):
+            threads.append(threading.Thread(target=self._do_fit, args=(idx,)))
+            threads[-1].start()        
+            
+        for t in threads:
+            t.join()
+        
+    def _do_fit(self, idx):
         iteration = 0                
         q = deque()
         clf = None 
         feedback = None
+        chunks = self._data[idx]
         
-        while iteration < self._max_iterations and not self.converged:      
+        while iteration < self._max_iterations[idx] and not self.converged[idx]:      
             start_time = time()
             
             if len(chunks) > 1:
                 for chunk in chunks:
                     data = filter(None, [chunk, feedback])                    
-                    q.append(train(False, *data, **self._clf_params))                    
+                    q.append(train(False, *data, **self._clf_params[idx]))                    
             else:
                 # we jump to the last train
                 data = [chunks[0]]        
@@ -190,31 +255,31 @@ class CascadeSVM(object):
             while q:
                 data = []
                 
-                while q and len(data) < self._cascade_arity:
+                while q and len(data) < self._cascade_arity[idx]:
                     data.append(q.popleft())                    
                 
                 if q:
-                    q.append(train(False, *data, **self._clf_params))                                                       
+                    q.append(train(False, *data, **self._clf_params[idx]))                                                       
                                           
                     # delete partial results
                     for d in data:
                         compss_delete_object(d)
                     
-            sv, sl, clf = compss_wait_on(train(True, *data, **self._clf_params))
+            sv, sl, clf = compss_wait_on(train(True, *data, **self._clf_params[idx]))
             feedback = sv, sl
             
             iteration += 1
-            print("Checking convergence...")
-            self._check_convergence_and_update_w(sv, sl, clf)
+            print("Checking convergence for dataset %s..." % (idx))
+            self._check_convergence_and_update_w(sv, sl, clf, idx)
             end_time = time()
             print(" - Iteration %s/%s: converged?: %s\n - Iteration time %s\n\n" %
-                  (iteration, self._max_iterations, self.converged, (end_time - start_time)))
+                  (iteration, self._max_iterations[idx], self.converged[idx], (end_time - start_time)))
                
-        self._clf = clf        
-        self.iterations = iteration
+        self._clf[idx] = clf        
+        self.iterations[idx] = iteration        
         
-        print(" - Model: %s" % self._clf)
-        print(" - Iterations performed %s, convergence was achieved?: %s" % (self.iterations, self.converged))
+        print(" - Model %s: %s" % (idx, self._clf[idx]))
+        print(" - Iterations performed %s, convergence was achieved?: %s" % (self.iterations[idx], self.converged[idx]))
    
     def predict(self, X):
         """
@@ -223,19 +288,22 @@ class CascadeSVM(object):
         :param X: examples
         :return: predicted labels
         """
-
-        if self._clf:
-            return self._clf.predict(X)
-        else:
-            raise Exception("Calling predict method before fit (aka model is not initialized)")
-            return
+        #TODO
+        return
+        #if self._clf:
+            #return self._clf.predict(X)
+        #else:
+            #raise Exception("Calling predict method before fit (aka model is not initialized)")
+            #return
         
     def decision_function(self, X):
-        if self._clf:
-            return self._clf.decision_function(X)
-        else:
-            raise Exception("Calling predict method before fit (aka model is not initialized)")
-            return
+        #TODO
+        return
+        #if self._clf:
+            #return self._clf.decision_function(X)
+        #else:
+            #raise Exception("Calling predict method before fit (aka model is not initialized)")
+            #return
 
     def score(self, X, y):
         """
@@ -245,18 +313,20 @@ class CascadeSVM(object):
         :param y: testing labels
         :return: report of the classification as given by metrics.classification_report
         """
-        if self._clf:
-            #predicted = self._clf.predict(X)
-            #status = metrics.classification_report(predicted, y)
+        #TODO
+        return
+        #if self._clf:
+            ##predicted = self._clf.predict(X)
+            ##status = metrics.classification_report(predicted, y)
 
-            #return status
-            return self._clf.score(X, y)
-        else:
-            raise Exception("Calling score method before fit (aka model is not initialized)")
-            return
+            ##return status
+            #return self._clf.score(X, y)
+        #else:
+            #raise Exception("Calling score method before fit (aka model is not initialized)")
+            #return
         
 
-    def _lagrangian_fast(self, SVs, sl, coef):
+    def _lagrangian_fast(self, SVs, sl, coef, idx):
         set_sl = set(sl)
         assert len(set_sl) == 2, "Only binary problem can be handled"
         new_sl = sl.copy()
@@ -267,17 +337,15 @@ class CascadeSVM(object):
 
         C1, C2 = np.meshgrid(coef, coef)
         L1, L2 = np.meshgrid(new_sl, new_sl)
-        double_sum = C1 * C2 * L1 * L2 * self._kernel_f(SVs)
+        double_sum = C1 * C2 * L1 * L2 * self._kernel_f[idx](SVs, idx)
         double_sum = double_sum.sum()
         W = -0.5 * double_sum + coef.sum()
 
         return W   
 
-    def _rbf_kernel(self, x):
-        self._check_and_set_gamma(x.shape[1])
-        
+    def _rbf_kernel(self, x, idx):        
         # Trick: || x - y || ausmultipliziert
-        sigmaq = -1 / (2 * self._clf_params["gamma"])
+        sigmaq = -1 / (2 * self._clf_params[idx]["gamma"])
         n = x.shape[0]  
         K = x.dot(x.T) / sigmaq            
             
@@ -288,35 +356,30 @@ class CascadeSVM(object):
         K = K - np.ones((n, 1)) * d.T / 2
         K = K - d * np.ones((1, n)) / 2
         K = np.exp(K)
-        return K
+        return K 
 
-    def _check_and_set_gamma(self, n_features):
-        if self._clf_params["gamma"] == None:
-            print("Gamma was not set. Will use 1 / n_features =", 1. / n_features)
-            self._clf_params["gamma"] = 1. / n_features
+    def _check_convergence_and_update_w(self, sv, sl, clf, idx):
+        self.converged[idx] = False
         
-
-    def _check_convergence_and_update_w(self, sv, sl, clf):
-        self.converged = False
         if clf:
-            W = self._lagrangian_fast(sv, sl, clf.dual_coef_)
+            W = self._lagrangian_fast(sv, sl, clf.dual_coef_, idx)
             print(" - Computed W %s" % W)
 
-            if self._last_W:
-                delta = np.abs((W - self._last_W) / self._last_W)
-                if delta < self._convergence_margin:
+            if self._last_W[idx]:
+                delta = np.abs((W - self._last_W[idx]) / self._last_W[idx])
+                if delta < self._tol[idx]:
                     print(" - Converged with delta: %s " % (delta))
-                    self.converged = True
+                    self.converged[idx] = True
                 else:
                     print(" - No convergence with delta: %s " % (delta))
             else:
                 print(" - First iteration, not testing converge.")
-            self._last_W = W        
+            self._last_W[idx] = W        
 
     def _get_chunks(self, X, y):          
         chunks = []       
             
-        steps = np.linspace(0, X.shape[0], self._nchunks + 1, dtype=int)                         
+        steps = np.linspace(0, X.shape[0], self._nchunks[-1] + 1, dtype=int)                         
         
         for s in range(len(steps)  - 1):    
             chunkx = X[steps[s]:steps[s + 1]]            
@@ -324,21 +387,7 @@ class CascadeSVM(object):
             
             chunks.append((chunkx, chunky)) 
                 
-        return chunks
-
-    #@staticmethod
-    #def precisionCheckDiff(s0, s1):
-        #""""
-        #Method used to check how many vectors of s0 and s1 are equal or very similar (to check numerical issues)
-        #"""
-        #for i in range(0, s0.shape[0]):
-            #for j in range(i, s1.shape[0]):
-                ## print(s0[i] - s1[j])
-                #print("vm=%s" % (np.linalg.norm(s0[i] - s1[j])))
-                #if 0.5 > np.linalg.norm(s0[i] - s1[j]) > 0:
-                    #print("mode warning")
-                #if np.linalg.norm(s0[i] - s1[j]) == 0:
-                    #print("zero mode")
+        return chunks   
 
     @staticmethod
     def _count_lines(filename):
@@ -358,14 +407,14 @@ class CascadeSVM(object):
     
     @staticmethod
     def _count_features(filename, data_format=None):
-        if data_format == "libsvm":
+        if data_format == 'libsvm':
             X, y = load_svmlight_file(filename)
             features = X.shape[1]            
         else:        
-            f = open(filename, "r+")
+            f = open(filename, 'r+')
             buf = mmap.mmap(f.fileno(), 0)        
             line = buf.readline()    
-            features = len(line.split(",")) - 1
+            features = len(line.split(',')) - 1
             f.close()
         
         return features
@@ -394,7 +443,7 @@ def train(return_classifier, *args, **kwargs):
 
 @task(filename=FILE, returns=tuple)
 def read_chunk(filename, start=None, stop=None, data_format=None, n_features=None):
-    if data_format == "libsvm":
+    if data_format == 'libsvm':
         X, y = load_svmlight_file(filename, n_features)
         
         if start and stop:            
@@ -414,7 +463,9 @@ def merge(*args):
     else:
         return merge_dense(*args)
 
-def merge_dense(*args):            
+def merge_dense(*args):           
+    print(args)
+    
     sv1, sl1 = args[0]
     sv1 = np.concatenate((sv1, sl1[:, np.newaxis]), axis=1)
     
