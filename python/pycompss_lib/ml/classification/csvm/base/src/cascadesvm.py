@@ -22,7 +22,6 @@ from copy import copy
 import os
 from sklearn.datasets import load_svmlight_file
 from scipy.sparse import vstack, issparse, lil_matrix
-import threading
 
 
 class CascadeSVM(object):
@@ -46,7 +45,7 @@ class CascadeSVM(object):
         self._split_times = split_times
         
         self._cascade_arity = []        
-        self._max_iterations = []
+        self._max_iterations = []        
         self._nchunks = []
         self._tol = []       
         self._last_W = []
@@ -81,7 +80,9 @@ class CascadeSVM(object):
             self.read_time = time() - self.read_time
             self.fit_time = time()        
            
-        self._fit_threaded()
+        self._do_fit()
+        
+        barrier()
         
         if self._split_times:
             self.fit_time = time() - self.fit_time
@@ -223,63 +224,40 @@ class CascadeSVM(object):
             self._clf_params[-1]['gamma'] = 1. / X.shape[1]                        
             
         return chunks
-        
-    def _fit_threaded(self):
-        threads = []
-        
-        for idx in range(len(self._data)):
-            threads.append(threading.Thread(target=self._do_fit, args=(idx,)))
-            threads[-1].start()        
-            
-        for t in threads:
-            t.join()
-        
-    def _do_fit(self, idx):
+                
+    def _do_fit(self):
         iteration = 0                
         q = deque()
         clf = None 
-        feedback = None
-        chunks = self._data[idx]
+        feedback = None        
         
-        while iteration < self._max_iterations[idx] and not self.converged[idx]:      
-            start_time = time()
-            
-            if len(chunks) > 1:
-                for chunk in chunks:
-                    data = filter(None, [chunk, feedback])                    
-                    q.append(train(False, *data, **self._clf_params[idx]))                    
-            else:
-                # we jump to the last train
-                data = [chunks[0]]        
-                                                        
-            while q:
-                data = []
-                
-                while q and len(data) < self._cascade_arity[idx]:
-                    data.append(q.popleft())                    
-                
-                if q:
-                    q.append(train(False, *data, **self._clf_params[idx]))                                                       
-                                          
-                    # delete partial results
-                    for d in data:
-                        compss_delete_object(d)
+        while not np.array(self.converged).all():        
+            for idx, chunks in enumerate(self._data):
+                if self.iterations[idx] < self._max_iterations[idx]:                                                
                     
-            sv, sl, clf = compss_wait_on(train(True, *data, **self._clf_params[idx]))
-            feedback = sv, sl
+                    for chunk in chunks:
+                        data = filter(None, [chunk, feedback])                    
+                        q.append(train(False, *data, **self._clf_params[idx])) 
+                                                                
+                    while len(q) > 1:
+                        data = []
+                        
+                        while q and len(data) < self._cascade_arity[idx]:
+                            data.append(q.popleft())                    
+                                            
+                        q.append(train(False, *data, **self._clf_params[idx]))                                                       
+                                            
+                        # delete partial results
+                        for d in data:
+                            compss_delete_object(d)                        
+                    
+                    feedback = q.popleft()
+                    
+                    self.iterations[idx] += 1    
+                else:
+                    self.converged[idx] = True
             
-            iteration += 1
-            print("Checking convergence for dataset %s..." % (idx))
-            self._check_convergence_and_update_w(sv, sl, clf, idx)
-            end_time = time()
-            print(" - Iteration %s/%s: converged?: %s\n - Iteration time %s\n\n" %
-                  (iteration, self._max_iterations[idx], self.converged[idx], (end_time - start_time)))
-               
-        self._clf[idx] = clf        
-        self.iterations[idx] = iteration        
         
-        print(" - Model %s: %s" % (idx, self._clf[idx]))
-        print(" - Iterations performed %s, convergence was achieved?: %s" % (self.iterations[idx], self.converged[idx]))
    
     def predict(self, X):
         """
