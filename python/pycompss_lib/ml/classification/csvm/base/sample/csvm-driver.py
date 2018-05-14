@@ -46,7 +46,7 @@ def main():
         csvm.fit()
     else:
         csvm.load_data(path=train_data, n_features=args.f, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)
-        csvm.load_data(path=train_data, n_features=args.f, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)
+        #csvm.load_data(path=train_data, n_features=args.f, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)
         csvm.fit()
         
     out = [args.k, args.a, args.n, csvm._clf_params[0]['gamma'], args.c, csvm.iterations[0], csvm.converged[0], csvm.read_time, csvm.fit_time, csvm.total_time]    
