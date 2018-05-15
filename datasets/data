@@ -1,0 +1,15 @@
+1e4s1e1f3c
+python generate_classification_data.py --name=1e4s1e1f3c --n_samples=10000 --n_features=10 --n_classes=3
+< 1 s
+
+1e5s1e1f3c
+python generate_classification_data.py --name=1e5s1e1f3c --n_samples=100000 --n_features=10 --n_classes=3
+3 s
+
+1e6s1e1f3c
+python generate_classification_data.py --name=1e6s1e1f3c --n_samples=1000000 --n_features=10 --n_classes=3
+30 s
+
+1e7s1e1f3c
+python generate_classification_data.py --name=1e6s1e1f3c --n_samples=10000000 --n_features=10 --n_classes=3
+< 5 min
