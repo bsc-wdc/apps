@@ -3,7 +3,7 @@ import time
 
 from distutils import util
 
-from pycompss.api.api import compss_barrier
+from pycompss.api.api import compss_barrier, compss_wait_on
 
 import utils
 from forest import compss_RF_sklearn_trees
@@ -53,7 +53,11 @@ def main():
     # RandomForestRegressor Algorithm
     initial_time = time.time()
 
-    X_train, y_train, X_test, _ = utils.Dataset(**ds_kwargs).read()
+    ds = utils.Dataset(**ds_kwargs)
+
+    X_train = ds.read('X_train')
+    y_train = ds.read('y_train')
+    X_test = ds.read('X_test')
 
     if args.sklearn:
         if args.regr:
@@ -68,11 +72,16 @@ def main():
 
     time_0 = time.time()
 
+    X_train = compss_wait_on(X_train)
+    y_train = compss_wait_on(y_train)
+
     rf.fit(X_train, y_train)
 
-    compss_barrier()
-
     time_1 = time.time()
+
+    # compss_barrier()
+
+    X_test = compss_wait_on(X_test)
 
     rf.predict(X_test)
 

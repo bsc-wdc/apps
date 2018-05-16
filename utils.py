@@ -1,8 +1,11 @@
 import numpy as np
+import pandas
 import scipy as sp
 from pandas import read_csv
+from pycompss.api.api import compss_wait_on
+from pycompss.api.task import task
 
-DATA_PATH = './datasets/'
+DATA_PATH = '/home/bscuser/random_forest/datasets/'
 
 
 def are_equal(a, b):
@@ -19,6 +22,11 @@ def are_equal(a, b):
         return a == b or np.isnan(a) and np.isnan(b)
 
 
+@task(returns=pandas.DataFrame)
+def to_dataframe(path):
+    return read_csv(path, sep=' ', header=None, squeeze=True)
+
+
 class Dataset(object):
     """A class that represents the train and test data."""
 
@@ -30,14 +38,22 @@ class Dataset(object):
         self.prediction_type = prediction_type
         self.path = path
 
-    def read(self):
+    def read_and_wait_all(self):
         dataset_path = self.path + self.prediction_type + '_' + self.name + '_'
-        X_train = read_csv(dataset_path + 'train_X.dat', sep=' ', header=None)
-        y_train = np.ravel(read_csv(dataset_path + 'train_y.dat', sep=' ', header=None))
-        X_test = read_csv(dataset_path + 'test_X.dat', sep=' ', header=None)
+        X_train = to_dataframe(dataset_path + 'train_X.dat')
+        y_train = to_dataframe(dataset_path + 'train_y.dat')
+        X_test = to_dataframe(dataset_path + 'test_X.dat')
         y_test = None
-        # y_test = np.ravel(read_csv(dataset_path + 'test_y.dat', sep=' ', header=None))
+        # y_test = to_dataframe(dataset_path + 'test_y.dat')
+        X_train = compss_wait_on(X_train)
+        y_train = compss_wait_on(y_train)
+        X_test = compss_wait_on(X_test)
+        # y_test  = compss_wait_on(y_test)
         return X_train, y_train, X_test, y_test
+
+    def read(self, part_name):
+        dataset_path = self.path + self.prediction_type + '_' + self.name + '_'
+        return to_dataframe(dataset_path + part_name + '.dat')
 
     def save(self, X_train, y_train, X_test, y_test):
         dataset_path = self.path + self.prediction_type + '_' + self.name + '_'

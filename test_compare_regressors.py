@@ -1,10 +1,11 @@
 import sklearn
+
 from forest import compss_RF_sklearn_trees, compss_RF_sklearn_subclass
 import utils
 
 
 def main():
-    X_train, y_train, X_test, _ = utils.Dataset(prediction_type='regr').read()
+    X_train, y_train, X_test, _ = utils.Dataset(prediction_type='regr').read_and_wait_all()
 
     random_forests = []
     random_forests.append(compss_RF_sklearn_subclass.RandomForestRegressor(oob_score=True, random_state=0))
@@ -22,7 +23,6 @@ def main():
     for i in range(len(compare_list)):
         if not utils.are_equal(compare_list[0], compare_list[i]):
             different = True
-            print i
 
     if different:
         print('RandomForestRegressors yield different results')
