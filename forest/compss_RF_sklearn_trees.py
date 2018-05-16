@@ -183,11 +183,10 @@ def _distributed_validate_X_predict(estimator, X):
     return estimator._validate_X_predict(X, check_input=True)
 
 
-def _merge_reduce(reduce_function, data, chunk=50):
+def _merge_reduce_sum(data, chunk=50):
     """ Apply function cumulatively to the items of data,
         from left to right in binary tree structure, so as to
         reduce the data to a single value.
-    :param reduce_function: function (2 args) to apply to reduce data
     :param data: List of items to be reduced
     :param chunk: Size of the chunks
     :return: result of reduce the data to a single value
@@ -195,15 +194,15 @@ def _merge_reduce(reduce_function, data, chunk=50):
     while(len(data)) > 1:
         data_to_reduce = data[:chunk]
         data = data[chunk:]
-        data.append(_reduce_task(reduce_function, *data_to_reduce))
+        data.append(_reduce_sum_task(*data_to_reduce))
     return data[0]
 
 
 @task(returns=list)
-def _reduce_task(reduce_function, *data):
+def _reduce_sum_task(*data):
     reduce_value = data[0]
     for i in xrange(1, len(data)):
-        reduce_value = reduce_function(reduce_value, data[i])
+        reduce_value = reduce_value + data[i]
     return reduce_value
 
 
@@ -683,7 +682,7 @@ class RandomForestClassifier(six.with_metaclass(ABCMeta, BaseForest,
         for e in self.estimators_:
             predicts_reduction.append(_distributed_predict_proba(e, X_np))
 
-        all_proba = compss_wait_on(_merge_reduce(lambda x, y: x + y, predicts_reduction))
+        all_proba = compss_wait_on(_merge_reduce_sum(predicts_reduction))
 
         for proba in all_proba:
             proba /= len(self.estimators_)
@@ -853,7 +852,7 @@ class RandomForestRegressor(six.with_metaclass(ABCMeta, BaseForest, RegressorMix
         for e in self.estimators_:
             predicts_reduction.append(_distributed_predict(e, X_np))
 
-        y_hat = compss_wait_on(_merge_reduce(lambda x, y: x + y, predicts_reduction))
+        y_hat = compss_wait_on(_merge_reduce_sum(predicts_reduction))
 
         y_hat /= len(self.estimators_)
 
