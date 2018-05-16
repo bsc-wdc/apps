@@ -55,9 +55,9 @@ def main():
 
     ds = utils.Dataset(**ds_kwargs)
 
-    X_train = ds.read('X_train')
-    y_train = ds.read('y_train')
-    X_test = ds.read('X_test')
+    X_train = ds.read('train_X')
+    y_train = ds.read('train_y')
+    X_test = ds.read('test_X')
 
     if args.sklearn:
         if args.regr:
