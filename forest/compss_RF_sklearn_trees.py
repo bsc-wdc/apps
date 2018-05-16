@@ -178,15 +178,33 @@ def _distributed_set_oob_score_regressor(X, estimator, n_samples, n_outputs_):
     return p_estimator, unsampled_indices
 
 
-@task(returns=list)
-def _distributed_sum(a, b):
-    """Reduce"""
-    return a + b
-
-
 @task(returns=np.ndarray)
 def _distributed_validate_X_predict(estimator, X):
     return estimator._validate_X_predict(X, check_input=True)
+
+
+def _merge_reduce(reduce_function, data, chunk=50):
+    """ Apply function cumulatively to the items of data,
+        from left to right in binary tree structure, so as to
+        reduce the data to a single value.
+    :param reduce_function: function (2 args) to apply to reduce data
+    :param data: List of items to be reduced
+    :param chunk: Size of the chunks
+    :return: result of reduce the data to a single value
+    """
+    while(len(data)) > 1:
+        data_to_reduce = data[:chunk]
+        data = data[chunk:]
+        data.append(_reduce_task(reduce_function, *data_to_reduce))
+    return data[0]
+
+
+@task(returns=list)
+def _reduce_task(reduce_function, *data):
+    reduce_value = data[0]
+    for i in xrange(1, len(data)):
+        reduce_value = reduce_function(reduce_value, data[i])
+    return reduce_value
 
 
 class BaseForest(six.with_metaclass(ABCMeta, BaseEnsemble)):
@@ -665,13 +683,7 @@ class RandomForestClassifier(six.with_metaclass(ABCMeta, BaseForest,
         for e in self.estimators_:
             predicts_reduction.append(_distributed_predict_proba(e, X_np))
 
-        while len(predicts_reduction) > 1:
-            length = len(predicts_reduction)
-            for i in range(length // 2):
-                predicts_reduction[i] = _distributed_sum(predicts_reduction[i], predicts_reduction[-(i+1)])
-            predicts_reduction = predicts_reduction[: length // 2 + length % 2]
-
-        all_proba = compss_wait_on(predicts_reduction[0])
+        all_proba = compss_wait_on(_merge_reduce(lambda x, y: x + y, predicts_reduction))
 
         for proba in all_proba:
             proba /= len(self.estimators_)
@@ -841,13 +853,7 @@ class RandomForestRegressor(six.with_metaclass(ABCMeta, BaseForest, RegressorMix
         for e in self.estimators_:
             predicts_reduction.append(_distributed_predict(e, X_np))
 
-        while len(predicts_reduction) > 1:
-            length = len(predicts_reduction)
-            for i in range(length // 2):
-                predicts_reduction[i] = _distributed_sum(predicts_reduction[i], predicts_reduction[-(i+1)])
-            predicts_reduction = predicts_reduction[: length // 2 + length % 2]
-
-        y_hat = compss_wait_on(predicts_reduction[0])
+        y_hat = compss_wait_on(_merge_reduce(lambda x, y: x + y, predicts_reduction))
 
         y_hat /= len(self.estimators_)
 
