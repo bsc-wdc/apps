@@ -5,7 +5,7 @@ from pandas import read_csv
 from pycompss.api.api import compss_wait_on
 from pycompss.api.task import task
 
-DATA_PATH = '/home/bscuser/random_forest/datasets/'
+DATA_PATH = '/home/bscuser/datasets/'
 
 
 def are_equal(a, b):
