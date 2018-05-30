@@ -12,7 +12,7 @@ import sklearn as sk
 
 def main():
     parser = argparse.ArgumentParser(argument_default=argparse.SUPPRESS,
-                                     description='Predict regression value using a decision tree regressor.')
+                                     description='Predict regression value using a random forest.')
     # RandomForest params
     parser.add_argument('--n_estimators', type=int, help='The number of trees in the forest.')
     parser.add_argument('--bootstrap', type=util.strtobool,
