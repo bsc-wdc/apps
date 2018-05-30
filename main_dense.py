@@ -11,6 +11,7 @@ import utils
 from forest import compss_RF_sklearn_trees
 import sklearn as sk
 
+
 def main():
     initial_time = time.time()
     parser = argparse.ArgumentParser(argument_default=argparse.SUPPRESS,
@@ -47,13 +48,11 @@ def main():
     rf_kwargs = {k: v for k, v in vars(args).items() if k not in ('name', 'path', 'regr', 'sklearn')}
 
     time_1 = time.time()
-    df = read_csv(args.path + args.name, header=None, squeeze=True)
+
+    X_train = read_csv(args.path + 'class_' + args.name + '_train_X.dat', sep=' ', header=None, squeeze=True)
+    y_train = read_csv(args.path + 'class_' + args.name + '_train_y.dat', sep=' ', header=None, squeeze=True)
+
     time_2 = time.time()
-
-    y_train = df[df.columns[-1]]
-    X_train = df.drop(labels=df.columns[-1], axis=1)
-
-    time_3 = time.time()
 
     if args.sklearn:
         if args.regr:
@@ -65,19 +64,19 @@ def main():
             rf = compss_RF_sklearn_trees.RandomForestRegressor(**rf_kwargs)
         else:
             rf = compss_RF_sklearn_trees.RandomForestClassifier(**rf_kwargs)
-    print(type(rf))
+    # print(type(rf))
 
     rf.fit(X_train, y_train)
 
-    print X_train.head(2)
-    # print(rf.predict(X_train.head(2)))
+    compss_barrier()
+
+    time_3 = time.time()
 
     print('X_shape: ' + str(X_train.shape))
     print('y_shape: ' + str(y_train.shape))
     print('Time 1: ' + str(time_1-initial_time))
     print('Time 2: ' + str(time_2-initial_time))
-    print('Time 3: ' + str(time_3 - initial_time))
-
+    print('Time 3: ' + str(time_3-initial_time))
 
 
 if __name__ == "__main__":

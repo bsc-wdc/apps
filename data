@@ -41,3 +41,6 @@ python generate_classification_data.py --name=5e5s1e2f3c --n_samples=500000 --n_
 
 6e5s1e2f3c
 python generate_classification_data.py --name=6e5s1e2f3c --n_samples=600000 --n_features=100 --n_classes=3
+
+dense (4408983, 121)
+python generate_classification_data.py --name=dense --n_samples=4408983 --n_features=121 --n_classes=3 --path=/gpfs/projects/bsc19/COMPSs_DATASETS/random_forest/
