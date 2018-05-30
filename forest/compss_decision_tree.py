@@ -18,6 +18,12 @@ def get_feature_file(path, index):
     return path + 'x_' + str(index) + '.dat'
 
 
+@task(returns=object)
+def get_feature(path, i):
+    print("@task get_feature")
+    return read_csv(get_feature_file(path, i), header=None, squeeze=True)
+
+
 @task(returns=np.ndarray)
 def sample_selection(n_instances):
     print("@task sample_selection")
@@ -51,9 +57,8 @@ def gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size):
 
 
 @task(returns=list)
-def test_splits(sample, f_file, y):
+def test_splits(sample, feature, y):
     print("@task test_splits")
-    feature = read_csv(f_file, header=None, squeeze=True)
     sort_indices = feature[sample].argsort()
     l_frequencies = Counter()
     l_size = 0
@@ -152,7 +157,7 @@ class Leaf(object):
 
 @task(returns=Leaf)
 def build_leaf(sample, y, tree_path):
-    print('@task() build_leaf')
+    print('@task build_leaf')
     frequencies = Counter(y[sample])
     most_common = frequencies.most_common(1)
     if most_common:
@@ -162,19 +167,20 @@ def build_leaf(sample, y, tree_path):
     return Leaf(tree_path, len(sample), frequencies, mode)
 
 
-def compute_split(tree_path, sample, n_features, path, y):
-    features = feature_selection(n_features)
+def compute_split(tree_path, sample, features, path, y):
+    n_features = len(features)
+    index_selection = feature_selection(n_features)
     scores_and_values = []
-    for f in features:
-        f_file = get_feature_file(path, f)
-        scores_and_values.append(test_splits(sample, f_file, y))
-    node, index, value = get_best_split(tree_path, features, *scores_and_values)
+    for i in index_selection:
+        scores_and_values.append(test_splits(sample, features[i], y))
+    node, index, value = get_best_split(tree_path, index_selection, *scores_and_values)
     left_group, right_group = get_groups(sample, path, index, value)
     return node, left_group, right_group
 
 
 @task(file_out=FILE_INOUT)
 def flush_nodes_task(file_out, *nodes_to_persist):
+    print('@task flush_nodes_task')
     with open(file_out, "a") as tree_file:
         for node in nodes_to_persist:
             tree_file.write(node.to_json() + '\n')
@@ -187,19 +193,38 @@ def flush_nodes(file_out, nodes_to_persist):
 
 class DecisionTree:
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, path_in, n_instances, n_features):
+        """
+        Decision tree with distributed splits using pyCOMPSs.
 
-    def fit(self, path, n_instances, n_features, max_depth, path_out):
-        tree_sample = sample_selection(n_instances)
-        file_out = path_out + self.name
-        open(file_out, 'w').close()
-        y = get_y(path)
+        :param path_in: Path of the dataset directory.
+        :param n_instances: Number of instances in the sample.
+        :param n_features: Number of attributes in the sample.
+        """
+        self.path_in = path_in
+        self.n_instances = n_instances
+        self.n_features = n_features
+
+    def fit(self, max_depth, path_out, name):
+        """
+        Fits the DecisionTree.
+
+        :param max_depth: Depth of the decision tree.
+        :param path_out: Path of the output directory.
+        :param name: Name of the output file.
+        """
+        tree_sample = sample_selection(self.n_instances)
+        features = []  # Chunking would require task refactoring
+        for i in range(self.n_features):
+            features.append(get_feature(self.path_in, i))
+        y = get_y(self.path_in)
         nodes_to_split = [('/', tree_sample, 1)]
+        file_out = path_out + name
+        open(file_out, 'w').close()  # Create new empty file deleting previous content
         nodes_to_persist = []
         while nodes_to_split:
             tree_path, sample, depth = nodes_to_split.pop()
-            node, left_group, right_group = compute_split(tree_path, sample, n_features, path, y)
+            node, left_group, right_group = compute_split(tree_path, sample, features, self.path_in, y)
             nodes_to_persist.append(node)
             if depth < max_depth:
                 nodes_to_split.append((tree_path + 'R', right_group, depth + 1))
@@ -216,14 +241,14 @@ class DecisionTree:
 
 
 def main():
-    tree = DecisionTree('tree_0')
+    tree = DecisionTree('/home/bscuser/datasets/dt_test/', 4, 2)
     #
     # import cProfile
     # pr = cProfile.Profile()
     # pr.disable()
     # pr.enable()
     #
-    tree.fit('/home/bscuser/datasets/dt_test/', 4, 2, 2, "/home/bscuser/random_forest/")
+    tree.fit(2, '/home/bscuser/random_forest/', 'tree_0')
     # compss_barrier()
     #
     # pr.disable()
