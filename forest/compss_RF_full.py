@@ -1,4 +1,8 @@
-from compss_decision_tree import CompssDecisionTreeRegressor
+from compss_decision_tree import Node
+
+
+def bootstrap_sample():
+    pass
 
 
 class FullCompssRandomForestRegressor:
@@ -15,12 +19,17 @@ class FullCompssRandomForestRegressor:
         self.splitter = splitter
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
+        self.estimators_ = []
 
-    def fit(self, X, y):
-        trees = []
+    def fit(self):
+
         for i in range(self.n_estimators):
-            trees.append(CompssDecisionTreeRegressor(max_features=self.max_features).fit())
+            root = Node()
+            sample = bootstrap_sample()
+            root.compute_split(sample, kwargs)
+            root.build_subnodes()
+            self.estimators_.append(root)
         return self
 
-    def predict(self, x):
+    def predict(self):
         pass
