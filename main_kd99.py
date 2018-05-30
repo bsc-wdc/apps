@@ -47,6 +47,7 @@ def main():
     rf_kwargs = {k: v for k, v in vars(args).items() if k not in ('name', 'path', 'regr', 'sklearn')}
 
     time_1 = time.time()
+
     df = read_csv(args.path + args.name, header=None, squeeze=True)
     time_2 = time.time()
 
@@ -65,18 +66,20 @@ def main():
             rf = compss_RF_sklearn_trees.RandomForestRegressor(**rf_kwargs)
         else:
             rf = compss_RF_sklearn_trees.RandomForestClassifier(**rf_kwargs)
-    print(type(rf))
+    # print(type(rf))
 
     rf.fit(X_train, y_train)
 
-    print X_train.head(2)
-    # print(rf.predict(X_train.head(2)))
+    compss_barrier()
+
+    time_4 = time.time()
 
     print('X_shape: ' + str(X_train.shape))
     print('y_shape: ' + str(y_train.shape))
     print('Time 1: ' + str(time_1-initial_time))
     print('Time 2: ' + str(time_2-initial_time))
     print('Time 3: ' + str(time_3 - initial_time))
+    print('Time 4: ' + str(time_4 - initial_time))
 
 
 
