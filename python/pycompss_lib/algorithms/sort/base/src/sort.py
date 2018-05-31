@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 import sys
 import time
-#import pickle
+import pickle
 from numpy import *
 from collections import defaultdict
 from collections import OrderedDict
 from pycompss.api.task import task
-from pycompss.api.parameter import *
+from pycompss.api.api import compss_wait_on
 
 
 @task(returns=dict)
@@ -32,35 +32,34 @@ def reduce(result):
     return set().union(*result)
 
 
-def sorting(partialResult, result, fragments, num_range):
-    new_Dict = minimize_dict(partialResult)
+def sorting(partial_result, result, fragments, num_range):
+    new_Dict = minimize_dict(partial_result)
     step = num_range / fragments
-    sorted_new_Dict = OrderedDict(sorted(new_Dict.iteritems(),
+    sorted_new_dict = OrderedDict(sorted(new_Dict.iteritems(),
                                          key=lambda (k, v): k, reverse=False))
     initial = 0
     final = step
     sizes = []
     while initial < num_range:
         start_pos = 0
-        for k, v in sorted_new_Dict.iteritems():
+        for k, v in sorted_new_dict.iteritems():
             sizes.append(start_pos)
             start_pos += len(v)
         position = 0
-        for k, v in sorted_new_Dict.iteritems():
+        for k, v in sorted_new_dict.iteritems():
             if int(k) >= initial and int(k) < final:
-                result.append(sort_in_worker(k, v, sizes[position]))
+                result.append(sort_in_worker(v, sizes[position]))
                 initial += step
                 final += step
             position += 1
     for i in range(len(result)):
         result[i] = compss_wait_on(result[i])
     sort = reduce(result)
-    sort = compss_wait_on(sort)
     return sort
 
 
 @task(returns=dict)
-def sort_in_worker(range_initial, block, position):
+def sort_in_worker(block, position):
     local_block = sorted(block)
     result = {}
     idx = 0
@@ -71,35 +70,37 @@ def sort_in_worker(range_initial, block, position):
     return result
 
 
-def minimize_dict(partialResult):
+def minimize_dict(partial_result):
     new_Dict = defaultdict(list)
-    for key, value in partialResult.items():
+    for key, value in partial_result.items():
         value = compss_wait_on(value)
         for val in value:
             new_Dict[val[0]].append(value[val])
     return new_Dict
 
 
-def sort(numsFile, fragments, num_range):
-    from pycompss.api.api import compss_wait_on
+def sort(nums_file, fragments, num_range):
+    from pycompss.api.api import compss_barrier
 
+    # Read numbers from file
+    f = open(nums_file, 'r')
 
-    '''read numbers from file'''
-    f = open(numsFile, 'r')
-
-    nums = []
+    dataset = []
     for line in f:
-        nums = asarray([int(x) for x in line.strip().split(" ")])
+        dataset.append(asarray([int(x) for x in line.strip().split(" ")]))
+
+    # Flat dataset
+    nums = [item for sublist in dataset for item in sublist]
 
     numbers = len(nums)
 
     if numbers / fragments < num_range:
-        print 'error: num_range should be greater than numbers/fragments'
+        print 'ERROR: num_range should be greater than numbers/fragments'
         num_range = int(numbers / fragments)
-        print ("using numrange= ", num_range)
+        print ("Using num_range: %s" % num_range)
 
     nums_per_node = numbers / fragments
-    partialResult = {}
+    partial_result = {}
     result = []
 
     start = time.time()
@@ -109,25 +110,31 @@ def sort(numsFile, fragments, num_range):
 
     idx = 0
     for k in keys:
-        partialResult[idx] = calculate_range(k, fragments, num_range, idx)
+        partial_result[idx] = calculate_range(k, fragments, num_range, idx)
         idx += 1
 
-    sortedNums = sorting(partialResult, result, fragments, num_range)
+    sorted_nums = sorting(partial_result, result, fragments, num_range)
 
-    print "Ellapsed time(s)"
+    compss_barrier()
+
+    print "Elapsed time(s)"
     print time.time() - start
+
+    print sorted_nums
 
     # Save result file
     '''
-    aux = list(sortedNums.items())
-    ff = open('./result.txt','w')
-    pickle.dump(aux,ff)
-    ff.close()
+    sorted_nums = compss_wait_on(sorted_nums)
+    aux = list(sorted_nums.items())
+    result_file = open('./result.txt','w')
+    pickle.dump(aux, result_file)
+    result_file.close()
     '''
 
+
 if __name__ == "__main__":
-    numsFile = sys.argv[1]
+    nums_file = sys.argv[1]
     fragments = int(sys.argv[2])
     num_range = int(sys.argv[3])
-    
-    sort(numsFile, fragments, num_range)
+
+    sort(nums_file, fragments, num_range)
