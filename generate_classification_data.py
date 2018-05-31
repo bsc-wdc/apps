@@ -1,4 +1,5 @@
 import argparse
+from distutils import util
 
 from sklearn.datasets import make_classification
 from random import randint
@@ -14,6 +15,8 @@ if __name__ == "__main__":
     parser.add_argument('--n_classes', type=int, default=3, help="The number of classes.")
     parser.add_argument('--name', default='default')
     parser.add_argument('--path')
+    parser.add_argument('--file_per_feature', default=False, type=util.strtobool,
+                        help='Whether to use separate output files for each feature.')
     args = parser.parse_args()
     if len(sys.argv) > 1:
         dataset_id = sys.argv[1]
@@ -32,7 +35,7 @@ if __name__ == "__main__":
     y_train = y[:len(y) / 2]
     X_test = X[len(X) / 2:]
     y_test = y[len(y) / 2:]
-    ds_kwargs = {k: v for k, v in vars(args).iteritems() if k in ('name', 'path') and v is not None}
+    ds_kwargs = {k: v for k, v in vars(args).items() if k in ('name', 'path') and v is not None}
     ds_kwargs['prediction_type'] = 'class'
     ds = utils.Dataset(**ds_kwargs)
-    ds.save(X_train, y_train, X_test, y_test)
+    ds.save(X_train, y_train, X_test, y_test, args.file_per_feature)
