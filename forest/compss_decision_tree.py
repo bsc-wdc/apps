@@ -242,20 +242,3 @@ class DecisionTree:
             if len(nodes_to_persist) >= 10000:
                 flush_nodes(file_out, nodes_to_persist)
         flush_nodes(file_out, nodes_to_persist)
-
-
-def main():
-    tree = DecisionTree('/home/bscuser/datasets/dt_test_2/', 20, 10)
-    #
-    # import cProfile
-    # pr = cProfile.Profile()
-    # pr.disable()
-    # pr.enable()
-    #
-    tree.fit(3, '/home/bscuser/random_forest/', 'tree_2')
-    # compss_barrier()
-    #
-    # pr.disable()
-    # # pr.print_stats(sort='time')
-    #
-    # # tree.get_and_print()
