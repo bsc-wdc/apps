@@ -9,6 +9,12 @@ def main():
     maxN = 200000
 
     nums = random.random_integers(maxN, size=(numbers,))
+    # Plain numbers output
+    with open("dataset.txt", 'w') as dataset:
+        for n in nums:
+            dataset.write(str(n) + ' ')
+    '''
+    # Pickled output
     print("Nums: %s" % str(nums))
     ff = open('n.txt', 'w')
     pickle.dump(nums, ff)
@@ -17,6 +23,7 @@ def main():
     f = open('n.txt', 'r')
     aux = pickle.load(f)
     print(aux)
+    '''
 
 
 if __name__ == '__main__':
