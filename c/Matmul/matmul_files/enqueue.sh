@@ -1,0 +1,1 @@
+enqueue_compss -d -m --worker_working_dir=gpfs --lang=c --num_nodes=2 --cpus_per_node=12 --exec_time=15 --appdir=/home/bsc19/bsc19430/matmul_files /home/bsc19/bsc19430/matmul_files/master/Matmul 4 64 12.34

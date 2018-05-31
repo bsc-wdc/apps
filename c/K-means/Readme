@@ -1,0 +1,14 @@
+Build:
+
+compss_build_app <flags> kmeans
+
+<flags> should be --ompss if you are building the OmpSs version, and --ompss --cuda if you are building a version that uses Cuda.
+
+Run:
+
+Edit the file enqueue.sh with the parameters you want, making sure appdir points to the path you application is in.
+
+Generating data:
+
+See README.txt in generator/ folder. 
+

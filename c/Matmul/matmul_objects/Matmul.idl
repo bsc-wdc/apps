@@ -1,0 +1,5 @@
+interface Matmul 
+{
+	void multiplyBlocks(inout Block block1, inout Block block2, inout Block block3);
+	//void Block::multiply(in Block block1, in Block block2);
+};

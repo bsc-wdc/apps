@@ -1,0 +1,18 @@
+interface Matmul 
+{
+	@Constraints(processors={
+                @Processor(ProcessorType=GPU, ComputingUnits=1),
+                @Processor(ProcessorType=CPU, ComputingUnits=1)});
+	void multiplyBlocks(inout File f1, in File f2, in File f3, in int M);
+
+/*
+	@Constraints(processors={
+               @Processor(ProcessorType=CPU, ComputingUnits=1)});
+        @Implements(multiplyBlocks);
+        void multiplyBlocks_CPU(inout File f1, in File file2, in File file3, in int M);
+*/
+
+	@Constraints(processors={
+               @Processor(ProcessorType=CPU, ComputingUnits=1)});
+	void init_block(out File file, in int bSize, in double val);
+};

@@ -1,0 +1,4 @@
+interface saxpy{
+    void saxpy(in int N, in float a, inout saxpy_obj y, in saxpy_obj x);
+    void test(inout saxpy_obj x);
+};

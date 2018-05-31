@@ -1,0 +1,1 @@
+enqueue_compss -d --lang=c --persistent_worker_c=true --num_nodes=2 --cpus_per_node=12 --exec_time=10 --appdir=/home/bsc19/bsc19430/matmul_objects_ompss/ /home/bsc19/bsc19430/matmul_objects_ompss/master/Matmul 2 1024 12.34

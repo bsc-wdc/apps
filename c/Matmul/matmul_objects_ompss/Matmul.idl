@@ -1,0 +1,6 @@
+interface Matmul 
+{
+	@Constraints(processors={
+               @Processor(ProcessorType=CPU, ComputingUnits=2)});
+	void multiplyBlocks(inout Block block1, in Block block2, in Block block3);
+};
