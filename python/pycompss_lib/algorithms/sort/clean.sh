@@ -13,3 +13,6 @@
  
   # Clean trace files
   find . -type f -name '*tar.gz' -delete
+
+  # Clean dataset files
+  find . -type f -name 'dataset.txt' -delete

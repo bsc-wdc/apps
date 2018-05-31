@@ -7,11 +7,10 @@
   jobDependency=None
   numNodes=2
   executionTime=5
-  tasksPerNode=16
   tracing=false
   
   # Set arguments
   appArgs="/gpfs/projects/bsc19/COMPSs_DATASETS/sortNumbers/Random6000.txt 5 600"
 
-  # Execute specifcversion launch  
-  ${scriptDir}/1_base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  # Execute specific version launch
+  ${scriptDir}/1_base/launch.sh $jobDependency $numNodes $executionTime $tracing $appArgs

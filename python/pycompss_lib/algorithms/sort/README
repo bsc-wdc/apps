@@ -1,7 +1,7 @@
 This is the Readme for:
-PCA
+Sort
 
-[Name]: PCA
+[Name]: Sort
 [Contact Person]: support-compss@bsc.es
 [Access Level]: public
 [License Agreement]: Apache2
@@ -9,16 +9,19 @@ PCA
 
 [Body]
 == Description ==
-PCA
+Parallel Sort
 
 == Versions ==
 * - 1_base: base version
  
 == Execution instructions ==                                                                                        
 Usage:                                                                                                                             
-pca_distributed.py                                                      
+sort.py <dataset_path> <number_of_fragments> <numbers_per_range>
                                                                                                                     
-where:                                                                                                              
-                 * -                                                                                                                                        
+where:
+                 * - dataset_path: Path where the input is.
+                 * - number_of_fragments: Number of chunks to split the dataset.
+                 * - numbers_per_range: Numbers per range.
+
 == Build ==                                                                                                         
 No build is required
