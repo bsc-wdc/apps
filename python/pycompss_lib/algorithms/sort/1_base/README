@@ -1,0 +1,5 @@
+Parallel Sort
+Params: File data , number of fragments, numbers per range 
+Example usage:
+
+./launch.sh None 2 5 True /gpfs/projects/bsc19/COMPSs_APPS/sortNumbers/data/Random6000.txt 5 600
