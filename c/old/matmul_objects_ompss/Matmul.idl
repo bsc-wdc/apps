@@ -1,0 +1,7 @@
+interface Matmul 
+{
+	//void initMatrix(inout Matrix matrix, in int mSize, in int nSize, in double val);
+	@Constraints(ComputingUnits=2);
+	void multiplyBlocks(inout Block block1, in Block block2, in Block block3);
+	//void Block::multiply(in Block block1, in Block block2);
+};

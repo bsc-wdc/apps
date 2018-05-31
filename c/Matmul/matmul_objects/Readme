@@ -1,0 +1,35 @@
+This is the Readme for:
+Matmul_Objects
+
+[Name]: Matrix multiplication with objects
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Matrix multiplication is a binary operation that takes a pair of matrices and produces another matrix.
+
+If A is an n×m matrix and B is an m×p matrix, the result AB of their multiplication is an n×p matrix defined only if the number of columns m in A is equal to the number of rows m in B. When multiplying A and B, the elements of the rows in A are multiplied with corresponding columns in B.
+
+In this implementation, A and B are square matrices (same number of rows and columns), and so it is the result matrix C. Each matrix is divided in N blocks of M doubles. The multiplication of two blocks is done by a multiply task method with a simple three-nested-loop implementation. When executed with COMPSs, the main program generates N^3^ tasks arranged as N^2^ chains of N tasks in the dependency graph.
+
+
+== Execution instructions ==
+Usage:
+runcompss --lang=c /home/compss/tutorial_apps/c/matmul_objects/master/Matmul <numberOfBlocks> <blockSize> <initVal>
+
+where:
+		 * - numberOfBlocks: Number of blocks inside each matrix
+		 * - blockSize: Size of each block
+		 * - initVal: double value for the matrix initialization
+
+
+== Execution Example ==
+runcompss --lang=c /home/compss/tutorial_apps/c/matmul_objects/master/Matmul 8 4 12.34
+
+
+== Build ==
+buildapp Matmul
+

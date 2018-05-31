@@ -1,0 +1,16 @@
+interface kmeans
+{
+        void init_Fragment(out Fragment frag, in File filename, in int nSize);
+        void compute_newCluster(in Fragment frag, in Clusters clusters, out Clusters newClusters, out ClustersSize newClustersSize);
+
+
+	@Constraints(processors={
+		@Processor(ProcessorType=GPU, ComputingUnits=1),
+		@Processor(ProcessorType=CPU, ComputingUnits=1)});
+	void cuda_compute_newCluster(in Fragment frag, in Clusters clusters, out Clusters newClusters, out ClustersSize newClustersSize);
+//, in int numThreadsPerClusterBlock, in int numClusterBlocks, in int clusterBlockSharedDataSize);	
+
+
+        void merge_newCluster(inout Clusters clusters1, in Clusters clusters2, inout ClustersSize newClustersSize1, in ClustersSize newClustersSize2);
+	void update_clusters(in Clusters clusters, in ClustersSize clustersSize, inout Clusters newClusters);
+};

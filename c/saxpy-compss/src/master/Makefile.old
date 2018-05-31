@@ -1,0 +1,42 @@
+PROGRAM=saxpy
+KERNEL=saxpy_kernels
+PREFIX=.
+
+TARGETS=$(PROGRAM)-p $(PROGRAM)-i $(PROGRAM)-d 
+
+BASE_DIR=../..
+#include $(BASE_DIR)/common-files/Makefile
+
+CC = mcxx
+
+
+CFLAGS = --ompss  
+
+AOCL_FLAGS = $(shell aocl compile-config)
+AOCL_FLAGS_LD = $(shell aocl link-config)  -lrrmbroker
+#PAPI_INCLUDE = -I/home/albertn/programs/include
+#PAPI_LIBRARY = -L/home/albertn/programs/lib -lpapi
+
+LIBS  = $(AOCL_FLAGS_LD) -L/opt/aalsdk/aalsdk-5.0.2/lib
+INCS  = -I$(PREFIX) --opencl-build-opts=-I$(PREFIX) -I/home/albertn/programs/include/nanox $(AOCL_FLAGS) -I$AALSDK/include
+
+PURE_INC = -I/home/albertn/common/inc $(AOCL_FLAGS)
+AOCL_SRC = $(wildcard ../../../../common/src/AOCLUtils/*.cpp)
+
+EXTRA = -O3 -Wall -Wno-unused -g --variable=disable_opencl_file_check:1 -march=native -mavx -msse2 -ffast-math 
+
+#EXTRA += --Wnl,-pg
+
+all: $(TARGETS)
+
+
+$(PROGRAM): $(PROGRAM).c 
+	$(CC) $(GFLAGS) $(CFLAGS) $(EXTRA) $(INCS) -o $@ $< $(LIBS) 
+
+.c.o:
+	$(CC) --no-openmp $(EXTRA) -c $<
+
+clean:
+	rm -f $(CC)_* *.o *~ $(TARGETS) 
+
+
