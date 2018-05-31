@@ -1,7 +1,0 @@
-interface Matmul 
-{
-	void initMatrix(inout Matrix matrix, in int mSize, in int nSize, in double val);
-	void multiplyBlocks(inout Block block1, inout Block block2, inout Block block3);
-	void Block::multiply(in Block block1, in Block block2);
-	static Matrix Matrix::init(in int mSize, in int bSize, in double val);
-};
