@@ -39,7 +39,7 @@ def feature_selection(n_features):
 @task(returns=object)
 def get_y(path):
     print("@task get_y")
-    return read_csv(path + 'y.dat', header=None, squeeze=True)
+    return read_csv(path + 'y.dat', dtype=object, header=None, squeeze=True)
 
 
 def gini_index(counter, size):
@@ -59,32 +59,36 @@ def gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size):
 @task(returns=list)
 def test_splits(sample, feature, y):
     print("@task test_splits")
-    sort_indices = feature[sample].argsort()
+    sort_indices = feature[sample].argsort().values
+    # print ("sort_indices: " + str(sort_indices))
+    # print("sort_sample: \t" + str([sample[i] for i in sort_indices]))
+    # print("sort_features: \t" + str([feature[sample[i]] for i in sort_indices]))
+    # print("sort_classes: \t" + str([y[sample[i]] for i in sort_indices]))
     l_frequencies = Counter()
     l_size = 0
     r_frequencies = Counter(y[sample])
     r_size = len(sample)
     min_score = sys.float_info.max
     b_value = None
-    for i in sort_indices:
+    for k in range(len(sort_indices)):
+        i = sort_indices[k]
         s = sample[i]
         l_frequencies[y[s]] += 1
         r_frequencies[y[s]] -= 1
         l_size += 1
         r_size -= 1
         try:
-            s_next = sample[i+1]
-            if feature[s] == feature[s_next]:
+            s_next = sample[sort_indices[k+1]]
+            if y[s] == y[s_next]:
                 continue
         except IndexError:  # Last element
             pass
-
         score = gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size)
-        print(score)
         if score < min_score:
             min_score = score
             try:
-                b_value = (feature[s] + feature[sample[i + 1]])/2
+                s_next = sample[sort_indices[k + 1]]
+                b_value = (feature[s] + feature[s_next])/2
             except IndexError:  # Last element
                 b_value = np.float64(np.inf)
     return tuple([min_score, b_value])
@@ -241,14 +245,14 @@ class DecisionTree:
 
 
 def main():
-    tree = DecisionTree('/home/bscuser/datasets/dt_test/', 4, 2)
+    tree = DecisionTree('/home/bscuser/datasets/dt_test_2/', 20, 10)
     #
     # import cProfile
     # pr = cProfile.Profile()
     # pr.disable()
     # pr.enable()
     #
-    tree.fit(2, '/home/bscuser/random_forest/', 'tree_0')
+    tree.fit(3, '/home/bscuser/random_forest/', 'tree_2')
     # compss_barrier()
     #
     # pr.disable()
