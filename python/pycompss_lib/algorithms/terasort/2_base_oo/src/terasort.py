@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-#  Copyright 2002-2017 Barcelona Supercomputing Center (www.bsc.es)
+#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -14,9 +14,8 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+#
 
-from pycompss.api.task import task
-from pycompss.api.parameter import *
 from Terasort import Board
 from Terasort import Bucket
 import sys
