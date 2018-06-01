@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 #
 #  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
 #
@@ -15,6 +14,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
+
+# -*- coding: utf-8 -*-
 
 from Terasort import Board
 from Terasort import Bucket
