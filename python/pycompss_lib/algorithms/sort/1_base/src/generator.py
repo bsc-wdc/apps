@@ -1,13 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from numpy import *
-import pickle
 
 
 def main():
     numbers = 102400
     maxN = 200000
-    dataset_file="dataset.txt"
+    dataset_file = "dataset.txt"
 
     nums = random.random_integers(maxN, size=(numbers,))
     # Plain numbers output
@@ -16,6 +15,8 @@ def main():
             dataset.write(str(n) + ' ')
     '''
     # Pickled output
+    import pickle
+
     print("Nums: %s" % str(nums))
     ff = open(dataset_file, 'w')
     pickle.dump(nums, ff)

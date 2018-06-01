@@ -35,18 +35,18 @@ def reduce(result):
 def sorting(partial_result, result, fragments, num_range):
     new_Dict = minimize_dict(partial_result)
     step = num_range / fragments
-    sorted_new_dict = OrderedDict(sorted(new_Dict.iteritems(),
-                                         key=lambda (k, v): k, reverse=False))
+    sorted_new_dict = OrderedDict(sorted(iter(new_Dict.items()),
+                                         key=lambda k_v: k_v[0], reverse=False))
     initial = 0
     final = step
     sizes = []
     while initial < num_range:
         start_pos = 0
-        for k, v in sorted_new_dict.iteritems():
+        for k, v in sorted_new_dict.items():
             sizes.append(start_pos)
             start_pos += len(v)
         position = 0
-        for k, v in sorted_new_dict.iteritems():
+        for k, v in sorted_new_dict.items():
             if int(k) >= initial and int(k) < final:
                 result.append(sort_in_worker(v, sizes[position]))
                 initial += step
@@ -72,7 +72,7 @@ def sort_in_worker(block, position):
 
 def minimize_dict(partial_result):
     new_Dict = defaultdict(list)
-    for key, value in partial_result.items():
+    for key, value in list(partial_result.items()):
         value = compss_wait_on(value)
         for val in value:
             new_Dict[val[0]].append(value[val])
@@ -95,9 +95,9 @@ def sort(nums_file, fragments, num_range):
     numbers = len(nums)
 
     if numbers / fragments < num_range:
-        print 'ERROR: num_range should be greater than numbers/fragments'
+        print('ERROR: num_range should be greater than numbers/fragments')
         num_range = int(numbers / fragments)
-        print ("Using num_range: %s" % num_range)
+        print(("Using num_range: %s" % num_range))
 
     nums_per_node = numbers / fragments
     partial_result = {}
@@ -117,13 +117,13 @@ def sort(nums_file, fragments, num_range):
 
     compss_barrier()
 
-    print "Elapsed time(s)"
-    print time.time() - start
+    print("Elapsed time(s)")
+    print(time.time() - start)
 
-    print sorted_nums
+    print(sorted_nums)
 
-    # Save result file
     '''
+    # Save result file
     sorted_nums = compss_wait_on(sorted_nums)
     aux = list(sorted_nums.items())
     result_file = open('./result.txt','w')
