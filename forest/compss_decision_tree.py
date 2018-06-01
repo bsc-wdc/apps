@@ -1,4 +1,4 @@
-# Python3 compatibility
+# Python3 compatibility imports
 from __future__ import division
 
 import sys
@@ -56,7 +56,7 @@ def gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size):
     return weighted_sum
 
 
-@task(returns=list)
+@task(returns=tuple)
 def test_splits(sample, feature, y):
     print("@task test_splits")
     sort_indices = feature[sample].argsort().values
@@ -91,7 +91,7 @@ def test_splits(sample, feature, y):
                 b_value = (feature[s] + feature[s_next])/2
             except IndexError:  # Last element
                 b_value = np.float64(np.inf)
-    return tuple([min_score, b_value])
+    return min_score, b_value
 
 
 @task(priority=True, returns=(list, list))

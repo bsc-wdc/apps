@@ -70,6 +70,8 @@ def main():
 
     compss_barrier()
 
+    rf.predict(X_train)
+
     time_3 = time.time()
 
     print('X_shape: ' + str(X_train.shape))
