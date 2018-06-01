@@ -17,13 +17,14 @@
 
 # -*- coding: utf-8 -*-
 
+import sys
 from numpy import *
 
 
 def main():
-    nums = 102400
-    max_n = 200000
-    dataset_file = "dataset.txt"
+    nums = int(sys.argv[1])     # Example: 102400
+    max_n = int(sys.argv[2])    # Example: 200000
+    dataset_file = sys.argv[3]  # Example: dataset.txt
 
     nums = random.random_integers(max_n, size=(nums,))
     # Plain nums output
