@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-#from pycompss.api.task import task
 
 
 def generateIntData(numRecords, uniqueKeys, uniqueValues, numPartitions, randomSeed):
@@ -19,18 +18,14 @@ def generateIntData(numRecords, uniqueKeys, uniqueValues, numPartitions, randomS
 
 def generateStringData(numRecords, uniqueKeys, keyLength, uniqueValues, valueLength, numPartitions, randomSeed, storageLocation, hashFunction):
     import pickle
-    ints = generateIntData(
-        numRecords, uniqueKeys, uniqueValues, numPartitions, randomSeed)
+    ints = generateIntData(numRecords, uniqueKeys, uniqueValues, numPartitions, randomSeed)
 
     data = []
     for i in range(numPartitions):
-        data.append(map(lambda (k, v): (paddedString(
-            k, keyLength, hashFunction), paddedString(v, valueLength, hashFunction)), ints[i]))
+        data.append([(paddedString(k_v[0], keyLength, hashFunction), paddedString(k_v[1], valueLength, hashFunction)) for k_v in ints[i]])
 
     ff = open(storageLocation, 'w')
     pickle.dump(data, ff)
-
-    return data
 
 
 def paddedString(i, length, hashFunction):
@@ -47,7 +42,7 @@ def paddedString(i, length, hashFunction):
 
 def chunks(l, n, balanced=False):
     if not balanced or not len(l) % n:
-        for i in xrange(0, len(l), n):
+        for i in range(0, len(l), n):
             yield l[i:i + n]
     else:
         rest = len(l) % n
@@ -56,7 +51,7 @@ def chunks(l, n, balanced=False):
             yield l[start: start + n + 1]
             rest -= 1
             start += n + 1
-        for i in xrange(start, len(l), n):
+        for i in range(start, len(l), n):
             yield l[i:i + n]
 
 
@@ -77,29 +72,36 @@ def hashedPartitioner(k, numPartitions, keyfunc=lambda x: x):
 def keyfunc(x):
     return x
 
-'''Sorts self, which is assumed to consists of (key, value) pairs'''
-#@task(returns=list)
 
+def main():
+    # Tests
+    # ints = generateIntData(10, 10, 10, 2, 5)
+    # print ints
+    # out_path = "/tmp/out.dataset"
+    # generateStringData(10, 10, 5, 10, 5, 2, 8, out_path, False)
 
-def sortPartition(iterator, ascending=True):
-    return sorted(iterator, key=lambda (k, v): keyfunc(k), reverse=not ascending)
+    import sys
 
+    numRecords = int(sys.argv[1])
+    uniqueKeys = int(sys.argv[2])
+    keyLength = int(sys.argv[3])
+    uniqueValues = int(sys.argv[4])
+    valueLength = int(sys.argv[5])
+    numPartitions = int(sys.argv[6])
+    randomSeed = int(sys.argv[7])
+    storageLocation = sys.argv[8]
+    hashFunction = bool(sys.argv[9])
 
-def sortByKey(self, ascending=True, numPartitions=None, keyfunc=lambda x: x):
-    return map(sortPartition, partitionBy(self, numPartitions, True))
-
-
-def reduceDict(dic1, dic2):
-    for k in dic2:
-        if k in dic1:
-            dic1[k] += dic2[k]
-        else:
-            dic1[k] = dic2[k]
+    generateStringData(numRecords,
+                       uniqueKeys,
+                       keyLength,
+                       uniqueValues,
+                       valueLength,
+                       numPartitions,
+                       randomSeed,
+                       storageLocation,
+                       hashFunction)
 
 
 if __name__ == "__main__":
-    import sys
-    #from pycompss.api.api import compss_wait_on
-    '''test'''
-    print generateIntData(10, 10, 10, 2, 5)
-    print generateStringData(10, 10, 5, 10, 5, 2, 8, out_path, True)
+    main()

@@ -4,32 +4,32 @@ from pycompss.api.task import task
 
 
 @task(returns=list)
-def sortPartitionFromFile(file):
+def sortPartitionFromFile(path):
     """ Sorts data, which is assumed to consists of (key, value) tuples list.
-    :param file: file absolute path where the list of tuples to be sorted is located.
+    :param path: file absolute path where the list of tuples to be sorted is located.
     :return: sorted list of tuples.
     """
     import pickle
-    f = open(file, 'r')
+    f = open(path, 'r')
     data = pickle.load(f)
     f.close()
-    res = sorted(data, key=lambda tuple: tuple[0], reverse=False) # sort by key
+    res = sorted(data, key=lambda tuple: tuple[0], reverse=False)
     return res
 
 
 @task(returns=list)
 def sortPartition(data):
-    """ Sorts data, which is assumed to consists of (key, value) pairs list
+    """ Sorts data, which is assumed to consists of (key, value) pairs list.
     :param data: list of tuples to be sorted by key.
     :return: sorted list of tuples.
     """
-    res = sorted(data, key=lambda tuple: tuple[0], reverse=False) # sort by key
+    res = sorted(data, key=lambda tuple: tuple[0], reverse=False)
     return res
 
 
 @task(returns=list, priority=True)
 def reducetask(a, b):
-    """ Reduce list a and list b. 
+    """ Reduce list a and list b.
         They must be already sorted.
     :param a: list.
     :param b: list.
@@ -57,12 +57,12 @@ def mergeReduce(function, data):
     """ Apply function cumulatively to the items of data,
         from left to right in binary tree structure, so as to
         reduce the data to a single value.
-    :param function: function to apply to reduce data
-    :param data: List of items to be reduced
-    :return: result of reduce the data to a single value
+    :param function: function to apply to reduce data.
+    :param data: List of items to be reduced.
+    :return: result of reduce the data to a single value.
     """
     from collections import deque
-    q = deque(xrange(len(data)))
+    q = deque(range(len(data)))
     while len(q):
         x = q.popleft()
         if len(q):
@@ -77,39 +77,40 @@ def mergeReduce(function, data):
 def generateFragment(numKeys, uniqueKeys, keyLength, uniqueValues, valueLength, randomSeed, hashFunction):
     """ Generate a fragment.
         Each fragment is list of pairs (K, V) generated randomly.
-    :param numKeys: number of keys per fragment
-    :param uniqueKeys: number of unique keys
-    :param keyLength: length of each key
-    :param uniqueValues: number of unique values
-    :param valueLength: length of each value
-    :param randomSeed: Random seed
+    :param numKeys: number of keys per fragment.
+    :param uniqueKeys: number of unique keys.
+    :param keyLength: length of each key.
+    :param uniqueValues: number of unique values.
+    :param valueLength: length of each value.
+    :param randomSeed: Random seed.
     :param hashFunction: Boolean - use hash function.
-    :return: fragment (list of tuples)
+    :return: fragment (list of tuples).
     """
-    fragment = []
     ints = generateIntData(numKeys, uniqueKeys, uniqueValues, randomSeed)
-    data = map(lambda (k, v): (paddedString(k, keyLength, hashFunction), paddedString(v, valueLength, hashFunction)), ints)
+    data = [(paddedString(k_v[0], keyLength, hashFunction), paddedString(k_v[1], valueLength, hashFunction)) for k_v in ints]
     return data
+
 
 def generateIntData(numKeys, uniqueKeys, uniqueValues, randomSeed):
     """ Generate a list of (int, int) tuples with random values.
-    :param numKeys: number of keys per fragment
-    :param uniqueKeys: number of unique keys
-    :param uniqueValues: number of unique values
-    :param randomSeed: Random seed
-    :return: fragment (list of tuples)
+    :param numKeys: number of keys per fragment.
+    :param uniqueKeys: number of unique keys.
+    :param uniqueValues: number of unique values.
+    :param randomSeed: Random seed.
+    :return: fragment (list of tuples).
     """
     import random
     random.seed(randomSeed)
     data = [(random.randint(0, uniqueKeys), random.randint(0, uniqueValues)) for i in range(numKeys)]
     return data
 
+
 def paddedString(i, length, hashFunction):
     """ Converts a int to String with determined length.
-    :param i: input integer
+    :param i: input integer.
     :param length: length (number of characters).
     :param hashFunction: Boolean - use hash function.
-    :return: i as String
+    :return: i as String.
     """
     fmtString = "{:0>" + str(length) + "d}"
     if hashFunction:
@@ -122,7 +123,7 @@ def paddedString(i, length, hashFunction):
         return fmtString.format(i)
 
 
-if __name__ == "__main__":
+def main():
     import sys
     import os
     import time
@@ -134,7 +135,7 @@ if __name__ == "__main__":
     valueLength = int(sys.argv[5])   # number of characters
     numFragments = int(sys.argv[6])
     keysPerFragment = numKeys / numFragments
-    randomSeed = int(sys.argv[7])  
+    randomSeed = int(sys.argv[7])
     fromFiles = sys.argv[8]
     path = "Not used - Autogenerating dataset."
     if fromFiles == "true":
@@ -143,18 +144,18 @@ if __name__ == "__main__":
         # Each file has to contain a pickable dictionary {K,V} with the desired lengths and values.
         path = sys.argv[9]
 
-    print "Sort by Key [(K,V)]:"
-    print "Num keys: %d" % (numKeys)
-    print "Unique keys: %d" % (uniqueKeys)
-    print "Key length: %d" % (keyLength)
-    print "Unique values: %d" % (uniqueValues)
-    print "Value length: %d" % (valueLength)
-    print "Num fragments: %d" % (numFragments)
-    print "Keys per frameng: %d" % (keysPerFragment)
-    print "Random seed: %d" % (randomSeed)
-    print "From files: %r" % (fromFiles)
-    print "Path: %s" % (path)
-    
+    print("Sort by Key [(K,V)]:")
+    print("Num keys: %d" % (numKeys))
+    print("Unique keys: %d" % (uniqueKeys))
+    print("Key length: %d" % (keyLength))
+    print("Unique values: %d" % (uniqueValues))
+    print("Value length: %d" % (valueLength))
+    print("Num fragments: %d" % (numFragments))
+    print("Keys per frameng: %d" % (keysPerFragment))
+    print("Random seed: %d" % (randomSeed))
+    print("From files: %r" % (fromFiles))
+    print("Path: %s" % (path))
+
     startTime = time.time()
     from pycompss.api.api import compss_wait_on
 
@@ -165,11 +166,10 @@ if __name__ == "__main__":
         files = []
         for file in os.listdir(path):
             files.append(path+'/'+file)
-        numFragments = len(files)
-        partialSorted = map(sortPartitionFromFile, files)
+        partialSorted = list(map(sortPartitionFromFile, files))
         result = mergeReduce(reducetask, partialSorted)
     else:
-        # Autogenerate dataset 
+        # Autogenerate dataset
         for i in range(numFragments):
             fragment = generateFragment(keysPerFragment, uniqueKeys, keyLength, uniqueValues, valueLength, randomSeed, True)
             partialSorted.append(sortPartition(fragment))
@@ -178,7 +178,11 @@ if __name__ == "__main__":
 
     result = compss_wait_on(result)
 
-    print "Ellapsed Time(s)"
-    print time.time()-startTime
-    print "Sorted by Key elements: %d" % (len(result))
-    #print result
+    print("Elapsed Time(s)")
+    print(time.time()-startTime)
+    print("Sorted by Key elements: %d" % (len(result)))
+    # print result
+
+
+if __name__ == "__main__":
+    main()

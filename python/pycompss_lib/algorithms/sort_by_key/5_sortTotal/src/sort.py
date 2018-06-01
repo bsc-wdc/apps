@@ -5,22 +5,26 @@ from pycompss.api.task import task
 
 @task(returns=list)
 def sortPartition(path):
-    """Sorts data, which is assumed to consists of (key, value) pairs"""
+    """ Sorts data, which is assumed to consists of (key, value) tuples list.
+    :param path: file absolute path where the list of tuples to be sorted is located.
+    :return: sorted list of tuples.
+    """
     import pickle
     import operator
-    #import numpy as ynp
     f = open(path, 'r')
     data = pickle.load(f)
     f.close()
-    #res = sorted(data, key=lambda (k, v): k, reverse=not ascending)
-    res = sorted(data.items(), key=operator.itemgetter(1), reverse=False)
-    #res = np.sort(data, kind='mergesort')
+    res = sorted(list(data.items()), key=operator.itemgetter(1), reverse=False)
     return res
 
 
-def sortByKey(paths):
+def sortByKey(files_paths):
+    """ Sort by key.
+    :param files_paths: List of paths of the input files.
+    :return: List of elements sorted.
+    """
     from pycompss.api.api import compss_wait_on
-    n = map(sortPartition, paths)
+    n = list(map(sortPartition, files_paths))
     res = merge_reduce(reducetask, n)
     res = compss_wait_on(res)
     return res
@@ -28,10 +32,15 @@ def sortByKey(paths):
 
 @task(returns=list, priority=True)
 def reducetask(a, b):
+    """ Reduce list a and list b.
+        They must be already sorted.
+    :param a: list.
+    :param b: list.
+    :return: result of merging a and b lists.
+    """
     res = []
     i = 0
     j = 0
-
     while i < len(a) and j < len(b):
         if a[i] < b[j]:
             res.append(a[i])
@@ -39,17 +48,24 @@ def reducetask(a, b):
         else:
             res.append(b[j])
             j += 1
+    # Append the remaining tuples
     if i < len(a):
-        res.append(a[i:])
+        res += a[i:]
     elif j < len(b):
-        res.append(b[j:])
-
+        res += b[j:]
     return res
 
 
 def merge_reduce(function, data):
-    import Queue
-    q = Queue.Queue()
+    """ Apply function cumulatively to the items of data,
+        from left to right in binary tree structure, so as to
+        reduce the data to a single value.
+    :param function: function to apply to reduce data.
+    :param data: List of items to be reduced.
+    :return: result of reduce the data to a single value.
+    """
+    import queue
+    q = queue.Queue()
     for i in data:
         q.put(i)
     while not q.empty():
@@ -60,18 +76,23 @@ def merge_reduce(function, data):
         else:
             return x
 
-if __name__ == "__main__":
+
+def main():
     import sys
     import os
     import time
     path = sys.argv[1]
 
-    X = []
+    files_paths = []
     for file in os.listdir(path):
-        X.append(path+'/'+file)
+        files_paths.append(path + '/' + file)
     startTime = time.time()
-    result = sortByKey(X)
+    result = sortByKey(files_paths)
 
-    print "Ellapsed Time(s)"
-    print time.time()-startTime
-    print result
+    print("Elapsed Time(s)")
+    print(time.time() - startTime)
+    print(result)
+
+
+if __name__ == "__main__":
+    main()
