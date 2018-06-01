@@ -109,14 +109,12 @@ def sort(nums_file, fragments, num_range):
     # Flat dataset
     nums = [item for sublist in dataset for item in sublist]
 
-    nums = len(nums)
-
-    if nums / fragments < num_range:
+    if len(nums) / fragments < num_range:
         print('ERROR: num_range should be greater than nums/fragments')
-        num_range = int(nums / fragments)
+        num_range = int(len(nums) / fragments)
         print("Using num_range: %s" % num_range)
 
-    nums_per_node = nums / fragments
+    nums_per_node = len(nums) / fragments
     partial_result = {}
     result = []
 
