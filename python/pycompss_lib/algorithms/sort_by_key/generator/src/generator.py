@@ -2,42 +2,42 @@
 # -*- coding: utf-8 -*-
 
 
-def generateIntData(numRecords, uniqueKeys, uniqueValues, numPartitions, randomSeed):
-    recordsPerPartition = int((numRecords / float(numPartitions)))
+def generate_int_data(num_records, unique_keys, unique_values, num_partitions, random_seed):
+    records_per_partition = int((num_records / float(num_partitions)))
 
-    def generatePartition(index):
+    def generate_partition(index):
         import random
-        effectiveSeed = int(randomSeed) ** index  # .toString.hashCode
-        random.seed(effectiveSeed)
-        data = [(random.randint(0, uniqueKeys), random.randint(0, uniqueValues))
-                for i in range(recordsPerPartition)]
+        effective_seed = int(random_seed) ** index  # .toString.hashCode
+        random.seed(effective_seed)
+        data = [(random.randint(0, unique_keys), random.randint(0, unique_values))
+                for i in range(records_per_partition)]
         return data
 
-    return [generatePartition(i) for i in range(numPartitions)]
+    return [generate_partition(i) for i in range(num_partitions)]
 
 
-def generateStringData(numRecords, uniqueKeys, keyLength, uniqueValues, valueLength, numPartitions, randomSeed, storageLocation, hashFunction):
+def generate_string_data(num_records, unique_keys, key_length, unique_values, value_length, num_partitions, random_seed, storage_location, hash_function):
     import pickle
-    ints = generateIntData(numRecords, uniqueKeys, uniqueValues, numPartitions, randomSeed)
+    ints = generate_int_data(num_records, unique_keys, unique_values, num_partitions, random_seed)
 
     data = []
-    for i in range(numPartitions):
-        data.append([(paddedString(k_v[0], keyLength, hashFunction), paddedString(k_v[1], valueLength, hashFunction)) for k_v in ints[i]])
+    for i in range(num_partitions):
+        data.append([(padded_string(k_v[0], key_length, hash_function), padded_string(k_v[1], value_length, hash_function)) for k_v in ints[i]])
 
-    ff = open(storageLocation, 'w')
+    ff = open(storage_location, 'w')
     pickle.dump(data, ff)
 
 
-def paddedString(i, length, hashFunction):
-    fmtString = "{:0>" + str(length) + "d}"
-    if hashFunction:
+def padded_string(i, length, hash_function):
+    fmt_string = "{:0>" + str(length) + "d}"
+    if hash_function:
         out = hash(i)
         if len(str(out)) < length:
-            return fmtString.format(out)
+            return fmt_string.format(out)
         else:
             return out
     else:
-        return fmtString.format(i)
+        return fmt_string.format(i)
 
 
 def chunks(l, n, balanced=False):
@@ -55,18 +55,18 @@ def chunks(l, n, balanced=False):
             yield l[i:i + n]
 
 
-def partitionBy(self, numPartitions, hash):
+def partition_by(self, num_partitions, hash):
     if not hash:
-        return chunks(self, len(self) / numPartitions, True)
+        return chunks(self, len(self) / num_partitions, True)
     else:
-        partitions = [[] for n in range(numPartitions)]
+        partitions = [[] for n in range(num_partitions)]
         for s in self:
-            partitions[hashedPartitioner(s, numPartitions)].append(s)
+            partitions[hashed_partitioner(s, num_partitions)].append(s)
         return partitions
 
 
-def hashedPartitioner(k, numPartitions, keyfunc=lambda x: x):
-    return hash(keyfunc(k)) % numPartitions
+def hashed_partitioner(k, num_partitions, key_func=lambda x: x):
+    return hash(key_func(k)) % num_partitions
 
 
 def keyfunc(x):
@@ -75,32 +75,32 @@ def keyfunc(x):
 
 def main():
     # Tests
-    # ints = generateIntData(10, 10, 10, 2, 5)
+    # ints = generate_int_data(10, 10, 10, 2, 5)
     # print ints
     # out_path = "/tmp/out.dataset"
-    # generateStringData(10, 10, 5, 10, 5, 2, 8, out_path, False)
+    # generate_string_data(10, 10, 5, 10, 5, 2, 8, out_path, False)
 
     import sys
 
-    numRecords = int(sys.argv[1])
-    uniqueKeys = int(sys.argv[2])
-    keyLength = int(sys.argv[3])
-    uniqueValues = int(sys.argv[4])
-    valueLength = int(sys.argv[5])
-    numPartitions = int(sys.argv[6])
-    randomSeed = int(sys.argv[7])
-    storageLocation = sys.argv[8]
-    hashFunction = bool(sys.argv[9])
+    num_records = int(sys.argv[1])
+    unique_keys = int(sys.argv[2])
+    key_length = int(sys.argv[3])
+    unique_values = int(sys.argv[4])
+    value_length = int(sys.argv[5])
+    num_partitions = int(sys.argv[6])
+    random_seed = int(sys.argv[7])
+    storage_location = sys.argv[8]
+    hash_function = bool(sys.argv[9])
 
-    generateStringData(numRecords,
-                       uniqueKeys,
-                       keyLength,
-                       uniqueValues,
-                       valueLength,
-                       numPartitions,
-                       randomSeed,
-                       storageLocation,
-                       hashFunction)
+    generate_string_data(num_records,
+                         unique_keys,
+                         key_length,
+                         unique_values,
+                         value_length,
+                         num_partitions,
+                         random_seed,
+                         storage_location,
+                         hash_function)
 
 
 if __name__ == "__main__":

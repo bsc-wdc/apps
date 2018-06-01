@@ -19,18 +19,18 @@ def chunks(l, n, balanced=False):
             yield l[i:i + n]
 
 
-def partitionBy(self, numPartitions, hash):
+def partition_by(self, num_partitions, hash):
     if not hash:
-        return chunks(self, len(self) / numPartitions, True)
+        return chunks(self, len(self) / num_partitions, True)
     else:
-        partitions = [[] for n in range(numPartitions)]
+        partitions = [[] for n in range(num_partitions)]
         for s in self:
-            partitions[hashedPartitioner(s, numPartitions)].append(s)
+            partitions[hashed_partitioner(s, num_partitions)].append(s)
         return partitions
 
 
-def hashedPartitioner(k, numPartitions):
-    return hash(keyfunc(k)) % numPartitions
+def hashed_partitioner(k, num_partitions):
+    return hash(keyfunc(k)) % num_partitions
 
 
 def keyfunc(x):
@@ -38,15 +38,15 @@ def keyfunc(x):
 
 
 @task(returns=list)
-def sortPartition(iterator, ascending=True):
+def sort_partition(iterator, ascending=True):
     """Sorts self, which is assumed to consists of (key, value) pairs"""
     return sorted(iterator,
                   key=lambda k_v: keyfunc(k_v[0]),
                   reverse=not ascending)
 
 
-def sortByKey(self, numPartitions=None):
-    return list(map(sortPartition, partitionBy(self, numPartitions, False)))
+def sort_by_key(self, num_partitions=None):
+    return list(map(sort_partition, partition_by(self, num_partitions, False)))
 
 
 def main():
@@ -64,10 +64,10 @@ def main():
         lines += [(x, 1) for x in line.strip().split(" ")]
     text.close()
 
-    defaultParallelism = 4
-    reducer = int(max(defaultParallelism / 2, 2))
+    default_parallelism = 4
+    reducer = int(max(default_parallelism / 2, 2))
 
-    result = sortByKey(lines, numPartitions=reducer)
+    result = sort_by_key(lines, num_partitions=reducer)
 
     result = compss_wait_on(result)
 

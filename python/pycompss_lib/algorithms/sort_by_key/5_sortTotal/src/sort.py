@@ -4,7 +4,7 @@ from pycompss.api.task import task
 
 
 @task(returns=list)
-def sortPartition(path):
+def sort_partition(path):
     """ Sorts data, which is assumed to consists of (key, value) tuples list.
     :param path: file absolute path where the list of tuples to be sorted is located.
     :return: sorted list of tuples.
@@ -18,20 +18,20 @@ def sortPartition(path):
     return res
 
 
-def sortByKey(files_paths):
+def sort_by_key(files_paths):
     """ Sort by key.
     :param files_paths: List of paths of the input files.
     :return: List of elements sorted.
     """
     from pycompss.api.api import compss_wait_on
-    n = list(map(sortPartition, files_paths))
-    res = merge_reduce(reducetask, n)
+    n = list(map(sort_partition, files_paths))
+    res = merge_reduce(reduce_task, n)
     res = compss_wait_on(res)
     return res
 
 
 @task(returns=list, priority=True)
-def reducetask(a, b):
+def reduce_task(a, b):
     """ Reduce list a and list b.
         They must be already sorted.
     :param a: list.
@@ -56,11 +56,11 @@ def reducetask(a, b):
     return res
 
 
-def merge_reduce(function, data):
+def merge_reduce(f, data):
     """ Apply function cumulatively to the items of data,
         from left to right in binary tree structure, so as to
         reduce the data to a single value.
-    :param function: function to apply to reduce data.
+    :param f: function to apply to reduce data.
     :param data: List of items to be reduced.
     :return: result of reduce the data to a single value.
     """
@@ -72,7 +72,7 @@ def merge_reduce(function, data):
         x = q.get()
         if not q.empty():
             y = q.get()
-            q.put(function(x, y))
+            q.put(f(x, y))
         else:
             return x
 
@@ -86,11 +86,11 @@ def main():
     files_paths = []
     for file in os.listdir(path):
         files_paths.append(path + '/' + file)
-    startTime = time.time()
-    result = sortByKey(files_paths)
+    start_time = time.time()
+    result = sort_by_key(files_paths)
 
     print("Elapsed Time(s)")
-    print(time.time() - startTime)
+    print(time.time() - start_time)
     print(result)
 
 

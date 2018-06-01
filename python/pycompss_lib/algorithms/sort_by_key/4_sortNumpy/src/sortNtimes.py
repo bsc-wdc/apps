@@ -5,7 +5,7 @@ from pycompss.api.task import task
 
 
 @task(returns=int)
-def sortPartition(path):
+def sort_partition(path):
     """ Sorts data, which is assumed to consists of (key, value) tuples list.
     :param path: file absolute path where the list of tuples to be sorted is located.
     :return: sorted list of tuples.
@@ -19,13 +19,13 @@ def sortPartition(path):
     return len(res)
 
 
-def sortByKey(files_paths):
+def sort_by_key(files_paths):
     """ Sort by key.
     :param files_paths: List of paths of the input files.
     :return: Length of the list of elements sorted.
     """
     from pycompss.api.api import compss_wait_on
-    n = list(map(sortPartition, files_paths))
+    n = list(map(sort_partition, files_paths))
     n = compss_wait_on(n)
     return len(n)
 
@@ -41,16 +41,16 @@ def main():
     for file in os.listdir(path):
         files_paths.append(path + '/' + file)
 
-    timeList = []
+    time_list = []
     for i in range(n_times):
-        startTime = time.time()
-        result = sortByKey(files_paths)
-        timeList.append(time.time()-startTime)
+        start_time = time.time()
+        result = sort_by_key(files_paths)
+        time_list.append(time.time() - start_time)
 
     print("Elapsed Time(s)")
-    print("min: " + str(min(timeList)))
-    print("max: " + str(max(timeList)))
-    print("mean: " + str(sum(timeList)/len(timeList)))
+    print("min: " + str(min(time_list)))
+    print("max: " + str(max(time_list)))
+    print("mean: " + str(sum(time_list) / len(time_list)))
     print(result)
 
 

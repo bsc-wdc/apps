@@ -4,7 +4,7 @@ from pycompss.api.task import task
 
 
 @task(returns=int)
-def sortPartition(path):
+def sort_partition(path):
     """ Sorts data, which is assumed to consists of (key, value) tuples list.
     :param path: file absolute path where the list of tuples to be sorted is located.
     :return: sorted list of tuples.
@@ -17,7 +17,7 @@ def sortPartition(path):
     return len(res)
 
 
-def sortByKey(files_paths, n_times):
+def sort_by_key(files_paths, n_times):
     """ Sort by key.
     :param files_paths: List of paths of the input files.
     :param n_times: Number of times to do the sort by key.
@@ -26,7 +26,7 @@ def sortByKey(files_paths, n_times):
     from pycompss.api.api import compss_wait_on
     fo_list = []
     for i in range(n_times):
-        fo_list.append(list(map(sortPartition, files_paths)))
+        fo_list.append(list(map(sort_partition, files_paths)))
     result_list = compss_wait_on(fo_list)
     return len(result_list)
 
@@ -42,12 +42,11 @@ def main():
     for f in os.listdir(path):
         files_paths.append(path + '/' + f)
 
-    startTime = time.time()
-    result = sortByKey(files_paths, n_times)
-    endTime = time.time() - startTime
+    start_time = time.time()
+    result = sort_by_key(files_paths, n_times)
 
     print("Elapsed Time(s)")
-    print(endTime)
+    print(time.time() - start_time)
     print(result)
 
 
