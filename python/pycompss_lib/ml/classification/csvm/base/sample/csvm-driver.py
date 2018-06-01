@@ -20,6 +20,7 @@ def main():
     parser.add_argument('-f', metavar='N_FEATURES', type=int, help='mandatory if --libsvm option is used and train_data is a directory (optional otherwise)', default=None)    
     parser.add_argument('-t', metavar='TEST_FILE_PATH', help='test CSV file path', type=str, required=False)       
     parser.add_argument('-o', metavar='OUTPUT_FILE_PATH', help='output file path', type=str, required=False)      
+    parser.add_argument('-nd', metavar='N_DATASETS', type=int, help='number of times to load the dataset', default=1)   
     parser.add_argument('train_data', help='CSV file or directory containing CSV files (if a directory is provided N_CHUNKS is ignored)', type=str)    
     args = parser.parse_args()
     
@@ -29,6 +30,8 @@ def main():
     
     if not args.g:
         gamma = 'auto'
+    else:
+        gamma = args.g
     
     if args.centralized_read:
         if args.libsvm:
@@ -39,15 +42,18 @@ def main():
             x = train[:, :-1]
             y = train[:, -1]        
         
-        csvm.load_data(X=x, y=y, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)        
-        csvm.fit()        
-    elif args.libsvm:       
-        csvm.load_data(path=train_data, data_format='libsvm', n_features=args.f, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)
-        csvm.fit()
+        for _ in range(args.nd):
+            csvm.load_data(X=x, y=y, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)                    
+        
+    elif args.libsvm:      
+        for _ in range(args.nd):
+            csvm.load_data(path=train_data, data_format='libsvm', n_features=args.f, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)            
+        
     else:
-        csvm.load_data(path=train_data, n_features=args.f, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)
-        #csvm.load_data(path=train_data, n_features=args.f, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)
-        csvm.fit()
+        for _ in range(args.nd):
+            csvm.load_data(path=train_data, n_features=args.f, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)
+        
+    csvm.fit()
         
     out = [args.k, args.a, args.n, csvm._clf_params[0]['gamma'], args.c, csvm.iterations[0], csvm.converged[0], csvm.read_time, csvm.fit_time, csvm.total_time]    
         
