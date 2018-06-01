@@ -21,7 +21,7 @@ from Terasort import Bucket
 import sys
 
 range_min = 0
-range_max = sys.maxint
+range_max = sys.maxsize
 
 
 def generate_ranges():
@@ -88,18 +88,18 @@ def terasort(numFragments, numEntries, numBuckets, seed):
     #         for kv in elem:
     #             assert(kv[0] >= ranges[i][0] and kv[0] < ranges[i][1])
 
-    for key, bucket in buckets.iteritems():
+    for key, bucket in buckets.items():
         bucket.combineAndSortBucketElements()
         bucket.removeUnsortedFragmentsList()  # Clean up unnecessary memory
 
     result = {}
-    for key, bucket in buckets.iteritems():
+    for key, bucket in buckets.items():
         result[key] = compss_wait_on(bucket)
 
-    print "*********** FINAL RESULT ************"
+    print("*********** FINAL RESULT ************")
     import pprint
     pprint.pprint(result)
-    print "*************************************"
+    print("*************************************")
 
 
 if __name__ == "__main__":
@@ -117,4 +117,4 @@ if __name__ == "__main__":
 
     startTime = time.time()
     terasort(numFragments, numEntries, numBuckets, seed)
-    print "Elapsed Time {} (s)".format(time.time() - startTime)
+    print("Elapsed Time {} (s)".format(time.time() - startTime))

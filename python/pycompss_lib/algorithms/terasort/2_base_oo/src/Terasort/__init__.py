@@ -108,9 +108,7 @@ class Fragment(object):
         """
         buckets = []
         for range in ranges:
-            buckets.append(filter(lambda (k, v):
-                                  k >= range[0] and k < range[1],
-                                  self.entries))
+            buckets.append([k_v for k_v in self.entries if k_v[0] >= range[0] and k_v[0] < range[1]])
         return tuple(buckets)
 
 

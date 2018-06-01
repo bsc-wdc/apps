@@ -19,7 +19,7 @@
 from pycompss.api.task import task
 import sys
 range_min = 0
-range_max = sys.maxint
+range_max = sys.maxsize
 
 
 @task(returns=list)
@@ -65,7 +65,7 @@ def filterFragment(fragment, ranges):
     """
     buckets = []
     for range in ranges:
-        buckets.append(filter(lambda (k, v): k >= range[0] and k < range[1], fragment))
+        buckets.append([k_v for k_v in fragment if k_v[0] >= range[0] and k_v[0] < range[1]])
     return tuple(buckets)
 
 
@@ -147,16 +147,16 @@ def terasort(numFragments, numEntries, numBuckets, seed):
     #             assert(kv[0] >= ranges[i][0] and kv[0] < ranges[i][1])
 
     result = {}
-    for key, value in buckets.iteritems():
+    for key, value in buckets.items():
         result[key] = combineAndSortBucketElements(*tuple(value))
 
-    for key, value in result.iteritems():
+    for key, value in result.items():
         result[key] = compss_wait_on(value)
 
-    print "*********** FINAL RESULT ************"
+    print("*********** FINAL RESULT ************")
     import pprint
     pprint.pprint(result)
-    print "*************************************"
+    print("*************************************")
 
 
 if __name__ == "__main__":
@@ -174,4 +174,4 @@ if __name__ == "__main__":
 
     startTime = time.time()
     terasort(numFragments, numEntries, numBuckets, seed)
-    print "Elapsed Time {} (s)".format(time.time() - startTime)
+    print("Elapsed Time {} (s)".format(time.time() - startTime))
