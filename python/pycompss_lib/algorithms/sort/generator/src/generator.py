@@ -16,3 +16,35 @@
 #
 
 # -*- coding: utf-8 -*-
+
+import sys
+from numpy import *
+
+
+def main():
+    nums = int(sys.argv[1])     # Example: 102400
+    max_n = int(sys.argv[2])    # Example: 200000
+    dataset_file = sys.argv[3]  # Example: dataset.txt
+
+    nums = random.random_integers(max_n, size=(nums,))
+    # Plain nums output
+    with open(dataset_file, 'w') as dataset:
+        for n in nums:
+            dataset.write(str(n) + ' ')
+    '''
+    # Pickled output
+    import pickle
+
+    print("Nums: %s" % str(nums))
+    ff = open(dataset_file, 'w')
+    pickle.dump(nums, ff)
+    ff.close()
+
+    f = open(dataset_file, 'r')
+    aux = pickle.load(f)
+    print(aux)
+    '''
+
+
+if __name__ == '__main__':
+    main()

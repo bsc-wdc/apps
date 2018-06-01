@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-#  Copyright 2002-2015 Barcelona Supercomputing Center (www.bsc.es)
+#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ class Bucket(object):
             for kv in entries:
                 combined.append(kv)
         self.sortedByKey = sorted(combined, key=lambda key: key[0])
-        #self.sortedByKey = sorted((kv for kv in entries for entries in self.unsortedFragments), key=lambda key: key[0])
+        # self.sortedByKey = sorted((kv for kv in entries for entries in self.unsortedFragments), key=lambda key: key[0])
 
     def removeUnsortedFragmentsList(self):
         self.unsortedFragments = list()
@@ -78,7 +78,6 @@ class Fragment(object):
 
         :param numEntries: Number of k,v pairs within a fragment
         :param seed: The seed for the random generator
-        :return:
         """
         import random
         random.seed(seed)
@@ -89,7 +88,6 @@ class Fragment(object):
         self.num_entries = numEntries
         self.entries = fragment
 
-    # @task(returns="tuple([tuple() for i in range(len(fragment))])")  # not supported
     @task(returns=tuple([tuple() for i in range(10)]))  # Multireturn
     def filterFragment(self, ranges):
         """
@@ -110,9 +108,7 @@ class Fragment(object):
         """
         buckets = []
         for range in ranges:
-            buckets.append(filter(lambda (k, v):
-                                  k >= range[0] and k < range[1],
-                                  self.entries))
+            buckets.append([k_v for k_v in self.entries if k_v[0] >= range[0] and k_v[0] < range[1]])
         return tuple(buckets)
 
 

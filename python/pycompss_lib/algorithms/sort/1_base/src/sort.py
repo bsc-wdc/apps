@@ -1,5 +1,22 @@
 #!/usr/bin/python
+#
+#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+
 # -*- coding: utf-8 -*-
+
 import sys
 import time
 import pickle
@@ -33,20 +50,20 @@ def reduce(result):
 
 
 def sorting(partial_result, result, fragments, num_range):
-    new_Dict = minimize_dict(partial_result)
+    new_dict = minimize_dict(partial_result)
     step = num_range / fragments
-    sorted_new_dict = OrderedDict(sorted(new_Dict.iteritems(),
-                                         key=lambda (k, v): k, reverse=False))
+    sorted_new_dict = OrderedDict(sorted(iter(new_dict.items()),
+                                         key=lambda k_v: k_v[0], reverse=False))
     initial = 0
     final = step
     sizes = []
     while initial < num_range:
         start_pos = 0
-        for k, v in sorted_new_dict.iteritems():
+        for k, v in sorted_new_dict.items():
             sizes.append(start_pos)
             start_pos += len(v)
         position = 0
-        for k, v in sorted_new_dict.iteritems():
+        for k, v in sorted_new_dict.items():
             if int(k) >= initial and int(k) < final:
                 result.append(sort_in_worker(v, sizes[position]))
                 initial += step
@@ -71,18 +88,18 @@ def sort_in_worker(block, position):
 
 
 def minimize_dict(partial_result):
-    new_Dict = defaultdict(list)
-    for key, value in partial_result.items():
+    new_dict = defaultdict(list)
+    for key, value in list(partial_result.items()):
         value = compss_wait_on(value)
         for val in value:
-            new_Dict[val[0]].append(value[val])
-    return new_Dict
+            new_dict[val[0]].append(value[val])
+    return new_dict
 
 
 def sort(nums_file, fragments, num_range):
-    from pycompss.api.api import compss_barrier
+    from pycompss.api.api import compss_wait_on
 
-    # Read numbers from file
+    # Read nums from file
     f = open(nums_file, 'r')
 
     dataset = []
@@ -92,14 +109,12 @@ def sort(nums_file, fragments, num_range):
     # Flat dataset
     nums = [item for sublist in dataset for item in sublist]
 
-    numbers = len(nums)
+    if len(nums) / fragments < num_range:
+        print('ERROR: num_range should be greater than nums/fragments')
+        num_range = int(len(nums) / fragments)
+        print("Using num_range: %s" % num_range)
 
-    if numbers / fragments < num_range:
-        print 'ERROR: num_range should be greater than numbers/fragments'
-        num_range = int(numbers / fragments)
-        print ("Using num_range: %s" % num_range)
-
-    nums_per_node = numbers / fragments
+    nums_per_node = len(nums) / fragments
     partial_result = {}
     result = []
 
@@ -115,16 +130,15 @@ def sort(nums_file, fragments, num_range):
 
     sorted_nums = sorting(partial_result, result, fragments, num_range)
 
-    compss_barrier()
-
-    print "Elapsed time(s)"
-    print time.time() - start
-
-    print sorted_nums
-
-    # Save result file
-    '''
     sorted_nums = compss_wait_on(sorted_nums)
+
+    print("Elapsed time(s)")
+    print(time.time() - start)
+
+    print(sorted_nums)
+
+    '''
+    # Save result file
     aux = list(sorted_nums.items())
     result_file = open('./result.txt','w')
     pickle.dump(aux, result_file)

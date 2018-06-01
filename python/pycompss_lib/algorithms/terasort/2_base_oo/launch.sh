@@ -20,11 +20,10 @@
   enqueue_compss \
     --job_dependency=$jobDependency \
     --num_nodes=$numNodes \
-    --tasks_per_node=$tasksPerNode \
+    --max_tasks_per_node=$tasksPerNode \
     --exec_time=$executionTime \
     --master_working_dir=. \
     --worker_working_dir=gpfs \
-    --library_path=/gpfs/apps/MN3/INTEL/mkl/lib/intel64 \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
@@ -40,5 +39,3 @@
 # Example:
 #       ./launch.sh None 2 5 16 false 10 100
 #
-#  numFragments = number of fragments
-#  numEntries = number of (k, v) pairs withien each fragment
