@@ -1,0 +1,13 @@
+-------------------------------
+Parallel Sort Dataset Generator
+-------------------------------
+
+Parameters:
+
+    - Numbers
+    - Max number
+    - Dataset output file
+
+Example usage:
+
+./generate_dataset.sh 102400 200000 /path/to/dataset.txt

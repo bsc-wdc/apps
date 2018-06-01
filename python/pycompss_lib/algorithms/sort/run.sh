@@ -2,8 +2,8 @@
 
   # Define script directory for relative calls
   scriptDir=$(pwd)/$(dirname $0)
-  echo $scriptDir
 
+  # Set common arguments
   nums=102400
   max_num=200000
   dataset="dataset.txt"
