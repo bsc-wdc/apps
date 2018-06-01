@@ -97,7 +97,7 @@ def minimize_dict(partial_result):
 
 
 def sort(nums_file, fragments, num_range):
-    from pycompss.api.api import compss_barrier
+    from pycompss.api.api import compss_wait_on
 
     # Read nums from file
     f = open(nums_file, 'r')
@@ -130,7 +130,7 @@ def sort(nums_file, fragments, num_range):
 
     sorted_nums = sorting(partial_result, result, fragments, num_range)
 
-    compss_barrier()
+    sorted_nums = compss_wait_on(sorted_nums)
 
     print("Elapsed time(s)")
     print(time.time() - start)
@@ -139,7 +139,6 @@ def sort(nums_file, fragments, num_range):
 
     '''
     # Save result file
-    sorted_nums = compss_wait_on(sorted_nums)
     aux = list(sorted_nums.items())
     result_file = open('./result.txt','w')
     pickle.dump(aux, result_file)
