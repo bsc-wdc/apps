@@ -33,9 +33,9 @@ def reduce(result):
 
 
 def sorting(partial_result, result, fragments, num_range):
-    new_Dict = minimize_dict(partial_result)
+    new_dict = minimize_dict(partial_result)
     step = num_range / fragments
-    sorted_new_dict = OrderedDict(sorted(iter(new_Dict.items()),
+    sorted_new_dict = OrderedDict(sorted(iter(new_dict.items()),
                                          key=lambda k_v: k_v[0], reverse=False))
     initial = 0
     final = step
@@ -71,18 +71,18 @@ def sort_in_worker(block, position):
 
 
 def minimize_dict(partial_result):
-    new_Dict = defaultdict(list)
+    new_dict = defaultdict(list)
     for key, value in list(partial_result.items()):
         value = compss_wait_on(value)
         for val in value:
-            new_Dict[val[0]].append(value[val])
-    return new_Dict
+            new_dict[val[0]].append(value[val])
+    return new_dict
 
 
 def sort(nums_file, fragments, num_range):
     from pycompss.api.api import compss_barrier
 
-    # Read numbers from file
+    # Read nums from file
     f = open(nums_file, 'r')
 
     dataset = []
@@ -92,14 +92,14 @@ def sort(nums_file, fragments, num_range):
     # Flat dataset
     nums = [item for sublist in dataset for item in sublist]
 
-    numbers = len(nums)
+    nums = len(nums)
 
-    if numbers / fragments < num_range:
-        print('ERROR: num_range should be greater than numbers/fragments')
-        num_range = int(numbers / fragments)
-        print(("Using num_range: %s" % num_range))
+    if nums / fragments < num_range:
+        print('ERROR: num_range should be greater than nums/fragments')
+        num_range = int(nums / fragments)
+        print("Using num_range: %s" % num_range)
 
-    nums_per_node = numbers / fragments
+    nums_per_node = nums / fragments
     partial_result = {}
     result = []
 

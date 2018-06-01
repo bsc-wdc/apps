@@ -4,12 +4,12 @@ from numpy import *
 
 
 def main():
-    numbers = 102400
-    maxN = 200000
+    nums = 102400
+    max_n = 200000
     dataset_file = "dataset.txt"
 
-    nums = random.random_integers(maxN, size=(numbers,))
-    # Plain numbers output
+    nums = random.random_integers(max_n, size=(nums,))
+    # Plain nums output
     with open(dataset_file, 'w') as dataset:
         for n in nums:
             dataset.write(str(n) + ' ')
