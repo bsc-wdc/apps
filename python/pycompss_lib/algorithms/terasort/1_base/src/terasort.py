@@ -18,12 +18,13 @@
 
 from pycompss.api.task import task
 import sys
+
 range_min = 0
 range_max = sys.maxsize
 
 
 @task(returns=list)
-def genFragment(numEntries, seed):
+def gen_fragment(num_entries, seed):
     """
     Generate a fragment with random numbers.
     A fragment is a list of tuples, where the first element of each tuple
@@ -33,20 +34,20 @@ def genFragment(numEntries, seed):
 
     fragment structure = [(k1, v1), (k2, v2), ..., (kn, vn)]
 
-    :param numEntries: Number of k,v pairs within a fragment
+    :param num_entries: Number of k,v pairs within a fragment
     :param seed: The seed for the random generator
     :return: Fragment
     """
     import random
     random.seed(seed)
     fragment = []
-    for n in range(numEntries):
+    for n in range(num_entries):
         fragment.append((random.randrange(range_min, range_max), random.random()))
     return fragment
 
 
 @task(returns=tuple([tuple() for i in range(10)]))  # Multireturn
-def filterFragment(fragment, ranges):
+def filter_fragment(fragment, ranges):
     """
     Task that filters a fragment entries for the given ranges.
         * Ranges is a list of tuples where each tuple corresponds to
@@ -70,7 +71,7 @@ def filterFragment(fragment, ranges):
 
 
 @task(returns=dict)
-def combineAndSortBucketElements(*args):
+def combine_and_sort_bucket_elements(*args):
     """
     Task that combines the buckets received as *args parameter and final
     sorting.
@@ -85,11 +86,11 @@ def combineAndSortBucketElements(*args):
     for e in args:
         for kv in e:
             combined.append(kv)
-    sortedByKey = sorted(combined, key=lambda key: key[0])
-    return sortedByKey
+    sorted_by_key = sorted(combined, key=lambda key: key[0])
+    return sorted_by_key
 
 
-def generateRanges():
+def generate_ranges():
     """
     Generate the ranges of each bucket.
     The ranges structure:
@@ -98,14 +99,14 @@ def generateRanges():
     :return: Ranges of the buckets
     """
     import numpy as np
-    split_indexes = np.linspace(range_min, range_max+1, numBuckets + 1)
+    split_indexes = np.linspace(range_min, range_max+1, num_buckets + 1)
     ranges = []
     for ind in range(split_indexes.size - 1):
         ranges.append((split_indexes[ind], split_indexes[ind + 1]))
     return ranges
 
 
-def terasort(numFragments, numEntries, numBuckets, seed):
+def terasort(num_fragments, num_entries, num_buckets, seed):
     """
     ----------------------
     Terasort main program
@@ -114,33 +115,33 @@ def terasort(numFragments, numEntries, numBuckets, seed):
     generated key, value tuples and sorts them all considering the key of
     each tuple.
 
-    :param numFragments: Number of fragments to generate
-    :param numEntries: Number of entries (k,v tuples) within each fragment
-    :param numBuckets: Number of buckets to consider.
+    :param num_fragments: Number of fragments to generate
+    :param num_entries: Number of entries (k,v tuples) within each fragment
+    :param num_buckets: Number of buckets to consider.
     :param seed: Initial seed for the random number generator.
     """
     from pycompss.api.api import compss_wait_on
 
-    dataset = [genFragment(numEntries, seed + i) for i in range(numFragments)]
+    dataset = [gen_fragment(num_entries, seed + i) for i in range(num_fragments)]
 
     # Init buckets dictionary
     buckets = {}
-    for i in range(numBuckets):
+    for i in range(num_buckets):
         buckets[i] = []
 
     # Init ranges
-    ranges = generateRanges()
-    assert(len(ranges) == numBuckets)
+    ranges = generate_ranges()
+    assert(len(ranges) == num_buckets)
 
     for d in dataset:
-        fragmentBuckets = filterFragment(d, ranges)  # en fragment
-        for i in range(numBuckets):
-            buckets[i].append(fragmentBuckets[i])
+        fragment_buckets = filter_fragment(d, ranges)  # en fragment
+        for i in range(num_buckets):
+            buckets[i].append(fragment_buckets[i])
 
     # Verify that the buckets contain elements from their corresponding range
     # This verification can also be done when using PyCOMPSs but will require
     # a synchronization.
-    # for i in range(numBuckets):
+    # for i in range(num_buckets):
     #     bucket = buckets[i]
     #     for elem in bucket:
     #         for kv in elem:
@@ -148,7 +149,7 @@ def terasort(numFragments, numEntries, numBuckets, seed):
 
     result = {}
     for key, value in buckets.items():
-        result[key] = combineAndSortBucketElements(*tuple(value))
+        result[key] = combine_and_sort_bucket_elements(*tuple(value))
 
     for key, value in result.items():
         result[key] = compss_wait_on(value)
@@ -166,12 +167,12 @@ if __name__ == "__main__":
     arg1 = sys.argv[1] if len(sys.argv) > 1 else 16
     arg2 = sys.argv[2] if len(sys.argv) > 2 else 50
 
-    numFragments = int(arg1)  # Default: 16
-    numEntries = int(arg2)    # Default: 50
+    num_fragments = int(arg1)  # Default: 16
+    num_entries = int(arg2)    # Default: 50
     # be very careful with the following argument (since it is in a decorator)
-    numBuckets = 10           # int(sys.argv[3])
+    num_buckets = 10           # int(sys.argv[3])
     seed = 5
 
     startTime = time.time()
-    terasort(numFragments, numEntries, numBuckets, seed)
+    terasort(num_fragments, num_entries, num_buckets, seed)
     print("Elapsed Time {} (s)".format(time.time() - startTime))

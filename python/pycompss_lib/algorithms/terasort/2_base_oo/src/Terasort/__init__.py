@@ -25,7 +25,7 @@ class Bucket(object):
         self.sortedByKey = []
 
     @task()
-    def addUnsortedFragment(self, fragment):
+    def add_unsorted_fragment(self, fragment):
         """
         Task to append new chunks to a bucket
         :param fragment: unsorted fragment to be included
@@ -33,7 +33,7 @@ class Bucket(object):
         self.unsortedFragments.append(fragment)
 
     @task()
-    def combineAndSortBucketElements(self):
+    def combine_and_sort_bucket_elements(self):
         """
         Task that combines the buckets received as *args parameter and final
         sorting.
@@ -51,7 +51,7 @@ class Bucket(object):
         self.sortedByKey = sorted(combined, key=lambda key: key[0])
         # self.sortedByKey = sorted((kv for kv in entries for entries in self.unsortedFragments), key=lambda key: key[0])
 
-    def removeUnsortedFragmentsList(self):
+    def remove_unsorted_fragments_list(self):
         self.unsortedFragments = list()
 
     def __repr__(self):
@@ -66,7 +66,7 @@ class Fragment(object):
         self.range_max = range_max
 
     @task(returns=list)
-    def genFragment(self, numEntries, seed):
+    def gen_fragment(self, num_entries, seed):
         """
         Generate a fragment with random numbers.
         A fragment is a list of tuples, where the first element of each tuple
@@ -76,20 +76,20 @@ class Fragment(object):
 
         fragment structure = [(k1, v1), (k2, v2), ..., (kn, vn)]
 
-        :param numEntries: Number of k,v pairs within a fragment
+        :param num_entries: Number of k,v pairs within a fragment
         :param seed: The seed for the random generator
         """
         import random
         random.seed(seed)
         fragment = []
-        for n in range(numEntries):
+        for n in range(num_entries):
             fragment.append((random.randrange(self.range_min, self.range_max),
                              random.random()))
-        self.num_entries = numEntries
+        self.num_entries = num_entries
         self.entries = fragment
 
     @task(returns=tuple([tuple() for i in range(10)]))  # Multireturn
-    def filterFragment(self, ranges):
+    def filter_fragment(self, ranges):
         """
         Task that filters a fragment entries for the given ranges.
             * Ranges is a list of tuples where each tuple corresponds to
@@ -119,6 +119,7 @@ class Board(object):
         self.num_entries = 0
         self.range_min = range_min
         self.range_max = range_max
+        self.base_seed = 0
 
     def init_random(self, num_fragments, num_entries, base_seed):
         self.num_fragments = num_fragments
@@ -127,7 +128,7 @@ class Board(object):
 
         seed = base_seed
         for i in range(self.num_fragments):
-            newFrag = Fragment(self.range_min, self.range_max)
-            newFrag.genFragment(num_entries, seed)
-            self.fragments.append(newFrag)
+            new_frag = Fragment(self.range_min, self.range_max)
+            new_frag.gen_fragment(num_entries, seed)
+            self.fragments.append(new_frag)
             seed += 1
