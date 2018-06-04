@@ -187,9 +187,9 @@ if __name__ == "__main__":
     num_points = int(sys.argv[1])
     dim = 2
     fragments = int(sys.argv[2])
-    if len(sys.argv) <= 4:
+    if len(sys.argv) <= 3:
         plot_result = False
     else:
-        plot_result = bool(sys.argv[4])
+        plot_result = bool(sys.argv[3])
 
     linear_regression(num_points, dim, fragments, plot_result)
