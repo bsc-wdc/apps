@@ -12,12 +12,14 @@ mandelbrot
 Mandelbrot fractal. Every row of the image is computed using a task.
 
 == Versions ==
-* - 1_base: base version                                                                                                                    
-== Execution instructions ==                                                                                        
-Usage:                                                                                                                             
-mandel.py <numPoints>                                                      
-                                                                                                                    
-where:                                                                                                              
-                 * - numPoints: number of points                                                                                                                                                                           
-== Build ==                                                                                                         
+* - 1_base: base version
+
+== Execution instructions ==
+Usage:
+mandel.py <numPoints>
+
+where:
+                 * - numPoints: number of points
+
+== Build ==
 No build is required
