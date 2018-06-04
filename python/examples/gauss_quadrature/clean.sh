@@ -13,8 +13,3 @@
  
   # Clean trace files
   find . -type f -name '*tar.gz' -delete
-
-  # TODO: ADD ANY CLEAN FOR SPECIFC APPLICATIONS
-  # For example
-  # find . -type d -name 'results' -exec rm -rf "{}" \;
-

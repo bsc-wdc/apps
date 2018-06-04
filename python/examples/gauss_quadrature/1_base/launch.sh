@@ -22,9 +22,6 @@
     --num_nodes=$numNodes \
     --exec_time=$executionTime \
     --tasks_per_node=$tasksPerNode \
-    --master_working_dir=. \
-    --worker_working_dir=scratch \
-    --library_path=/gpfs/apps/MN3/INTEL/mkl/lib/intel64 \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
@@ -35,9 +32,9 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#	./launch jobDependency numNodes executionTime tasksPerNode tracing m nip#         a b 
+#	./launch.sh jobDependency numNodes executionTime tasksPerNode tracing m nip a b
 #
 # Example:
-#	./launch None 2 5 16 false 16 3 0 1
+#	./launch.sh None 2 5 16 false 16 3 0 1
 #
 
