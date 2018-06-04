@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import sys
 from pycompss.api.task import task
-from pycompss.api.parameter import *
 import numpy as np
 
 
@@ -109,9 +109,9 @@ def transform(data, eig, dim):
 
 def PCA():
     from pycompss.api.api import compss_wait_on
-    numPoints = 1000
-    dim = 8
-    classes = 10
+    numPoints = int(sys.argv[1])  # Example: 1000
+    dim = int(sys.argv[2])        # Example: 8
+    classes = int(sys.argv[3])    # Example: 10
 
     # data = [dimx, dimy, dimz], dim*=[]len(numPoints)
     data = generateData(numPoints, dim, classes)
