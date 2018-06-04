@@ -8,7 +8,7 @@ from pycompss.api.api import compss_barrier, compss_wait_on
 from pycompss.api.task import task
 
 import utils
-from forest import compss_RF_sklearn_trees
+from forest import rf_sklearn_trees
 import sklearn as sk
 
 def main():
@@ -63,9 +63,9 @@ def main():
             rf = sk.ensemble.RandomForestClassifier(**rf_kwargs)
     else:
         if args.regr:
-            rf = compss_RF_sklearn_trees.RandomForestRegressor(**rf_kwargs)
+            rf = rf_sklearn_trees.RandomForestRegressor(**rf_kwargs)
         else:
-            rf = compss_RF_sklearn_trees.RandomForestClassifier(**rf_kwargs)
+            rf = rf_sklearn_trees.RandomForestClassifier(**rf_kwargs)
     # print(type(rf))
 
     rf.fit(X_train, y_train)

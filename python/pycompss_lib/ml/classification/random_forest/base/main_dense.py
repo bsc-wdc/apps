@@ -4,11 +4,8 @@ import time
 from distutils import util
 
 from pandas import read_csv
-from pycompss.api.api import compss_barrier, compss_wait_on
-from pycompss.api.task import task
-
-import utils
-from forest import compss_RF_sklearn_trees
+from pycompss.api.api import compss_barrier
+from forest import rf_sklearn_trees
 import sklearn as sk
 
 
@@ -61,24 +58,29 @@ def main():
             rf = sk.ensemble.RandomForestClassifier(**rf_kwargs)
     else:
         if args.regr:
-            rf = compss_RF_sklearn_trees.RandomForestRegressor(**rf_kwargs)
+            rf = rf_sklearn_trees.RandomForestRegressor(**rf_kwargs)
         else:
-            rf = compss_RF_sklearn_trees.RandomForestClassifier(**rf_kwargs)
+            rf = rf_sklearn_trees.RandomForestClassifier(**rf_kwargs)
     # print(type(rf))
 
     rf.fit(X_train, y_train)
 
     compss_barrier()
 
+    time_3 = time.time()
+
     rf.predict(X_train)
 
-    time_3 = time.time()
+    compss_barrier()
+
+    time_4 = time.time()
 
     print('X_shape: ' + str(X_train.shape))
     print('y_shape: ' + str(y_train.shape))
-    print('Time 1: ' + str(time_1-initial_time))
-    print('Time 2: ' + str(time_2-initial_time))
-    print('Time 3: ' + str(time_3-initial_time))
+    print('Time Args: ' + str(time_1-initial_time))
+    print('Time Load: ' + str(time_2-time_1))
+    print('Time Fit: ' + str(time_3-time_2))
+    print('Time Predict: ' + str(time_4-time_3))
 
 
 if __name__ == "__main__":

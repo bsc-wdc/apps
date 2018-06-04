@@ -1,4 +1,4 @@
-from compss_decision_tree import Node
+from decision_tree import Node
 
 
 def bootstrap_sample():

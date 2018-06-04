@@ -6,7 +6,7 @@ from distutils import util
 from pycompss.api.api import compss_barrier, compss_wait_on
 
 import utils
-from forest import compss_RF_sklearn_trees
+from forest import rf_sklearn_trees
 import sklearn as sk
 
 
@@ -66,9 +66,9 @@ def main():
             rf = sk.ensemble.RandomForestClassifier(**rf_kwargs)
     else:
         if args.regr:
-            rf = compss_RF_sklearn_trees.RandomForestRegressor(**rf_kwargs)
+            rf = rf_sklearn_trees.RandomForestRegressor(**rf_kwargs)
         else:
-            rf = compss_RF_sklearn_trees.RandomForestClassifier(**rf_kwargs)
+            rf = rf_sklearn_trees.RandomForestClassifier(**rf_kwargs)
 
     time_0 = time.time()
 

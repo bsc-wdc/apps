@@ -1,6 +1,6 @@
 import argparse
 
-from forest.compss_decision_tree import DecisionTree
+from forest.decision_tree import DecisionTree
 
 
 def main():
