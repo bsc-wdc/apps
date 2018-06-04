@@ -228,15 +228,17 @@ class CascadeSVM(object):
     def _do_fit(self):
         iteration = 0                
         q = deque()
-        clf = None 
-        feedback = None        
+        feedback = []
+        
+        for _ in self._data:
+            feedback.append(None)
         
         while not np.array(self.converged).all():        
             for idx, chunks in enumerate(self._data):
                 if self.iterations[idx] < self._max_iterations[idx]:                                                
                     
                     for chunk in chunks:
-                        data = filter(None, [chunk, feedback])                    
+                        data = filter(None, [chunk, feedback[idx]])                    
                         q.append(train(False, *data, **self._clf_params[idx])) 
                                                                 
                     while len(q) > 1:
@@ -251,7 +253,7 @@ class CascadeSVM(object):
                         for d in data:
                             compss_delete_object(d)                        
                     
-                    feedback = q.popleft()
+                    feedback[idx] = q.popleft()
                     
                     self.iterations[idx] += 1    
                 else:
