@@ -2,7 +2,7 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/pca_distributed.py
+  execFile=${scriptDir}/src/pca.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
@@ -22,23 +22,19 @@
     --num_nodes=$numNodes \
     --exec_time=$executionTime \
     --tasks_per_node=$tasksPerNode \
-    --master_working_dir=. \
-    --worker_working_dir=scratch \
-    --library_path=/gpfs/apps/MN3/INTEL/mkl/lib/intel64 \
     --tracing=$tracing \
     --graph=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
     --lang=python \
-    --debug \
     $execFile $@
 
 
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch jobDependency numNodes executionTime tasksPerNode tracing 
+#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing numPoints dimensions classes
 #
 # Example:
-#       ./launch.sh None 2 5 16 false
+#       ./launch.sh None 2 5 16 false 1000 8 10
 #

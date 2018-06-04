@@ -22,10 +22,6 @@
     --num_nodes=$numNodes \
     --exec_time=$executionTime \
     --tasks_per_node=$tasksPerNode \
-    --master_working_dir=. \
-    --worker_working_dir=gpfs \
-    --debug \
-    --library_path=/gpfs/apps/MN3/INTEL/mkl/lib/intel64 \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
@@ -36,9 +32,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing points fragments 
+#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing points fragments plotResult
 #
 # Example:
-#       ./launch.sh None 2 5 16 false 25600000 64
+#       ./launch.sh None 2 5 16 false 6400000 16 True
 #
-# Parameters: NumberOfPoints Fragments
