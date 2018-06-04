@@ -160,7 +160,13 @@ def fit(X, Y):
 
 
 def linear_regression(num_points, dim, fragments, plot_result=False):
-
+    """
+    Linear regression
+    :param num_points: Number of points
+    :param dim: Dimensions
+    :param fragments: Number of fragments
+    :param plot_result: Boolean plot results
+    """
     points_per_frag = num_points / fragments
     # Example data: data = [[[1,2,3],[4,5,6]], [[1,2,3],[4,5,6]]]
     data = [[list(randint(100, size=points_per_frag)) for _ in range(fragments)] for _ in range(dim)]
