@@ -17,18 +17,17 @@
 
 # -*- coding: utf-8 -*-
 
-from pycompss.api.task import task
-from pycompss.api.parameter import *
+import sys
 import math
+import time
 from numpy import arange
 from numpy.random import randint
-import types
-import time
-#from pylab import scatter, show, plot, savefig, sys
+from pycompss.api.task import task
 
-
-# yi = alpha + beta*xi + epsiloni
-# goal: y=alpha + betax
+"""
+model: y1=alpha+beta*xi+epsiloni
+goal: y = alpha + beta*x
+"""
 
 
 def list_length(l):
@@ -41,21 +40,21 @@ def list_length(l):
     return 0
 
 
-def mergeReduce(function, data):
+def merge_reduce(f, data):
     """ Apply function cumulatively to the items of data,
         from left to right in binary tree structure, so as to
         reduce the data to a single value.
-    :param function: function to apply to reduce data
+    :param f: function to apply to reduce data
     :param data: List of items to be reduced
     :return: result of reduce the data to a single value
     """
     from collections import deque
-    q = deque(xrange(len(data)))
+    q = deque(range(len(data)))
     while len(q):
         x = q.popleft()
         if len(q):
             y = q.popleft()
-            data[x] = function(data[x], data[y])
+            data[x] = f(data[x], data[y])
             q.append(x)
         else:
             return data[x]
@@ -77,7 +76,7 @@ def _mean(X, n):
 
 
 def mean(X, n):
-    result = mergeReduce(reduce_add, [_mean(x, n) for x in X])
+    result = merge_reduce(reduce_add, [_mean(x, n) for x in X])
     return result
 
 
@@ -88,7 +87,7 @@ def _norm(X, m):
 
 @task(returns=list)
 def _pow(X, p=2):
-    return [pow(x, 2) for x in X]
+    return [pow(x, p) for x in X]
 
 
 @task(returns=float)
@@ -99,7 +98,7 @@ def _mul(x, y):
 def std(X, m, n):
     xs = [_norm(x, m) for x in X]
     xp = [_pow(x, 2) for x in xs]
-    suma = mergeReduce(reduce_add, [_mean(x, n) for x in xp])
+    suma = merge_reduce(reduce_add, [_mean(x, n) for x in xp])
     return suma
 
 
@@ -109,8 +108,8 @@ def op_task(sum_x, sum_y, suma):
 
 
 @task(returns=float)
-def multFrag(a, b):
-    p = zip(a, b)
+def mult_frag(a, b):
+    p = list(zip(a, b))
     result = 0
     for (a, b) in p:
         result += a * b
@@ -123,25 +122,18 @@ def pearson(X, Y, mx, my):
     xxs = [_pow(x, 2) for x in xs]
     yys = [_pow(y, 2) for y in ys]
 
-    suma = mergeReduce(reduce_add, [multFrag(a, b) for (a,b) in zip(xs, ys)])
+    suma = merge_reduce(reduce_add, [mult_frag(a, b) for (a, b) in zip(xs, ys)])
 
-    sum_x = mergeReduce(reduce_add, map(_add, xxs))
-    sum_y = mergeReduce(reduce_add, map(_add, yys))
+    sum_x = merge_reduce(reduce_add, list(map(_add, xxs)))
+    sum_y = merge_reduce(reduce_add, list(map(_add, yys)))
     r = op_task(sum_x, sum_y, suma)
     return r
 
 
-#@task(returns=types.LambdaType)
 @task(returns=(float, float))
-def computeLine(r, stdy, stdx, my, mx):
+def compute_line(r, stdy, stdx, my, mx):
     b = r * (math.sqrt(stdy) / math.sqrt(stdx))
     A = my - b*mx
-
-    #def line(x):
-    #    return b*x-A
-    #line = lambda x: b*x-A
-    #return line
-    #return lambda x: b*x-A
     return b, A
 
 
@@ -154,40 +146,55 @@ def fit(X, Y, n):
     stdx = std(X, mx, n)
     stdy = std(Y, mx, n)
 
-    line = computeLine(r, stdy, stdx, my, mx)
+    line = compute_line(r, stdy, stdx, my, mx)
 
     line = compss_wait_on(line)
-    print "Ellapsed time {}".format(time.time()-st)
-    return lambda x: line[0]*x+line[1]
+    print("Elapsed time {}".format(time.time() - st))
+    return lambda x: line[0]*x + line[1]
+
 
 @task(returns=list)
-def genFragment(pointsPerFrag):
-    return list(randint(0,100,size=pointsPerFrag))
+def gen_fragment(points_per_frag):
+    return list(randint(0, 100, size=points_per_frag))
 
 
-def initData(pointsPerFrag, fragments, dim):
-    data = [[genFragment(pointsPerFrag) for _ in range(fragments)] for _ in range(dim)]
+def init_data(points_per_frag, fragments, dim):
+    data = [[gen_fragment(points_per_frag) for _ in range(fragments)] for _ in range(dim)]
     return data
 
 
+def linear_regression(num_points, dim, fragments, plot_result=False):
+    """
+    Linear regression
+    :param num_points: Number of points
+    :param dim: Dimensions
+    :param fragments: Number of fragments
+    :param plot_result: Boolean plot results
+    """
+    points_per_frag = num_points / fragments
+    data = init_data(points_per_frag, fragments, dim)
+    line = fit(data[0], data[1], num_points)
+    print [line(x) for x in arange(0.0, 100.0, 1.0)]
+
+    if plot_result:
+        from pylab import scatter, plot, savefig, show
+        from pycompss.api.api import compss_wait_on
+        data = compss_wait_on(data)
+        datax = [item for sublist in data[0] for item in sublist]
+        datay = [item for sublist in data[1] for item in sublist]
+        scatter(datax, datay, marker='x')
+        plot([line(x) for x in arange(0.0, 100.0, 0.1)], arange(0.0, 100.0, 0.1))
+        # show()
+        savefig('lrd.png')
+
+
 if __name__ == "__main__":
-    from pycompss.api.api import compss_wait_on
-    numPoints = int(sys.argv[1])
+    num_points = int(sys.argv[1])
     dim = 2
     fragments = int(sys.argv[2])
-    # plotResult = bool(sys.argv[4])
+    if len(sys.argv) <= 3:
+        plot_result = False
+    else:
+        plot_result = bool(sys.argv[3])
 
-    pointsPerFrag = numPoints/fragments
-
-    data = initData(pointsPerFrag, fragments, dim)
-
-    line = fit(data[0], data[1], numPoints)
-    
-    #if plotResult:
-    #    data = compss_wait_on(data)
-    #    datax = [item for sublist in data[0] for item in sublist]
-    #    datay = [item for sublist in data[1] for item in sublist]
-    #    scatter(datax, datay, marker='x')
-    #    plot([line(x) for x in arange(0.0, 100.0, 0.1)], arange(0.0, 100.0, 0.1))
-    #    show()
-    #    savefig('lrd.png')
+    linear_regression(num_points, dim, fragments, plot_result)
