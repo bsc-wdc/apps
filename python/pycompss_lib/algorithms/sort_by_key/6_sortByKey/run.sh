@@ -7,21 +7,13 @@
   appPythonpath=${scriptDir}/src/
 
   # Retrieve arguments
-  jobDependency=$1
-  numNodes=$2
-  executionTime=$3
-  tasksPerNode=$4
-  tracing=$5
+  tracing=$1
 
   # Leave application args on $@
-  shift 5
+  shift 1
 
   # Enqueue the application
-  enqueue_compss \
-    --job_dependency=$jobDependency \
-    --num_nodes=$numNodes \
-    --exec_time=$executionTime \
-    --tasks_per_node=$tasksPerNode \
+  runcompss \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
@@ -32,8 +24,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch jobDependency numNodes executionTime tasksPerNode tracing datasetPath
+#       ./run.sh tracing numkeys uniquekeys keyslenght uniquevalues valuelenght numfrag keysperfrag randomseed fromfiles path
 #
 # Example:
-#       ./launch None 2 5 16 false /path/to/dataset/
+#       ./run.sh false 10 5 3 5 2 5 12345 false undefined
 #

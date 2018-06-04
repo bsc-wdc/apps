@@ -61,8 +61,8 @@ def sort_partition(iterator, ascending=True):
                   reverse=not ascending)
 
 
-def sortByKey(self, num_partitions=None):
-    return list(map(sort_partition, partition_by(self, num_partitions, True)))
+def sort_by_key(self, num_partitions=None):
+    return list(map(sort_partition, partition_by(self, num_partitions, False)))
 
 
 def main():
@@ -83,7 +83,7 @@ def main():
     default_parallelism = 4
     reducer = int(max(default_parallelism / 2, 2))
 
-    result = sortByKey(lines, num_partitions=reducer)
+    result = sort_by_key(lines, num_partitions=reducer)
 
     result = compss_wait_on(result)
 

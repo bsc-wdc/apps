@@ -1,48 +1,67 @@
 #!/usr/bin/python
+#
+#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+
 # -*- coding: utf-8 -*-
+
 from pycompss.api.task import task
 
-def keyfunc(x):
-        return x
 
-
-'''Sorts self, which is assumed to consists of (key, value) pairs'''
 @task(returns=int)
-def sortPartition(iterator, ascending=True):
-        import pickle
-        import numpy as np
-        f = open(iterator, 'r')
-        iterator = pickle.load(f)
-        f.close()
-	#import operator
-        #res = sorted(iterator.items(), key=operator.itemgetter(1), reverse=not ascending)
-        res = np.sort(iterator,kind='mergesort')
-        return len(res)
-        #return iter(sorted(iterator, key=lambda (k, v): keyfunc(k), reverse=not ascending))
+def sort_partition(path):
+    """ Sorts data, which is assumed to consists of (key, value) tuples list.
+    :param path: file absolute path where the list of tuples to be sorted is located.
+    :return: sorted list of tuples.
+    """
+    import pickle
+    import numpy as np
+    f = open(path, 'r')
+    iterator = pickle.load(f)
+    f.close()
+    res = np.sort(iterator, kind='mergesort')
+    return len(res)
 
 
-def sortByKey(self, ascending=True, numPartitions=None, keyfunc=lambda x: x):
-        from pycompss.api.api import compss_wait_on
-        n = map(sortPartition, self)
-        n = compss_wait_on(n)
-        return len(n)
-        #return self.partitionBy(numPartitions, hashedPartitioner).mapPartitions(sortPartition, True)
+def sort_by_key(files_paths):
+    """ Sort by key.
+    :param files_paths: List of paths of the input files.
+    :return: Length of the list of elements sorted.
+    """
+    from pycompss.api.api import compss_wait_on
+    n = list(map(sort_partition, files_paths))
+    n = compss_wait_on(n)
+    return len(n)
+
+
+def main():
+    import sys
+    import os
+    import time
+    path = sys.argv[1]
+
+    files_paths = []
+    for f in os.listdir(path):
+        files_paths.append(path + '/' + f)
+    start_time = time.time()
+    result = sort_by_key(files_paths)
+
+    print("Elapsed Time(s)")
+    print(time.time() - start_time)
+    print(result)
 
 
 if __name__ == "__main__":
-        import sys
-        import os
-        import time
-        #from pycompss.api.api import compss_wait_on
-        path = sys.argv[1]
-        reducer = int(sys.argv[2])
-
-        X = []
-        for file in os.listdir(path):
-            X.append(path+'/'+file)
-	startTime = time.time()
-        result = sortByKey(X, numPartitions=reducer)
-        #result = compss_wait_on(result)
-        print "Ellapsed Time(s)"
-        print time.time()-startTime
-        print result
+    main()

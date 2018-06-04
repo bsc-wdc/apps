@@ -7,24 +7,13 @@
   appPythonpath=${scriptDir}/src/
 
   # Retrieve arguments
-  jobDependency=$1
-  numNodes=$2
-  executionTime=$3
-  tasksPerNode=$4
-  tracing=$5
+  tracing=$1
 
   # Leave application args on $@
-  shift 5
+  shift 1
 
   # Enqueue the application
-  enqueue_compss \
-    --job_dependency=$jobDependency \
-    --num_nodes=$numNodes \
-    --exec_time=$executionTime \
-    --tasks_per_node=$tasksPerNode \
-    --master_working_dir=. \
-    --worker_working_dir=scratch \
-    --library_path=/gpfs/apps/MN3/INTEL/mkl/lib/intel64 \
+  runcompss \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
@@ -35,8 +24,9 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch jobDependency numNodes executionTime tasksPerNode tracing m nip#         a b 
+#       ./run.sh tracing datasetPath
 #
 # Example:
-#       ./launch None 2 5 16 false
+#       # Run the generator consider the output path for running
+#       ./run.sh false /path/to/dataset/
 #

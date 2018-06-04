@@ -1,53 +1,64 @@
 #!/usr/bin/python
+#
+#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+
 # -*- coding: utf-8 -*-
-#from pycompss.api.task import task
 
 
-def generateIntData(numRecords, uniqueKeys, uniqueValues, numPartitions, randomSeed):
-    recordsPerPartition = int((numRecords / float(numPartitions)))
+def generate_int_data(num_records, unique_keys, unique_values, num_partitions, random_seed):
+    records_per_partition = int((num_records / float(num_partitions)))
 
-    def generatePartition(index):
+    def generate_partition(index):
         import random
-        effectiveSeed = int(randomSeed) ** index  # .toString.hashCode
-        random.seed(effectiveSeed)
-        data = [(random.randint(0, uniqueKeys), random.randint(0, uniqueValues))
-                for i in range(recordsPerPartition)]
+        effective_seed = int(random_seed) ** index  # .toString.hashCode
+        random.seed(effective_seed)
+        data = [(random.randint(0, unique_keys), random.randint(0, unique_values))
+                for i in range(records_per_partition)]
         return data
 
-    return [generatePartition(i) for i in range(numPartitions)]
+    return [generate_partition(i) for i in range(num_partitions)]
 
 
-def generateStringData(numRecords, uniqueKeys, keyLength, uniqueValues, valueLength, numPartitions, randomSeed, storageLocation, hashFunction):
+def generate_string_data(num_records, unique_keys, key_length, unique_values, value_length, num_partitions, random_seed, storage_location, hash_function):
     import pickle
-    ints = generateIntData(
-        numRecords, uniqueKeys, uniqueValues, numPartitions, randomSeed)
+    ints = generate_int_data(num_records, unique_keys, unique_values, num_partitions, random_seed)
 
     data = []
-    for i in range(numPartitions):
-        data.append(map(lambda (k, v): (paddedString(
-            k, keyLength, hashFunction), paddedString(v, valueLength, hashFunction)), ints[i]))
+    for i in range(num_partitions):
+        data.append([(padded_string(k_v[0], key_length, hash_function), padded_string(k_v[1], value_length, hash_function)) for k_v in ints[i]])
 
-    ff = open(storageLocation, 'w')
+    ff = open(storage_location, 'w')
     pickle.dump(data, ff)
 
-    return data
 
-
-def paddedString(i, length, hashFunction):
-    fmtString = "{:0>" + str(length) + "d}"
-    if hashFunction:
+def padded_string(i, length, hash_function):
+    fmt_string = "{:0>" + str(length) + "d}"
+    if hash_function:
         out = hash(i)
         if len(str(out)) < length:
-            return fmtString.format(out)
+            return fmt_string.format(out)
         else:
             return out
     else:
-        return fmtString.format(i)
+        return fmt_string.format(i)
 
 
 def chunks(l, n, balanced=False):
     if not balanced or not len(l) % n:
-        for i in xrange(0, len(l), n):
+        for i in range(0, len(l), n):
             yield l[i:i + n]
     else:
         rest = len(l) % n
@@ -56,50 +67,57 @@ def chunks(l, n, balanced=False):
             yield l[start: start + n + 1]
             rest -= 1
             start += n + 1
-        for i in xrange(start, len(l), n):
+        for i in range(start, len(l), n):
             yield l[i:i + n]
 
 
-def partitionBy(self, numPartitions, hash):
+def partition_by(self, num_partitions, hash):
     if not hash:
-        return chunks(self, len(self) / numPartitions, True)
+        return chunks(self, len(self) / num_partitions, True)
     else:
-        partitions = [[] for n in range(numPartitions)]
+        partitions = [[] for n in range(num_partitions)]
         for s in self:
-            partitions[hashedPartitioner(s, numPartitions)].append(s)
+            partitions[hashed_partitioner(s, num_partitions)].append(s)
         return partitions
 
 
-def hashedPartitioner(k, numPartitions, keyfunc=lambda x: x):
-    return hash(keyfunc(k)) % numPartitions
+def hashed_partitioner(k, num_partitions, key_func=lambda x: x):
+    return hash(key_func(k)) % num_partitions
 
 
 def keyfunc(x):
     return x
 
-'''Sorts self, which is assumed to consists of (key, value) pairs'''
-#@task(returns=list)
 
+def main():
+    # Tests
+    # ints = generate_int_data(10, 10, 10, 2, 5)
+    # print ints
+    # out_path = "/tmp/out.dataset"
+    # generate_string_data(10, 10, 5, 10, 5, 2, 8, out_path, False)
 
-def sortPartition(iterator, ascending=True):
-    return sorted(iterator, key=lambda (k, v): keyfunc(k), reverse=not ascending)
+    import sys
 
+    num_records = int(sys.argv[1])
+    unique_keys = int(sys.argv[2])
+    key_length = int(sys.argv[3])
+    unique_values = int(sys.argv[4])
+    value_length = int(sys.argv[5])
+    num_partitions = int(sys.argv[6])
+    random_seed = int(sys.argv[7])
+    storage_location = sys.argv[8]
+    hash_function = bool(sys.argv[9])
 
-def sortByKey(self, ascending=True, numPartitions=None, keyfunc=lambda x: x):
-    return map(sortPartition, partitionBy(self, numPartitions, True))
-
-
-def reduceDict(dic1, dic2):
-    for k in dic2:
-        if k in dic1:
-            dic1[k] += dic2[k]
-        else:
-            dic1[k] = dic2[k]
+    generate_string_data(num_records,
+                         unique_keys,
+                         key_length,
+                         unique_values,
+                         value_length,
+                         num_partitions,
+                         random_seed,
+                         storage_location,
+                         hash_function)
 
 
 if __name__ == "__main__":
-    import sys
-    #from pycompss.api.api import compss_wait_on
-    '''test'''
-    print generateIntData(10, 10, 10, 2, 5)
-    print generateStringData(10, 10, 5, 10, 5, 2, 8, out_path, True)
+    main()
