@@ -17,49 +17,44 @@
 
 # -*- coding: utf-8 -*-
 
+import sys
+import time
+from function import Function, fun6
+from error import AError
+from method import SMethodP
 import numpy as np
 from decimal import getcontext, setcontext, ExtendedContext
+
 digits = 8192
-#prec = (digits*np.log(10.0) / np.log(2.0) + 1.0)
+# prec = (digits*np.log(10.0) / np.log(2.0) + 1.0)
+
+
+def mnum(n, prec):
+    step = float((2.0-1.5)/n)
+
+    setcontext(ExtendedContext)
+    getcontext().prec = prec
+
+    f = Function(fun6, prec)
+    e = AError(digits, prec)
+
+    m = SMethodP(f, e, prec, n)
+    print("Main: ", getcontext().prec)
+    initial_aprox = list(np.arange(1.5, 2.0, step))
+    start = time.time()
+    r = m.solution(initial_aprox)
+
+    print("Elapsed Total Time {} (s)".format(time.time() - start))
+    # m.plot()
+
 
 if __name__ == "__main__":
-    from pycompss.api.api import compss_wait_on
-    from src.function import Function, fun2, fun6, cos,exp
-    from src.error import AError
-    from src.method import SMethodP, SMethodP2
-    from decimal import Decimal
-    import time
-    import sys
     prec = 4096
-    n = 100
+    n = 16
     if len(sys.argv) > 1:
         n = int(sys.argv[1])
         prec = int(sys.argv[2])
     else:
-        print "Default Params"
-    step = float((2.0-1.5)/n)
-    
-    #prec = 4096
-    setcontext(ExtendedContext)
-    getcontext().prec = prec
-    
-    
-    f = Function(fun6,prec)
-    e = AError(digits,prec)
+        print("Default Params")
 
-    #m = SMethodP(f,e,prec,3)
-    m = SMethodP(f,e,prec,n)
-    print("Main: ",getcontext().prec)
-    initial_aprox = list(np.arange(1.5,2.0,step))
-    start = time.time()
-    r = m.solution(initial_aprox)
-    #print(m.solution([1.5,1.55,1.6,1.65,1.70,1.75,1.8,1.85,1.9,1.95]))
-    print "Ellapsed Total Time {} (s)".format(time.time()-start)
-    #m.plot()
-    
-    #f2 = Function(fun2,prec)
-    #e2 = AError(digits,prec)
-    #m2 = KMethodP(f2,e2,prec,10)
-    #print(m2.solution([1.5,1.55,1.6,1.65,1.7,1.75,1.8,1.85,1.9,1.95]))
-    
-    
+    mnum(n, prec)

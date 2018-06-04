@@ -17,28 +17,22 @@
 
 # -*- coding: utf-8 -*-
 
-import numpy as np
+
 class Function(object):
+
     from decimal import Decimal
     from pycompss.api.task import task
-    def __init__(self,f,prec,alpha=-1):
+
+    def __init__(self, f, prec, alpha=-1):
         self.alpha = alpha
         self.fun = f
         self.fn = []
         self.n = 0
         self.prec = prec
-    @task(returns=Decimal,isModifier=False)
-    def eval(self,x,append=True):
-        from decimal import Decimal,getcontext
-        getcontext().prec = self.prec
-        if append:
-            self.fn.append(self.fun(x))
-            self.n += 1
-            return self.fn[self.n-1]
-        else:
-            return self.fun(x)
-    def evalSeq(self,x,append=True):
-        from decimal import Decimal,getcontext
+
+    @task(returns=Decimal, isModifier=False)
+    def eval(self, x, append=True):
+        from decimal import getcontext
         getcontext().prec = self.prec
         if append:
             self.fn.append(self.fun(x))
@@ -47,18 +41,32 @@ class Function(object):
         else:
             return self.fun(x)
 
+    def evalSeq(self, x, append=True):
+        from decimal import getcontext
+        getcontext().prec = self.prec
+        if append:
+            self.fn.append(self.fun(x))
+            self.n += 1
+            return self.fn[self.n-1]
+        else:
+            return self.fun(x)
+
+
 def fun2(x):
     from decimal import Decimal
-    
     if x > 0.0:
         return Decimal(x*x.ln()-Decimal(1.0))
     else:
         return -1.0
+
+
 def fun6(x):
     from decimal import Decimal
     return Decimal(exp(-x)+cos(x))
+
+
 def fun3(x):
-    from decimal import Decimal,getcontext
+    from decimal import Decimal, getcontext
     getcontext().prec = 1024
     getcontext().prec += 2
     if x > 0.0:
@@ -70,18 +78,19 @@ def fun3(x):
         getcontext().prec -= 2
         return res
         return -1.0
+
+
 def cos(x):
     """Return the cosine of x as measured in radians.
 
-    >>> print cos(Decimal('0.5'))
+    print cos(Decimal('0.5'))
     0.8775825618903727161162815826
-    >>> print cos(0.5)
+    print cos(0.5)
     0.87758256189
-    >>> print cos(0.5+0j)
+    print cos(0.5+0j)
     (0.87758256189+0j)
-
     """
-    from decimal import Decimal,getcontext
+    from decimal import getcontext
     getcontext().prec += 2
     i, lasts, s, fact, num, sign = 0, 0, 1, 1, 1, 1
     while s != lasts:
@@ -93,20 +102,21 @@ def cos(x):
         s += num / fact * sign
     getcontext().prec -= 2
     return +s
+
+
 def exp(x):
     """Return e raised to the power of x.  Result type matches input type.
 
-    >>> print exp(Decimal(1))
+    print exp(Decimal(1))
     2.718281828459045235360287471
-    >>> print exp(Decimal(2))
+    print exp(Decimal(2))
     7.389056098930650227230427461
-    >>> print exp(2.0)
+    print exp(2.0)
     7.38905609893
-    >>> print exp(2+0j)
+    print exp(2+0j)
     (7.38905609893+0j)
-
     """
-    from decimal import Decimal,getcontext
+    from decimal import getcontext
     getcontext().prec += 2
     i, lasts, s, fact, num = 0, 0, 1, 1, 1
     while s != lasts:
