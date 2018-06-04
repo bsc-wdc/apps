@@ -10,10 +10,12 @@
   tasksPerNode=16
   tracing=false
   
-  # Set arguments
-  appArgs="25600000 64"
+  # Set arguments:
+  # Parameters: NumberOfPoints Fragments plotResult
+  appArgs="25600000 64 False"
 
-  # Execute specifcversion launch  
-  ${scriptDir}/3_initParallel/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
-
-# Parameters: NumberOfPoints Fragments
+  # Execute specifc version launch
+  # ${scriptDir}/1_base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  # ${scriptDir}/2_noWaitOns/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  # ${scriptDir}/3_initParallel/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  ${scriptDir}/4_apps_objects/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
