@@ -13,5 +13,5 @@
   # Set arguments
   appArgs="16 4096"
 
-  # Execute specifcversion launch  
+  # Execute specifc version launch
   ${scriptDir}/1_base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
