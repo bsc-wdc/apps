@@ -17,23 +17,27 @@
 
 # -*- coding: utf-8 -*-
 
+import sys
+import os
+import pickle
+import time
 from pycompss.api.task import task
-from pycompss.api.parameter import *
+
 
 @task(returns=dict)
-def wordCount(data):
-    partialResult = {}
+def wordcount(data):
+    partial_result = {}
     for entry in data:
         for word in entry:
-            if word not in partialResult:
-                partialResult[word] = 1
+            if word not in partial_result:
+                partial_result[word] = 1
             else:
-                partialResult[word] += 1
-    return partialResult
+                partial_result[word] += 1
+    return partial_result
 
-#@task(dic1=INOUT)
+
 @task(returns=dict)
-def reduce(dic1,dic2):
+def reduce(dic1, dic2):
     for k in dic2:
         if k in dic1:
             dic1[k] += dic2[k]
@@ -42,84 +46,48 @@ def reduce(dic1,dic2):
     return dic1
 
 
-### MAIN PROGRAM ###
-
-def merge_reduce(function, data):
-    import Queue
-    q = Queue.Queue()
+def merge_reduce(f, data):
+    import queue
+    q = queue.Queue()
     for i in data:
         q.put(i)
     while not q.empty():
         x = q.get()
         if not q.empty():
             y = q.get()
-            q.put(function(x,y))
+            q.put(f(x, y))
         else:
             return x
 
-def mergeReduce(partialResult):
-    n = len(partialResult)
-    act = [j for j in range(n)]
-    while n > 1:
-        aux = []
-        if n%2:
-            reduce(partialResult[act[len(act)-2]], partialResult[act[len(act)-1]])
-            act.pop(len(act)-1)
-            n -= 1
-        for i in range(0,n,2):
-            reduce(partialResult[act[i]],partialResult[act[i+1]])
-            aux.append(act[i])
-        act = aux
-        n = len(act)
 
-    partialResult[0] = compss_wait_on(partialResult[0])
-    return partialResult[0]
-
-if __name__ == "__main__":
-    import sys
-    import os
-    import pickle
-    import time
+def main():
     from pycompss.api.api import compss_wait_on
 
     path = sys.argv[1]
-    resultFile = sys.argv[2]
+    result_file = sys.argv[2]
 
-    partialResult = []
-    
+    partial_result = []
+
     start = time.time()
 
     for file in os.listdir(path):
         f = open(path + file)
         data = f.readlines()
-        partialResult.append(wordCount(data))
+        partial_result.append(wordcount(data))
 
+    print("All wordcount tasks submitted")
 
-    print("All wordCount tasks submitted")
+    result = merge_reduce(reduce, partial_result)
+    result = compss_wait_on(result)
 
-    #result = mergeReduce(partialResult)
-    result = merge_reduce(reduce,partialResult)
-    result = compss_wait_on(result)    
+    print("Elapsed time: ")
+    print(time.time() - start)
 
-    end = time.time()
-    print "Ellapsed time: "
-    print end-start
-
-    #Save Result
     aux = list(result.items())
-    ff = open(resultFile,'w')
-    pickle.dump(aux,ff)
+    ff = open(result_file, 'w')
+    pickle.dump(aux, ff)
     ff.close()
 
-    #open Result
-    '''
-    f = open(resultFile,'r')
-    aux = pickle.load(f)
-    print(aux)
-    '''
 
-    '''
-    f = open('./result_word_count.dat','r')
-    aux = pickle.load(f)
-    print(aux)
-    '''
+if __name__ == "__main__":
+    main()

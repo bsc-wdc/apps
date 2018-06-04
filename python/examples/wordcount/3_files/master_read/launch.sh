@@ -36,5 +36,6 @@
 #       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing datasetPath resultFile
 #
 # Example:
-#       ./launch.sh None 2 5 16 false /gpfs/projects/bsc19/COMPSs_DATASETS/wordcount/data/dataset_64f_16mb output.txt
+#       ./launch.sh None 2 5 16 false /gpfs/projects/bsc19/COMPSs_DATASETS/wordcount/data/dataset_64f_16mb result.txt
 #
+
