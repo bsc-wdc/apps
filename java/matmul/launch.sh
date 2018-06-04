@@ -67,7 +67,7 @@
   #               * - MSIZE: Number of blocks of the matrix
   #               * - BSIZE: Number of elements per block
   #               * - SEED: Integer for random seed
-  
+
   runcompssOpts=" --tracing="$tracing""
 
   appDir=$(ls ${scriptDir} | grep "^[0-9]*[_]"$1"$")
