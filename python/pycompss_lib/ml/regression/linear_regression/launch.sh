@@ -10,10 +10,9 @@
   tasksPerNode=16
   tracing=false
   
-  # Set arguments
+  # Set arguments:
+  # Parameters: NumberOfPoints Fragments
   appArgs="25600000 64"
 
   # Execute specifcversion launch  
   ${scriptDir}/3_initParallel/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
-
-# Parameters: NumberOfPoints Fragments
