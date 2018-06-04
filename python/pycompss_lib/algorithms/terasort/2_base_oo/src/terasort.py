@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 #
 #  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
 #
@@ -15,6 +14,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
+
+# -*- coding: utf-8 -*-
 
 from Terasort import Board
 from Terasort import Bucket
@@ -33,21 +34,21 @@ def generate_ranges():
     :return: Ranges of the buckets
     """
     import numpy as np
-    split_indexes = np.linspace(range_min, range_max + 1, numBuckets + 1)
+    split_indexes = np.linspace(range_min, range_max + 1, num_buckets + 1)
     ranges = []
     for ind in range(split_indexes.size - 1):
         ranges.append((split_indexes[ind], split_indexes[ind + 1]))
     return ranges
 
 
-def init_buckets(numBuckets):
+def init_buckets(num_buckets):
     buckets = {}
-    for i in range(numBuckets):
+    for i in range(num_buckets):
         buckets[i] = Bucket()
     return buckets
 
 
-def terasort(numFragments, numEntries, numBuckets, seed):
+def terasort(num_fragments, num_entries, num_buckets, seed):
     """
     ----------------------
     Terasort main program
@@ -56,41 +57,41 @@ def terasort(numFragments, numEntries, numBuckets, seed):
     generated key, value tuples and sorts them all considering the key of
     each tuple.
 
-    :param numFragments: Number of fragments to generate
-    :param numEntries: Number of entries (k,v tuples) within each fragment
-    :param numBuckets: Number of buckets to consider.
+    :param num_fragments: Number of fragments to generate
+    :param num_entries: Number of entries (k,v tuples) within each fragment
+    :param num_buckets: Number of buckets to consider.
     :param seed: Initial seed for the random number generator.
     """
-    from pycompss.api.api import compss_wait_on, compss_barrier
+    from pycompss.api.api import compss_wait_on
 
     # Init dataset
     X = Board(range_min, range_max)
-    X.init_random(numFragments, numEntries, seed)
+    X.init_random(num_fragments, num_entries, seed)
 
     # Init buckets dictionary
-    buckets = init_buckets(numBuckets)
+    buckets = init_buckets(num_buckets)
 
     # Init ranges
     ranges = generate_ranges()
-    assert(len(ranges) == numBuckets)
+    assert(len(ranges) == num_buckets)
 
     for d in X.fragments:
-        fragmentBuckets = d.filterFragment(ranges)
-        for i in range(numBuckets):
-            buckets[i].addUnsortedFragment(fragmentBuckets[i])
+        fragment_buckets = d.filter_fragment(ranges)
+        for i in range(num_buckets):
+            buckets[i].add_unsorted_fragment(fragment_buckets[i])
 
     # Verify that the buckets contain elements from their corresponding range
     # This verification can also be done when using PyCOMPSs but will require
     # a synchronization.
-    # for i in range(numBuckets):
+    # for i in range(num_buckets):
     #     bucket = buckets[i]
     #     for elem in bucket:
     #         for kv in elem:
     #             assert(kv[0] >= ranges[i][0] and kv[0] < ranges[i][1])
 
     for key, bucket in buckets.items():
-        bucket.combineAndSortBucketElements()
-        bucket.removeUnsortedFragmentsList()  # Clean up unnecessary memory
+        bucket.combine_and_sort_bucket_elements()
+        bucket.remove_unsorted_fragments_list()  # Clean up unnecessary memory
 
     result = {}
     for key, bucket in buckets.items():
@@ -109,12 +110,12 @@ if __name__ == "__main__":
     arg1 = sys.argv[1] if len(sys.argv) > 1 else 16
     arg2 = sys.argv[2] if len(sys.argv) > 2 else 50
 
-    numFragments = int(arg1)  # Default: 16
-    numEntries = int(arg2)    # Default: 50
+    num_fragments = int(arg1)  # Default: 16
+    num_entries = int(arg2)    # Default: 50
     # be very careful with the following argument (since it is in a decorator)
-    numBuckets = 10           # int(sys.argv[3])
+    num_buckets = 10           # int(sys.argv[3])
     seed = 5
 
     startTime = time.time()
-    terasort(numFragments, numEntries, numBuckets, seed)
+    terasort(num_fragments, num_entries, num_buckets, seed)
     print("Elapsed Time {} (s)".format(time.time() - startTime))
