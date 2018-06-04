@@ -1,30 +1,29 @@
 #!/bin/bash -e
 
+compile_and_execute() {
+  err1=$({ cd ${scriptDir}/jar ;} 2>&1) || true
+  err2=$({ cd ${scriptDir}/target ;} 2>&1) || true
+  
+  if [ -n "$err1" ] && [ -n "$err2" ]; then 
+	echo "There is no ./jar or ./target folder, I am going to build it..."
+	mvn clean package
+	cd ${scriptDir}/target
+	runcompss $1 $2 $3	
+  elif [ -z "$err1" ]; then
+	cd ${scriptDir}/jar
+	runcompss $1 $2 $3
+  elif [ -z "$err2" ]; then
+	cd ${scriptDir}/target
+        runcompss $1 $2 $3
+  fi
+}
+
   # Define script directory for relative calls
   scriptDir=$(dirname $0)
+  appName="matmul.randomGen.objects.Matmul"
+  runcompssOpts=$1
+  appArgs=$2
 
-  # Set common arguments
-  jobDependency=None
-  numNodes=2
-  executionTime=5
-  tasksPerNode=16
-  tracing=false
-  
-  # Set arguments
-  appArgs="4 2 1"
-  # Arguments:
-  #   <MSIZE> <BSIZE> <SEED>
-  # where:
-  #               * - MSIZE: Number of blocks of the matrix
-  #               * - BSIZE: Number of elements per block
-  #               * - SEED: Integer for random seed
- 
-  # Version used by default: random generated objects:
-  #=== Version 2 ===
-  #''Random Generation Objects'', where the matrices are randomly generated at execution time and stored internally as objects
+  compile_and_execute  $runcompssOpts $appName $appArgs
 
-  # Execute specifcversion launch  
-  ${scriptDir}/1_base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
-
-
-
+  exit 0
