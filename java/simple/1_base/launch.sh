@@ -1,0 +1,22 @@
+#!/bin/bash -e
+
+  # Define script directory for relative calls
+  scriptDir=$(dirname $0)
+
+  err1=$({ cd ${scriptDir}/jar ;} 2>&1) || true
+  err2=$({ cd ${scriptDir}/target ;} 2>&1) || true
+
+  if [ -n "$err1" ] && [ -n "$err2" ]; then 
+	echo "There is no ./jar or ./target folder, I am going to build it..."
+	mvn clean package
+	cd ${scriptDir}/target
+	runcompss $1 simple.Simple "$2"	
+  elif [ -z "$err1" ]; then
+	cd ${scriptDir}/jar
+	runcompss $1 simple.Simple "$2"
+  elif [ -z "$err2" ]; then
+	cd ${scriptDir}/target
+        runcompss $1 simple.Simple "$2"
+  fi
+
+  exit 0
