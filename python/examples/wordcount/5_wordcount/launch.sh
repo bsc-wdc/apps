@@ -1,19 +1,40 @@
-#/bin/bash 
+#!/bin/bash -e
 
-${IT_HOME}/scripts/user/enqueue_compss \
-  --exec_time=15 \
-  --num_nodes=3 \
-  --queue_system=lsf \
-  --tasks_per_node=16 \
-  --master_working_dir=. \
-  --worker_working_dir=scratch \
-  --lang=python \
-  --graph=true \
-  --classpath=/gpfs/projects/bsc19/COMPSs_APPS/wordcount/python/2.0_wordcount/src/ \
-  --comm="es.bsc.compss.nio.master.NIOAdaptor" \
-/gpfs/projects/bsc19/COMPSs_APPS/wordcount/python/2.0_wordcount/src/wordcount.py /gpfs/projects/bsc19/COMPSs_APPS/wordcount/data/text_102400.txt False 10000
+  # Define script variables
+  scriptDir=$(pwd)/$(dirname $0)
+  execFile=${scriptDir}/src/wordcount.py
+  appClasspath=${scriptDir}/src/
+  appPythonpath=${scriptDir}/src/
 
-#/gpfs/projects/bsc19/COMPSs_APPS/wordcount/python/2.0_wordcount/src/wordcount.py /gpfs/projects/bsc19/COMPSs_APPS/wordcount/data/all_64x.txt wordcount.out 10000000
+  # Retrieve arguments
+  jobDependency=$1
+  numNodes=$2
+  executionTime=$3
+  tasksPerNode=$4
+  tracing=$5
 
-#  --comm="es.bsc.compss.gat.master.GATAdaptor"
-#  --comm="es.bsc.compss.nio.master.NIOAdaptor"
+  # Leave application args on $@
+  shift 5
+
+  # Enqueue the application
+  enqueue_compss \
+    --job_dependency=$jobDependency \
+    --num_nodes=$numNodes \
+    --exec_time=$executionTime \
+    --tasks_per_node=$tasksPerNode \
+    --tracing=$tracing \
+    --graph=true \
+    --classpath=$appClasspath \
+    --pythonpath=$appPythonpath \
+    --lang=python \
+    $execFile $@
+
+
+######################################################
+# APPLICATION EXECUTION EXAMPLE
+# Call:
+#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing datasetPath multipleFiles blockSize
+#
+# Example:
+#       ./launch.sh None 2 5 16 false /gpfs/projects/bsc19/COMPSs_DATASETS/wordcount/data/dataset_64f_16mb True 10000
+#

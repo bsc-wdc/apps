@@ -23,6 +23,7 @@
     --exec_time=$executionTime \
     --tasks_per_node=$tasksPerNode \
     --tracing=$tracing \
+    --graph=true \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
     --lang=python \
@@ -32,8 +33,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing datasetPath outFile blockSize
+#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing datasetPath resultFile
 #
 # Example:
-#       ./launch.sh None 2 5 16 false /gpfs/projects/bsc19/COMPSs_DATASETS/wordcount/data/dataset_64f_16mb wordcount.out 1000000
+#       ./launch.sh None 2 5 16 false /gpfs/projects/bsc19/COMPSs_DATASETS/wordcount/data/dataset_64f_16mb output.txt
 #
