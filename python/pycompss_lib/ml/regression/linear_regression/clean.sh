@@ -13,3 +13,6 @@
  
   # Clean trace files
   find . -type f -name '*tar.gz' -delete
+
+  # Clean output files
+  find . -type f -name '*.png' -delete
