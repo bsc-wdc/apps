@@ -21,6 +21,7 @@ def main():
     parser.add_argument('-t', metavar='TEST_FILE_PATH', help='test CSV file path', type=str, required=False)       
     parser.add_argument('-o', metavar='OUTPUT_FILE_PATH', help='output file path', type=str, required=False)      
     parser.add_argument('-nd', metavar='N_DATASETS', type=int, help='number of times to load the dataset', default=1)   
+    parser.add_argument('--convergence', help='check for convergence', action='store_true')
     parser.add_argument('train_data', help='CSV file or directory containing CSV files (if a directory is provided N_CHUNKS is ignored)', type=str)    
     args = parser.parse_args()
     
@@ -52,8 +53,9 @@ def main():
     else:
         for _ in range(args.nd):
             csvm.load_data(path=train_data, n_features=args.f, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)
-        
-    csvm.fit()
+       
+          
+    csvm.fit(args.convergence)
         
     out = [args.k, args.a, args.n, csvm._clf_params[0]['gamma'], args.c, csvm.iterations[0], csvm.converged[0], csvm.read_time, csvm.fit_time, csvm.total_time]    
         
