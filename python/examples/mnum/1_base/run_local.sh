@@ -2,7 +2,7 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/sort.py
+  execFile=${scriptDir}/src/mnum.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
@@ -24,9 +24,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run.sh tracing datasetPath
+#       ./run_local.sh tracing num precision
 #
 # Example:
-#       # Run the generator consider the output path for running
-#       ./run.sh false /path/to/dataset/
+#       ./run_local.sh false 16 4096
 #

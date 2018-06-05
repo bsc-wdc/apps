@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
   # Define script directory for relative calls
-  # scriptDir=$(pwd)/$(dirname $0)
+  scriptDir=$(pwd)
 
   # Set common arguments
   numFragments=10
@@ -12,5 +12,7 @@
   appArgs="${numFragments} ${numEntries}"
 
   # Execute specific version launch
-  1_base/run.sh $tracing $appArgs
-  # 2_base_oo/run.sh $tracing $appArgs
+  cd 1_base
+  # cd 2_base_oo
+  ./run_local.sh $tracing $appArgs
+  cd ..

@@ -14,3 +14,5 @@
   # Clean trace files
   find . -type f -name '*tar.gz' -delete
 
+  # Remove temporal dataset
+  rm -rf dataset_*

@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
   # Define script variables
-  scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/sort.py
+  scriptDir=$(dirname $0)
+  execFile=src/linearRegression.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
@@ -24,8 +24,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run.sh tracing numkeys uniquekeys keyslenght uniquevalues valuelenght numfrag keysperfrag randomseed fromfiles path
+#       ./run_local.sh tracing points fragments plotResult
 #
 # Example:
-#       ./run.sh false 10 5 3 5 2 5 12345 false undefined
+#       ./run_local.sh false 1024 8 True
 #

@@ -27,20 +27,24 @@ from loremipsum import *
 def main():
     num_files = int(sys.argv[1])
     size = int(sys.argv[2])*1024*1024  # MBytes to Bytes
-    dataset_path = "dataset_{}f_{}mb".format(num_files, (size/1024)/1024)
-    os.mkdir(dataset_path)
+    dataset_path = 'dataset_{}f_{}mb'.format(num_files, (size/1024)/1024)
+    try:
+        os.mkdir(dataset_path)
+    except OSError:
+        print('Dataset already exists.')
+        return None
 
     for i in range(num_files):
         text_size = 0
-        file_name = "file{}.txt".format(i)
+        file_name = 'file{}.txt'.format(i)
         path = os.path.join(dataset_path, file_name)
         with open(path, 'w') as f:
             while text_size < size:
                 paragraph = generate_paragraph()
                 f.write(paragraph[2])
                 text_size = os.path.getsize(path)
-        print("{} generated: size {} mb".format(file_name, (float(text_size)/1024.0)/1024.0))
+        print('{} generated: size {} mb'.format(file_name, (float(text_size)/1024.0)/1024.0))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

@@ -2,7 +2,7 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/sort.py
+  execFile=src/sort.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
@@ -24,9 +24,9 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run.sh tracing file numFrag numRange
+#       ./run.sh tracing datasetPath
 #
 # Example:
 #       # Run the generator consider the output path for running
-#       ./run.sh false /path/to/dataset/dataset.txt 5 600
+#       ./run.sh false /path/to/dataset/
 #

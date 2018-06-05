@@ -1,8 +1,9 @@
 #!/bin/bash -e
 
   # Define script variables
-  scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/sort.py
+  scriptDir=$(dirname $0)
+  execFile=${scriptDir}/src/wc_merge.py
+  # execFile=${scriptDir}/src/wc_reduce.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
@@ -15,6 +16,7 @@
   # Enqueue the application
   runcompss \
     --tracing=$tracing \
+    --graph=true \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
     --lang=python \
@@ -24,9 +26,9 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run.sh tracing datasetPath
+#       ./run_local.sh datasetPath
 #
 # Example:
-#       # Run the generator consider the output path for running
-#       ./run.sh false /path/to/dataset/
+#       # Create a dataset before running it
+#       ./run_local.sh /path/to/dataset/
 #

@@ -2,7 +2,7 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/terasort.py
+  execFile=src/sort.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
@@ -24,8 +24,9 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run.sh tracing numFragments numEntries
+#       ./run.sh tracing datasetPath
 #
 # Example:
-#       ./launch.sh false 10 100
+#       # Run the generator consider the output path for running
+#       ./run.sh false /path/to/dataset/
 #
