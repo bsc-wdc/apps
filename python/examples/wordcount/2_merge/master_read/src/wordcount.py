@@ -17,13 +17,14 @@
 
 # -*- coding: utf-8 -*-
 
-"""wordcount Block divide"""
+"""wordcount Block divide master read"""
 
 import sys
 import pickle
 import time
 from pycompss.api.task import task
-from pycompss.api.parameter import *
+from pycompss.api.parameter import INOUT
+from functools import reduce
 
 
 def read_word(file_object):
@@ -33,8 +34,9 @@ def read_word(file_object):
 
 
 def read_word_by_word(fp, size_block):
-    """Lazy function (generator) to read a file piece by piece i
+    """Lazy function (generator) to read a file piece by piece in
     chunks of size approx size_block"""
+
     data = open(fp)
     block = []
     for word in read_word(data):
@@ -66,24 +68,37 @@ def reduce(dic1, dic2):
             dic1[k] = dic2[k]
 
 
-def main():
+def merge_reduce(partial_result):
     from pycompss.api.api import compss_wait_on
+    n = len(partial_result)
+    act = [j for j in range(n)]
+    while n > 1:
+        aux = []
+        if n % 2:
+            reduce(partial_result[act[len(act)-2]], partial_result[act[len(act)-1]])
+            act.pop(len(act)-1)
+            n -= 1
+        for i in range(0, n, 2):
+            reduce(partial_result[act[i]], partial_result[act[i+1]])
+            aux.append(act[i])
+        act = aux
+        n = len(act)
 
+    partial_result[0] = compss_wait_on(partial_result[0])
+    return partial_result[0]
+
+
+def main():
     path_file = sys.argv[1]
     result_file = sys.argv[2]
     size_block = int(sys.argv[3])
 
     start = time.time()
-    result = {}
-    for block in read_word_by_word(path_file, size_block):
-        partial_result = wordcount(block)
-        reduce(result, partial_result)
+    result = merge_reduce(list(map(wordcount, read_word_by_word(path_file, size_block))))
 
-    result = compss_wait_on(result)
     print("Elapsed Time")
-    print(time.time() - start)
+    print(time.time()-start)
 
-    # print result
     aux = list(result.items())
     ff = open(result_file, 'w')
     pickle.dump(aux, ff)

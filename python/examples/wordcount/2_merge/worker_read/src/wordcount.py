@@ -17,37 +17,23 @@
 
 # -*- coding: utf-8 -*-
 
-"""wordcount Block divide"""
+"""Wordcount self read"""
 
 import sys
 import pickle
 import time
 from pycompss.api.task import task
-from pycompss.api.parameter import *
-
-
-def read_word(file_object):
-    for line in file_object:
-        for word in line.split():
-            yield word
-
-
-def read_word_by_word(fp, size_block):
-    """Lazy function (generator) to read a file piece by piece i
-    chunks of size approx size_block"""
-    data = open(fp)
-    block = []
-    for word in read_word(data):
-        block.append(word)
-        if sys.getsizeof(block) > size_block:
-            yield block
-            block = []
-    if block:
-        yield block
+from pycompss.api.parameter import INOUT
+from functools import reduce
 
 
 @task(returns=dict)
-def wordcount(data):
+def wordcount_self_read(path_file, start, size_block):
+    fp = open(path_file)
+    fp.seek(start)
+    aux = fp.read(size_block)
+    fp.close()
+    data = aux.strip().split(" ")
     partial_result = {}
     for entry in data:
         if entry not in partial_result:
@@ -66,24 +52,45 @@ def reduce(dic1, dic2):
             dic1[k] = dic2[k]
 
 
-def main():
+def merge_reduce(partial_result):
     from pycompss.api.api import compss_wait_on
+    n = len(partial_result)
+    act = [j for j in range(n)]
+    while n > 1:
+        aux = []
+        if n % 2:
+            reduce(partial_result[act[len(act)-2]], partial_result[act[len(act)-1]])
+            act.pop(len(act)-1)
+            n -= 1
+        for i in range(0, n, 2):
+            reduce(partial_result[act[i]], partial_result[act[i+1]])
+            aux.append(act[i])
+        act = aux
+        n = len(act)
 
+    partial_result[0] = compss_wait_on(partial_result[0])
+    return partial_result[0]
+
+
+def main():
     path_file = sys.argv[1]
     result_file = sys.argv[2]
     size_block = int(sys.argv[3])
 
     start = time.time()
-    result = {}
-    for block in read_word_by_word(path_file, size_block):
-        partial_result = wordcount(block)
-        reduce(result, partial_result)
+    data = open(path_file)
+    data.seek(0, 2)
+    file_size = data.tell()
+    ind = 0
+    partial_result = []
+    while ind < file_size:
+        partial_result.append(wordcount_self_read(path_file, ind, size_block))
+        ind += size_block
+    result = merge_reduce(partial_result)
 
-    result = compss_wait_on(result)
     print("Elapsed Time")
-    print(time.time() - start)
+    print(time.time()-start)
 
-    # print result
     aux = list(result.items())
     ff = open(result_file, 'w')
     pickle.dump(aux, ff)

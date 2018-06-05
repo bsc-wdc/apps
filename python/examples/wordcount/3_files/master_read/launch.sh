@@ -2,7 +2,7 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/mnum.py
+  execFile=${scriptDir}/src/wordcount.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
@@ -23,6 +23,7 @@
     --exec_time=$executionTime \
     --tasks_per_node=$tasksPerNode \
     --tracing=$tracing \
+    --graph=true \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
     --lang=python \
@@ -32,8 +33,9 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing num precision
+#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing datasetPath resultFile
 #
 # Example:
-#       ./launch.sh None 2 5 16 false 16 4096
+#       ./launch.sh None 2 5 16 false /gpfs/projects/bsc19/COMPSs_DATASETS/wordcount/data/dataset_64f_16mb result.txt
 #
+

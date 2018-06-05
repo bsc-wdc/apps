@@ -1,2 +1,0 @@
-./launch.sh -v 1.2 -n 2 -t 15 -a /gpfs/projects/bsc19/COMPSs_APPS/wordcount/data/all.txt 10000000
-./launch.sh -v 1.3 -n 3 -t 15 -tn 16 -a /gpfs/projects/bsc19/COMPSs_APPS/wordcount/data/all.txt 10000000
