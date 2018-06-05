@@ -2,7 +2,7 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/terasort.py
+  execFile=src/terasort.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
