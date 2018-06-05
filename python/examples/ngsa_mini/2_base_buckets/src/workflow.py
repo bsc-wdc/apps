@@ -7,7 +7,7 @@ from pycompss.api.task import task
 def call_cmd(cmd, file_out=None):
     from subprocess import Popen
 
-    print "cmd: ", cmd
+    print("cmd: ", cmd)
     if file_out is None:
         p = Popen(cmd, shell=True)
     else:
@@ -35,50 +35,50 @@ def mapping(bwa_bin, ssc_bin, seq1_file, seq2_file, contig_file, bwa_db_file, *a
     import os
     import os.path
 
-    print "mapping!!"               # dbg
+    print("mapping!!")               # dbg
 
     num_threads = '1'
     tmp_dir = "ngsa_mini_py_temp" + os.path.splitext(seq1_file)[1]
-    print "abans de fer el dir"     # dbg
+    print("abans de fer el dir")     # dbg
     try:
-        os.makedirs(tmp_dir, mode=0777)
+        os.makedirs(tmp_dir, mode=0o777)
     except OSError as e:
         if e.errno != errno.EEXIST:
-            print "Failed to create Directory[{}].\n".format(tmp_dir)
+            print("Failed to create Directory[{}].\n".format(tmp_dir))
             raise
         else:
-            print "File already exists"
-    print "despres de fer el dir"   # dbg
+            print("File already exists")
+    print("despres de fer el dir")   # dbg
 
     cmd = bwa_bin + ' aln -t ' + num_threads + ' ' + bwa_db_file + ' ' + seq1_file
     seq1_sai = tmp_dir + '/' + os.path.basename(seq1_file) + ".sai"
     call_cmd(cmd, seq1_sai)
-    print "executat 1"  # dbg
+    print("executat 1")  # dbg
 
     cmd = bwa_bin + ' aln -t ' + num_threads + ' ' + bwa_db_file + ' ' + seq2_file
     seq2_sai = tmp_dir + '/' + os.path.basename(seq2_file) + ".sai"
     call_cmd(cmd, seq2_sai)
-    print "executat 2"  # dbg
+    print("executat 2")  # dbg
 
     cmd = bwa_bin + ' sampe ' + bwa_db_file + ' ' + seq1_sai + ' ' + seq2_sai + ' ' + seq1_file + ' ' + seq2_file
     sam_file = tmp_dir + '/' + "0.sam"
     call_cmd(cmd, sam_file)
-    print "executat 3"  # dbg
+    print("executat 3")  # dbg
 
     cmd = ssc_bin + ' ' + contig_file + ' ' + sam_file + ' ' + tmp_dir
     call_cmd(cmd)       # in the original version, stdout is redirected to stderr
-    print "executat 4"  # dbg
+    print("executat 4")  # dbg
 
-    print "creating the dictionary"                                 # dbg
+    print("creating the dictionary")                                 # dbg
     dic = {}
     for contig in os.listdir(tmp_dir):
-        print "contig file: " + contig                              # dbg
+        print("contig file: " + contig)                              # dbg
         if os.path.splitext(contig)[1] == '.sam' and contig != 'single.sam' and \
                             contig != 'unmap.sam' and contig != '0.sam':
-            print "  ------> writing to dictionary"                 # dbg
+            print("  ------> writing to dictionary")                 # dbg
             with open(tmp_dir + '/' + contig, 'r') as f:
                 dic[contig] = f.read()
-    print "dictionary created with length: " + str(len(dic))        # dbg
+    print("dictionary created with length: " + str(len(dic)))        # dbg
     return dic
 
 
@@ -92,14 +92,14 @@ def merge(d1, d2):
     :param d2: dictionary
     """
 
-    print "merging dictionary d2 into d1. List of keys from d2:"    # dbg
+    print("merging dictionary d2 into d1. List of keys from d2:")    # dbg
 
     for k in d2:
-        if d1.has_key(k):
-            print "    " + k + ": updated in d1"                    # dbg
+        if k in d1:
+            print("    " + k + ": updated in d1")                    # dbg
             d1[k] = d1[k] + d2[k]
         else:
-            print "    " + k + ": added into d1"                    # dbg
+            print("    " + k + ": added into d1")                    # dbg
             d1[k] = d2[k]
 
 
@@ -119,24 +119,25 @@ def mapping_merge(d1, cmd_dir, bwa_db_file, contig_file, seq_files):
     bwa_db_dir = os.path.dirname(bwa_db_file)
     bwa_db_files = [bwa_db_dir + '/' + x for x in os.listdir(os.path.split(bwa_db_file)[0])]
 
-    print "mapping and merge from files: ", str(seq_files)  # dbg
+    print("mapping and merge from files: ", str(seq_files))  # dbg
 
     bwa_bin = cmd_dir + "/bwa"
     ssc_bin = cmd_dir + "/splitSam2Contig2"
 
-    print "Calling mapping with parameters:"                # dbg
-    print "bwa_bin=", bwa_bin                               # dbg
-    print "ssc_bin=", ssc_bin                               # dbg
-    print "seq_files[0]=", seq_files[0]                     # dbg
-    print "seq_files[1]=", seq_files[1]                     # dbg
-    print "contig_file=", contig_file                       # dbg
-    print "bwa_db_file=", bwa_db_file                       # dbg
-    print "bwa_db_files=", str(bwa_db_files)                # dbg
+    print("Calling mapping with parameters:")                # dbg
+    print("bwa_bin=", bwa_bin)                               # dbg
+    print("ssc_bin=", ssc_bin)                               # dbg
+    print("seq_files[0]=", seq_files[0])                     # dbg
+    print("seq_files[1]=", seq_files[1])                     # dbg
+    print("contig_file=", contig_file)                       # dbg
+    print("bwa_db_file=", bwa_db_file)                       # dbg
+    print("bwa_db_files=", str(bwa_db_files))                # dbg
     d2 = mapping(bwa_bin, ssc_bin, seq_files[0], seq_files[1], contig_file, bwa_db_file, *bwa_db_files)
 
     merge(d1, d2)
 
     return d1
+
 
 @task(returns=list)
 def split(num_buckets, contigs):
@@ -173,10 +174,10 @@ def rmdup_analyze(samtools_bin, snp_bin, ref_idx_file, ref_file, contig_sam, con
     n_memory = '800000000'
     tmp_dir = "ngsa_mini_py_temp"
     try:
-        os.makedirs(tmp_dir, mode=0700)
+        os.makedirs(tmp_dir, mode=0o700)
     except OSError as e:
         if e.errno != errno.EEXIST:
-            print "Failed to create Directory[{}].\n".format(tmp_dir)
+            print("Failed to create Directory[{}].\n".format(tmp_dir))
             raise
 
     contig = os.path.splitext(contig_sam)[0]
@@ -269,25 +270,25 @@ def rmdup_analyze_tar(cmd_dir, ref_idx_file, ref_file, bucket, tar_file):
     out_file1 = "ngsa_mini_py_temp/" + contig + '.indel'
     out_file2 = "ngsa_mini_py_temp/" + contig + '.snp'
     out_file3 = "ngsa_mini_py_temp/" + contig + '.sum'
-    print "Calling rmdup_analyze with parameters:"               # dbg
-    print "samtools_bin=", samtools_bin                          # dbg
-    print "snp_bin=", snp_bin                                    # dbg
-    print "ref_idx_file=", ref_idx_file                          # dbg
-    print "ref_file=", ref_file                                  # dbg
-    print "contig_sam=", contig_sam                              # dbg
-    print "str(len(contig_content))=", str(len(contig_content))  # dbg
-    print "out_file1=", out_file1                                # dbg
-    print "out_file2=", out_file2                                # dbg
-    print "out_file3=", out_file3                                # dbg
+    print("Calling rmdup_analyze with parameters:")               # dbg
+    print("samtools_bin=", samtools_bin)                          # dbg
+    print("snp_bin=", snp_bin)                                    # dbg
+    print("ref_idx_file=", ref_idx_file)                          # dbg
+    print("ref_file=", ref_file)                                  # dbg
+    print("contig_sam=", contig_sam)                              # dbg
+    print("str(len(contig_content))=", str(len(contig_content)))  # dbg
+    print("out_file1=", out_file1)                                # dbg
+    print("out_file2=", out_file2)                                # dbg
+    print("out_file3=", out_file3)                                # dbg
     rmdup_analyze(samtools_bin, snp_bin, ref_idx_file, ref_file, contig_sam, contig_content, out_file1, out_file2,
                   out_file3)
 
     # tar files
-    print "Calling tar with parameters:"                         # dbg
-    print "tar_file=", tar_file                                  # dbg
-    print "out_file1=", out_file1                                # dbg
-    print "out_file2=", out_file2                                # dbg
-    print "out_file3=", out_file3                                # dbg
+    print("Calling tar with parameters:")                         # dbg
+    print("tar_file=", tar_file)                                  # dbg
+    print("out_file1=", out_file1)                                # dbg
+    print("out_file2=", out_file2)                                # dbg
+    print("out_file3=", out_file3)                                # dbg
     tar(tar_file, out_file1, out_file2, out_file3)
     compss_delete_file(out_file1)
     compss_delete_file(out_file2)
@@ -312,7 +313,7 @@ def mergeReduce(function, data, init):
     :return: result of reduce the data to a single value
     """
     from collections import deque
-    q = deque(xrange(len(data)))
+    q = deque(range(len(data)))
     while len(q):
         x = q.popleft()
         if len(q):
@@ -332,15 +333,15 @@ def main():
 
     # usage
     if len(sys.argv) != 8:
-        print "Usage: {} BWA_DB_FILE CONTIG_FILE REFERENCE_FILE REFERENCE_INDEX_FILE INPUT_DIR WORK_DIR " \
+        print("Usage: {} BWA_DB_FILE CONTIG_FILE REFERENCE_FILE REFERENCE_INDEX_FILE INPUT_DIR WORK_DIR " \
               "NUM_PROCESSES [NUM_BUCKETS=2*NUM_PROCESSES]\n\n" \
-              "Program name must be called with an absolute path (starting with '/').".format(sys.argv[0])
+              "Program name must be called with an absolute path (starting with '/').".format(sys.argv[0]))
         return 1
 
     # find program directory and basenames
     cmd_dir = os.path.dirname(sys.argv[0])
     if cmd_dir == "" or cmd_dir[0] != '/':
-        print "Program must be called with an absolute path (starting with '/')"
+        print("Program must be called with an absolute path (starting with '/')")
         return 1
     prog_basename = os.path.basename(os.path.splitext(sys.argv[0])[0])
 
@@ -359,10 +360,10 @@ def main():
 
     out_dir = "{}/{}_OUT".format(work_dir, prog_basename)
     try:
-        os.makedirs(out_dir, mode=0700)
+        os.makedirs(out_dir, mode=0o700)
     except OSError as e:
         if e.errno != errno.EEXIST:
-            print "Failed to create Directory[{}].\n".format(out_dir)
+            print("Failed to create Directory[{}].\n".format(out_dir))
             raise
 
     start_time = time.time()
@@ -370,7 +371,7 @@ def main():
     # mapping & merge
     inputs = []
     for in_dir in in_dirs:
-        exts = set(map(lambda file1: os.path.splitext(file1)[1], os.listdir(in_dir)))
+        exts = set([os.path.splitext(file1)[1] for file1 in os.listdir(in_dir)])
         for ext in exts:
             elem = [in_dir + '/' + f for f in os.listdir(in_dir) if f.endswith(ext)]
             elem.sort()
@@ -378,11 +379,11 @@ def main():
     # inputs = [[in_dir+'part_1.'+i, in_dir+'part_2.'+i] for i in range(num_processes)]
     #        ~ [[part_1.0, part_2.0], [part_1.1, part_2.1], ...]
 
-    print "Inputs: ", str(inputs)               # dbg
+    print("Inputs: ", str(inputs))               # dbg
     contigs = reduce(lambda e1, e2: mapping_merge(e1, cmd_dir, bwa_db_file, contig_file, e2), inputs, {})
-    print "before compss_wait_on"               # dbg
+    print("before compss_wait_on")               # dbg
     contigs = compss_wait_on(contigs)
-    print "after compss_wait_on"                # dbg
+    print("after compss_wait_on")                # dbg
     with open('output.dict', 'w') as f:         # dbg
         f.write(str(contigs))                   # dbg
     buckets = split(num_buckets, contigs)
@@ -391,11 +392,11 @@ def main():
     tar_file = init_tar(out_dir)
     reduce(lambda tar_file1, bucket: rmdup_analyze_tar(cmd_dir, ref_idx_file, ref_file, bucket, tar_file1),
            buckets, tar_file)
-    print "before barrier"                      # dbg
+    print("before barrier")                      # dbg
     barrier()
-    print "after barrier"                       # dbg
+    print("after barrier")                       # dbg
 
-    print "NGSA-mini-py with {} processes. Ellapsed Time {} (s)".format(num_processes, time.time() - start_time)
+    print("NGSA-mini-py with {} processes. Ellapsed Time {} (s)".format(num_processes, time.time() - start_time))
 
 
 if __name__ == "__main__":
