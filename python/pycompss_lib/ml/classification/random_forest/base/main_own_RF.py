@@ -1,9 +1,13 @@
 import argparse
+import time
+
+from pycompss.api.api import compss_barrier
 
 from forest.decision_tree import DecisionTree
 
 
 def main():
+    initial_time = time.time()
     parser = argparse.ArgumentParser(description='Own decision tree, for now.')
 
     # DecisionTree params
@@ -18,6 +22,13 @@ def main():
 
     tree = DecisionTree(args.path_in, args.n_instances, args.n_features)
     tree.fit(args.max_depth, args.path_out, args.name)
+
+    compss_barrier()
+
+    final_time = time.time()
+
+    print(args)
+    print('Time: ' + str(final_time - initial_time))
 
 
 if __name__ == "__main__":

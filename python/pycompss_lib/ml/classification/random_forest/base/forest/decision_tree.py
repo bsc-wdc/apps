@@ -14,6 +14,35 @@ from pandas import read_csv
 from pycompss.api.task import task
 
 
+class Node(object):
+
+    def __init__(self, tree_path=None, index=None, value=None):
+        self.tree_path = tree_path
+        self.index = index
+        self.value = value
+
+    def to_json(self):
+        return ('{{"type": "NODE", "tree_path": "{}", '
+                '"index": {}, "value": {}}}'
+                .format(self.tree_path, self.index, self.value))
+
+
+class Leaf(object):
+
+    def __init__(self, tree_path=None, size=None, frequencies=None, mode=None):
+        self.tree_path = tree_path
+        self.size = size
+        self.frequencies = frequencies
+        self.mode = mode
+
+    def to_json(self):
+        frequencies_str = ', '.join(map('%r: %r'.__mod__, self.frequencies.most_common()))
+        frequencies_str = '{' + frequencies_str + '}'
+        return ('{{"type": "LEAF", "tree_path": "{}", '
+                '"size": {}, "mode": {}, "frequencies": {}}}'
+                .format(self.tree_path, self.size, self.mode, frequencies_str))
+
+
 def get_feature_file(path, index):
     return path + 'x_' + str(index) + '.dat'
 
@@ -94,34 +123,6 @@ def test_splits(sample, feature, y):
     return min_score, b_value
 
 
-@task(priority=True, returns=(list, list))
-def get_groups(sample, path, index, value):
-    print("@task get_groups")
-    left = []
-    right = []
-    if len(sample) > 0:
-        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True)
-        for i in sample:
-            if feature[i] < value:
-                left.append(i)
-            else:
-                right.append(i)
-    return left, right
-
-
-class Node(object):
-
-    def __init__(self, tree_path, index, value):
-        self.tree_path = tree_path
-        self.index = index
-        self.value = value
-
-    def to_json(self):
-        return ('{{"type": "NODE", "tree_path": "{}", '
-                '"index": {}, "value": {}}}'
-                .format(self.tree_path, self.index, self.value))
-
-
 @task(priority=True, returns=(Node, int, float))
 def get_best_split(tree_path, features, *scores_and_values):
     print("@task get_best_split")
@@ -143,20 +144,19 @@ def get_best_split(tree_path, features, *scores_and_values):
     return Node(tree_path, b_feature, b_value), b_feature, b_value
 
 
-class Leaf(object):
-
-    def __init__(self, tree_path, size, frequencies, mode):
-        self.tree_path = tree_path
-        self.size = size
-        self.frequencies = frequencies
-        self.mode = mode
-
-    def to_json(self):
-        frequencies_str = ', '.join(map('%r: %r'.__mod__, self.frequencies.most_common()))
-        frequencies_str = '{' + frequencies_str + '}'
-        return ('{{"type": "LEAF", "tree_path": "{}", '
-                '"size": {}, "mode": {}, "frequencies": {}}}'
-                .format(self.tree_path, self.size, self.mode, frequencies_str))
+@task(priority=True, returns=(list, list))
+def get_groups(sample, path, index, value):
+    print("@task get_groups")
+    left = []
+    right = []
+    if len(sample) > 0:
+        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True)
+        for i in sample:
+            if feature[i] < value:
+                left.append(i)
+            else:
+                right.append(i)
+    return left, right
 
 
 @task(returns=Leaf)
@@ -182,17 +182,17 @@ def compute_split(tree_path, sample, features, path, y):
     return node, left_group, right_group
 
 
+def flush_nodes(file_out, nodes_to_persist):
+    flush_nodes_task(file_out, *nodes_to_persist)
+    del nodes_to_persist[:]
+
+
 @task(file_out=FILE_INOUT)
 def flush_nodes_task(file_out, *nodes_to_persist):
     print('@task flush_nodes_task')
     with open(file_out, "a") as tree_file:
         for node in nodes_to_persist:
             tree_file.write(node.to_json() + '\n')
-
-
-def flush_nodes(file_out, nodes_to_persist):
-    flush_nodes_task(file_out, *nodes_to_persist)
-    del nodes_to_persist[:]
 
 
 class DecisionTree:
