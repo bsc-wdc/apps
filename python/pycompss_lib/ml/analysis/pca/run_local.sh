@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
   # Define script directory for relative calls
-  scriptDir=$(dirname $0)
+  scriptDir=$(pwd)
 
   # Set common arguments
   jobDependency=None
@@ -9,9 +9,11 @@
   executionTime=5
   tasksPerNode=16
   tracing=false
-  
+
   # Set arguments
-  appArgs="1000 8 10"
+  appArgs="1000 3 3"
 
   # Execute specific version launch
-  ${scriptDir}/1_base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  cd 1_base
+  ./run_local.sh $tracing $appArgs
+  cd ..
