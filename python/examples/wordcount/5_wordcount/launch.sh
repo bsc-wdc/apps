@@ -33,8 +33,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing datasetPath multipleFiles blockSize
+#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing datasetPath multipleFiles
 #
 # Example:
-#       ./launch.sh None 2 5 16 false /gpfs/projects/bsc19/COMPSs_DATASETS/wordcount/data/dataset_64f_16mb True 10000
+#       ./launch.sh None 2 5 16 false /gpfs/projects/bsc19/COMPSs_DATASETS/wordcount/data/dataset_64f_16mb True
 #

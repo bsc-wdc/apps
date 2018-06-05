@@ -17,14 +17,18 @@
 
 # -*- coding: utf-8 -*-
 
-'''Wordcount self read'''
+"""wordcount self read"""
+
+import sys
+import os
+import time
 from pycompss.api.task import task
 from pycompss.api.parameter import *
 from collections import defaultdict
 
 
 @task(returns=dict, file=FILE_IN, priority=True)
-def wordCount(file):
+def wordcount(file):
     """ Perform a wordcount of a file.
     :param fle: Absolute path of the file to process.
     :return: dictionary with the appearance of each word.
@@ -38,17 +42,17 @@ def wordCount(file):
     return result
 
 
-@task(returns=dict, pathFile=FILE_IN, priority=True)
-def wordCountBlock(pathFile, start, sizeBlock):
+@task(returns=dict, path_file=FILE_IN, priority=True)
+def wordcount_block(path_file, start, block_size):
     """ Perform a wordcount of a portion of a file.
-    :param pathFile: Absolute path of the file to process.
-    :param start: Wordcount starting point.
-    :param sizeBlock: Block to process size in bytes.
+    :param path_file: Absolute path of the file to process.
+    :param start: wordcount starting point.
+    :param block_size: Block to process size in bytes.
     :return: dictionary with the appearance of each word.
     """
-    fp = open(pathFile)
+    fp = open(path_file)
     fp.seek(start)
-    block = fp.read(sizeBlock)
+    block = fp.read(block_size)
     fp.close()
     data = block.strip().split(" ")
     result = defaultdict(int)
@@ -64,74 +68,73 @@ def reduce(dic1, dic2):
     :param b: dictionary.
     :return: dictionary result of merging a and b.
     """
-    for k, v in dic1.iteritems():
+    for k, v in dic1.items():
         dic2[k] += v
-    # This is destructive regarding dic2, but the algorithm
-    # knows that it becomes irrelevant.
     return dic2
 
 
-def mergeReduce(function, data):
+def merge_reduce(f, data):
     """ Apply function cumulatively to the items of data,
         from left to right in binary tree structure, so as to
         reduce the data to a single value.
-    :param function: function to apply to reduce data
+    :param f: function to apply to reduce data
     :param data: List of items to be reduced
     :return: result of reduce the data to a single value
     """
     from collections import deque
-    q = deque(xrange(len(data)))
+    q = deque(range(len(data)))
     while len(q):
         x = q.popleft()
         if len(q):
             y = q.popleft()
-            data[x] = function(data[x], data[y])
+            data[x] = f(data[x], data[y])
             q.append(x)
         else:
             return data[x]
 
 
-if __name__ == "__main__":
-    import sys
-    import os
-    import time
-    pathFile = sys.argv[1]
+def main():
+    from pycompss.api.api import compss_wait_on
+
+    path_file = sys.argv[1]
     multipleFiles = sys.argv[2]
     if multipleFiles == "False":
         # All text is in a unique text file (need block size).
-        sizeBlock = int(sys.argv[3])
+        block_size = int(sys.argv[3])
 
-    print "Wordcount:"
-    print "Path: %s" % (pathFile)
-    print "Multiple files?: %s" % (multipleFiles)
+    print("wordcount:")
+    print("Path: %s" % path_file)
+    print("Multiple files?: %s" % multipleFiles)
     if multipleFiles == "False":
-        print "Block size: %d" % (sizeBlock)
+        print("Block size: %d" % block_size)
 
     start = time.time()
-    from pycompss.api.api import compss_wait_on
 
-    partialResult = []
-
+    partial_result = []
     if multipleFiles == "False":
         # Process only one file.
         # Tasks will process chunks of the file.
-        data = open(pathFile)
+        data = open(path_file)
         data.seek(0, 2)
         file_size = data.tell()
         ind = 0
         while ind < file_size:
-            partialResult.append(wordCountBlock(pathFile, ind, sizeBlock))
-            ind += sizeBlock
+            partial_result.append(wordcount_block(path_file, ind, block_size))
+            ind += block_size
     else:
         # Process multiple files.
         # Each file will be processed by a task.
-        for fileName in os.listdir(pathFile):
-            partialResult.append(wordCount(pathFile + fileName))
+        for fileName in os.listdir(path_file):
+            partial_result.append(wordcount(path_file + fileName))
 
-    result = mergeReduce(reduce, partialResult)
+    result = merge_reduce(reduce, partial_result)
 
     result = compss_wait_on(result)
     elapsed = time.time()-start
 
-    print "Elapsed Time: ", elapsed
+    print("Elapsed Time: ", elapsed)
     # print result
+
+
+if __name__ == "__main__":
+    main()
