@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -lt "1" ]; then
-  $1="1_compssify"
+  $1="1_base"
 fi
 
 

@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # Define script variables
-NGSA_MINI_HOME="/gpfs/projects/bsc19/COMPSs_APPS/ngsa_mini/ngsa-mini-py/2_compssify_buckets"
+NGSA_MINI_HOME="/gpfs/projects/bsc19/COMPSs_APPS/ngsa_mini/ngsa-mini-py/2_base_buckets"
 INPUT_PATH="/gpfs/projects/bsc19/COMPSs_DATASETS/ngsa_mini"
 execFile=${NGSA_MINI_HOME}/src/workflow.py
 appClasspath=${NGSA_MINI_HOME}/src
