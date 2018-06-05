@@ -13,16 +13,20 @@ wordcount
 
 == Versions ==
 * - 1_base: base version
-* - 2_merge: Improve 
+* - 2_merge: Improve
 * - 3_files: files
 * - 4_in: in objects
-* - 5_wordcount: stable version
-* - 6_tutorial: simpler version                                                                                                                    
-== Execution instructions ==                                                                                        
-Usage:                                                                                                                             
-wc_merge.py <datasetPath>                                                      
-                                                                                                                    
-where:                                                                                                              
-                 * - datasetPath: datasetPath                                                                                                                                                                          
-== Build ==                                                                                                         
+* - 5_wordcount: stable version (latest)
+* - 6_tutorial: simpler version for tutorial purposes
+
+== Execution instructions ==
+Usage:
+wordcount.py <datasetPath> <multipleFiles> <blockSize>
+
+where:
+                 * - datasetPath: dataset path/file
+                 * - multipleFiles: boolean (True if multiple files, False on the contrary)
+                 * - blockSize: block size (only needed if only one file)
+
+== Build ==
 No build is required

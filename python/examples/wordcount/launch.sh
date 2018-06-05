@@ -11,7 +11,7 @@
   tracing=true
   
   # Set arguments
-  appArgs="/gpfs/projects/bsc19/COMPSs_DATASETS/wordcount/data/dataset_64f_16mb"
+  appArgs="/gpfs/projects/bsc19/COMPSs_DATASETS/wordcount/data/dataset_64f_16mb True"
 
-  # Execute specifcversion launch  
-  ${scriptDir}/6_tutorial/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  # Execute specific version launch
+  ${scriptDir}/5_wordcount/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs

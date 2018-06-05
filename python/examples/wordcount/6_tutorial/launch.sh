@@ -23,9 +23,6 @@
     --num_nodes=$numNodes \
     --exec_time=$executionTime \
     --tasks_per_node=$tasksPerNode \
-    --master_working_dir=. \
-    --worker_working_dir=scratch \
-    --library_path=/gpfs/apps/MN3/INTEL/mkl/lib/intel64 \
     --tracing=$tracing \
     --graph=true \
     --classpath=$appClasspath \
@@ -37,7 +34,7 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing m nip#         a b 
+#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing datasetPath
 #
 # Example:
 #       ./launch.sh None 2 5 16 false /gpfs/projects/bsc19/COMPSs_DATASETS/wordcount/data/dataset_64f_16mb
