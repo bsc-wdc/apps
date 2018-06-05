@@ -14,4 +14,4 @@ Example usage:
 ./launch.sh None 2 5 True /gpfs/projects/bsc19/COMPSs_APPS/sortNumbers/data/Random6000.txt 5 600
 
 # Local (run the generator consider the output path for running):
-./run.sh True /path/to/dataset.txt 5 600
+./run_local.sh True /path/to/dataset.txt 5 600
