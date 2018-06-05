@@ -2,7 +2,7 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/sort.py
+  execFile=src/sort.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 

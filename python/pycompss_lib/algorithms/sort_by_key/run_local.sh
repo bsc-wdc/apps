@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
   # Define script directory for relative calls
-  scriptDir=$(pwd)/$(dirname $0)
+  scriptDir=$(pwd)
 
   # Set common arguments
   num_records=1000
@@ -21,13 +21,17 @@
   # appArgs="${storage_location}"
 
   # Execute specific version launch
-  # 1_base/run.sh $tracing $appArgs
-  # 2_hash/run.sh $tracing $appArgs
-  # 3_files/run.sh $tracing $appArgs
-  # 4_sortNumpy/run.sh $tracing $appArgs
-  # 5_sortTotal/run.sh $tracing $appArgs
+  # cd 1_base
+  # cd 2_hash
+  # cd 3_files
+  # cd 4_sortNumpy
+  # cd 5_sortTotal
+  # ./run_local.sh $tracing $appArgs
+  # cd ..
 
   # Set arguments
   appArgs="${num_records} ${unique_keys} ${key_length} ${unique_values} ${value_length} ${num_partitions} ${random_seed} True ${storage_location}"
 
-  6_sortByKey/run.sh $tracing $appArgs
+  cd 6_sortByKey
+  ./run_local.sh $tracing $appArgs
+  cd ..
