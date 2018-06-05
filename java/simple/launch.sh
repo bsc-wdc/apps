@@ -44,6 +44,3 @@ We found these versions on the directory:
   	cd ${scriptDir}/${appDir}
 	./launch.sh $runcompssOpts $appArgs
   fi
-
-
-

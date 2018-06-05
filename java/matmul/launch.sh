@@ -59,7 +59,7 @@
   # where:
   #               * - MSIZE: Number of blocks of the matrix
   #               * - BSIZE: Number of elements per block
-  #               * - SEED: Integer for random seed
+  #               * - PATH_TO_DATASET_FOLDER: Folder where matrices A and B are stored in files
 
   # Arguments for randobjects and randfiles:
   #   <MSIZE> <BSIZE> <SEED>
