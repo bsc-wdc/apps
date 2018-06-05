@@ -32,7 +32,6 @@ def main():
 
     for i in range(num_files):
         text_size = 0
-        text = ""
         file_name = "file{}.txt".format(i)
         path = os.path.join(dataset_path, file_name)
         with open(path, 'w') as f:
