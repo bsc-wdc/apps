@@ -17,6 +17,6 @@
 
 # -*- coding: utf-8 -*-
 
-from linear_regression.base.src import LinearRegression
+from linear_regression.4_apps_objects.srclinearRegression import linear_regression
 
-__all__ = ['LinearRegression']
+__all__ = ['linear_regression']
