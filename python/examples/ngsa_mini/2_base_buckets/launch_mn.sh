@@ -1,12 +1,12 @@
 #!/bin/bash -e
 
 # Define script variables
-NGSA_MINI_HOME="/gpfs/projects/bsc19/COMPSs_APPS/ngsa_mini/ngsa-mini-py"
+NGSA_MINI_HOME="/gpfs/projects/bsc19/COMPSs_APPS/ngsa_mini/ngsa-mini-py/2_base_buckets"
 INPUT_PATH="/gpfs/projects/bsc19/COMPSs_DATASETS/ngsa_mini"
-execFile=${NGSA_MINI_HOME}/1_compssify/src/workflow.py
-appClasspath=${NGSA_MINI_HOME}/1_compssify/src
-appPythonpath=${NGSA_MINI_HOME}/1_compssify/src
-WORK_DIR=${NGSA_MINI_HOME}/1_compssify/work_compss
+execFile=${NGSA_MINI_HOME}/src/workflow.py
+appClasspath=${NGSA_MINI_HOME}/src
+appPythonpath=${NGSA_MINI_HOME}/src
+WORK_DIR=${NGSA_MINI_HOME}/work_compss
 
 # Just in case, remove previous output data
 rm -rf time.txt
@@ -23,18 +23,22 @@ if [ $n -eq "16" ]; then
   input_folder=${INPUT_PATH}/work/wfinput_16_16000000
   num_nodes=2
   max_time=40
+  BUCKETS=32
 elif [ $n -eq "32" ]; then
   input_folder=${INPUT_PATH}/work/wfinput_32_32000000
   num_nodes=4
   max_time=80
+  BUCKETS=64
 elif [ $n -eq "64" ]; then
   input_folder=${INPUT_PATH}/work/wfinput_64_64000000
   num_nodes=8
   max_time=160
+  BUCKETS=128
 else
   input_folder=${INPUT_PATH}/work/wfinput_08_8000000
   num_nodes=1
   max_time=20
+  BUCKETS=16
 fi
 
 echo "Calling NGSA-mini with "${n}" tasks and "${num_nodes}" nodes"
@@ -61,7 +65,7 @@ enqueue_compss \
   ${INPUT_PATH}/reference.fa.fai \
   $input_folder \
   $WORK_DIR \
-  $n
+  $n $BUCKETS
 
 #### HOW TO EXECUTE
 # 

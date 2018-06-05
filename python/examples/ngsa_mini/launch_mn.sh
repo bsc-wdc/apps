@@ -1,3 +1,3 @@
 #!/bin/bash -e
 
-./1_compssify/launch.sh "$@"
+./1_base/launch.sh "$@"
