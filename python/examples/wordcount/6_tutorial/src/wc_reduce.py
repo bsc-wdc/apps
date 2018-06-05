@@ -20,7 +20,6 @@
 import sys
 import os
 from pycompss.api.task import task
-from pycompss.api.parameter import *
 
 
 @task(returns=list)
@@ -37,18 +36,18 @@ def read_file(file_path):
 
 
 @task(returns=dict)
-def wordCount(data):
-    """ Construct a frequency word dictorionary from a list of words.
+def wordcount(data):
+    """ Construct a frequency word dictionary from a list of words.
     :param data: a list of words
     :return: a dictionary where key=word and value=#appearances
     """
-    partialResult = {}
+    partial_result = {}
     for entry in data:
-        if entry in partialResult:
-            partialResult[entry] += 1
+        if entry in partial_result:
+            partial_result[entry] += 1
         else:
-            partialResult[entry] = 1
-    return partialResult
+            partial_result[entry] = 1
+    return partial_result
 
 
 @task(returns=dict, priority=True)
@@ -70,26 +69,25 @@ if __name__ == "__main__":
     from pycompss.api.api import compss_wait_on
 
     # Get the dataset path
-    pathDataset = sys.argv[1]
+    dataset_path = sys.argv[1]
 
     # Construct a list with the file's paths from the dataset
     paths = []
-    for fileName in os.listdir(pathDataset):
-        paths.append(os.path.join(pathDataset, fileName))
+    for fileName in os.listdir(dataset_path):
+        paths.append(os.path.join(dataset_path, fileName))
 
-    # Read file's content
-    data = map(read_file, paths)
-
-    # From all file's data execute a wordcount on it
-    partialResult = map(wordCount, data)
-
-    # Accumulate the partial results to get the final result.
-    result = reduce(merge_two_dicts, partialResult)
+    # Read file's content execute a wordcount on each of them
+    result = {}
+    for p in paths:
+        data = read_file(p)
+        partial_result = wordcount(data)
+        # Accumulate the partial results to get the final result.
+        result = merge_two_dicts(result, partial_result)
 
     # Wait for result
     result = compss_wait_on(result)
 
-    print "Result:"
+    print("Result:")
     from pprint import pprint
     pprint(result)
-    print "Words: {}".format(sum(result.values()))
+    print("Words: {}".format(sum(result.values())))

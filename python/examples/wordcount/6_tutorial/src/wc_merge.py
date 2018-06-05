@@ -37,18 +37,18 @@ def read_file(file_path):
 
 
 @task(returns=dict)
-def wordCount(data):
-    """ Construct a frequency word dictorionary from a list of words.
+def wordcount(data):
+    """ Construct a frequency word dictionary from a list of words.
     :param data: a list of words
     :return: a dictionary where key=word and value=#appearances
     """
-    partialResult = {}
+    partial_result = {}
     for entry in data:
-        if entry in partialResult:
-            partialResult[entry] += 1
+        if entry in partial_result:
+            partial_result[entry] += 1
         else:
-            partialResult[entry] = 1
-    return partialResult
+            partial_result[entry] = 1
+    return partial_result
 
 
 @task(returns=dict, priority=True)
@@ -66,21 +66,21 @@ def merge_two_dicts(dic1, dic2):
     return dic1
 
 
-def mergeReduce(function, data):
+def merge_reduce(f, data):
     """ Apply function cumulatively to the items of data,
         from left to right in binary tree structure, so as to
         reduce the data to a single value.
-    :param function: function to apply to reduce data
+    :param f: function to apply to reduce data
     :param data: List of items to be reduced
     :return: result of reduce the data to a single value
     """
     from collections import deque
-    q = deque(xrange(len(data)))
+    q = deque(list(range(len(data))))
     while len(q):
         x = q.popleft()
         if len(q):
             y = q.popleft()
-            data[x] = function(data[x], data[y])
+            data[x] = f(data[x], data[y])
             q.append(x)
         else:
             return data[x]
@@ -90,27 +90,26 @@ if __name__ == "__main__":
     from pycompss.api.api import compss_wait_on
 
     # Get the dataset path
-    pathDataset = sys.argv[1]
+    dataset_path = sys.argv[1]
 
     # Construct a list with the file's paths from the dataset
     paths = []
-    for fileName in os.listdir(pathDataset):
-        paths.append(os.path.join(pathDataset, fileName))
+    for fileName in os.listdir(dataset_path):
+        paths.append(os.path.join(dataset_path, fileName))
 
-    # Read file's content
-    data = map(read_file, paths)
-
-    # From all file's data execute a wordcount on it
-    partialResult = map(wordCount, data)
+    # Read file's content execute a wordcount on each of them
+    partial_result = []
+    for p in paths:
+        data = read_file(p)
+        partial_result.append(wordcount(data))
 
     # Accumulate the partial results to get the final result.
-    result = mergeReduce(merge_two_dicts, partialResult)
+    result = merge_reduce(merge_two_dicts, partial_result)
 
     # Wait for result
     result = compss_wait_on(result)
 
-    print "Result:"
+    print("Result:")
     from pprint import pprint
     pprint(result)
-    print "Words: {}".format(sum(result.values()))
-
+    print("Words: {}".format(sum(result.values())))
