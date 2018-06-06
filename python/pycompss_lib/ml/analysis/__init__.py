@@ -17,6 +17,6 @@
 
 # -*- coding: utf-8 -*-
 
-from pca.1_base.src.pca import pca
+from pca.base.src.pca import pca
 
 __all__ = ['pca']

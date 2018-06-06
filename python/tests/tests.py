@@ -16,7 +16,7 @@ class ImportTests(unittest.TestCase):
         from pycompss_lib.ml.clustering import DBScan
 
     def test_import_pca(self):
-        from pycompss_lib.ml.analysis import PCA
+        from pycompss_lib.ml.analysis import pca
 
     def test_import_cholesky(self):
         from pycompss_lib.math.linalg import cholesky

@@ -17,11 +17,11 @@
 
 # -*- coding: utf-8 -*-
 
-from analysis.pca.1_base.src import pca
+from analysis.pca.base.src import pca
 from classification.csvm.base.src.cascadesvm import CascadeSVM
 from classification.random_forest.base.forest.rf_sklearn_trees import RandomForestClassifier
 from clustering.kmeans.base.src.kmeans import Kmeans
 from clustering.dbscan.base.DBSCAN.DBSCAN import DBScan
-from linear_regression.4_apps_objects.src import linearRegression
+from regression.linear_regression.apps_objects.src import linearRegression
 
 __all__ = ['pca', 'CascadeSVM', 'RandomForestClassifier', 'Kmeans', 'DBScan', 'linearRegression']
