@@ -35,7 +35,7 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch jobDependency numNodes executionTime tasksPerNode tracing m nip#         a b 
+#       ./launch jobDependency numNodes executionTime tasksPerNode tracing numInd sizeInd target cycles
 #
 # Example:
 #       ./launch None 2 5 16 false 100 100 200 10

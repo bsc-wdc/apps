@@ -82,7 +82,7 @@ if __name__ == "__main__":
     st = time.time()
     p = genPopulation(N, size)
     et = time.time()
-    print "genPopulation: Ellapsed Time {} (s)".format(et-st)
+    print "genPopulation: Elapsed Time {} (s)".format(et-st)
     #fitnessHistory = [grade(p, x)]
     for i in xrange(lifeCycles):
         p = evolve(p, x)
@@ -91,7 +91,7 @@ if __name__ == "__main__":
         p = compss_wait_on(p)
         print p
         #fitnessHistory = grade(p,x)
-        print "genAlgorithm: Ellapsed Time {} (s)".format(time.time()-et)
+        print "genAlgorithm: Elapsed Time {} (s)".format(time.time()-et)
         #print "final fitness: {}".format(fitnessHistory)
     
     #print p
