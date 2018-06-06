@@ -9,7 +9,7 @@ from six.moves import range
 from collections import Counter
 
 import numpy as np
-from math import sqrt
+from math import sqrt, floor
 from pandas import read_csv
 from pycompss.api.task import task
 
@@ -72,79 +72,80 @@ def get_y(path):
 
 
 def gini_index(counter, size):
-    return 1 - sum((counter[key]/size)**2 for key in counter)
+    return 1 - sum((counter[key] / size) ** 2 for key in counter)
 
 
 # Maximizing the Gini gain is equivalent to minimizing this weighted_sum
 def gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size):
     weighted_sum = 0
     if l_size:
-        weighted_sum += l_size*gini_index(l_frequencies, l_size)
+        weighted_sum += l_size * gini_index(l_frequencies, l_size)
     if r_size:
-        weighted_sum += r_size*gini_index(r_frequencies, r_size)
+        weighted_sum += r_size * gini_index(r_frequencies, r_size)
     return weighted_sum
 
 
 @task(returns=tuple)
-def test_splits(sample, feature, y):
+def test_splits(sample, y, feature_indices, *features):
     print("@task test_splits")
-    sort_indices = feature[sample].argsort().values
-    # print ("sort_indices: " + str(sort_indices))
-    # print("sort_sample: \t" + str([sample[i] for i in sort_indices]))
-    # print("sort_features: \t" + str([feature[sample[i]] for i in sort_indices]))
-    # print("sort_classes: \t" + str([y[sample[i]] for i in sort_indices]))
-    l_frequencies = Counter()
-    l_size = 0
-    r_frequencies = Counter(y[sample])
-    r_size = len(sample)
     min_score = sys.float_info.max
     b_value = None
-    for k in range(len(sort_indices)):
-        i = sort_indices[k]
-        s = sample[i]
-        l_frequencies[y[s]] += 1
-        r_frequencies[y[s]] -= 1
-        l_size += 1
-        r_size -= 1
-        try:
-            s_next = sample[sort_indices[k+1]]
-            if y[s] == y[s_next]:
-                continue
-        except IndexError:  # Last element
-            pass
-        score = gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size)
-        if score < min_score:
-            min_score = score
+    b_index = None
+    for t in range(len(feature_indices)):
+        feature = features[t]
+        sort_indices = feature[sample].argsort().values
+        # print ("sort_indices: " + str(sort_indices))
+        # print("sort_sample: \t" + str([sample[i] for i in sort_indices]))
+        # print("sort_features: \t" + str([feature[sample[i]] for i in sort_indices]))
+        # print("sort_classes: \t" + str([y[sample[i]] for i in sort_indices]))
+        l_frequencies = Counter()
+        l_size = 0
+        r_frequencies = Counter(y[sample])
+        r_size = len(sample)
+        for k in range(len(sort_indices)):
+            i = sort_indices[k]
+            s = sample[i]
+            l_frequencies[y[s]] += 1
+            r_frequencies[y[s]] -= 1
+            l_size += 1
+            r_size -= 1
             try:
                 s_next = sample[sort_indices[k + 1]]
-                b_value = (feature[s] + feature[s_next])/2
+                if y[s] == y[s_next]:
+                    continue
             except IndexError:  # Last element
-                b_value = np.float64(np.inf)
-    return min_score, b_value
+                pass
+            score = gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size)
+            if score < min_score:
+                min_score = score
+                b_index = feature_indices[t]
+                try:
+                    s_next = sample[sort_indices[k + 1]]
+                    b_value = (feature[s] + feature[s_next]) / 2
+                except IndexError:  # Last element
+                    b_value = np.float64(np.inf)
+    return min_score, b_value, b_index
 
 
 @task(priority=True, returns=(Node, int, float))
-def get_best_split(tree_path, features, *scores_and_values):
+def get_best_split(tree_path, sample, path, *scores_and_values_and_indices):
     print("@task get_best_split")
     min_score = sys.float_info.max
     b_index = None
     b_value = None
-    for i in range(len(scores_and_values)):
-        score, value = scores_and_values[i]
+    for i in range(len(scores_and_values_and_indices)):
+        score, value, index = scores_and_values_and_indices[i]
         if score < min_score:
             min_score = score
-            b_index = i
             b_value = value
-    if b_index is None:
-        b_feature = None
-    else:
-        b_feature = features[b_index]
+            b_index = index
     if b_value is not None:
         b_value = b_value.item()
-    return Node(tree_path, b_feature, b_value), b_feature, b_value
+    node = Node(tree_path, b_index, b_value)
+    left_group, right_group = get_groups(sample, path, b_index, b_value)
+    return node, left_group, right_group
 
 
-@task(priority=True, returns=(list, list))
 def get_groups(sample, path, index, value):
     print("@task get_groups")
     left = []
@@ -171,14 +172,17 @@ def build_leaf(sample, y, tree_path):
     return Leaf(tree_path, len(sample), frequencies, mode)
 
 
-def compute_split(tree_path, sample, features, path, y):
+def compute_split(tree_path, sample, depth, n_instances, features, path, y):
     n_features = len(features)
     index_selection = feature_selection(n_features)
-    scores_and_values = []
-    for i in index_selection:
-        scores_and_values.append(test_splits(sample, features[i], y))
-    node, index, value = get_best_split(tree_path, index_selection, *scores_and_values)
-    left_group, right_group = get_groups(sample, path, index, value)
+    chunk = max(1, int(floor(10000 * 2 ** (depth - 1) / n_instances)))
+    scores_and_values_and_indices = []
+    while (len(index_selection)) > 0:
+        indices_to_test = index_selection[:chunk]
+        index_selection = index_selection[chunk:]
+        scores_and_values_and_indices.append(
+            test_splits(sample, y, indices_to_test, *[features[i] for i in indices_to_test]))
+    node, left_group, right_group = get_best_split(tree_path, sample, path, *scores_and_values_and_indices)
     return node, left_group, right_group
 
 
@@ -228,7 +232,8 @@ class DecisionTree:
         nodes_to_persist = []
         while nodes_to_split:
             tree_path, sample, depth = nodes_to_split.pop()
-            node, left_group, right_group = compute_split(tree_path, sample, features, self.path_in, y)
+            node, left_group, right_group = compute_split(tree_path, sample, depth, self.n_instances, features,
+                                                          self.path_in, y)
             nodes_to_persist.append(node)
             if depth < max_depth:
                 nodes_to_split.append((tree_path + 'R', right_group, depth + 1))
