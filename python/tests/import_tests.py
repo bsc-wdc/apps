@@ -40,6 +40,10 @@ class ImportTests(unittest.TestCase):
         from pycompss_lib.algorithms import sort_by_key
 
 
+class ResultsTest(unittest.TestCase):
+
+    def test_cascadecsvm(self):
+        from pycompss_lib.ml.classification import CascadeSVM
 
 
 def main():
