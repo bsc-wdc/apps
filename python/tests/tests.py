@@ -41,9 +41,22 @@ class ImportTests(unittest.TestCase):
 
 
 class ResultsTest(unittest.TestCase):
+    #import pycompss.interactive as ipycompss
+    #ipycompss.start(graph=False, trace=False, debug=False)
+    #ipycompss.start(graph=True, trace=True, debug=True, project_xml='../project.xml', resources_xml='../resources.xml')
 
     def test_cascadecsvm(self):
         from pycompss_lib.ml.classification import CascadeSVM
+
+    def test_import_max_norm(self):
+        from pycompss_lib.algorithms import max_norm
+        
+        points, dimensions, fragments, seed = 16000, 3, 16, 666
+        expected_output = 17137.68885398087
+
+        result = max_norm(points, dimensions, fragments, seed)
+
+        self.assertEqual(result, expected_output)
 
 
 def main():
