@@ -6,9 +6,9 @@ Computing grou that can be executed at MareNostrum III.
 Its purpose is to share the applications among all the members of the group to ease
 debugging, testing executions or benchmarking executions. Thus, please, when a new
 application is uploaded to the folder, recall setting the file permissions to be 
-accessible for all the members of the group (recommended rwxrwxr-x).
+accessible for all the members of the group (recommended `rwxrwxr-x`).
 
-$ chmod -R 775 *
+```$ chmod -R 775 *```
 
 
 ## Application's Folder Structure 
@@ -17,6 +17,7 @@ Each application has a unique folder that hosts all the versions for that applic
 For instance, the matmul application that has version for PyCOMPSs, COMPSs with files,
 COMPSs using objects and COMPSs with byte arrays and has the following tree directory.
 
+```
 COMPSs_APPS
   |- matmul
   |    |- python
@@ -36,6 +37,7 @@ COMPSs_APPS
   |    |- c
   |    	  |- ...
   |- ...
+```
 
 **REMINDER**: For each language there **must** be **one** launch.sh and **one** clean.sh script
           that executes the **stable** (base) version of that language. This script is used by
