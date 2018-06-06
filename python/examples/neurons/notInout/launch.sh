@@ -2,7 +2,7 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/ns-data-proc_compss_objects.py
+  execFile=${scriptDir}/src/neurons.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 

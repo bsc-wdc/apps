@@ -6,14 +6,12 @@
   # Set common arguments
   jobDependency=None
   numNodes=2
-  executionTime=15
+  executionTime=30
   tasksPerNode=16
   tracing=false
   
   # Set arguments
-  appArgs="1024 /gpfs/projects/bsc19/COMPSs_DATASETS/neurons/spikes.dat"
+  appArgs="1024 data/spikes.dat"
 
   # Execute specifcversion launch  
-  ${scriptDir}/notInout/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
-
-
+  ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
