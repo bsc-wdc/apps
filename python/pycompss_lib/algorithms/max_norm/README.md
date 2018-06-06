@@ -1,7 +1,8 @@
 This is the Readme for:
-max
 
-[Name]: max
+max_norm
+
+[Name]: max_norm
 [Contact Person]: support-compss@bsc.es
 [Access Level]: public
 [License Agreement]: Apache2
@@ -12,7 +13,7 @@ max
 max
 
 == Versions ==
-* - 1_base: base version
+* - base: base version
  
 == Execution instructions ==                                                                                        
 Usage:                                                                                                                             
