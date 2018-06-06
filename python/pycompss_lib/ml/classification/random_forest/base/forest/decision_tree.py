@@ -85,6 +85,38 @@ def gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size):
     return weighted_sum
 
 
+def test_split(sample, y, feature):
+    min_score = sys.float_info.max
+    b_value = None
+    sort_indices = feature[sample].argsort().values
+    l_frequencies = Counter()
+    l_size = 0
+    r_frequencies = Counter(y[sample])
+    r_size = len(sample)
+    for k in range(len(sort_indices)):
+        i = sort_indices[k]
+        s = sample[i]
+        l_frequencies[y[s]] += 1
+        r_frequencies[y[s]] -= 1
+        l_size += 1
+        r_size -= 1
+        try:
+            s_next = sample[sort_indices[k + 1]]
+            if y[s] == y[s_next]:
+                continue
+        except IndexError:  # Last element
+            pass
+        score = gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size)
+        if score < min_score:
+            min_score = score
+            try:
+                s_next = sample[sort_indices[k + 1]]
+                b_value = (feature[s] + feature[s_next]) / 2
+            except IndexError:  # Last element
+                b_value = np.float64(np.inf)
+    return min_score, b_value
+
+
 @task(returns=tuple)
 def test_splits(sample, y, feature_indices, *features):
     print("@task test_splits")
@@ -93,37 +125,11 @@ def test_splits(sample, y, feature_indices, *features):
     b_index = None
     for t in range(len(feature_indices)):
         feature = features[t]
-        sort_indices = feature[sample].argsort().values
-        # print ("sort_indices: " + str(sort_indices))
-        # print("sort_sample: \t" + str([sample[i] for i in sort_indices]))
-        # print("sort_features: \t" + str([feature[sample[i]] for i in sort_indices]))
-        # print("sort_classes: \t" + str([y[sample[i]] for i in sort_indices]))
-        l_frequencies = Counter()
-        l_size = 0
-        r_frequencies = Counter(y[sample])
-        r_size = len(sample)
-        for k in range(len(sort_indices)):
-            i = sort_indices[k]
-            s = sample[i]
-            l_frequencies[y[s]] += 1
-            r_frequencies[y[s]] -= 1
-            l_size += 1
-            r_size -= 1
-            try:
-                s_next = sample[sort_indices[k + 1]]
-                if y[s] == y[s_next]:
-                    continue
-            except IndexError:  # Last element
-                pass
-            score = gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size)
-            if score < min_score:
-                min_score = score
-                b_index = feature_indices[t]
-                try:
-                    s_next = sample[sort_indices[k + 1]]
-                    b_value = (feature[s] + feature[s_next]) / 2
-                except IndexError:  # Last element
-                    b_value = np.float64(np.inf)
+        score, value = test_split(sample, y, feature)
+        if score < min_score:
+            min_score = score
+            b_index = feature_indices[t]
+            b_value = value
     return min_score, b_value, b_index
 
 
@@ -160,7 +166,6 @@ def get_groups(sample, path, index, value):
     return left, right
 
 
-@task(returns=Leaf)
 def build_leaf(sample, y, tree_path):
     print('@task build_leaf')
     frequencies = Counter(y[sample])
@@ -186,16 +191,33 @@ def compute_split(tree_path, sample, depth, n_instances, features, path, y):
     return node, left_group, right_group
 
 
-def flush_nodes(file_out, nodes_to_persist):
-    flush_nodes_task(file_out, *nodes_to_persist)
+def compute_split_simple(tree_path, sample, n_features, path, y):
+    index_selection = feature_selection(n_features)
+    b_score = sys.float_info.max
+    for index in index_selection:
+        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True)
+        score, value = test_split(sample, y, feature)
+        if score < b_score:
+            b_score, b_value, b_index = score, value, index
+    node = Node(tree_path, b_index, b_value)
+    left_group, right_group = get_groups(sample, path, b_index, b_value)
+    return node, left_group, right_group
+
+
+def flush_nodes(file_out, nodes_to_persist, node_list_to_persist):
+    # Swap positions for unpacking a list of futures:
+    flush_nodes_task(file_out, node_list_to_persist, *nodes_to_persist)
     del nodes_to_persist[:]
 
 
 @task(file_out=FILE_INOUT)
-def flush_nodes_task(file_out, *nodes_to_persist):
+def flush_nodes_task(file_out, node_list_to_persist, *nodes_to_persist):
     print('@task flush_nodes_task')
     with open(file_out, "a") as tree_file:
+        # Swap positions back and persist the nodes:
         for node in nodes_to_persist:
+            tree_file.write(node.to_json() + '\n')
+        for node in node_list_to_persist:
             tree_file.write(node.to_json() + '\n')
 
 
@@ -235,15 +257,41 @@ class DecisionTree:
             node, left_group, right_group = compute_split(tree_path, sample, depth, self.n_instances, features,
                                                           self.path_in, y)
             nodes_to_persist.append(node)
-            if depth < max_depth:
+            if depth < max_depth // 2:
                 nodes_to_split.append((tree_path + 'R', right_group, depth + 1))
                 nodes_to_split.append((tree_path + 'L', left_group, depth + 1))
             else:
-                left = build_leaf(left_group, y, tree_path + 'L')
-                nodes_to_persist.append(left)
+                left_subtree_nodes = build_subtree(left_group, y, tree_path + 'L', max_depth - depth, len(features),
+                                                   self.path_in)
+                flush_nodes(file_out, nodes_to_persist, left_subtree_nodes)
+                # left = build_leaf(left_group, y, tree_path + 'L')
+                # nodes_to_persist.append(left)
 
-                right = build_leaf(right_group, y, tree_path + 'R')
-                nodes_to_persist.append(right)
+                right_subtree_nodes = build_subtree(right_group, y, tree_path + 'R', max_depth - depth, len(features),
+                                                    self.path_in)
+                flush_nodes(file_out, nodes_to_persist, right_subtree_nodes)
+                # right = build_leaf(right_group, y, tree_path + 'R')
+                # nodes_to_persist.append(right)
             if len(nodes_to_persist) >= 10000:
                 flush_nodes(file_out, nodes_to_persist)
-        flush_nodes(file_out, nodes_to_persist)
+        # flush_nodes(file_out, nodes_to_persist, [])
+
+
+@task(returns=list)
+def build_subtree(sample, y, tree_path, max_depth, n_features, path_in):
+    nodes_to_split = [(tree_path, sample, 1)]
+    node_list_to_persist = []
+    while nodes_to_split:
+        tree_path, sample, depth = nodes_to_split.pop()
+        node, left_group, right_group = compute_split_simple(tree_path, sample, n_features, path_in, y)
+        node_list_to_persist.append(node)
+        if depth < max_depth:
+            nodes_to_split.append((tree_path + 'R', right_group, depth + 1))
+            nodes_to_split.append((tree_path + 'L', left_group, depth + 1))
+        else:
+            left = build_leaf(left_group, y, tree_path + 'L')
+            node_list_to_persist.append(left)
+
+            right = build_leaf(right_group, y, tree_path + 'R')
+            node_list_to_persist.append(right)
+    return node_list_to_persist
