@@ -1,4 +1,15 @@
-## Library applications avaialable
+# PyCOMPSs library and examples
+
+## Tests 
+
+To run the pycomss_lib tests issue:
+
+
+`python tests/tests.py`
+
+
+## Library applications available
+
 
 
 ### Pycompss Packages
