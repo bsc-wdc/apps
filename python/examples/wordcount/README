@@ -12,12 +12,12 @@ wordcount
 wordcount
 
 == Versions ==
-* - 1_base: base version
-* - 2_merge: Improve
-* - 3_files: files
-* - 4_in: in objects
-* - 5_wordcount: stable version (latest)
-* - 6_tutorial: simpler version for tutorial purposes
+* - base: base version
+* - merge: Improve
+* - files: files
+* - in: in objects
+* - wordcount: stable version (latest)
+* - tutorial: simpler version for tutorial purposes
 
 == Execution instructions ==
 Usage:

@@ -10,5 +10,5 @@
   appArgs="16 3 0 1"
 
   # Execute specifcversion launch  
-  ${scriptDir}/1_base/run_local.sh $tracing $appArgs
+  ${scriptDir}/base/run_local.sh $tracing $appArgs
 

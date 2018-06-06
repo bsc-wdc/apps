@@ -21,7 +21,7 @@ https://www.wolframalpha.com/input/?i=(sum+from+i+%3D+1+to+M+(sum+from+j+%3D+i+%
 https://www.wolframalpha.com/input/?i=(sum+from+i+%3D+1+to+M+(sum+from+j+%3D+i+%2B+1+to+M+(sum+from+k+%3D+1+to+M+(1))))
 
 == Versions ==
-* - 1_base: distributed initialisation 
+* - base: distributed initialisation
 
 == Execution instructions ==
 Usage:

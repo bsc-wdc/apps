@@ -14,7 +14,7 @@ dividing the domain ([a, b]) in m subintervals using a defined number of
 integration points at each subinterval.
 
 == Versions ==
-* - 1_base: base version
+* - base: base version
 
 == Execution instructions ==
 Usage:

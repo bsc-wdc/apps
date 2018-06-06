@@ -12,7 +12,7 @@ sortByKey
 sortByKey
 
 == Versions ==
-* - 1_base: base version
+* - base: base version
 * - 2_hash: base version with hashed partitioning
 * - 3_files: Sort N files (with pickled content)
 * - 4_sortNumpy: Sort N files (with pickled content) with numpy using mergesort algorithm. Also alternatives for N times.

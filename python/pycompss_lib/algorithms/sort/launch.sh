@@ -13,4 +13,4 @@
   appArgs="/gpfs/projects/bsc19/COMPSs_DATASETS/sortNumbers/Random6000.txt 5 600"
 
   # Execute specific version launch
-  ${scriptDir}/1_base/launch.sh $jobDependency $numNodes $executionTime $tracing $appArgs
+  ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tracing $appArgs

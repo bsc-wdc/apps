@@ -14,6 +14,6 @@
   appArgs="1000 3 3"
 
   # Execute specific version launch
-  cd 1_base
+  cd base
   ./run_local.sh $tracing $appArgs
   cd ..

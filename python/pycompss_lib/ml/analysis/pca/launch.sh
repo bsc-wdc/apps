@@ -14,4 +14,4 @@
   appArgs="1000 8 10"
 
   # Execute specific version launch
-  ${scriptDir}/1_base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs

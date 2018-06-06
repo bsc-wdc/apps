@@ -12,7 +12,7 @@
   appArgs="${numFragments} ${numEntries}"
 
   # Execute specific version launch
-  cd 1_base
-  # cd 2_base_oo
+  cd base
+  # cdbasebase_oo
   ./run_local.sh $tracing $appArgs
   cd ..

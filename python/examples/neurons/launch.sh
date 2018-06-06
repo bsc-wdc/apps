@@ -14,6 +14,6 @@
   appArgs="1024 /gpfs/projects/bsc19/COMPSs_DATASETS/neurons/spikes.dat"
 
   # Execute specifcversion launch  
-  ${scriptDir}/2_notInout/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  ${scriptDir}/notInout/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
 
 

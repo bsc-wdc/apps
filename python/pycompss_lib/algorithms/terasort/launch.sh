@@ -16,5 +16,5 @@
   #  - numEntries   = 100 = number of (k, v) pairs within each fragment
 
   # Execute specifcversion launch
-  # ${scriptDir}/1_base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
-  ${scriptDir}/2_base_oo/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  # ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  ${scriptDir}/base_oo/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs

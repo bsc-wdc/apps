@@ -19,9 +19,9 @@
   # where:
   #             * - propertiesFile: Location of the NMMB properties
   #
-  propertiesFile=${8:-${SCRIPT_DIR}/1_base/JOB/nmmb_compss_MN.properties}
+  propertiesFile=${8:-${SCRIPT_DIR}/base/JOB/nmmb_compss_MN.properties}
 
-  # Version used by default: 1_base
+  # Version used by default: base
   # Execute specifcversion launch  
-  "${SCRIPT_DIR}"/1_base/launch.sh "${jobDependency}" "${numNodes}" "${cpusPerNode}" "${executionTime}" "${tracing}" "${graph}" "${logLevel}" "${propertiesFile}"
+  "${SCRIPT_DIR}"/base/launch.sh "${jobDependency}" "${numNodes}" "${cpusPerNode}" "${executionTime}" "${tracing}" "${graph}" "${logLevel}" "${propertiesFile}"
 

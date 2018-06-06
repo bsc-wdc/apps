@@ -14,4 +14,4 @@
   appArgs="/gpfs/projects/bsc19/COMPSs_DATASETS/wordcount/data/dataset_64f_16mb True"
 
   # Execute specific version launch
-  ${scriptDir}/5_wordcount/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  ${scriptDir}/wordcount/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs

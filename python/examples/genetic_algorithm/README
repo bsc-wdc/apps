@@ -12,7 +12,7 @@ geneticAlgorithm
 GeneticAlgorithm
 
 == Versions ==
-* - 1_base: base version                                                                                                                    
+* - base: base version
 == Execution instructions ==                                                                                        
 Usage:                                                                                                                             
 gen.py <numIndividuals> <sizeIndividual> <Target> <LifeCycles>                                                      

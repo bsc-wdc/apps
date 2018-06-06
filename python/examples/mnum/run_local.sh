@@ -10,4 +10,4 @@
   appArgs="16 4096"
 
   # Execute specific version launch
-  ${scriptDir}/1_base/run_local.sh $tracing $appArgs
+  ${scriptDir}/base/run_local.sh $tracing $appArgs

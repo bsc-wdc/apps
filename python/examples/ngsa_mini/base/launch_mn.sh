@@ -3,10 +3,10 @@
 # Define script variables
 NGSA_MINI_HOME="/gpfs/projects/bsc19/COMPSs_APPS/ngsa_mini/ngsa-mini-py"
 INPUT_PATH="/gpfs/projects/bsc19/COMPSs_DATASETS/ngsa_mini"
-execFile=${NGSA_MINI_HOME}/1_base/src/workflow.py
-appClasspath=${NGSA_MINI_HOME}/1_base/src
-appPythonpath=${NGSA_MINI_HOME}/1_base/src
-WORK_DIR=${NGSA_MINI_HOME}/1_base/work_compss
+execFile=${NGSA_MINI_HOME}/base/src/workflow.py
+appClasspath=${NGSA_MINI_HOME}/base/src
+appPythonpath=${NGSA_MINI_HOME}/base/src
+WORK_DIR=${NGSA_MINI_HOME}/base/work_compss
 
 # Just in case, remove previous output data
 rm -rf time.txt

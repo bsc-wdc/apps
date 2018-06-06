@@ -15,9 +15,9 @@
   find . -type f -name '*tar.gz' -delete
 
   # Application dependant files
-  DIR0=0_initial
-  DIR1=1_base
-  DIR2=2_base_buckets
+  DIR0=initial
+  DIR1=base
+  DIR2=base_buckets
   WORK_DIR=work_compss
 
   rm -r $DIR0/$WORK_DIR/*

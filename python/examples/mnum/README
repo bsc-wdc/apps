@@ -13,7 +13,7 @@ MNUM is a system to solve non-linear equations using iterative methods and
 divided difference.
 
 == Versions ==
-* - 1_base: base version
+* - base: base version
 
 == Execution instructions ==
 Usage:

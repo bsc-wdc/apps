@@ -12,7 +12,7 @@ cholesky
 Cholesky decomposition
 
 == Versions ==
-* - 1_base: distributed initialisation 
+* - base: distributed initialisation
 
 == Execution instructions ==
 Usage:
