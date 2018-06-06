@@ -62,7 +62,7 @@ def main():
     startTime = time.time()
     result = max_norm(numP, dim, numFrag)
     print("The maximum norm is %f" % result)
-    print("Ellapsed Time {} (s)".format(time.time() - startTime))
+    print("Elapsed Time {} (s)".format(time.time() - startTime))
 
 if __name__ == "__main__":
     main()
