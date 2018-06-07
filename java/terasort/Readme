@@ -13,7 +13,7 @@ Sort an input of the form {key, value} by key.
 
 == Versions ==
 There are five versions of terasort
-.
+
 === Version 1 ===
 FILES: This version takes takes the files produced by teragen as input. Has a task that reads and transfers the entire content to all filter tasks.
 === Version 2 ===
@@ -70,11 +70,11 @@ runcompss terasort.random.Sort 4 10 5 4 10 2 1
 
 == Build ==
 === Option 1: Native java ===
-cd ~/workspace_java/terasort/; 
+cd /PATH_TO_JAVA_APPS/terasort/; 
 javac src/main/java/terasort/files/*.java; javac src/main/java/terasort/filesFiltered/*.java; javac src/main/java/terasort/filesFiltered2/*.java; javac src/main/java/terasort/filesFilteredShared/*.java; javac src/main/java/terasort/filesFilteredShared2/*.java; javac src/main/java/terasort/files/*.java;
 cd src/main/java/; jar cf terasort.jar terasort/
-cd ../../../; mv src/main/java/terasort.jar jar/
+cd ../../../; mkdir jar; mv src/main/java/terasort.jar jar/
 
 === Option 2: Maven ===
-cd ~/workspace_java/terasort/
+cd /PATH_TO_JAVA_APPS/terasort/
 mvn clean package

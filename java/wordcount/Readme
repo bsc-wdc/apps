@@ -45,18 +45,18 @@ Where:
 runcompss wordcount.multipleFiles.Wordcount ~/multipleFilesDataset/ ~/outputfolder/ result.txt
 runcompss wordcount.multipleFilesDiffFolders.Wordcount ~/multipleFilesDataset/ ~/outputfolder/ result.txt
 runcompss wordcount.multipleFilesNTimes.Wordcount ~/multipleFilesDataset/ ~/outputfolder/ result.txt 8
-runcompss wordcount.multipleFilesReadWriteTasks.Wordcount ~/multipleFilesDataset ~/outputfolder/ result.txt
+runcompss wordcount.multipleFilesReadWriteTasks.Wordcount ~/multipleFilesDataset/ ~/outputfolder/ result.txt
 runcompss wordcount.uniqueFile.Wordcount ~/singleFileDataset/data.txt ~/outputfolder/ result.txt 1024000
 
 
 == Build ==
 === Option 1: Native java ===
-cd ~/workspace_java/wordcount/; 
+cd /PATH_TO_JAVA_APPS/wordcount/; 
 javac src/main/java/wordcount/multipleFiles/*.java; javac src/main/java/wordcount/multipleFilesDiffFolders/*.java; javac src/main/java/wordcount/multipleFilesNTimes/*.java; javac src/main/java/wordcount/multipleFilesReadWriteTasks/*.java;  javac src/main/java/wordcount/uniqueFile/*.java; 
 
 cd src/main/java/; jar cf wordcount.jar wordcount/
-cd ../../../; mv src/main/java/wordcount.jar jar/
+cd ../../../; mkdir jar; mv src/main/java/wordcount.jar jar/
 
 === Option 2: Maven ===
-cd ~/workspace_java/wordcount/
+cd /PATH_TO_JAVA_APPS/wordcount/
 mvn clean package

@@ -1,0 +1,47 @@
+This is the Readme for:
+NAS Parallel Benchmarks
+
+[Name]: NAS Parallel Benchmarks
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+The NAS parallel benchmarks (NPB) are a set of kernels that evaluate diverse computation and communication patterns, and they are widely used for parallel performance benchmarking. Four of these kernels were implemented in sequential Java to be executed with COMPSs:
+1. Embarrassingly Parallel (EP): a test for computation performance that generates pseudorandom floating point numbers and has few communications.
+2. Fast Fourier Transform (FT): this benchmark tests computation performance by solving a differential equation with FFTs and communication by sending large messages.
+3. Integer Sort (IS): this kernel also tests computation, but especially communication performance. It sorts a large array of integers and is characterised by numerous transfers.
+4. Conjugate Gradiant (CG): it estimates the smallest eigenvalue of a large sparse symmetric positive-definite matrix using the inverse iteration with the conjugate gradient method as a subroutine for solving systems of linear equations.
+
+== Build ==
+=== Option 1: Native java ===
+cd /PATH_TO_JAVA_APPS/npb/; javac src/main/java/npb/*.java
+cd src/main/java/; jar cf npb.jar npb/
+cd ../../../; mkdir jar; mv src/main/java/npb.jar jar/
+
+=== Option 2: Maven ===
+cd /PATH_TO_JAVA_APPS/npb/
+mvn clean package
+
+== Execution Examples ==
+
+To execute the EP test :
+runcompss npb.nasep.NASEP -np (NUMBER OF PROCESSORS) -class (SIZE)
+
+To execute the FT test :
+runcompss npb.nasft.NASFT -np (NUMBER OF PROCESSORS) -class (SIZE)
+
+To execute the IS test :
+runcompss npb.nasis.NASIS -np (NUMBER OF PROCESSORS) -class (SIZE)
+
+To execute the CG test :
+runcompss npb.nascg.NASCG -np (NUMBER OF PROCESSORS) -class (SIZE)
+
+You can specify the number of processors and the class which will finally determine the size of the problem, if you run it without arguments default values will be used. If you pretend to execute it locally, we strongly recommend you to use an 'S' class.
+
+== References ==
+http://www.nas.nasa.gov/Software/NPB/
+
+Last Update Nov. 2014

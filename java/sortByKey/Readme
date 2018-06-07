@@ -42,11 +42,11 @@ runcompss sortByKey.random.Sort 4 10 5 4 10 2 1
 
 == Build ==
 === Option 1: Native java ===
-cd ~/workspace_java/sort_by_key/; 
+cd /PATH_TO_JAVA_APPS/sort_by_key/; 
 javac src/main/java/sortByKey/files/*.java; javac src/main/java/sortByKey/random/*.java;
 cd src/main/java/; jar cf sort_by_key.jar sort_by_key/
-cd ../../../; mv src/main/java/sort_by_key.jar jar/
+cd ../../../; mkdir jar; mv src/main/java/sort_by_key.jar jar/
 
 === Option 2: Maven ===
-cd ~/workspace_java/sort_by_key/
+cd /PATH_TO_JAVA_APPS/sort_by_key/
 mvn clean package

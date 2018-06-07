@@ -41,10 +41,10 @@ java -classpath kmeans_frag.jar kmeans_frag_files.KMeans_frag_files -c 2 -i 10 -
 
 == Build ==
 === Option 1: Native java ===
-cd ~/workspace_java/kmeans_frag/; javac src/main/java/kmeans_frag/*/*.java
+cd /PATH_TO_JAVA_APPS/kmeans_frag/; javac src/main/java/kmeans_frag/*/*.java
 cd src/main/java/; jar cf kmeans_frag.jar kmeans_frag/
-cd ../../../; mv src/main/java/kmeans_frag.jar jar/
+cd ../../../; mkdir jar; mv src/main/java/kmeans_frag.jar jar/
 
 === Option 2: Maven ===
-cd ~/workspace_java/kmeans_frag/
+cd /PATH_TO_JAVA_APPS/kmeans_frag/
 mvn clean package

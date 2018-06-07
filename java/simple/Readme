@@ -20,7 +20,7 @@ cd src/main/java/; jar cf simple.jar simple/
 cd ../../../; mkdir jar; mv src/main/java/simple.jar jar/
 
 === Option 2: Maven ===
-cd ~/workspace_java/simple/
+cd /PATH_TO_JAVA_APPS/simple/
 mvn clean package
 
 == Execution instructions ==

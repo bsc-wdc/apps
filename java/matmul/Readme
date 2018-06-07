@@ -38,9 +38,17 @@ where:
 		 * - SEED: Integer for random seed
 
 == Execution Example ==
-runcompss matmul.input.files.Matmul 4 2 ~/datasets/matmul/
-runcompss -d matmul.randomGen.objects.Matmul 4 2 1
-runcompss -d matmul.randomGen.files.Matmul 4 2 1
+
+1_base:
+v1: runcompss matmul.input.files.Matmul 4 2 ~/datasets/matmul/
+v2: runcompss -d matmul.randomGen.objects.Matmul 4 2 1
+v3: runcompss -d matmul.randomGen.files.Matmul 4 2 1
+
+2_apps:
+v1: runcompss matmul.arrays.Matmul 4 2
+v2: runcompss matmul.files.Matmul 4 2
+v3: runcompss matmul.objects.Matmul 4 2
+
 
 == Dataset generation ==
 The package includes a simple application for dataset generation that can be run by running the following command.
