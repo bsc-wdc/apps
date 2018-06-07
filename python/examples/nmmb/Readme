@@ -9,7 +9,9 @@ NMMB/BSC Dust Preprocess
 
 [Body]
 == Description ==
-The NMMB/BSC Dust application data that is later used as a input for the NMMB/BSC-Dust model, operated by the Earth Sciences Department of the Barcelona Supercomputing Center. This model predicts the atmospheric life cycle of the eroded desert dust for a regional and global domain.
+The NMMB/BSC Dust application data that is later used as a input for the NMMB/BSC-Dust model,
+operated by the Earth Sciences Department of the Barcelona Supercomputing Center.
+This model predicts the atmospheric life cycle of the eroded desert dust for a regional and global domain.
 
 == References ==
  [1] http://www.bsc.es/earth-sciences/mineral-dust/nmmbbsc-dust-forecast

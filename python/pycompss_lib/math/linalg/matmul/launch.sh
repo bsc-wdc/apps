@@ -17,5 +17,5 @@
   MKL_NUM_THREADS=16
 
   # Execute specifcversion launch  
-  ${scriptDir}/2_init_parallel/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $matrixSize $blockSize $computingUnits $MKL_NUM_THREADS
+  ${scriptDir}/init_parallel/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $matrixSize $blockSize $computingUnits $MKL_NUM_THREADS
 

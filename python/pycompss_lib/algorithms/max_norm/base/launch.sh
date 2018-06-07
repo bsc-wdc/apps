@@ -2,7 +2,7 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/max.py
+  execFile=${scriptDir}/src/max_norm.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
@@ -22,9 +22,6 @@
     --num_nodes=$numNodes \
     --exec_time=$executionTime \
     --tasks_per_node=$tasksPerNode \
-    --master_working_dir=. \
-    --worker_working_dir=scratch \
-    --library_path=/gpfs/apps/MN3/INTEL/mkl/lib/intel64 \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
