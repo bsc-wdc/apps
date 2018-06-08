@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package hmmerobj;
+package hmmerws;
 
 import java.io.BufferedInputStream;
 import java.io.EOFException;
@@ -25,11 +25,15 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.LinkedList;
 
+import static dummy.hmmerobj.worker.HmmerObjects.HmmerObjectsPort.HMMPfamDummy.*;
+
 
 public class HMMPfam {
 
     private static final String SEQUENCE = "seqF";
     private static final String DATABASE = "dbF";
+    //private static final String TOTAL_NHMM = "--total_nhmm";
+    //private static final String START_NHMM = " --start_nhmm ";
     private static final String FRAGS_DIR = "/tmp/hmmer_frags";
     // hmmpfam constants
     private static final int ALPHABET_SIZE = 20;
@@ -53,7 +57,7 @@ public class HMMPfam {
 
     private static final String fragsDirName;
     private static final String hmmpfamBin;
-
+    
     private static CommandLineArgs clArgs;
     private static int[] dbFragsNumModels = null;
     private static int totalNumModels = 0;
@@ -122,6 +126,11 @@ public class HMMPfam {
          */
         numSeqFrags = seqFrags.size();
         numDBFrags = dbFrags.size();
+
+        /* Pass the total number of models and the number of models per fragment
+         * if the database is segmented and Z is not defined
+         */
+        // if (numModelsNeeded) clArgs.addArg(TOTAL_NHMM, Integer.toString(totalNumModels));
         String commonArgs = clArgs.getArgs();
 
         int i = 0;
@@ -156,7 +165,7 @@ public class HMMPfam {
             while (neighbor < numSeqFrags) {
                 for (int seq = 0; seq < numSeqFrags; seq += 2 * neighbor) {
                     if (seq + neighbor < numSeqFrags) {
-                        sequences[seq] = HMMPfamImpl.mergeSameDB(sequences[seq], sequences[seq + neighbor]);
+                        sequences[seq] = scoreRatingSameDB(sequences[seq], sequences[seq + neighbor]);
                     }
                 }
                 neighbor *= 2;
@@ -168,7 +177,7 @@ public class HMMPfam {
         while (neighbor < numDBFrags) {
             for (int db = 0; db < numDBFrags; db += 2 * neighbor) {
                 if (db + neighbor < numDBFrags) {
-                    outputs[db][0] = HMMPfamImpl.mergeSameSeq(outputs[db][0], outputs[db + neighbor][0], clArgs.getALimit());
+                    outputs[db][0] = scoreRatingSameSeq(outputs[db][0], outputs[db + neighbor][0], clArgs.getALimit());
                 }
             }
             neighbor *= 2;

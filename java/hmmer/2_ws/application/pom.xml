@@ -3,19 +3,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- GENERAL INFORMATION -->
-    <artifactId>hmmerobj</artifactId>
+    <artifactId>hmmerws</artifactId>
     <packaging>jar</packaging>
     <parent>
         <groupId>es.bsc.compss.apps.java</groupId>
         <artifactId>compss-apps-java</artifactId>
         <version>2.2.rc1803</version>
-        <relativePath>../..</relativePath>
+        <relativePath>../../..</relativePath>
     </parent>
 
     <!-- PROJECT INFORMATION -->
-    <name>Hmmerobj</name>
-    <description>Hmmerobj application</description>
-    <url>http://compss.bsc.es/projects/bar/wiki/application_pages/apps/java/hmmerobj</url>
+    <name>HmmerWS</name>
+    <description>HmmerWS application</description>
+    <url>http://compss.bsc.es/projects/bar/wiki/application_pages/apps/java/hmmerws</url>
     <inceptionYear>2014</inceptionYear>
     <licenses>
         <license>
