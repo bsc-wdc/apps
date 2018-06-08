@@ -84,7 +84,7 @@ public class KMeans {
 		System.arraycopy(points, 0, cluster, 0, cluster.length);
 	}
 
-	private static void initializePoints(KMeansDataSet data, int numFrags) {
+	private static void initializePoints(KMeansDataSet data, int numFrags) { 
 		int pointsPerFragment = data.numPoints / numFrags;
 		for (int i = 0; i < numFrags; i++) {
 			int start = i * pointsPerFragment;
@@ -99,17 +99,21 @@ public class KMeans {
 		int nFrag = 0, startPos = 0;
 		int toCopy = data.currentCluster.length;
 		while (toCopy > 0) {
+			//System.out.println("ToCopy: " + String.valueOf(toCopy));
+			//System.out.println("copied: " + String.valueOf(copied));
 			int copied = copyToCluster(data.points[nFrag], data.currentCluster,
 					toCopy, startPos);
 			toCopy -= copied;
 			startPos += copied;
 			nFrag++;
+
 		}
 	}
 
 	private static int copyToCluster(float[] points, float[] cluster,
 			int toCopy, int startPos) {
 		int canCopy = Math.min(toCopy, points.length);
+		System.out.println("canCopy: " + String.valueOf(canCopy));
 
 		int j = 0;
 		for (int i = startPos; i < startPos + canCopy; i++)

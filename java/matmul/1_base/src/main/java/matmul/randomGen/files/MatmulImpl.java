@@ -15,7 +15,6 @@
  */
 package matmul.randomGen.files;
 
-
 public class MatmulImpl {
 	
 	public static void multiplyAccumulative(String f3, String f1, String f2, int bsize) {

@@ -15,7 +15,6 @@ As the algorithm progresses, the area of the matrix that is accessed is smaller;
 
 When executed with COMPSs, Sparse LU produces several types of task with different granularity and numerous dependencies between them.
 
-
 == Versions ==
 There are three versions of Sparse LU, depending on the data types used to store the blocks.
 === Version 1 ===
@@ -25,24 +24,20 @@ There are three versions of Sparse LU, depending on the data types used to store
 === Version 3 ===
 ''arrays'', where the matrix blocks are stored in arrays.
 
-
 == Execution instructions ==
 Usage:
 runcompss sparselu.objects.SparseLU <MSIZE> <BSIZE>
-runcompss sparselu.files.SparseLU <MSIZE> <BSIZE>
-runcompss sparselu.arrays.SparseLU <MSIZE> <BSIZE>
-
+runcompss sparselu.files.SparseLU   <MSIZE>
+runcompss sparselu.arrays.SparseLU  <MSIZE> <BSIZE>
 
 where:
                  * - MSIZE: Number of blocks of the matrix
 		 * - BSIZE: Number of elements per block
 
-
 == Execution Example ==
 runcompss sparselu.objects.SparseLU 16 4
-runcompss sparselu.files.SparseLU 16 4
+runcompss sparselu.files.SparseLU 16 
 runcompss sparselu.arrays.SparseLU 16 4
-
 
 == Build ==
 === Option 1: Native java ===

@@ -9,7 +9,8 @@ Terasort for MN
 
 [Body]
  == Description ==
-Sort an input of the form {key, value} by key.
+Sort an input of the form {key, value} by key. 
+You will find several datasets in the apps directory.
 
 == Versions ==
 There are five versions of terasort
@@ -26,7 +27,6 @@ FILES FILTERED SHARED: Evolution of version 2 assuming that there is a shared di
 FILES FILTERED SHARED 2: Version 4 with optimized serialization using externalizable.
 === Version 6 ===
 RANDOM: This version generates a random dataset and performs the sorting.
-
 
 == Execution instructions ==
 Usage:

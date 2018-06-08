@@ -29,7 +29,7 @@ public class Matmul {
 	private static Block[][] C;
 	
 	private static void usage() {
-		System.out.println("    Usage: matmul.objects.Matmul <MSize> <BSize> <seed>");
+		System.out.println("[ERROR] Usage: matmul.objects.Matmul <MSize> <BSize> <seed>");
 	}
 	
 	public static void main(String args[]) throws Exception {
