@@ -94,17 +94,17 @@ def _distributed_apply(tree, X):
 
 
 @task(tree=INOUT, returns=DecisionTreeClassifier)
-def _distributed_build_classifier_trees(tree, *args, **kwargs):
-    return _distributed_build_trees(tree, *args, **kwargs)
+def _distributed_build_classifier_tree(tree, *args, **kwargs):
+    return _distributed_build_tree(tree, *args, **kwargs)
 
 
 @task(tree=INOUT, returns=DecisionTreeRegressor)
-def _distributed_build_regression_trees(tree, *args, **kwargs):
-    return _distributed_build_trees(tree, *args, **kwargs)
+def _distributed_build_regression_tree(tree, *args, **kwargs):
+    return _distributed_build_tree(tree, *args, **kwargs)
 
 
-def _distributed_build_trees(tree, bootstrap, X, y, sample_weight, tree_idx, n_trees,
-                             verbose=0, class_weight=None):
+def _distributed_build_tree(tree, bootstrap, X, y, sample_weight, tree_idx, n_trees,
+                            verbose=0, class_weight=None):
     """Private function used to fit a single tree in a distributed way."""
     if verbose > 1:
         print("building tree %d of %d" % (tree_idx + 1, n_trees))
@@ -402,7 +402,7 @@ class BaseForest(six.with_metaclass(ABCMeta, BaseEnsemble)):
 
             # Distributed loop.
             for i, t in enumerate(trees):
-                self._call_distributed_build_trees(
+                self._call_distributed_build_tree(
                     t, self.bootstrap, X, y, sample_weight, i, len(trees),
                     verbose=self.verbose, class_weight=self.class_weight)
 
@@ -417,8 +417,8 @@ class BaseForest(six.with_metaclass(ABCMeta, BaseEnsemble)):
         return self
 
     @abstractmethod
-    def _call_distributed_build_trees(self, *args, **kwargs):
-        """Call _distributed_build_[regression|classifier]_trees"""
+    def _call_distributed_build_tree(self, *args, **kwargs):
+        """Call _distributed_build_[regression|classifier]_tree"""
 
     def _decapsulate_classes(self):
         # Default implementation
@@ -512,8 +512,8 @@ class RandomForestClassifier(six.with_metaclass(ABCMeta, BaseForest,
         self.min_impurity_decrease = min_impurity_decrease
         self.min_impurity_split = min_impurity_split
 
-    def _call_distributed_build_trees(self, *args, **kwargs):
-        _distributed_build_classifier_trees(*args, **kwargs)
+    def _call_distributed_build_tree(self, *args, **kwargs):
+        _distributed_build_classifier_tree(*args, **kwargs)
 
     def _decapsulate_classes(self):
         # Decapsulate classes_ attributes
@@ -776,8 +776,8 @@ class RandomForestRegressor(six.with_metaclass(ABCMeta, BaseForest, RegressorMix
         self.min_impurity_decrease = min_impurity_decrease
         self.min_impurity_split = min_impurity_split
 
-    def _call_distributed_build_trees(self, *args, **kwargs):
-        _distributed_build_regression_trees(*args, **kwargs)
+    def _call_distributed_build_tree(self, *args, **kwargs):
+        _distributed_build_regression_tree(*args, **kwargs)
 
     def _set_oob_score(self, X, y):
         """Compute out-of-bag scores"""
