@@ -1,0 +1,79 @@
+<?page title="Optimis Genomic Application" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:n="native">
+	<vlayout spacing="15px">
+		<hlayout spacing="15px" valign="middle">
+			<image src="/images/optimis/logo.png" width="400px"></image>
+			<label value="Genomic Application">
+				<attribute name="style">
+					font-size: 30px; font-weight: bold;
+				</attribute>
+			</label>
+			<image src="/images/bsc/logo.jpg" width="120px"></image>
+		</hlayout>
+		<groupbox width="900px" mold="3d">
+			<caption label="Homology-based Gene Detection" />
+			<vlayout id="vertLayout" spacing="15px">
+				<hlayout spacing="15px" valign="middle">
+					<image src="/images/genomics/genome.jpg"
+						height="150px" />
+					<vlayout spacing="15px">
+						<hlayout spacing="5px" valign="middle">
+							<label>Database file:</label>
+							<combobox id="DBFile">
+								<comboitem label="chr4" />
+							</combobox>
+						</hlayout>
+						<hlayout spacing="5px" valign="middle">
+							<label>Sequence file:</label>
+							<combobox id="seqFile">
+								<comboitem label="ENSRNOP00000053114" />
+							</combobox>
+						</hlayout>
+						<hlayout spacing="5px" valign="middle">
+							<label>Alignment:</label>
+							<textbox id="alignment" />
+						</hlayout>
+						<hlayout spacing="5px" valign="middle">
+							<label>Scores:</label>
+							<textbox id="scores" />
+						</hlayout>
+						<hlayout spacing="5px" valign="middle">
+							<label>Threshold:</label>
+							<textbox id="threshold" />
+						</hlayout>
+						<button label="Submit">
+							<attribute name="onClick">
+{
+		try {
+			String tempId = "" + java.util.UUID.randomUUID();
+			String result = es.bsc.genedetection.gui.ServiceCaller.call(DBFile.getValue(), seqFile.getValue(), Integer.parseInt(alignment.getValue()), Integer.parseInt(scores.getValue()), Float.parseFloat(threshold.getValue()), tempId);
+			resultLabel.setValue(result);
+			resultPicture.setSrc("/images/result-" + tempId + ".jpg");
+			results.setVisible(true);
+		} catch (com.sun.xml.internal.ws.wsdl.parser.InaccessibleWSDLException e) {
+			Messagebox.show("Can not connect to the service");
+			e.printStackTrace();
+		}
+	}
+</attribute>
+						</button>
+					</vlayout>
+				</hlayout>
+				<tabbox id="results" width="840px" visible="false">
+					<tabs>
+						<tab label="Result" />
+						<tab label="Image" closable="false" />
+					</tabs>
+					<tabpanels>
+						<tabpanel>
+							<label pre="true" id="resultLabel" />
+						</tabpanel>
+						<tabpanel>
+							<image id="resultPicture" width="800px" />
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</vlayout>
+		</groupbox>
+	</vlayout>
+</zk>
