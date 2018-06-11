@@ -153,7 +153,6 @@ def get_best_split(tree_path, sample, path, *scores_and_values_and_indices):
 
 
 def get_groups(sample, path, index, value):
-    print("@task get_groups")
     left = []
     right = []
     if len(sample) > 0:
@@ -167,7 +166,6 @@ def get_groups(sample, path, index, value):
 
 
 def build_leaf(sample, y, tree_path):
-    print('@task build_leaf')
     frequencies = Counter(y[sample])
     most_common = frequencies.most_common(1)
     if most_common:
@@ -206,21 +204,20 @@ def compute_split_simple(tree_path, sample, n_features, path, y):
     return node, left_group, right_group
 
 
-def flush_nodes(file_out, nodes_to_persist, node_list_to_persist):
-    # Swap positions for unpacking a list of futures:
-    flush_nodes_task(file_out, node_list_to_persist, *nodes_to_persist)
-    del nodes_to_persist[:]
-
-
 @task(file_out=FILE_INOUT)
-def flush_nodes_task(file_out, node_list_to_persist, *nodes_to_persist):
+def flush_nodes_task(file_out, *nodes_to_persist):
     print('@task flush_nodes_task')
     with open(file_out, "a") as tree_file:
-        # Swap positions back and persist the nodes:
-        for node in nodes_to_persist:
-            tree_file.write(node.to_json() + '\n')
-        for node in node_list_to_persist:
-            tree_file.write(node.to_json() + '\n')
+        for item in nodes_to_persist:
+            print('item')
+            print(type(item))
+            if isinstance(item, (Leaf, Node)):
+                tree_file.write(item.to_json() + '\n')
+            else:
+                for node in item:
+                    print('node')
+                    print(type(node))
+                    tree_file.write(node.to_json() + '\n')
 
 
 class DecisionTree:
@@ -265,18 +262,15 @@ class DecisionTree:
             else:
                 left_subtree_nodes = build_subtree(left_group, y, tree_path + 'L', max_depth - depth, len(features),
                                                    self.path_in)
-                flush_nodes(file_out, nodes_to_persist, left_subtree_nodes)
-                # left = build_leaf(left_group, y, tree_path + 'L')
-                # nodes_to_persist.append(left)
+                nodes_to_persist.append(left_subtree_nodes)
 
                 right_subtree_nodes = build_subtree(right_group, y, tree_path + 'R', max_depth - depth, len(features),
                                                     self.path_in)
-                flush_nodes(file_out, nodes_to_persist, right_subtree_nodes)
-                # right = build_leaf(right_group, y, tree_path + 'R')
-                # nodes_to_persist.append(right)
-            if len(nodes_to_persist) >= 10000:
-                flush_nodes(file_out, nodes_to_persist)
-        # flush_nodes(file_out, nodes_to_persist, [])
+                nodes_to_persist.append(right_subtree_nodes)
+            if len(nodes_to_persist) >= 1000:
+                print 'HERE'
+                flush_nodes_task(file_out, *nodes_to_persist)
+        flush_nodes_task(file_out, *nodes_to_persist)
 
 
 @task(returns=list)
