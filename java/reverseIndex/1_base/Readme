@@ -1,0 +1,39 @@
+This is the Readme for:
+Reverse Index
+
+[Name]: Reverse Index  
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+== Implementations ==
+
+reverse.Reverse :
+	Extracts the links from a webpage (.html) using htmlparser.
+
+
+== Execution instructions ==
+
+runcompss -d --classpath=${PWD}/lib/htmllexer-2.1.jar:${PWD}/lib/htmlparser-2.1.jar:${PWD}/reverse.jar reverse.Reverse true /home/mdomingu/git/apps/java/reverseIndex/1_base/test 3 /home/mdomingu/git/apps/java/reverseIndex/1_base/out.txt /tmp
+
+Arguments:
+	1. Debug: if true, prints debug information
+	2. Website path: path to the directory where to read the files from
+	3. Chunks: number of chunks when processing files
+	4. Output filename: filename for the result file where the application merges all the links found
+	5. Temp directory: directory where the application writes the (*.part) temporary files
+
+== Build ==
+
+Change to the version directory you want to compile and execute:
+
+	mvn clean package
+
+All the .jar files needed by the application will be automatically generated.
+
+== Execution instructions ==
+The test directory under this project contains 3 html pages to be parsed as example.
+We assume that you are going to execute the application in its main directory, so ${PWD} inthis case could be resolved as /PATH_TO_JAVA_APPS/reverseIndex/1_base/ .
+
+runcompss -d --classpath=${PWD}/lib/htmllexer-2.1.jar:${PWD}/lib/htmlparser-2.1.jar:${PWD}/reverse.jar reverse.Reverse true /home/mdomingu/git/apps/java/reverseIndex/1_base/test 3 /home/mdomingu/git/apps/java/reverseIndex/1_base/out.txt /tmp

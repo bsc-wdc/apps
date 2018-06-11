@@ -1,10 +1,8 @@
 #!/bin/bash -e
 
 compile_and_execute() {
-
 	mvn clean package
 	runcompss $1 $2 ${@:3}
-
 }
 
   # Define script directory for relative calls

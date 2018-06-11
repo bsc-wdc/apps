@@ -1,0 +1,51 @@
+This is the Readme for:
+Matrix Multiplication for NxN 1_base
+
+[Name]: Matrix Multiplication NxN
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+== Implementations ==
+
+matmul.input.files.Matmul :
+
+	This one uses existent files containing 
+	matrices and computes the C matrix.
+
+matmul.randomGen.objects.Matmul :
+
+	Generates random matrices A and B to
+	compute the C matrix.
+
+matmul.randomGen.files.Matmul :
+
+	As the random objects, files with random matrices
+	are multiplied to compute the C matrix.
+
+== Execution instructions ==
+
+runcompss matmul.input.files.Matmul <MSIZE> <BSIZE> <PATH_TO_DATASET_FOLDER>
+runcompss matmul.randomGen.objects.Matmul <MSIZE> <BSIZE> <SEED>
+runcompss matmul.randomGen.files.Matmul <MSIZE> <BSIZE> <SEED>
+
+where:
+                 * - MSIZE: Number of blocks of the matrix
+                 * - BSIZE: Number of elements per block
+                 * - PATH_TO_DATASET_FOLDER: Absolute path the to base folder where the A and B matrices are stored
+                 * - SEED: Integer for random seed
+
+== Execution example ==
+
+runcompss matmul.input.files.Matmul 4 2 ~/datasets/matmul/
+runcompss matmul.randomGen.objects.Matmul 4 2 1
+runcompss matmul.randomGen.files.Matmul 4 2 1
+
+== Dataset generation ==
+
+The package includes a simple application for dataset generation that can be run by running the following command.
+
+java -cp matmul.jar generation.MatmulGeneration <MSIZE> <BSIZE> <PATH_TO_DATASET_FOLDER> <SEED>
+
+Example: java -cp matmul.jar generation.MatmulGeneration 4 2 /home/cramonco/Downloads/mat/dataset/ 1

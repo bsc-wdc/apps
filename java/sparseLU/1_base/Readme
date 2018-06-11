@@ -1,0 +1,38 @@
+This is the Readme for:
+Sparse LU factorization
+
+[Name]: Sparse LU
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+== Implementations ==
+
+sparselu.objects.SparseLU :
+
+	''files'', where the matrix blocks are stored in files.
+
+sparselu.files.SparseLU :
+
+	''objects'', where the matrix blocks are represented by objects.
+
+sparselu.arrays.SparseLU :
+
+	''arrays'', where the matrix blocks are stored in arrays.
+
+
+== Execution instructions ==
+
+runcompss sparselu.objects.SparseLU <MSIZE> <BSIZE>
+runcompss sparselu.files.SparseLU   <MSIZE>
+runcompss sparselu.arrays.SparseLU  <MSIZE> <BSIZE>
+
+where:
+                 * - MSIZE: Number of blocks of the matrix
+		 * - BSIZE: Number of elements per block
+
+== Execution Example ==
+runcompss sparselu.objects.SparseLU 16 4
+runcompss sparselu.files.SparseLU 16 
+runcompss sparselu.arrays.SparseLU 16 4

@@ -1,0 +1,77 @@
+This is the Readme for:
+Terasort for MN
+
+[Name]: Terasort for MN
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+== Implementations ==
+
+terasort.files.Sort :
+
+	This version takes takes the files produced by teragen as input.
+	Has a task that reads and transfers the entire content to all filter tasks.
+
+terasort.filesFiltered.Sort :
+
+	This version is an evolution of the version 1, where all filter tasks are submitted 
+	at the same time with the reference to the file that they have to read in order
+	to avoid to transfer each file content to multiple filter tasks.
+
+terasort.filesFiltered2.Sort :
+
+	This version is an evolution of version 2. In this version,
+	a secondary range structure helps on mixing the fragments.
+
+terasort.filesFilteredShared :
+
+	Evolution of version 2 assuming that there is a shared disk that can be used to store temporary files within folders (buckets).
+
+terasort.filesFilteredShared2 :
+
+	Version 4 with optimized serialization using externalizable.
+
+terasort.files.random :
+
+	This version generates a random dataset and performs the sorting.
+
+== Execution instructions ==
+Usage:
+=== Version 1 ===
+runcompss terasort.files <DATA_FOLDER> <OUTPUT_FOLDER>
+=== Version 2 ===
+runcompss terasort.filesFiltered <DATA_FOLDER> <OUTPUT_FOLDER> <READ_ENTIRE_FILE>
+=== Version 3 ===
+runcompss terasort.filesFiltered2 <DATA_FOLDER> <OUTPUT_FOLDER> <NUM_RANGES>
+=== Version 4 ===
+runcompss terasort.filesFilteredShared <DATA_FOLDER> <OUTPUT_FOLDER> <NUM_BLOCKS> <NUM_BUCKETS> <REMOVE_RESULTS>
+=== Version 5 ===
+runcompss terasort.filesFilteredShared2 <DATA_FOLDER> <OUTPUT_FOLDER> <NUM_BLOCKS> <NUM_BUCKETS> <REMOVE_RESULTS>
+=== Version 6 ===
+runcompss terasort.random <NUM_KEYS> <UNIQUE_KEYS> <KEY_LENGTH> <UNIQUE_VALUES> <VALUE_LENGTH> <NUM_FRAGMENTS> <RANDOM_SEED>
+
+where:
+                 * - DATASET_FOLDER: Absolute path to base directory of dataset files
+                 * - OUTPUT_FOLDER: Absolute path where to store the result sorted files.
+                 * - READ_ENTIRE_FILE: Read the entire file
+                 * - NUM_BLOCKS: Number of blocks
+                 * - NUM_BUCKETS: Number of buckets
+                 * - REMOVE_RESULTS: Remove results after finishing.
+                 * - NUM_KEYS: Total number of keys
+                 * - UNIQUE_KEYS: Maximum value for a key (keys will be between 0 and UNIQUE_KEYS)
+                 * - KEY_LENGTH: Number of characters of a key (fixed format)
+                 * - UNIQUE_VALUES: Maximum value for a value (values will be between 0 and UNIQUE_VALUES)
+                 * - VALUE_LENGTH: Number of characters of a value (fixed format)
+                 * - NUM_FRAGMENTS: Number of fragments (tasks)
+                 * - RANDOM_SEED: Initial random seed
+
+
+== Execution Example ==
+runcompss terasort.files.Sort /home/user/terasort/ /home/user/terasortOutput/
+runcompss terasort.filesFiltered.Sort /home/user/terasort/ /home/user/terasortOutput/ False
+runcompss terasort.filesFiltered2.Sort /home/user/terasort/ /home/user/terasortOutput/ 4
+runcompss terasort.filesFilteredShared.Sort /home/user/terasort/ /home/user/terasortOutput/ 8 4 False
+runcompss terasort.filesFilteredShared2.Sort /home/user/terasort/ /home/user/terasortOutput/ 8 4 False
+runcompss terasort.random.Sort 4 10 5 4 10 2 1 

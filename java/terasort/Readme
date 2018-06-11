@@ -13,68 +13,26 @@ Sort an input of the form {key, value} by key.
 You will find several datasets in the apps directory.
 
 == Versions ==
-There are five versions of terasort
-
-=== Version 1 ===
-FILES: This version takes takes the files produced by teragen as input. Has a task that reads and transfers the entire content to all filter tasks.
-=== Version 2 ===
-FILES FILTERED: This version is an evolution of the version 1, where all filter tasks are submitted at the same time with the reference to the file that they have to read in order to avoid to transfer each file content to multiple filter tasks.
-=== Version 3 ===
-FILES FILTERED 2: This version is an evolution of version 2. In this version, a secondary range structure helps on mixing the fragments.
-=== Version 4 ===
-FILES FILTERED SHARED: Evolution of version 2 assuming that there is a shared disk that can be used to store temporary files within folders (buckets).
-=== Version 5 ===
-FILES FILTERED SHARED 2: Version 4 with optimized serialization using externalizable.
-=== Version 6 ===
-RANDOM: This version generates a random dataset and performs the sorting.
-
-== Execution instructions ==
-Usage:
-=== Version 1 ===
-runcompss terasort.files <DATA_FOLDER> <OUTPUT_FOLDER>
-=== Version 2 ===
-runcompss terasort.filesFiltered <DATA_FOLDER> <OUTPUT_FOLDER> <READ_ENTIRE_FILE>
-=== Version 3 ===
-runcompss terasort.filesFiltered2 <DATA_FOLDER> <OUTPUT_FOLDER> <NUM_RANGES>
-=== Version 4 ===
-runcompss terasort.filesFilteredShared <DATA_FOLDER> <OUTPUT_FOLDER> <NUM_BLOCKS> <NUM_BUCKETS> <REMOVE_RESULTS>
-=== Version 5 ===
-runcompss terasort.filesFilteredShared2 <DATA_FOLDER> <OUTPUT_FOLDER> <NUM_BLOCKS> <NUM_BUCKETS> <REMOVE_RESULTS>
-=== Version 6 ===
-runcompss terasort.random <NUM_KEYS> <UNIQUE_KEYS> <KEY_LENGTH> <UNIQUE_VALUES> <VALUE_LENGTH> <NUM_FRAGMENTS> <RANDOM_SEED>
-
-where:
-                 * - DATASET_FOLDER: Absolute path to base directory of dataset files
-                 * - OUTPUT_FOLDER: Absolute path where to store the result sorted files.
-                 * - READ_ENTIRE_FILE: Read the entire file
-                 * - NUM_BLOCKS: Number of blocks
-                 * - NUM_BUCKETS: Number of buckets
-                 * - REMOVE_RESULTS: Remove results after finishing.
-                 * - NUM_KEYS: Total number of keys
-                 * - UNIQUE_KEYS: Maximum value for a key (keys will be between 0 and UNIQUE_KEYS)
-                 * - KEY_LENGTH: Number of characters of a key (fixed format)
-                 * - UNIQUE_VALUES: Maximum value for a value (values will be between 0 and UNIQUE_VALUES)
-                 * - VALUE_LENGTH: Number of characters of a value (fixed format)
-                 * - NUM_FRAGMENTS: Number of fragments (tasks)
-                 * - RANDOM_SEED: Initial random seed
-
-
-== Execution Example ==
-runcompss terasort.files.Sort /home/user/terasort/ /home/user/terasortOutput/
-runcompss terasort.filesFiltered.Sort /home/user/terasort/ /home/user/terasortOutput/ False
-runcompss terasort.filesFiltered2.Sort /home/user/terasort/ /home/user/terasortOutput/ 4
-runcompss terasort.filesFilteredShared.Sort /home/user/terasort/ /home/user/terasortOutput/ 8 4 False
-runcompss terasort.filesFilteredShared2.Sort /home/user/terasort/ /home/user/terasortOutput/ 8 4 False
-runcompss terasort.random.Sort 4 10 5 4 10 2 1 
-
+There is only one version of terasort, but different
+implementations can be found inside this one.
 
 == Build ==
-=== Option 1: Native java ===
-cd /PATH_TO_JAVA_APPS/terasort/; 
-javac src/main/java/terasort/files/*.java; javac src/main/java/terasort/filesFiltered/*.java; javac src/main/java/terasort/filesFiltered2/*.java; javac src/main/java/terasort/filesFilteredShared/*.java; javac src/main/java/terasort/filesFilteredShared2/*.java; javac src/main/java/terasort/files/*.java;
-cd src/main/java/; jar cf terasort.jar terasort/
-cd ../../../; mkdir jar; mv src/main/java/terasort.jar jar/
 
-=== Option 2: Maven ===
+The .jar files are build with Maven.
+
 cd /PATH_TO_JAVA_APPS/terasort/
 mvn clean package
+
+== Scripts usage ==
+
+Interactive script: launch.sh
+
+Although we showed how to execute an application with runcompss in each subdirectory,
+we strongly recommend to use the available bash scripts on the top of each application directory.
+To run an application with the scripts, do the following:
+
+        cd /PATH_TO_JAVA_APPS/terasort   # change directory to the application top directory
+        ./launch.sh VERSION_TO_EXECUTE IMPLEMENTATION_TO_EXECUTE APP_ARGS # VERSION_TO_EXECUTE it is 'base' in case that the version is '1_base'
+
+TODO: SLURM jobscript: launch_mn.sh
+

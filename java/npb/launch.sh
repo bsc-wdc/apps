@@ -22,30 +22,14 @@
   # $N: Last application argument
 
   # Set common arguments
-  tracing=false
-  
-  # Arguments for in_files:
-  #   <MSIZE> <BSIZE> <PATH_TO_DATASET_FOLDER>
-  # where:
-  #               * - MSIZE: Number of blocks of the matrix
-  #               * - BSIZE: Number of elements per block
-  #               * - PATH_TO_DATASET_FOLDER: Folder where matrices A and B are stored in files
 
-  # Arguments for randobjects and randfiles:
-  #   <MSIZE> <BSIZE> <SEED>
-  # where:
-  #               * - MSIZE: Number of blocks of the matrix
-  #               * - BSIZE: Number of elements per block
-  #               * - SEED: Integer for random seed
-
-  runcompssOpts=" --tracing="$tracing""
+  runcompssOpts=" --tracing=false "
 
   appDir=$(ls ${scriptDir} | grep "^[0-9]*[_]"$1"$") || true
-  appName="$2" #Expected matmul.input.files.Matmul or matmul.randomGen.objects.Matmul or matmul.randomGen.files.Matmul
+  appName="$2" 
   # Set app arguments
 
   appArgs=${@:3} 
-  appName="$2"
 
   echo "Application arguments: "$appArgs""
 

@@ -18,53 +18,17 @@ In this implementation, A and B are square matrices (same number of rows and col
 
 == Versions ==
 There are three versions of Matrix Multiplication, depending on the data types used to store the blocks and the way the input data is read.
-=== Version 1 ===
-''INPUT files'', where the matrices are read from files and stored internally as files
-=== Version 2 ===
-''Random Generation Objects'', where the matrices are randomly generated at execution time and stored internally as objects
-=== Version 3 ===
-''Random Generation Files'', where the matrices are randomly generated at execution time and stored internally as files
-
-== Execution instructions ==
-Usage:
-runcompss matmul.input.files.Matmul <MSIZE> <BSIZE> <PATH_TO_DATASET_FOLDER>
-runcompss matmul.randomGen.objects.Matmul <MSIZE> <BSIZE> <SEED>
-runcompss -d matmul.randomGen.files.Matmul <MSIZE> <BSIZE> <SEED>
-
-where:
-                 * - MSIZE: Number of blocks of the matrix
-                 * - BSIZE: Number of elements per block
-		 * - PATH_TO_DATASET_FOLDER: Absolute path the to base folder where the A and B matrices are stored
-		 * - SEED: Integer for random seed
-
-== Execution Example ==
-
-1_base:
-v1: runcompss matmul.input.files.Matmul 4 2 ~/datasets/matmul/
-v2: runcompss -d matmul.randomGen.objects.Matmul 4 2 1
-v3: runcompss -d matmul.randomGen.files.Matmul 4 2 1
-
-2_apps:
-v1: runcompss matmul.arrays.Matmul 4 2
-v2: runcompss matmul.files.Matmul 4 2
-v3: runcompss matmul.objects.Matmul 4 2
-
-
-== Dataset generation ==
-The package includes a simple application for dataset generation that can be run by running the following command.
-
-java -cp matmul.jar generation.MatmulGeneration <MSIZE> <BSIZE> <PATH_TO_DATASET_FOLDER> <SEED>
-
-Example: java -cp matmul.jar generation.MatmulGeneration 4 2 /home/cramonco/Downloads/mat/dataset/ 1
+=== Version 1 : base ===
+This one implements matmul using files and objects. For files, you can use existent files or generate them randomly, objects will be always random generated.
+=== Version 2 : apps ===
+Is identical to the first version but implements a new version using arrays.
+=== Version 3 : mpi ===
+The third version gives the possibility to execute Java methods with COMPSs as MPI invokations.
 
 == Build ==
-=== Option 1: Native java ===
-cd ~/PATH_TO_JAVA_APPS/matmul/VERSION_TO_COMPILE; 
-javac src/main/java/generation/*.java; javac src/main/java/matmul/input/*/*.java; javac src/main/java/matmul/randomGen/*/*.java;
-cd src/main/java/; jar cf matmul.jar matmul/
-cd ../../../; mkdir jar; mv src/main/java/matmul.jar jar/
 
-=== Option 2: Maven ===
+The .jar files are build with Maven.
+
 cd ~/PATH_TO_JAVA_APPS/matmul/
 mvn clean package
 
@@ -72,8 +36,8 @@ mvn clean package
 
 Interactive script: launch.sh
 
-Although we showed how to execute an application with runcompss, we strongly
-recommend to use the available bash scripts on the top of each application directory.
+Although we showed how to execute an application with runcompss in each subdirectory, 
+we strongly recommend to use the available bash scripts on the top of each application directory.
 To run an application with the scripts, do the following:
 
         cd /PATH_TO_JAVA_APPS/matmul   # change directory to the application top directory

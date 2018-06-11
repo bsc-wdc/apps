@@ -1,0 +1,38 @@
+This is the Readme for:
+Sort by Key for MN
+
+[Name]: Sort by Key MN
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+== Implementations ==
+
+sortByKey.files.Sort :
+	
+	''Files'', where each fragment containing key,value pairs is in a separed file under a given path.
+
+sortByKey.random.Sort :
+
+	''Random Generation'', where all the values are generated randomly.
+
+== Execution instructions ==
+Usage:
+runcompss sortByKey.files.Sort <DATASET_DIR>
+runcompss sortByKey.random.Sort <NUM_KEYS> <UNIQUE_KEYS> <KEY_LENGTH> <UNIQUE_VALUES> <VALUE_LENGTH> <NUM_FRAGMENTS> <RANDOM_SEED>
+
+where:
+                 * - DATASET_DIR: Absolute path to base directory of dataset files
+                 * - NUM_KEYS: Total number of keys
+		 * - UNIQUE_KEYS: Maximum value for a key (keys will be between 0 and UNIQUE_KEYS)
+		 * - KEY_LENGTH: Number of characters of a key (fixed format)
+		 * - UNIQUE_VALUES: Maximum value for a value (values will be between 0 and UNIQUE_VALUES)
+                 * - VALUE_LENGTH: Number of characters of a value (fixed format)
+		 * - NUM_FRAGMENTS: Number of fragments (tasks)
+		 * - RANDOM_SEED: Initial random seed
+
+
+== Execution Example ==
+runcompss sortByKey.files.Sort /home/cramonco/Downloads/sort/
+runcompss sortByKey.random.Sort 4 10 5 4 10 2 1 

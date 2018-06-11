@@ -15,44 +15,28 @@ The NAS parallel benchmarks (NPB) are a set of kernels that evaluate diverse com
 3. Integer Sort (IS): this kernel also tests computation, but especially communication performance. It sorts a large array of integers and is characterised by numerous transfers.
 4. Conjugate Gradiant (CG): it estimates the smallest eigenvalue of a large sparse symmetric positive-definite matrix using the inverse iteration with the conjugate gradient method as a subroutine for solving systems of linear equations.
 
-== Build ==
-=== Option 1: Native java ===
-cd /PATH_TO_JAVA_APPS/npb/; javac src/main/java/npb/*.java
-cd src/main/java/; jar cf npb.jar npb/
-cd ../../../; mkdir jar; mv src/main/java/npb.jar jar/
+== Versions ==
+We can't talk about the versions concept we used before, each program here it is a new kind of benchmark and it is implemented it's way, the description is enough explanatory about in what consists.
 
-=== Option 2: Maven ===
-cd /PATH_TO_JAVA_APPS/npb/
+== Build ==
+
+The .jar files are build with Maven.
+
+cd ~/PATH_TO_JAVA_APPS/npb/
 mvn clean package
 
-== Usage ==
+== Scripts usage ==
 
-To execute the EP test :
-runcompss npb.nasep.NASEP -np (NUMBER OF PROCESSORS) -class (SIZE)
+Interactive script: launch.sh
 
-To execute the FT test :
-runcompss npb.nasft.NASFT -np (NUMBER OF PROCESSORS) -class (SIZE)
+Although we showed how to execute an application with runcompss in each subdirectory,
+we strongly recommend to use the available bash scripts on the top of each application directory.
+To run an application with the scripts, do the following:
 
-To execute the IS test :
-runcompss npb.nasis.NASIS -np (NUMBER OF PROCESSORS) -class (SIZE)
+        cd /PATH_TO_JAVA_APPS/npb # change directory to the application top directory
+        ./launch.sh VERSION_TO_EXECUTE # VERSION_TO_EXECUTE it is 'base' in case that the version is '1_base'
 
-To execute the CG test :
-runcompss npb.nascg.NASCG -np (NUMBER OF PROCESSORS) -class (SIZE)
-
-You can specify the number of processors and the class which will finally determine the size of the problem, if you run it without arguments default values will be used. If you pretend to execute it locally, we strongly recommend you to use an 'S' class.
-
-== Execution Examples ==
-
-runcompss npb.nasep.NASEP -class S
-
-runcompss npb.nasft.NASFT -class S
-
-runcompss npb.nasis.NASIS -class S
-
-runcompss npb.nascg.NASCG -class S
-
-These executions will at the end of the benchmark take out 
-the correspondent numbers and if the benchmark verification is successful.
+TODO: SLURM jobscript: launch_mn.sh
 
 == References ==
 http://www.nas.nasa.gov/Software/NPB/

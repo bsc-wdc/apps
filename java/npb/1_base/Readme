@@ -1,0 +1,40 @@
+This is the Readme for:
+NAS Parallel Benchmarks
+
+[Name]: NAS Parallel Benchmarks
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+== Implementations ==
+The concept implementation does not make sense, each benchmark is different from each other.
+
+== Usage ==
+
+To execute the EP test :
+runcompss npb.nasep.NASEP -np (NUMBER OF PROCESSORS) -class (SIZE)
+
+To execute the FT test :
+runcompss npb.nasft.NASFT -np (NUMBER OF PROCESSORS) -class (SIZE)
+
+To execute the IS test :
+runcompss npb.nasis.NASIS -np (NUMBER OF PROCESSORS) -class (SIZE)
+
+To execute the CG test :
+runcompss npb.nascg.NASCG -np (NUMBER OF PROCESSORS) -class (SIZE)
+
+You can specify the number of processors and the class which will finally determine the size of the problem, if you run it without arguments default values will be used. If you pretend to execute it locally, we strongly recommend you to use an 'S' class.
+
+== Execution Examples ==
+
+runcompss npb.nasep.NASEP -class S
+
+runcompss npb.nasft.NASFT -class S
+
+runcompss npb.nasis.NASIS -class S
+
+runcompss npb.nascg.NASCG -class S
+
+These executions will at the end of the benchmark take out 
+the correspondent numbers and if the benchmark verification is successful.

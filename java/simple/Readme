@@ -9,37 +9,23 @@ Simple
 
 [Body]
 == Description ==
-Example of a simple application with only one task.
+Example of a simple application with only one task. The application stores a counter value in a file,
+increments that counter in a task method (''increment'') and then prints the final value in the main program.
 
-The application stores a counter value in a file, increments that counter in a task method (''increment'') and then prints the final value in the main program.
+== Versions ==
+Simple has only one single version, the increment is performed in a file.
 
 == Build ==
-=== Option 1: Native java ===
-cd /PATH_TO_JAVA_APPS/simple/1_base; javac src/main/java/simple/*.java
-cd src/main/java/; jar cf simple.jar simple/
-cd ../../../; mkdir jar; mv src/main/java/simple.jar jar/
 
-=== Option 2: Maven ===
+The .jar files are build with Maven.
+
 cd /PATH_TO_JAVA_APPS/simple/
 mvn clean package
 
-== Execution instructions ==
-Usage:
-runcompss simple.Simple <counterValue>
-
-where:
-                 * - counterValue: Initial value of the counter to increase
-
-== Execution Example ==
-
-runcompss simple.Simple 1
-
-For a deeper knowledge of what runcompss is capable of, try: runcompss -h 
-
 == Scripts usage ==
 
-Although we showed how to execute an application with runcompss, we strongly
-recommend to use the available bash scripts on the top of each application directory.
+Although we show how to execute an application with runcompss in each subdirectory, 
+we strongly recommend to use the available bash scripts on the top of each application directory.
 To run an application with the scripts, do the following:
 
 	cd /PATH_TO_JAVA_APPS/simple   # change directory to the application top directory

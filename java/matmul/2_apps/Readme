@@ -1,0 +1,43 @@
+This is the Readme for:
+Matrix Multiplication for NxN 1_base
+
+[Name]: Matrix Multiplication NxN
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+== Implementations ==
+
+matmul.arrays.Matmul :
+
+	This one uses arrays to store the
+	matrices and computes the C matrix.
+
+matmul.files.Matmul :
+
+	Uses file to store the 
+	matrices and compute the C matrix.
+
+matmul.objects.Matmul :
+
+	The matrices are stored in objects 
+	(i.e Block) and are multiplied to 
+	compute the C matrix.
+
+== Execution instructions ==
+
+runcompss matmul.arrays.Matmul <MSIZE> <BSIZE>
+runcompss matmul.files.Matmul <MSIZE> <BSIZE>
+runcompss matmul.objects.Matmul <MSIZE> <BSIZE>
+
+where:
+                 * - MSIZE: Number of blocks of the matrix
+                 * - BSIZE: Number of elements per block
+
+== Execution example ==
+
+runcompss matmul.arrays.Matmul 4 2
+runcompss matmul.files.Matmul 4 2
+runcompss matmul.objects.Matmul 4 2
+
