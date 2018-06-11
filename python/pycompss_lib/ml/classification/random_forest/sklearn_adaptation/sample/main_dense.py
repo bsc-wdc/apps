@@ -5,7 +5,7 @@ from distutils import util
 
 from pandas import read_csv
 from pycompss.api.api import compss_barrier
-from python.pycompss_lib.ml.classification.random_forest.sklearn_adaptation.src import forest
+import forest
 import sklearn as sk
 
 

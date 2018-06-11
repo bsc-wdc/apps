@@ -5,8 +5,8 @@ from distutils import util
 
 from pycompss.api.api import compss_wait_on
 
-from python.pycompss_lib.ml.classification.random_forest.sklearn_adaptation.utils import utils
-from python.pycompss_lib.ml.classification.random_forest.sklearn_adaptation.src import forest
+import utils
+import forest
 import sklearn as sk
 
 
