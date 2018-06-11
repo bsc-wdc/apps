@@ -24,7 +24,7 @@ class RandomForestClassifier:
 
         for i in range(self.n_estimators):
             tree = DecisionTree(self.path_in, self.n_instances, self.n_features,
-                                self.max_depth, self.path_out, 'tree_' + str(i))
+                                self.path_out, 'tree_' + str(i), self.max_depth)
             self.trees.append(tree)
 
         for tree in self.trees:
