@@ -286,14 +286,18 @@ def build_subtree(sample, y, tree_path, max_depth, n_features, path_in):
     while nodes_to_split:
         tree_path, sample, depth = nodes_to_split.pop()
         node, left_group, right_group = compute_split_simple(tree_path, sample, n_features, path_in, y)
-        node_list_to_persist.append(node)
-        if depth < max_depth:
-            nodes_to_split.append((tree_path + 'R', right_group, depth + 1))
-            nodes_to_split.append((tree_path + 'L', left_group, depth + 1))
+        if not left_group or not right_group:
+            leaf = build_leaf(sample, y, tree_path)
+            node_list_to_persist.append(leaf)
         else:
-            left = build_leaf(left_group, y, tree_path + 'L')
-            node_list_to_persist.append(left)
+            node_list_to_persist.append(node)
+            if depth < max_depth:
+                nodes_to_split.append((tree_path + 'R', right_group, depth + 1))
+                nodes_to_split.append((tree_path + 'L', left_group, depth + 1))
+            else:
+                left = build_leaf(left_group, y, tree_path + 'L')
+                node_list_to_persist.append(left)
 
-            right = build_leaf(right_group, y, tree_path + 'R')
-            node_list_to_persist.append(right)
+                right = build_leaf(right_group, y, tree_path + 'R')
+                node_list_to_persist.append(right)
     return node_list_to_persist
