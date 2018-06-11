@@ -9,6 +9,9 @@ class ImportTests(unittest.TestCase):
     def test_import_cascadecsvm(self):
         from pycompss_lib.ml.classification import CascadeSVM
 
+    def test_import_random_forest(self):
+        from pycompss_lib.ml.classification import RandomForestClassifier
+
     def test_import_kmeans(self):
         from pycompss_lib.ml.clustering import Kmeans
 

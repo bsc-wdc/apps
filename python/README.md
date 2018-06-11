@@ -22,6 +22,10 @@ CascadeSVM
 
 `from pycompss_lib.ml.classification import CascadeSVM`
 
+RandomForest
+
+`from pycompss_lib.ml.classification import RandomForestClassifier`
+
 ##### Clustering
 
 Kmeans
