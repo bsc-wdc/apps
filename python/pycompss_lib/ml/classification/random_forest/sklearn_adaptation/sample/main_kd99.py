@@ -4,11 +4,9 @@ import time
 from distutils import util
 
 from pandas import read_csv
-from pycompss.api.api import compss_barrier, compss_wait_on
-from pycompss.api.task import task
+from pycompss.api.api import compss_barrier
 
-import utils
-from forest import rf_sklearn_trees
+from python.pycompss_lib.ml.classification.random_forest.sklearn_adaptation.src import forest
 import sklearn as sk
 
 def main():
@@ -16,7 +14,7 @@ def main():
     parser = argparse.ArgumentParser(argument_default=argparse.SUPPRESS,
                                      description='Predict regression value using a decision tree regressor.')
     # RandomForest params
-    parser.add_argument('--n_estimators', type=int, help='The number of trees in the forest.')
+    parser.add_argument('--n_estimators', type=int, help='The number of trees in the src.')
     parser.add_argument('--bootstrap', type=util.strtobool,
                         help='0 or 1. Whether bootstrap samples are used when building trees.')
     parser.add_argument('--oob_score', type=util.strtobool,
@@ -63,9 +61,9 @@ def main():
             rf = sk.ensemble.RandomForestClassifier(**rf_kwargs)
     else:
         if args.regr:
-            rf = rf_sklearn_trees.RandomForestRegressor(**rf_kwargs)
+            rf = forest.RandomForestRegressor(**rf_kwargs)
         else:
-            rf = rf_sklearn_trees.RandomForestClassifier(**rf_kwargs)
+            rf = forest.RandomForestClassifier(**rf_kwargs)
     # print(type(rf))
 
     rf.fit(X_train, y_train)
@@ -80,7 +78,6 @@ def main():
     print('Time 2: ' + str(time_2-initial_time))
     print('Time 3: ' + str(time_3 - initial_time))
     print('Time 4: ' + str(time_4 - initial_time))
-
 
 
 if __name__ == "__main__":

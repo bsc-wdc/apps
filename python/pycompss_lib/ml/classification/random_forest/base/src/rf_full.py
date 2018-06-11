@@ -24,6 +24,7 @@ class FullCompssRandomForestRegressor:
     def fit(self):
 
         for i in range(self.n_estimators):
+            DecisionTree(self.path_in, self.n_instances, self.n_features)
             root = Node()
             sample = bootstrap_sample()
             root.compute_split(sample, kwargs)

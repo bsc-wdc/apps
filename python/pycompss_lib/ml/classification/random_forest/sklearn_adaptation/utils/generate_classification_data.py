@@ -5,10 +5,10 @@ from sklearn.datasets import make_classification
 from random import randint
 import sys
 
-import utils
+import python.pycompss_lib.ml.classification.random_forest.sklearn_adaptation.utils
 
 if __name__ == "__main__":
-    data_path = utils.DATA_PATH
+    data_path = python.pycompss_lib.ml.classification.random_forest.sklearn_adaptation.utils.DATA_PATH
     parser = argparse.ArgumentParser(description='Generate samples for a regression.')
     parser.add_argument('--n_samples', type=int, default=1000, help="The number of samples.")
     parser.add_argument('--n_features', type=int, default=100, help="The number of features.")
@@ -37,5 +37,5 @@ if __name__ == "__main__":
     y_test = y[len(y) / 2:]
     ds_kwargs = {k: v for k, v in vars(args).items() if k in ('name', 'path') and v is not None}
     ds_kwargs['prediction_type'] = 'class'
-    ds = utils.Dataset(**ds_kwargs)
+    ds = python.pycompss_lib.ml.classification.random_forest.sklearn_adaptation.utils.Dataset(**ds_kwargs)
     ds.save(X_train, y_train, X_test, y_test, args.file_per_feature)

@@ -194,6 +194,8 @@ def compute_split(tree_path, sample, depth, n_instances, features, path, y):
 def compute_split_simple(tree_path, sample, n_features, path, y):
     index_selection = feature_selection(n_features)
     b_score = sys.float_info.max
+    b_index = None
+    b_value = None
     for index in index_selection:
         feature = read_csv(get_feature_file(path, index), header=None, squeeze=True)
         score, value = test_split(sample, y, feature)

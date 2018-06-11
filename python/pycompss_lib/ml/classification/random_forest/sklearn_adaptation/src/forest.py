@@ -1,4 +1,4 @@
-"""Random forest for distributed computing using the COMPSs framework
+"""Random src for distributed computing using the COMPSs framework
 
 This module adapts the RandomForestClassifier and RandomForestRegressor
 classes from sklearn. Each tree is built and accessed in a parallel and
@@ -21,7 +21,7 @@ The module structure is the following:
 Single and multi-output problems are both handled.
 
 """
-# This module is a derivative work of the sklearn.ensemble.forest module. Original note:
+# This module is a derivative work of the sklearn.ensemble.src module. Original note:
 # Authors: Gilles Louppe <g.louppe@gmail.com>
 #          Brian Holt <bdholt1@gmail.com>
 #          Joly Arnaud <arnaud.v.joly@gmail.com>
@@ -37,7 +37,6 @@ from warnings import warn
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import scipy as sp
-from pycompss.api.constraint import constraint
 from scipy.sparse import issparse
 from scipy.sparse import hstack as sparse_hstack
 
@@ -76,7 +75,7 @@ def _generate_sample_indices(random_state, n_samples):
 
 
 def _generate_unsampled_indices(random_state, n_samples):
-    """Private function used to forest._set_oob_score function."""
+    """Private function used to src._set_oob_score function."""
     sample_indices = _generate_sample_indices(random_state, n_samples)
     sample_counts = np.bincount(sample_indices, minlength=n_samples)
     unsampled_mask = sample_counts == 0
@@ -241,7 +240,7 @@ class BaseForest(six.with_metaclass(ABCMeta, BaseEnsemble)):
         self.estimators_ = []    # Kept distributed. Call compss_wait_on(e) to obtain an estimator e.
 
     def apply(self, X):
-        """Apply trees in the forest to X, return leaf indices.
+        """Apply trees in the src to X, return leaf indices.
 
         Parameters
         ----------
@@ -253,7 +252,7 @@ class BaseForest(six.with_metaclass(ABCMeta, BaseEnsemble)):
         Returns
         -------
         X_leaves : array_like, shape = [n_samples, n_estimators]
-            For each datapoint x in X and for each tree in the forest,
+            For each datapoint x in X and for each tree in the src,
             return the index of the leaf x ends up in.
         """
         X = self._validate_X_predict(X)
@@ -266,7 +265,7 @@ class BaseForest(six.with_metaclass(ABCMeta, BaseEnsemble)):
         return np.array(results).T
 
     def decision_path(self, X):
-        """Return the decision path in the forest
+        """Return the decision path in the src
 
         .. versionadded:: 0.18
 
@@ -302,7 +301,7 @@ class BaseForest(six.with_metaclass(ABCMeta, BaseEnsemble)):
         return sparse_hstack(indicators).tocsr(), n_nodes_ptr
 
     def fit(self, X, y, sample_weight=None):
-        """Build a forest of trees from the training set (X, y).
+        """Build a src of trees from the training set (X, y).
 
         Parameters
         ----------
@@ -462,9 +461,9 @@ class BaseForest(six.with_metaclass(ABCMeta, BaseEnsemble)):
 
 class RandomForestClassifier(six.with_metaclass(ABCMeta, BaseForest,
                                                 ClassifierMixin)):
-    """A random forest classifier.
+    """A random src classifier.
 
-    A random forest is a meta estimator that fits a number of decision tree
+    A random src is a meta estimator that fits a number of decision tree
     classifiers on various sub-samples of the dataset and use averaging to
     improve the predictive accuracy and control over-fitting. The sub-sample
     size is always the same as the original input sample size but the samples
@@ -619,7 +618,7 @@ class RandomForestClassifier(six.with_metaclass(ABCMeta, BaseForest,
         """Predict class for X.
 
         The predicted class of an input sample is a vote by the trees in
-        the forest, weighted by their probability estimates. That is,
+        the src, weighted by their probability estimates. That is,
         the predicted class is the one with highest mean probability
         estimate across the trees.
 
@@ -655,7 +654,7 @@ class RandomForestClassifier(six.with_metaclass(ABCMeta, BaseForest,
         """Predict class probabilities for X.
 
         The predicted class probabilities of an input sample are computed as
-        the mean predicted class probabilities of the trees in the forest. The
+        the mean predicted class probabilities of the trees in the src. The
         class probability of a single tree is the fraction of samples of the same
         class in a leaf.
 
@@ -697,7 +696,7 @@ class RandomForestClassifier(six.with_metaclass(ABCMeta, BaseForest,
 
         The predicted class log-probabilities of an input sample is computed as
         the log of the mean predicted class probabilities of the trees in the
-        forest.
+        src.
 
         Parameters
         ----------
@@ -726,9 +725,9 @@ class RandomForestClassifier(six.with_metaclass(ABCMeta, BaseForest,
 
 
 class RandomForestRegressor(six.with_metaclass(ABCMeta, BaseForest, RegressorMixin)):
-    """A random forest regressor.
+    """A random src regressor.
 
-    A random forest is a meta estimator that fits a number of classifying decision
+    A random src is a meta estimator that fits a number of classifying decision
     trees on various sub-samples of the dataset and use averaging to improve the
     predictive accuracy and control over-fitting. The sub-sample size is always the
     same as the original input sample size but the samples are drawn with
@@ -829,7 +828,7 @@ class RandomForestRegressor(six.with_metaclass(ABCMeta, BaseForest, RegressorMix
         """Predict regression target for X.
 
         The predicted regression target of an input sample is computed as the
-        mean predicted regression targets of the trees in the forest.
+        mean predicted regression targets of the trees in the src.
 
         Parameters
         ----------

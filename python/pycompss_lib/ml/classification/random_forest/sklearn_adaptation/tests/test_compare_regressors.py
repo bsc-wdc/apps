@@ -1,14 +1,14 @@
 import sklearn
 
-from forest import rf_sklearn_trees
-import utils
+from ..src import forest
+from python.pycompss_lib.ml.classification.random_forest.sklearn_adaptation.utils import utils
 
 
 def main():
     X_train, y_train, X_test, _ = utils.Dataset(prediction_type='regr').read_and_wait_all()
 
     random_forests = []
-    random_forests.append(rf_sklearn_trees.RandomForestRegressor(oob_score=True, random_state=0))
+    random_forests.append(forest.RandomForestRegressor(oob_score=True, random_state=0))
     random_forests.append(sklearn.ensemble.RandomForestRegressor(oob_score=True, random_state=0))
 
     compare_list = []

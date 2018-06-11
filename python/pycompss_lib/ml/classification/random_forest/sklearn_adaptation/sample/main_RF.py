@@ -3,18 +3,18 @@ import time
 
 from distutils import util
 
-from pandas import read_csv
-from pycompss.api.api import compss_barrier
-from forest import rf_sklearn_trees
+from pycompss.api.api import compss_wait_on
+
+from python.pycompss_lib.ml.classification.random_forest.sklearn_adaptation.utils import utils
+from python.pycompss_lib.ml.classification.random_forest.sklearn_adaptation.src import forest
 import sklearn as sk
 
 
 def main():
-    initial_time = time.time()
     parser = argparse.ArgumentParser(argument_default=argparse.SUPPRESS,
-                                     description='Predict regression value using a decision tree regressor.')
+                                     description='Predict regression value using a random src.')
     # RandomForest params
-    parser.add_argument('--n_estimators', type=int, help='The number of trees in the forest.')
+    parser.add_argument('--n_estimators', type=int, help='The number of trees in the src.')
     parser.add_argument('--bootstrap', type=util.strtobool,
                         help='0 or 1. Whether bootstrap samples are used when building trees.')
     parser.add_argument('--oob_score', type=util.strtobool,
@@ -42,14 +42,22 @@ def main():
 
     args = parser.parse_args()
 
+    ds_kwargs = {k: v for k, v in vars(args).items() if k in ('name', 'path')}
+    if args.regr:
+        ds_kwargs['prediction_type'] = 'regr'
+    else:
+        ds_kwargs['prediction_type'] = 'class'
+
     rf_kwargs = {k: v for k, v in vars(args).items() if k not in ('name', 'path', 'regr', 'sklearn')}
 
-    time_1 = time.time()
+    # RandomForestRegressor Algorithm
+    initial_time = time.time()
 
-    X_train = read_csv(args.path + 'class_' + args.name + '_train_X.dat', sep=' ', header=None, squeeze=True)
-    y_train = read_csv(args.path + 'class_' + args.name + '_train_y.dat', sep=' ', header=None, squeeze=True)
+    ds = utils.Dataset(**ds_kwargs)
 
-    time_2 = time.time()
+    X_train = ds.read('train_X')
+    y_train = ds.read('train_y')
+    X_test = ds.read('test_X')
 
     if args.sklearn:
         if args.regr:
@@ -58,29 +66,32 @@ def main():
             rf = sk.ensemble.RandomForestClassifier(**rf_kwargs)
     else:
         if args.regr:
-            rf = rf_sklearn_trees.RandomForestRegressor(**rf_kwargs)
+            rf = forest.RandomForestRegressor(**rf_kwargs)
         else:
-            rf = rf_sklearn_trees.RandomForestClassifier(**rf_kwargs)
-    # print(type(rf))
+            rf = forest.RandomForestClassifier(**rf_kwargs)
+
+    time_0 = time.time()
+
+    X_train = compss_wait_on(X_train)
+    y_train = compss_wait_on(y_train)
 
     rf.fit(X_train, y_train)
 
-    compss_barrier()
+    time_1 = time.time()
 
-    time_3 = time.time()
+    # compss_barrier()
 
-    rf.predict(X_train)
+    X_test = compss_wait_on(X_test)
 
-    compss_barrier()
+    rf.predict(X_test)
 
-    time_4 = time.time()
+    time_2 = time.time()
 
     print('X_shape: ' + str(X_train.shape))
     print('y_shape: ' + str(y_train.shape))
-    print('Time Args: ' + str(time_1-initial_time))
-    print('Time Load: ' + str(time_2-time_1))
-    print('Time Fit: ' + str(time_3-time_2))
-    print('Time Predict: ' + str(time_4-time_3))
+    print('Load time: ' + str(time_0-initial_time))
+    print('Load + Fit time: ' + str(time_1-initial_time))
+    print('Load + Fit + Predict time: ' + str(time_2 - initial_time))
 
 
 if __name__ == "__main__":

@@ -3,7 +3,11 @@ import time
 
 from pycompss.api.api import compss_barrier
 
-from forest.decision_tree import DecisionTree
+import os
+import inspect
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(inspect.stack()[0][1])))+'/src')
+from decision_tree import DecisionTree
 
 
 def main():
