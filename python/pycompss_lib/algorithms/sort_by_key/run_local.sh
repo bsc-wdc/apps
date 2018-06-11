@@ -21,8 +21,8 @@
   # appArgs="${storage_location}"
 
   # Execute specific version launch
-  # cd 1_base
-  # cd 2_hash
+  # cd base
+  # cdbasehash
   # cd 3_files
   # cd 4_sortNumpy
   # cd 5_sortTotal

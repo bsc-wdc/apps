@@ -8,7 +8,7 @@ from itertools import islice
 from time import time
 
 import numpy as np
-from pycompss.api.api import barrier
+from pycompss.api.api import compss_barrier as barrier
 from pycompss.api.api import compss_delete_object
 from pycompss.api.api import compss_wait_on
 from pycompss.api.parameter import *

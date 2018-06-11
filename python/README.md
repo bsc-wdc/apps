@@ -1,4 +1,15 @@
-## Library applications avaialable
+# PyCOMPSs library and examples
+
+## Tests 
+
+To run the pycomss_lib tests issue:
+
+
+`python tests/tests.py`
+
+
+## Library applications available
+
 
 
 ### Pycompss Packages
@@ -10,6 +21,10 @@
 CascadeSVM
 
 `from pycompss_lib.ml.classification import CascadeSVM`
+
+RandomForest
+
+`from pycompss_lib.ml.classification import RandomForestClassifier`
 
 ##### Clustering
 

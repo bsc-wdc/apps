@@ -12,7 +12,7 @@ mandelbrot
 Mandelbrot fractal. Every row of the image is computed using a task.
 
 == Versions ==
-* - 1_base: base version
+* - base: base version
 
 == Execution instructions ==
 Usage:

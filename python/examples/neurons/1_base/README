@@ -1,6 +1,0 @@
-Neuron application
-
-Params: number of fragments
-
-Example usage:
-./launch.sh -v 1.2 -n 2 -t 30 -a 1024

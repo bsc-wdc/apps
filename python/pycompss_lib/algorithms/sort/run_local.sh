@@ -15,6 +15,6 @@
   appArgs="${scriptDir}/${dataset} 5 600"
 
   # Execute specific version launch
-  cd 1_base
+  cd base
   ./run_local.sh $tracing $appArgs
   cd ..

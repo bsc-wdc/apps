@@ -15,7 +15,7 @@
   appArgs="25600000 64 False"
 
   # Execute specifc version launch
-  # ${scriptDir}/1_base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
-  # ${scriptDir}/2_noWaitOns/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
-  # ${scriptDir}/3_initParallel/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
-  ${scriptDir}/4_apps_objects/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  # ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  # ${scriptDir}/noWaitOns/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  # ${scriptDir}/initParallel/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  ${scriptDir}/apps_objects/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs

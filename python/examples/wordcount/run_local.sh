@@ -16,4 +16,4 @@
   appArgs="${dataset} True"
 
   # Execute specific version launch
-  ${scriptDir}/5_wordcount/run_local.sh $tracing $appArgs
+  ${scriptDir}/wordcount/run_local.sh $tracing $appArgs
