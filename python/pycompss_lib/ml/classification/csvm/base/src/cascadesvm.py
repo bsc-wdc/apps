@@ -45,7 +45,6 @@ class CascadeSVM(object):
         self._data = []
         self._clf_params = []
         self._kernel_f = []
-        self._finished = []
 
     # def __str__(self):
     # return (" * CascadeSVM\n"
@@ -176,7 +175,6 @@ class CascadeSVM(object):
 
         self._data.append(chunks)
         self.converged.append(False)
-        self._finished.append(False)
 
     def predict(self, X, i=0):
         """
@@ -281,17 +279,22 @@ class CascadeSVM(object):
     def _do_fit(self, check_convergence):
         q = deque()
         feedback = []
+        finished = []
 
         for _ in self._data:
             feedback.append(None)
+            finished.append(None)
 
-        while not np.array(self._finished).all():
+        while not np.array(finished).all():
             for idx, chunks in enumerate(self._data):
-                if not self._finished[idx]:
+                if not finished[idx]:
+
+                    # first level
                     for chunk in chunks:
                         data = filter(None, [chunk, feedback[idx]])
                         q.append(train(False, True, *data, **self._clf_params[idx]))
 
+                    # reduction
                     while len(q) > 1:
                         data = []
 
@@ -317,7 +320,7 @@ class CascadeSVM(object):
                             idx, self.iterations[idx], self._max_iterations[idx]))
 
                     if self.iterations[idx] >= self._max_iterations[idx] or self.converged[idx]:
-                        self._finished[idx] = True
+                        finished[idx] = True
 
     def _lagrangian_fast(self, SVs, sl, coef, idx):
         set_sl = set(sl)
