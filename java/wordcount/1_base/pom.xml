@@ -78,7 +78,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/jar</outputDirectory>
+							<outputDirectory>${basedir}</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${project.build.directory}</directory>

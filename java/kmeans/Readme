@@ -17,33 +17,17 @@ After the initialization, the algorithm goes through a set of iterations. In eve
 
 
 == Versions ==
-=== Version 1: Binary Serialization ===
-kmeans_frag.kmeans_frag                     - The parameters are serialized using binary serialization. All the codes of this part are packaged under the kmeans_frag/ folder.
-=== Version 2: Dataset from files ===
-kmeans_frag_files.kmeans_frag_files               - Dataset from files version. All codes of this part are packaged under the kmeans_frag_files/ folder.
+There are two versions of Kmeans:
 
+=== Version 1 : apps ===
+Implements 2 ways of performing Kmeans, using random-generated objects or a dataset.
 
-== Execution instructions ==
-Usage:
-runcompss kmeans_frag.KMeans_frag -c <numClusters> -i <numIterations> -n <numPoints> -d <numDimensions> -f <numFragments> -s <seed> -r <scaleFactor> -ef <sameFragments>
-runcompss kmeans_frag_files.KMeans_frag_files -c <numClusters> -i <numIterations> -n <numPoints> -d <numDimensions> -f <numFragments> -s <seed> -r <scaleFactor> -p <datasetPath> -fc <firstCenters>
-
-== Execution with COMPSs Example ==
-runcompss kmeans_frag.KMeans_frag -c 100 -i 10 -n 9984000 -d 1000 -f 512 -s 5 -r 10 -ef false
-runcompss kmeans_frag_files.KMeans_frag_files -c 100 -i 10 -n 9984000 -d 1000 -f 512 -s 5 -r 10 -p ~/datasetFolder/ -fc 0
-
-
-== Execution without COMPSs Example ==
-java -classpath kmeans_frag.jar kmeans_frag.KMeans_frag -c 2 -i 10 -n 20 -d 3 -f 4 -s 5 -r 10 -ef false
-java -classpath kmeans_frag.jar kmeans_frag_files.KMeans_frag_files -c 2 -i 10 -n 20 -d 3 -f 4 -s 5 -r 10 -p ~/datasetFolder/ -fc 0
-
+=== Version 2 : psco ===
+Uses DataClay to perform the Kmeans.
 
 == Build ==
-=== Option 1: Native java ===
-cd /PATH_TO_JAVA_APPS/kmeans_frag/; javac src/main/java/kmeans_frag/*/*.java
-cd src/main/java/; jar cf kmeans_frag.jar kmeans_frag/
-cd ../../../; mkdir jar; mv src/main/java/kmeans_frag.jar jar/
 
-=== Option 2: Maven ===
-cd /PATH_TO_JAVA_APPS/kmeans_frag/
+The .jar files are build with Maven.
+
+cd /PATH_TO_JAVA_APPS/kmeans/
 mvn clean package
