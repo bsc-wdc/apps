@@ -1,0 +1,31 @@
+This is the Readme for:
+K-means Fragments
+
+[Name]: K-means Fragments
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+== Implementations ==
+
+kmeans_frag.KMeans_frag :
+
+	Performs the distributed KMeans using
+	random-generated objects.
+
+kmeans_frag_files.KMeans_frag_files :
+
+	Performs the distributed KMeans using
+	a dataset provided by the user.
+
+== Execution instructions ==
+
+runcompss kmeans_frag.KMeans_frag -c <numClusters> -i <numIterations> -n <numPoints> -d <numDimensions> -f <numFragments> -s <seed> -r <scaleFactor> -ef <sameFragments>
+runcompss kmeans_frag_files.KMeans_frag_files -c <numClusters> -i <numIterations> -n <numPoints> -d <numDimensions> -f <numFragments> -s <seed> -r <scaleFactor> -p <datasetPath> -fc <firstCenters>
+
+== Execution Example ==
+These examples are probably too big for your computer, try to reduce the magnitudes if you face any error.
+
+runcompss kmeans_frag.KMeans_frag -c 100 -i 10 -n 9984000 -d 1000 -f 512 -s 5 -r 10 -ef false
+runcompss kmeans_frag_files.KMeans_frag_files -c 100 -i 10 -n 9984000 -d 1000 -f 512 -s 5 -r 10 -p ~/datasetFolder/ -fc 0 
