@@ -221,58 +221,6 @@ def flush_nodes_task(file_out, *nodes_to_persist):
                     tree_file.write(node.to_json() + '\n')
 
 
-class DecisionTree:
-
-    def __init__(self, path_in, n_instances, n_features):
-        """
-        Decision tree with distributed splits using pyCOMPSs.
-
-        :param path_in: Path of the dataset directory.
-        :param n_instances: Number of instances in the sample.
-        :param n_features: Number of attributes in the sample.
-        """
-        self.path_in = path_in
-        self.n_instances = n_instances
-        self.n_features = n_features
-
-    def fit(self, max_depth, path_out, name):
-        """
-        Fits the DecisionTree.
-
-        :param max_depth: Depth of the decision tree.
-        :param path_out: Path of the output directory.
-        :param name: Name of the output file.
-        """
-        tree_sample = sample_selection(self.n_instances)
-        features = []  # Chunking would require task refactoring
-        for i in range(self.n_features):
-            features.append(get_feature(self.path_in, i))
-        y = get_y(self.path_in)
-        nodes_to_split = [('/', tree_sample, 1)]
-        file_out = path_out + name
-        open(file_out, 'w').close()  # Create new empty file deleting previous content
-        nodes_to_persist = []
-        while nodes_to_split:
-            tree_path, sample, depth = nodes_to_split.pop()
-            node, left_group, right_group = compute_split(tree_path, sample, depth, self.n_instances, features,
-                                                          self.path_in, y)
-            nodes_to_persist.append(node)
-            if depth < max_depth // 2:
-                nodes_to_split.append((tree_path + 'R', right_group, depth + 1))
-                nodes_to_split.append((tree_path + 'L', left_group, depth + 1))
-            else:
-                left_subtree_nodes = build_subtree(left_group, y, tree_path + 'L', max_depth - depth, len(features),
-                                                   self.path_in)
-                nodes_to_persist.append(left_subtree_nodes)
-
-                right_subtree_nodes = build_subtree(right_group, y, tree_path + 'R', max_depth - depth, len(features),
-                                                    self.path_in)
-                nodes_to_persist.append(right_subtree_nodes)
-            if len(nodes_to_persist) >= 1000:
-                flush_nodes(file_out, nodes_to_persist)
-        flush_nodes(file_out, nodes_to_persist)
-
-
 @task(returns=list)
 def build_subtree(sample, y, tree_path, max_depth, n_features, path_in):
     nodes_to_split = [(tree_path, sample, 1)]
@@ -295,3 +243,63 @@ def build_subtree(sample, y, tree_path, max_depth, n_features, path_in):
                 right = build_leaf(right_group, y, tree_path + 'R')
                 node_list_to_persist.append(right)
     return node_list_to_persist
+
+
+class DecisionTree:
+
+    def __init__(self, path_in, n_instances, n_features, path_out, name_out, max_depth=None):
+        """
+        Decision tree with distributed splits using pyCOMPSs.
+
+        :param path_in: Path of the dataset directory.
+        :param n_instances: Number of instances in the sample.
+        :param n_features: Number of attributes in the sample.
+        :param path_out: Path of the output directory.
+        :param name_out: Name of the output file.
+        :param max_depth: Depth of the decision tree.
+        """
+        self.path_in = path_in
+        self.n_instances = n_instances
+        self.n_features = n_features
+        self.path_out = path_out
+        self.name_out = name_out
+        self.max_depth = max_depth
+
+    def fit(self):
+        """
+        Fits the DecisionTree.
+        """
+        tree_sample = sample_selection(self.n_instances)
+        features = []  # Chunking would require task refactoring
+        for i in range(self.n_features):
+            features.append(get_feature(self.path_in, i))
+        y = get_y(self.path_in)
+        nodes_to_split = [('/', tree_sample, 1)]
+        file_out = self.path_out + self.name_out
+        open(file_out, 'w').close()  # Create new empty file deleting previous content
+        nodes_to_persist = []
+        while nodes_to_split:
+            tree_path, sample, depth = nodes_to_split.pop()
+            node, left_group, right_group = compute_split(tree_path, sample, depth, self.n_instances, features,
+                                                          self.path_in, y)
+            nodes_to_persist.append(node)
+            if depth < self.max_depth // 2:
+                nodes_to_split.append((tree_path + 'R', right_group, depth + 1))
+                nodes_to_split.append((tree_path + 'L', left_group, depth + 1))
+            else:
+                left_subtree_nodes = build_subtree(left_group, y, tree_path + 'L', self.max_depth - depth, len(features),
+                                                   self.path_in)
+                nodes_to_persist.append(left_subtree_nodes)
+
+                right_subtree_nodes = build_subtree(right_group, y, tree_path + 'R', self.max_depth - depth, len(features),
+                                                    self.path_in)
+                nodes_to_persist.append(right_subtree_nodes)
+            if len(nodes_to_persist) >= 1000:
+                flush_nodes(file_out, nodes_to_persist)
+        flush_nodes(file_out, nodes_to_persist)
+
+    def predict(self):
+        pass
+
+    def predict_probabilities(self):
+        pass
