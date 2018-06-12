@@ -1,7 +1,7 @@
 import sklearn
 
 from ..src import forest
-from python.pycompss_lib.ml.classification.random_forest.sklearn_adaptation.utils import utils
+from ..utils import utils
 
 
 def main():
