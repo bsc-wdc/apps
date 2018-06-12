@@ -60,13 +60,38 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+							<outputDirectory>${project.build.directory/lib}</outputDirectory>
 							<silent>true</silent>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+                                <artifactId>maven-resources-plugin</artifactId>
+                                <version>2.6</version>
+                                <executions>
+                                        <execution>
+                                                <id>copy-final-jar</id>
+                                                <phase>package</phase>
+                                                <goals>
+                                                        <goal>copy-resources</goal>
+                                                </goals>
+                                                <configuration>
+                                                        <outputDirectory>${basedir}</outputDirectory>
+                                                        <resources>
+                                                                <resource>
+                                                                        <directory>${project.build.directory}</directory>
+                                                                        <includes>
+                                                                                <include>${project.artifactId}.jar</include>
+                                                                        </includes>
+                                                                </resource>
+                                                        </resources>
+                                                </configuration>
+                                        </execution>
+                                </executions>
+                        </plugin>
 		</plugins>
+
 		<pluginManagement>
 			<plugins>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 

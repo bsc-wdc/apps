@@ -1,0 +1,39 @@
+This is the Readme for:
+Sparse LU factorization
+
+[Name]: Sparse LU
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+[Body]
+ == Description ==
+The Sparse LU application computes an LU matrix factorization on a sparse blocked matrix. The matrix size (number of blocks) and the block size are parameters of the application.
+
+As the algorithm progresses, the area of the matrix that is accessed is smaller; concretely, at each iteration, the 0th row and column of the current matrix are discarded. On the other hand, due to the sparseness of the matrix, some of its blocks might not be allocated and, therefore, no work is generated for them.
+
+When executed with COMPSs, Sparse LU produces several types of task with different granularity and numerous dependencies between them.
+
+== Versions ==
+There is one version of Sparse LU, and three implementations depending on the data types used to store the blocks.
+
+== Build ==
+
+The .jar files are build with Maven.
+
+cd /PATH_TO_JAVA_APPS/sparseLU/
+mvn clean package
+
+== Scripts usage ==
+
+Interactive script: launch.sh
+
+Although we showed how to execute an application with runcompss in each subdirectory,
+we strongly recommend to use the available bash scripts on the top of each application directory.
+To run an application with the scripts, do the following:
+
+        cd /PATH_TO_JAVA_APPS/sparseLU # change directory to the application top directory
+        ./launch.sh VERSION_TO_EXECUTE # VERSION_TO_EXECUTE it is 'base' in case that the version is '1_base'
+
+TODO: SLURM jobscript: launch_mn.sh

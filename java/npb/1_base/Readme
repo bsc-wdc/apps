@@ -7,27 +7,34 @@ NAS Parallel Benchmarks
 [License Agreement]: GPL
 [Platform]: COMPSs
 
-[Body]
-== Description ==
-The NAS parallel benchmarks (NPB) are a set of kernels that evaluate diverse computation and communication patterns, and they are widely used for parallel performance benchmarking. Four of these kernels were implemented in sequential Java to be executed with COMPSs:
-1. Embarrassingly Parallel (EP): a test for computation performance that generates pseudorandom floating point numbers and has few communications.
-2. Fast Fourier Transform (FT): this benchmark tests computation performance by solving a differential equation with FFTs and communication by sending large messages.
-3. Integer Sort (IS): this kernel also tests computation, but especially communication performance. It sorts a large array of integers and is characterised by numerous transfers.
-4. Conjugate Gradiant (CG): it estimates the smallest eigenvalue of a large sparse symmetric positive-definite matrix using the inverse iteration with the conjugate gradient method as a subroutine for solving systems of linear equations.
+== Implementations ==
+The concept implementation does not make sense, each benchmark is different from each other.
 
+== Usage ==
 
-== Build ==
-=== Option 1: Native java ===
-cd ~/workspace_java/npb/; javac src/main/java/npb/*.java
-cd src/main/java/; jar cf npb.jar npb/
-cd ../../../; mv src/main/java/npb.jar jar/
+To execute the EP test :
+runcompss npb.nasep.NASEP -np (NUMBER OF PROCESSORS) -class (SIZE)
 
-=== Option 2: Maven ===
-cd ~/workspace_java/npb/
-mvn clean package
+To execute the FT test :
+runcompss npb.nasft.NASFT -np (NUMBER OF PROCESSORS) -class (SIZE)
 
+To execute the IS test :
+runcompss npb.nasis.NASIS -np (NUMBER OF PROCESSORS) -class (SIZE)
 
-== References ==
-http://www.nas.nasa.gov/Software/NPB/
+To execute the CG test :
+runcompss npb.nascg.NASCG -np (NUMBER OF PROCESSORS) -class (SIZE)
 
-Last Update Nov. 2014
+You can specify the number of processors and the class which will finally determine the size of the problem, if you run it without arguments default values will be used. If you pretend to execute it locally, we strongly recommend you to use an 'S' class.
+
+== Execution Examples ==
+
+runcompss npb.nasep.NASEP -class S
+
+runcompss npb.nasft.NASFT -class S
+
+runcompss npb.nasis.NASIS -class S
+
+runcompss npb.nascg.NASCG -class S
+
+These executions will at the end of the benchmark take out 
+the correspondent numbers and if the benchmark verification is successful.

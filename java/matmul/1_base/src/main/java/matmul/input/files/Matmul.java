@@ -38,7 +38,7 @@ public class Matmul {
 		
 		//Store result
 		//System.out.println("[LOG] Storing C matrix obtained");
-		//matmul.storeMatrix(fC);
+		//matmul.storeMatrix("C_OUTPUT");
 		
 		System.out.println("[LOG] Main program finished.");
 	}
@@ -104,15 +104,20 @@ public class Matmul {
 			for (int i = 0; i < MSIZE; ++i) {
 				for (int j = 0; j < MSIZE; ++j) {
 					FileReader filereader = new FileReader(_C[i][j]);
+					System.out.println("[LOG] The name of the C block to store is : " + _C[i][j]);
 					BufferedReader br = new BufferedReader(filereader);
 					StringTokenizer tokens;
 					String nextLine;
 					for (int iblock = 0; iblock < BSIZE; ++iblock) {
 						nextLine = br.readLine();
-						tokens = new StringTokenizer(nextLine);
-						for (int jblock = 0; jblock < BSIZE && tokens.hasMoreTokens(); ++jblock) {
-							String value = tokens.nextToken() + " ";
-							fos.write(value.getBytes());
+						if (nextLine != null) { 
+							tokens = new StringTokenizer(nextLine);
+							for (int jblock = 0; jblock < BSIZE && tokens.hasMoreTokens() && nextLine != null; ++jblock) {
+								String value = tokens.nextToken() + " ";
+								fos.write(value.getBytes());
+								if (tokens.hasMoreTokens()) System.out.println("There are more tokens.");
+								System.out.println("Writing values: " + value);
+							}
 						}
 					}
 					fos.write("\n".getBytes());
