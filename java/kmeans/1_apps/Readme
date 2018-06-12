@@ -19,6 +19,11 @@ kmeans_frag_files.KMeans_frag_files :
 	Performs the distributed KMeans using
 	a dataset provided by the user.
 
+binarySerialization.KMeans_frag :
+
+	Works identically (with a dataset) as the 
+	KMeans_frag_files but is an optimized version.	
+
 == Execution instructions ==
 
 runcompss kmeans_frag.KMeans_frag -c <numClusters> -i <numIterations> -n <numPoints> -d <numDimensions> -f <numFragments> -s <seed> -r <scaleFactor> -ef <sameFragments>
@@ -29,3 +34,5 @@ These examples are probably too big for your computer, try to reduce the magnitu
 
 runcompss kmeans_frag.KMeans_frag -c 100 -i 10 -n 9984000 -d 1000 -f 512 -s 5 -r 10 -ef false
 runcompss kmeans_frag_files.KMeans_frag_files -c 100 -i 10 -n 9984000 -d 1000 -f 512 -s 5 -r 10 -p ~/datasetFolder/ -fc 0 
+runcompss binarySerialization.KMeans_frag -c 100 -i 10 -n 9984000 -d 1000 -f 512 -s 5 -r 10 -p ~/datasetFolder/
+

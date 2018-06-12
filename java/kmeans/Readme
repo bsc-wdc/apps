@@ -20,7 +20,7 @@ After the initialization, the algorithm goes through a set of iterations. In eve
 There are two versions of Kmeans:
 
 === Version 1 : apps ===
-Implements 2 ways of performing Kmeans, using random-generated objects or a dataset.
+Implements 3 ways of performing Kmeans, using random-generated objects or a dataset.
 
 === Version 2 : psco ===
 Uses DataClay to perform the Kmeans.

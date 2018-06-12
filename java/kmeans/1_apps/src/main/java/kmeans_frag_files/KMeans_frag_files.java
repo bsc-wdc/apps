@@ -43,12 +43,12 @@ public class KMeans_frag_files {
 
     public static void main(String[] args) {
     	// Default values
-        int K = 4;			// k
+        int K = 4;					// k
         double epsilon = 1e-4;		// convergence criteria
         int iterations = 50;		// maxIterations
-        int nPoints = 2000;		// numV
+        int nPoints = 2000;			// numV
         int nDimensions = 2;
-        int nFrags = 2;			// numFrag
+        int nFrags = 2;				// numFrag
         int argIndex = 0;
         String datasetPath = "";	// dataset path
         int seed = 5;                   // Seed
@@ -215,12 +215,18 @@ public class KMeans_frag_files {
     	    int v = 0;
     	    while (v < numV) {
     	        String line = br.readLine();
-    	        String[] values = line.split(" ");
-    	        for (int i = 0; i < values.length; i++){
-    	        	System.out.println("value of the point: " + values[i]);
-    	        	points[v][i] = Double.valueOf(values[i]);
+   
+    	        if (line != null) {
+    	        	String[] values = line.split(" ");
+	    	        for (int i = 0; i < values.length; i++){
+	    	        	System.out.println("value of the point: " + values[i]);
+	    	        	points[v][i] = Double.valueOf(values[i]);
+	    	        }
+	    	        v = v + 1;
+    	        } 
+    	        else {
+    	        	break;
     	        }
-    	        v = v + 1;
     	    }
     	} catch (IOException e){
     		e.printStackTrace();
@@ -262,8 +268,7 @@ public class KMeans_frag_files {
     	return new Fragment(points);
     }
     
-    // task
-    private static Fragment init_random(Fragment points, int k, int nDimensions){
+    public static Fragment init_random(Fragment points, int k, int nDimensions){
 	System.out.println("* Retrieving mu from fragment:");
     	System.out.println("  - k: " + k);
     	System.out.println("  - nDimensions: " + nDimensions);
@@ -350,7 +355,7 @@ public class KMeans_frag_files {
     // @task
     public static SumPoints partial_sum(Fragment points, Clusters cluster, int k, int ind) {
         SumPoints pSum = new SumPoints(k, points.getDimensions());
-        for (int c = 0; c < cluster.getSize(); c++) {  // en realidad cluster.getSize = k
+        for (int c = 0; c < cluster.getSize(); c++) { 
             int[] positionValues = cluster.getIndexes(c);
             for (int i = 0; i < cluster.getIndexesSize(c); i++) {
                 int value = positionValues[i];
@@ -370,18 +375,8 @@ public class KMeans_frag_files {
 
         return a;
     }
-
-    /*
-    // with INOUT
-    // @task
-    public static void reduceCentersTask(SumPoints a, SumPoints b){
-            for (int i = 0; i < b.getSize(); i++){
-                    a.sumValue(i, b.getValue(i), b.getNumPoints(i));
-            }
-    }
-    */
 	
-
+    @SuppressWarnings("unused")
     private static boolean has_converged (Fragment mu, Fragment oldmu, double epsilon, int n, int maxIterations){
         System.out.println("iter: " + n);
         System.out.println("maxIterations: " + maxIterations);
