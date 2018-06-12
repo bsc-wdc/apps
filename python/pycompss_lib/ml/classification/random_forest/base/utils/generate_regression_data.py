@@ -3,7 +3,7 @@ import argparse
 from sklearn.datasets import make_regression
 from random import randint
 
-import utils
+import running_utils
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate samples for a regression.')
@@ -31,5 +31,5 @@ if __name__ == "__main__":
     y_test = y[len(y) / 2:]
     ds_kwargs = {k: v for k, v in vars(args).iteritems() if k in ('name', 'path') and v is not None}
     ds_kwargs['prediction_type'] = 'regr'
-    ds = utils.Dataset(**ds_kwargs)
+    ds = running_utils.Dataset(**ds_kwargs)
     ds.save(X_train, y_train, X_test, y_test)

@@ -1,11 +1,11 @@
 import sklearn
 
-from ..src import forest
-from ..utils import utils
+import forest
+import running_utils
 
 
 def main():
-    X_train, y_train, X_test, _ = utils.Dataset(prediction_type='class').read_and_wait_all()
+    X_train, y_train, X_test, _ = running_utils.Dataset(prediction_type='class').read_and_wait_all()
 
     random_forests = []
     random_forests.append(forest.RandomForestClassifier(oob_score=True, random_state=0))
@@ -20,7 +20,7 @@ def main():
 
     different = False
     for res in compare_list:
-        if not utils.are_equal(compare_list[0], res):
+        if not running_utils.are_equal(compare_list[0], res):
             different = True
 
     if different:

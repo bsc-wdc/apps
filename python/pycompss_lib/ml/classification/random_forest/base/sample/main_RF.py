@@ -5,7 +5,7 @@ from distutils import util
 
 from pycompss.api.api import compss_wait_on
 
-import utils
+import running_utils
 import forest
 import sklearn as sk
 
@@ -53,7 +53,7 @@ def main():
     # RandomForestRegressor Algorithm
     initial_time = time.time()
 
-    ds = utils.Dataset(**ds_kwargs)
+    ds = running_utils.Dataset(**ds_kwargs)
 
     X_train = ds.read('train_X')
     y_train = ds.read('train_y')
