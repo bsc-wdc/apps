@@ -1,0 +1,5 @@
+file*.txt
+lib/
+master/
+worker/
+xml/project_test.xml

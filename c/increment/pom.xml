@@ -90,7 +90,7 @@
 							<goal>exec</goal>
 						</goals>
 						<configuration>
-							<executable>buildapp</executable>
+							<executable>compss_build_app</executable>
 							<workingDirectory>${basedir}/</workingDirectory>
 							<arguments>
 								<argument>increment</argument>

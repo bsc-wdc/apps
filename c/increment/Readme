@@ -11,6 +11,9 @@ Increment
 == Description ==
 Increment is an application that takes three different values and increases them a number of given times. The purpose of this application is to show parallelism between the different increments. 
 
+== Build ==
+compss_build_app increment
+
 == Execution instructions ==
 Usage:
 runcompss --lang=c --project=xml/project.xml master/increment <N> <initValue1> <initValue2> <initValue3>
@@ -25,7 +28,4 @@ where:
 == Execution Example ==
 runcompss --lang=c --project=xml/project.xml master/increment 10 1 2 3
 
-
-== Build ==
-buildapp increment
 
