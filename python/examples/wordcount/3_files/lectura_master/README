@@ -1,5 +1,0 @@
-
-Parameters: input_file output_file
-
-Example Usage
-./launch.sh -v 1.3 -n 2 -t 15 -a /gpfs/projects/bsc19/COMPSs_APPS/wordcount/data/text_100.txt

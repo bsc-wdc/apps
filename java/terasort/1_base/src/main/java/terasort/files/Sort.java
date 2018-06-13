@@ -48,11 +48,6 @@ public class Sort {
 
         System.out.println("[LOG] Main program finished.");
 
-        // Uncomment the following lines to see the result keys
-        //for (int i=0; i < NUM_RANGES; ++i){
-        //	System.out.println("Range " + i + " result:");
-        //	System.out.println(result[i]);
-        //}
         long endTime = System.currentTimeMillis();
 
         System.out.println("[TIMER] Elapsed time: " + (endTime - startTime) + " ms");

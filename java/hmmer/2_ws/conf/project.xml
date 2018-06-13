@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project>
+    <MasterNode/>
+    <ComputeNode Name="localhost">
+        <InstallDir>/opt/COMPSs</InstallDir>
+        <WorkingDir>/tmp/COMPSsWorker/</WorkingDir>
+    </ComputeNode>
+    <Service wsdl="http://localhost:8080/HmmerObjectsImpl/hmmerobjectsimpl?wsdl">
+        <LimitOfTasks>2</LimitOfTasks>
+    </Service>
+</Project>

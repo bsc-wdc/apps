@@ -12,28 +12,28 @@ sortByKey
 sortByKey
 
 == Versions ==
-* - 1_base: base version
-* - 2_hash
-* - 3_files
-* - 4_sortNumpy
-* - 5_sortTotal
-* - 6_sortByKey
+* - base: base version
+* - 2_hash: base version with hashed partitioning
+* - 3_files: Sort N files (with pickled content)
+* - 4_sortNumpy: Sort N files (with pickled content) with numpy using mergesort algorithm. Also alternatives for N times.
+* - 5_sortTotal: Sort N files (with pickled content) with merge_reduce of the whole result.
+* - 6_sortByKey: Final version with automatic dataset generation and from files (with pickled content).
  
 == Execution instructions ==                                                                                        
-Usage:                                                                                                                             
-sort.py <numKeys> <uniqueKeys> <keyLenght> <uniqueValues> <valueLenght>
-<numFragments> <keysPerFragment> <randomSeed> <fromFiles> <path>                                                      
+Usage (6_sortByKey):
+
+sort.py <numKeys> <uniqueKeys> <keyLenght> <uniqueValues> <valueLenght> <numFragments> <randomSeed> <fromFiles> <path>
                                                                                                                     
 where:                                                                                                              
-                 * - numKeys:
-                 * - uniqueKeys:
-                 * - keyLenght:
-                 * - uniqueValues:
-                 * - valueLenght:
-                 * - numFragments:
-                 * - keysPerFragment:
-                 * - randomSeed:
-                 * - fromFiles:
-                 * - path:                                                                                                                                       
-== Build ==                                                                                                         
+                 * - numKeys: Number of keys
+                 * - uniqueKeys: Number of unique keys
+                 * - keyLenght: Length of the keys (bytes)
+                 * - uniqueValues: Number of unique values
+                 * - valueLenght: Length of the values (bytes)
+                 * - numFragments: Number of fragments
+                 * - randomSeed: Random seed
+                 * - fromFiles: Boolean from files dataset (If true, ignores the previous parameters)
+                 * - path: Dataset path
+
+== Build ==
 No build is required

@@ -12,7 +12,7 @@ kmeans
 kmeans
 
 == Versions ==
-* - 1_base: base version
+* - base: base version
 * - 2_2steps: Base algorithm version 2: better task granularity 
 * - 3_2stepsnotwait:  
 * - 4_nruns: execute n runs of kmeans function.

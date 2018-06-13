@@ -1,0 +1,1 @@
+enqueue_compss -d -m --lang=c --persistent_worker_c=true --num_nodes=2 --max_tasks_per_node=12 --exec_time=15 --appdir=/home/bsc19/bsc19430/matmul_objects_init /home/bsc19/bsc19430/matmul_objects_init/master/Matmul 8 32 12.34

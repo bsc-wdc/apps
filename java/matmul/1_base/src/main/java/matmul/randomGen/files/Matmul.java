@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.StringTokenizer;
 
+import es.bsc.compss.api.COMPSs;
+
 
 public class Matmul {
 	private static int MSIZE;
@@ -59,7 +61,7 @@ public class Matmul {
 		
 		// Compute matrix multiplication C = A x B
 		computeMultiplication();
-		
+				
 		// Uncomment the following line if you wish to see the result in the stdout
 		//printMatrix(CfileNames, "C (Result)");
 		// Uncomment the following line if you wish to store the result in a file

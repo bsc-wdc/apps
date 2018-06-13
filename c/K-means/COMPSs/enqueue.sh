@@ -1,0 +1,1 @@
+enqueue_compss -d --persistent_worker_c=true --lang=c --exec_time=10 --num_nodes=2 --cpus_per_node=12 --appdir=/home/bsc19/bsc19430/kmeans-master/COMPSs master/kmeans -i /home/bsc19/bsc19430/kmeans-master/COMPSs/Image_data/N128_K4_d5_0.txt -n 4 -f 4 -o -l 10

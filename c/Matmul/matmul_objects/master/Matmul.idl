@@ -1,0 +1,4 @@
+interface Matmul 
+{
+	void multiplyBlocks(inout Block block1, inout Block block2, inout Block block3);
+};

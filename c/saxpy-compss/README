@@ -1,0 +1,7 @@
+Saxpy-kernel
+
+- Change the path in xml/project.xml to the real application path.
+- Build with:
+	compss_build_app saxpy
+- Run with:
+	runcompss -d --lang=c --project=xml/project.xml master/saxpy

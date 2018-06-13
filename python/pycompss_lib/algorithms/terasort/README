@@ -12,7 +12,7 @@ Terasort
 Terasort
 
 == Versions ==
-* - 1_base: base version
+* - base: base version
 * - 2_base_oo: object oriented implementation of the base version
 
 == Execution instructions ==

@@ -66,6 +66,31 @@
 					</execution>
 				</executions>
 			</plugin>
+			 <plugin>
+                                <artifactId>maven-resources-plugin</artifactId>
+                                <version>2.6</version>
+                                <executions>
+                                        <execution>
+                                                <id>copy-final-jar</id>
+                                                <phase>package</phase>
+                                                <goals>
+                                                        <goal>copy-resources</goal>
+                                                </goals>
+                                                <configuration>
+                                                        <outputDirectory>${basedir}</outputDirectory>
+                                                        <resources>
+                                                                <resource>
+                                                                        <directory>${project.build.directory}</directory>
+                                                                        <includes>
+                                                                                <include>${project.artifactId}.jar</include>
+                                                                        </includes>
+                                                                </resource>
+                                                        </resources>
+                                                </configuration>
+                                        </execution>
+                                </executions>
+                        </plugin>
+
 		</plugins>
 		<pluginManagement>
 			<plugins>

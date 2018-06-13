@@ -14,14 +14,16 @@ dividing the domain ([a, b]) in m subintervals using a defined number of
 integration points at each subinterval.
 
 == Versions ==
-* - 1_base: base version                                                                                                                    
-== Execution instructions ==                                                                                        
-Usage:                                                                                                                             
-integration.py <m> <nIP> <a> <b>                                                      
-                                                                                                                    
-where:                                                                                                              
-                 * - m: number of intervals                                                                    
-                 * - nIP: number of integration points                                                               
-                 * - [a,b]: integration domain                                                                                                                                                                         
-== Build ==                                                                                                         
+* - base: base version
+
+== Execution instructions ==
+Usage:
+integration.py <m> <nIP> <a> <b>
+
+where:
+                 * - m: number of intervals
+                 * - nIP: number of integration points
+                 * - [a,b]: integration domain
+
+== Build ==
 No build is required

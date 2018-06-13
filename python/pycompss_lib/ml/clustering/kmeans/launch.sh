@@ -14,7 +14,7 @@
   appArgs="16000 3 4 16"
 
   # Execute specifcversion launch  
-  ${scriptDir}/12_latest/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  ${scriptDir}/latest/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
 
 #  numV = numero de punts
 #  dim = dimensions del punt

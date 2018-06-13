@@ -1,5 +1,6 @@
 from pycompss.api.task import task
 from pycompss.api.parameter import *
+from numpy import random
 
 
 @task(returns=int)
@@ -31,7 +32,6 @@ def compute_maximum(X):
 
 
 def init_random(size, dim):
-    from numpy import random
     return [10000 * random.random(dim) for _ in range(size)]
 
 
@@ -40,8 +40,11 @@ def genFragment(size, dim):
     return init_random(size, dim)
 
 
-def max_norm(numP, dim, numFrag):
+def max_norm(numP, dim, numFrag, seed=None):
     from pycompss.api.api import compss_wait_on
+
+    if seed is not None:
+        random.seed(seed)
 
     size = int(numP / numFrag)
 
@@ -62,7 +65,7 @@ def main():
     startTime = time.time()
     result = max_norm(numP, dim, numFrag)
     print("The maximum norm is %f" % result)
-    print("Ellapsed Time {} (s)".format(time.time() - startTime))
+    print("Elapsed Time {} (s)".format(time.time() - startTime))
 
 if __name__ == "__main__":
     main()

@@ -12,13 +12,16 @@ PCA
 PCA
 
 == Versions ==
-* - 1_base: base version
+* - base: base version
  
 == Execution instructions ==                                                                                        
 Usage:                                                                                                                             
-pca_distributed.py                                                      
+pca_distributed.py <numPoints> <dimensions> <classes>
                                                                                                                     
 where:                                                                                                              
-                 * -                                                                                                                                        
+                 * - numPoints: Number of points
+                 * - dimensions: Number of dimensions
+                 * - classes; Number of classes
+
 == Build ==                                                                                                         
 No build is required
