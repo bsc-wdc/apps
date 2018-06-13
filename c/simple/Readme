@@ -1,0 +1,44 @@
+This is the Readme for:
+Simple
+
+[Name]: Simple
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Simple is an application that takes one value and increases it by one unit. The purpose of this application is to show how tasks are managed by COMPSs.
+
+== Setup ==
+Generate a project_test.xml with the current diretory as application dir.
+
+mvn process-resources
+
+
+== Build ==
+
+compss_build_app simple
+
+== Execution instructions ==
+
+Usage:
+runcompss --project=xml/project_test.xml master/simple <initValue>
+
+where:
+		 * - initValue: Initial value for counter
+
+
+== Execution Example ==
+runcompss --project=xml/project_test.xml master/simple 1
+
+This execution example can be run by executing the run.sh script
+
+./run.sh
+
+== All in One ==
+All the previous steps automatically executed with maven
+
+mvn clean install exec:exec
+

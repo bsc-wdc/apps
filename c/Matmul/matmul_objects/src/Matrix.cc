@@ -44,12 +44,3 @@ void Matrix::print() {
 	}
 }
 
-#ifdef COMPSS_WORKER
-
-void multiplyBlocks(Block *block1, Block *block2, Block *block3) {
-	block1->multiply(*block2, *block3);
-}
-
-
-#endif
-

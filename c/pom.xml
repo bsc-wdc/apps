@@ -101,5 +101,6 @@
 
 	<!-- SUB-MODULES -->
 	<modules>
+		<module>increment</module>
 	</modules>
 </project>

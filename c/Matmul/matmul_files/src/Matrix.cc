@@ -33,63 +33,26 @@ void Matrix::init(int mSize, int bSize, double val, char mat_name) {
 	for (int i=0; i<mSize; i++) {
 		for (int j=0; j<mSize; j++) {
 			stringstream ss;
-                        ss << "files/" << mat_name << "." << i << "." << j;
+                        ss << mat_name << "." << i << "." << j;
                         std::string tmp = ss.str();
                 
-                        char * file = new char[tmp.size() + 1];
-                        std::copy(tmp.begin(), tmp.end(), file);
-                        file[tmp.size()] = '\0';
-
-			FILE *fp = fopen(file, "w");
-			for (int ii = 0; ii < bSize; ii++){
-				for (int jj = 0; jj < bSize; jj++){
-					fprintf(fp, "%lf ", val);
-				}
-				fprintf(fp, " \n");
+                        cout << "writting file " << tmp << endl; 
+			FILE *fp = fopen(tmp.c_str(), "w");
+			if (fp!=NULL){
+				for (int ii = 0; ii < bSize; ii++){
+					for (int jj = 0; jj < bSize; jj++){
+						fprintf(fp, "%lf ", val);
+					}
+					fprintf(fp, " \n");
+				}	
+				fclose(fp);
+			}else{
+				cerr << " Error openning file " << tmp << " to write" <<endl;
+				exit(1);
 			}
-			fclose(fp);
 		}
 	}
 }
-
-
-static Block *get_block(char *file, int M) {
-	Block *result;
-	FILE *fp;
-
-	result = Block::init(M, 0.0);
-	fp = fopen(file, "r");
-	
-	for (int i = 0; i < M; i++) {
-		for (int j = 0; j < M; j++) {
-			fscanf(fp, "%lf ", &(result->data[i][j]));
-		}
-		fscanf(fp, " \n");
-	}
-	fclose(fp);
-	
-	return result;
-}
-
-
-
-static void write_block(Block *b, char *file, int M) {
-	
-	FILE *fp;
-
-	fp = fopen(file , "w");
-	
-	for (int i = 0; i < M; i++) {
-		for (int j = 0; j < M; j++) {
-			fprintf(fp, "%lf ", b->data[i][j]);
-		}
-		fprintf(fp, " \n");
-	}
-	fclose(fp);
-}
-
-
-
 
 void Matrix::print() {
 	for (int i=0; i<N; i++) {
@@ -100,23 +63,4 @@ void Matrix::print() {
 		cout << "\r\n";
 	}
 }
-
-#ifdef COMPSS_WORKER
-
-void multiplyBlocks(char *f1, char *f2, char *f3, int M) {
-
-	Block *block1, *block2, *block3;
-
-	block1 = get_block(f1, M);
-	block2 = get_block(f2, M);
-	block3 = get_block(f3, M);
-
-	block1->multiply(*(block2), *(block3));
-
-	write_block(block1, f1, M);
-
-}
-
-
-#endif
 

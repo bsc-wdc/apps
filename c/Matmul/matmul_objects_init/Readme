@@ -15,14 +15,17 @@ If A is an n×m matrix and B is an m×p matrix, the result AB of their multiplic
 
 In this implementation, A and B are square matrices (same number of rows and columns), and so it is the result matrix C. Each matrix is divided in N blocks of M doubles. The multiplication of two blocks is done by a multiply task method with a simple three-nested-loop implementation. When executed with COMPSs, the main program generates N^3^ tasks arranged as N^2^ chains of N tasks in the dependency graph.
 
-Each of these block multiplications is internally parallelized with OmpSs.
+== Setup ==
+Generate a project_test.xml with the current diretory as application dir.
 
-== Requirements ==
-This application required to have the Mercurium compiler and the Nanox++ runtime, included in the OmpSs distribution.
+mvn process-resources
+
+== Build ==
+compss_build_app Matmul
 
 == Execution instructions ==
 Usage:
-runcompss -d --project=xml/project_new.xml --lang=c ./master/Matmul <numberOfBlocks> <blockSize> <initVal>
+runcompss --lang=c --project=xml/project.xml master/Matmul <numberOfBlocks> <blockSize> <initVal>
 
 where:
 		 * - numberOfBlocks: Number of blocks inside each matrix
@@ -31,11 +34,13 @@ where:
 
 
 == Execution Example ==
-runcompss -d --project=xml/project_new.xml --lang=c ./master/Matmul 8 4 12.34
+runcompss --lang=c --project=xml/project_test.xml master/Matmul 8 4 12.34
 
+This execution example can be run by executing the run.sh script
 
-== Build ==
-export WITH_OMPSS=1
-buildapp Matmul
+./run.sh
 
-Modify xml/project_new.xml setting AppDir to the current dir
+== All in One ==
+All the previous steps automatically executed with maven
+
+mvn clean install exec:exec

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2002-2015 Barcelona Supercomputing Center (www.bsc.es)
+ *  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -47,33 +47,3 @@ void Matrix::print() {
 void Matrix::result(){
 	data[0][0]->result();
 }
-
-#ifdef COMPSS_WORKER
-
-void multiplyBlocks(Block *block1, Block *block2, Block *block3) {
-
-	cout << "printing in worker" << endl;
-	block1->print();
-	block2->print();
-	block3->print();
-
-	struct timeval t_start, t_end;
-	gettimeofday(&t_start, NULL);
-	block1->multiply(*block2, *block3);
-	gettimeofday(&t_end, NULL);
-	
-	double msecs;
-	msecs = (((t_end.tv_sec - t_start.tv_sec) * 1000000) + (t_end.tv_usec - t_start.tv_usec))/1000;
-
-	cout << "Time in task is " << msecs << endl;
-
-}
-
-void initBlock(Block *block, int bSize, double initVal){
-	block->init(bSize,initVal);
-} 
-
-
-#endif
-
-

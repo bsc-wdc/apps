@@ -6,9 +6,9 @@
 	<artifactId>increment</artifactId>
 	<packaging>pom</packaging>
 	<parent>
-                <groupId>es.bsc.compss.tutorial-apps.c</groupId>
-		<artifactId>compss-tutorial-apps-c</artifactId>
-		<version>2.0.rc1706</version>
+                <groupId>es.bsc.compss.apps.c</groupId>
+		<artifactId>compss-apps-c</artifactId>
+		<version>2.2.rc1803</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -105,7 +105,6 @@
 					<arguments>
 						<argument>--lang=c</argument>
 						<argument>--project=${basedir}/xml/project_test.xml</argument>
-						<argument>--resources=${basedir}/xml/resources.xml</argument>
 						<argument>${basedir}/master/increment</argument>
 						<argument>5</argument>
 						<argument>1</argument>
