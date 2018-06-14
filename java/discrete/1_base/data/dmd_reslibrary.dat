@@ -1,0 +1,197 @@
+#DMD Residue Library
+# Format
+# RESIDUE resid resName
+# resId atomId atType connected_atoms
+#
+RESIDUE ALA Alanine
+ALA N   nh  CA  CB  C    
+ALA CA  ch  CB  C   O
+ALA CB  ch3 C
+ALA C   co  O
+ALA O   oc
+RESIDUE GLY Glycine
+GLY N   nh  CA  C
+GLY CA  ch2 C   O
+GLY C   co  O
+GLY O   oc
+RESIDUE SER Serine
+SER N   nh  CA  CB  C
+SER CA  ch  CB  OG  C   O
+SER CB  ch2 OG  C
+SER OG  oh  
+SER C   co  O
+SER O   oc
+RESIDUE THR Threonine
+THR N   nh  CA CB C
+THR CA  ch  CB CG2 OG1 C O
+THR CB  ch  CG2 OG1 C
+THR CG2 ch3 OG1
+THR OG1 oh
+THR C   co  O
+THR O   oc
+RESIDUE LEU Leucine
+LEU N   nh  CA CB C
+LEU CA  ch  CB CG C O
+LEU CB  ch2 CG CD_ C
+LEU CG  ch  CD_
+LEU CD_ ch3 CD_
+LEU C   co  O
+LEU O   oc
+RESIDUE ILE Isoleucine
+ILE N   nh  CA CB C
+ILE CA  ch  CB CG_ C O
+ILE CB  ch  CG_ CD1 C
+ILE CG2 ch3 CG1 
+ILE CG1 ch2 CD1
+ILE CD1 ch3
+ILE C   co  O
+ILE O   oc
+RESIDUE VAL Valine
+VAL N   nh  CA CB C
+VAL CA  ch  CB CG_ C O
+VAL CB  ch  CG C
+VAL CG_ ch3 CG_
+VAL C   co  O
+VAL O   oc
+RESIDUE ASN Asparagine
+ASN N   nh  CA CB C
+ASN CA  ch  CB CG C O
+ASN CB  ch2 CG OD1 ND2 C
+ASN CG  cr2 OD1 ND2
+ASN OD1 oc  ND2
+ASN ND2 nh2
+ASN C   co  O
+ASN O   oc
+RESIDUE GLN Glutamine
+GLN N   nh  CA CB C
+GLN CA  ch  CB CG C O
+GLN CB  ch2 CG CD C
+GLN CG  ch2 CD OE1 NE2
+GLN CD  cr2 OE1 NE2 
+GLN OE1 oc  NE2
+GLN NE2 nh2
+GLN C   co  O
+GLN O   oc
+RESIDUE ARG Arginine
+ARG N   nh  CA CB C
+ARG CA  ch  CB CG C O
+ARG CB  ch2 CG CD C
+ARG CG  ch2 CD NE
+ARG CD  ch2 NE CZ
+ARG NE  nr  CZ NH_
+ARG CZ  cr2 NH_
+ARG NH_ nr2 NH_
+ARG C   co  O
+ARG O   oc
+RESIDUE HI_ Histidine
+HI_ N   nh  CA  CB  C 
+HI_ CA  ch  CB  CG  C   O
+HI_ CB  ch2 CG  ND1 CD2
+HI_ CG  cr2 ND1 CD2 CE1 NE2
+HI_ ND1 n2  CE1 NE2 CD2
+HI_ CE1 crh NE2 CD2
+HI_ NE2 n2  CD2 
+HI_ CD2 cr
+HI_ C   co  O
+HI_ O   oc
+RESIDUE TRP Tryptophan
+TRP N   nh  CA CB C 
+TRP CA  ch  CB CG C O
+TRP CB  ch2 CG CD_ C
+TRP CG  cr2 CD_ NE1 CE_ 
+TRP CD1 cr  NE1 CE2 CD2
+TRP NE1 nh  CE2 CZ2 CD2
+TRP CE2 cr2 CD2 CZ2 CH2 CE3
+TRP CZ2 cr  CH2 CZ3 CD2
+TRP CH2 cr  CZ3 CE3
+TRP CZ3 cr  CE3 CD2
+TRP CE3 cr  CD2
+TRP CD2 cr2 
+TRP C   co  O
+TRP O   oc
+RESIDUE PHE Phenylalanine
+PHE N   nh  CA CB C
+PHE CA  ch  CB CG C O
+PHE CB  ch2 CG CD_ 
+PHE CG  cr2 CD_ CE_ CZ
+PHE CD_ cr  CD_ CE_ CZ  
+PHE CE_ cr  CE_ CZ
+PHE CZ  cr 
+PHE C   co  O
+PHE O   oc
+RESIDUE TYR Tyrosine
+TYR N   nh  CA CB C
+TYR CA  ch  CB CG C O
+TYR CB  ch2 CG CD_
+TYR CG  cr2 CD_ CE_ CZ
+TYR CD_ cr  CD_ CE_ CZ
+TYR CE_ cr  CE_ CZ OH
+TYR CZ  cr2 OH
+TYR OH  oh
+TYR C   co  O
+TYR O   oc
+RESIDUE GLU Glutamic Acid
+GLU N   nh  CA CB C
+GLU CA  ch  CB CG C O
+GLU CB  ch2 CG CD
+GLU CG  ch2 CD OE_
+GLU CD  cr2 OE_
+GLU OE_ o-  OE_
+GLU C   co  O
+GLU O   oc
+RESIDUE ASP Aspartic Acid
+ASP N   nh  CA CB C
+ASP CA  ch  CB CG C O
+ASP CB  ch2 CG OD_
+ASP CG  cr2 OD_
+ASP OD_ o-  OD_
+ASP C   co  O
+ASP O   oc
+RESIDUE LYS Lysine
+LYS N   nh  CA CB C
+LYS CA  ch  CB CG C O
+LYS CB  ch2 CG CD C
+LYS CG  ch2 CD CE
+LYS CD  ch2 CE NZ
+LYS CE  ch2 NZ
+LYS NZ  nk 
+LYS C   co  O
+LYS O   oc
+RESIDUE PRO Proline
+PRO N   np  CD CG CB CA C
+PRO CD  ch2 CA CB CG
+PRO CG  ch2 CB CA
+PRO CB  ch2 CA C
+PRO CA  ch  C O
+PRO C   co  O
+PRO O   oc
+RESIDUE CY_ Cysteine
+CY_ N   nh  CA CB C
+CY_ CA  ch  CB SG C O
+CY_ CB  ch2 SG 
+CY_ SG  s  
+CY_ C   co  O
+CY_ O   oc
+RESIDUE MET Methionine
+MET N   nh  CA CB C
+MET CA  ch  CB CG C O
+MET CB  ch2 CG SD C
+MET CG  ch2 SD CE
+MET SD  s   CE
+MET CE  ch3  
+MET C   co  O
+MET O   oc
+RESIDUE ACE Acetyl
+ACE CH3 ch3 C O
+ACE C   co  O
+ACE O   oc
+RESIDUE NME N-Methyl
+NME N   nh  CH3 CA
+NME CH3 ch3  
+NME CA  ch3
+RESIDUE NTE N-Terminal
+NTE NTE nk  
+RESIDUE OXT C-Terminal
+OXT C   cr2
+OXT O   o- 
+OXT OXT o-  

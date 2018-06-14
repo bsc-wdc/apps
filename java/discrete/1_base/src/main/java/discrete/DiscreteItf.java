@@ -20,7 +20,6 @@ import es.bsc.compss.types.annotations.parameter.Direction;
 import es.bsc.compss.types.annotations.parameter.Type;
 import es.bsc.compss.types.annotations.task.Method;
 
-
 public interface DiscreteItf {
 
 	@Method(declaringClass = "discrete.DiscreteImpl")
