@@ -3,13 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- GENERAL INFORMATION -->
-	<artifactId>matmul</artifactId>
+	<groupId>es.bsc.compss.apps.c</groupId>
+	<artifactId>matmul-objects</artifactId>
 	<packaging>pom</packaging>
-	<parent>	
-                <groupId>es.bsc.compss.tutorial-apps.c</groupId>	
-		<artifactId>compss-tutorial-apps-c</artifactId>
-    		<version>2.0</version>
-    		<relativePath>..</relativePath>
+	<parent>		
+		<groupId>es.bsc.compss.apps.c</groupId>
+		<artifactId>compss-apps-c</artifactId>
+    		<version>2.2.rc1803</version>
+    		<relativePath>../..</relativePath>
 	</parent>
 	
 	<!-- PROJECT INFORMATION -->
@@ -79,7 +80,7 @@
                                                                 <workingDirectory>${basedir}/</workingDirectory>
                                                                 <arguments>
                                                                         <argument>-c</argument>
-                                                                        <argument>rm -rf master worker lib xml/project_test.xml compss-serialized-*</argument>
+                                                                        <argument>rm -rf A.* B.* C.* master worker lib xml/project_test.xml compss-serialized-*</argument>
                                                                 </arguments>
                                                                 <skip>false</skip>
                                                         </configuration>
@@ -91,7 +92,7 @@
                                                                 <goal>exec</goal>
                                                         </goals>
                                                         <configuration>
-                                                                <executable>buildapp</executable>
+                                                                <executable>compss_build_app</executable>
                                                                 <workingDirectory>${basedir}/</workingDirectory>
                                                                 <arguments>
                                                                         <argument>Matmul</argument>
@@ -106,12 +107,11 @@
                                                   <arguments>
 							<argument>--lang=c</argument>
 							<argument>--project=${basedir}/xml/project_test.xml</argument>
-                                                  	<argument>--resources=${basedir}/xml/resources.xml</argument>
 							<argument>-d</argument>
 							<argument>${basedir}/master/Matmul</argument>
                                                         <argument>2</argument>
 							<argument>2</argument>
-							<argument>1</argument>
+							<argument>1.1</argument>
                                                   </arguments>
 						  <skip>false</skip>
                                         </configuration>

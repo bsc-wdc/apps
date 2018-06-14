@@ -18,8 +18,6 @@
 #include <string.h>
 #include <vector>
 
-#define DEBUG_BINDING
-
 #include "Matmul.h"
 #include "Matrix.h"
 #include "Block.h"
@@ -41,8 +39,8 @@ int main(int argc, char **argv) {
 	struct timeval t_init_start, t_init_end, t_comp_start, t_comp_end;
 
 	Matrix A;
-    Matrix B;
-    Matrix C;
+	Matrix B;
+    	Matrix C;
 
 	if (argc != 4) {
 		usage();
@@ -74,24 +72,22 @@ int main(int argc, char **argv) {
 		for (int i=0; i<N; i++) {
           	      for (int j=0; j<N; j++) {
                     	initBlock(A.data[i][j], M, val);
-						initBlock(B.data[i][j], M, val);
-						initBlock(C.data[i][j], M, 0.0);
+			initBlock(B.data[i][j], M, val);
+			initBlock(C.data[i][j], M, 0.0);
                   }
          	}
 
-
+		compss_barrier();
 
 		gettimeofday(&t_init_end, NULL);
-		gettimeofday(&t_comp_start, NULL);
-
-		compss_barrier();		
+		gettimeofday(&t_comp_start, NULL);		
 
 		cout << "Blocks initialized with "; A.result(); cout << " "; B.result(); cout << " "; C.result(); cout << endl;		
 
 		for (int i=0; i<N; i++) {
                 	for (int j=0; j<N; j++) {
                         	for (int k=0; k<N; k++) {
-								multiplyBlocks(C.data[i][j], A.data[i][k], B.data[k][j]);
+					multiplyBlocks(C.data[i][j], A.data[i][k], B.data[k][j]);
 							}
                 	}
         }
@@ -99,27 +95,25 @@ int main(int argc, char **argv) {
 
         for (int i=0; i<N; i++) {
             for (int j=0; j<N; j++) {
-				cout << "before compss wait in master" << endl;
-            	compss_wait_on(*C.data[i][j]);	
+            	compss_wait_on(C.data[i][j]);	
            }
         }
 
-		compss_off();
-
-		gettimeofday(&t_comp_end, NULL);
+	gettimeofday(&t_comp_end, NULL);
 		
+	compss_off();
 
-		cout << "The result is ";
-		C.result();
-		cout << endl;			
+	cout << "The result is ";
+	C.result();
+	cout << endl;			
 
-		double init_msecs, comp_msecs, total_msecs;
+	double init_msecs, comp_msecs, total_msecs;
 
         init_msecs = (((t_init_end.tv_sec - t_init_start.tv_sec) * 1000000) + (t_init_end.tv_usec - t_init_start.tv_usec))/1000;
         comp_msecs = (((t_comp_end.tv_sec - t_comp_start.tv_sec) * 1000000) + (t_comp_end.tv_usec - t_comp_start.tv_usec))/1000;
         total_msecs = (((t_comp_end.tv_sec - t_init_start.tv_sec) * 1000000) + (t_comp_end.tv_usec - t_init_start.tv_usec))/1000;
 
-		cout << "Results for execution with CPU, N: " << N << ", M: " << M << endl;
+	cout << "Results for execution with CPU, N: " << N << ", M: " << M << endl;
         cout << "Initialization time: " << init_msecs << " ms\n";
         cout << "Computation time: " << comp_msecs << " ms\n";
         cout << "Total time: " << total_msecs << "ms\n";

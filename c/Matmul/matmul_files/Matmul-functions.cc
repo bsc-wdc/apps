@@ -1,5 +1,5 @@
 /*
- *  Copyright 2002-2015 Barcelona Supercomputing Center (www.bsc.es)
+ *  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,13 +26,52 @@
 #include "Matrix.h"
 #include "Block.h"
 
-/*
-void initMatrix(Matrix *matrix, int mSize, int nSize, double val) {
-	*matrix = Matrix::init(mSize, nSize, val);
+Block *get_block(char *file, int M) {
+        Block *result;
+        FILE *fp;
+
+        result = Block::init(M, 0.0);
+        fp = fopen(file, "r");
+
+        for (int i = 0; i < M; i++) {
+                for (int j = 0; j < M; j++) {
+                        fscanf(fp, "%lf ", &(result->data[i][j]));
+                }
+                fscanf(fp, " \n");
+        }
+        fclose(fp);
+
+        return result;
 }
 
 
-void multiplyBlocks(Block *block1, Block *block2, Block *block3) {
-	block1->multiply(*block2, *block3);
+
+void write_block(Block *b, char *file, int M) {
+
+        FILE *fp;
+
+        fp = fopen(file , "w");
+
+        for (int i = 0; i < M; i++) {
+                for (int j = 0; j < M; j++) {
+                        fprintf(fp, "%lf ", b->data[i][j]);
+                }
+                fprintf(fp, " \n");
+        }
+        fclose(fp);
 }
-*/
+
+void multiplyBlocks(char *f1, char *f2, char *f3, int M) {
+
+        Block *block1, *block2, *block3;
+
+        block1 = get_block(f1, M);
+        block2 = get_block(f2, M);
+        block3 = get_block(f3, M);
+
+        block1->multiply(*(block2), *(block3));
+
+        write_block(block1, f1, M);
+
+}
+

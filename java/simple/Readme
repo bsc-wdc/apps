@@ -1,0 +1,34 @@
+This is the Readme for:
+Simple
+
+[Name]: Simple
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Example of a simple application with only one task. The application stores a counter value in a file,
+increments that counter in a task method (''increment'') and then prints the final value in the main program.
+
+== Versions ==
+Simple has only one single version, the increment is performed in a file.
+
+== Build ==
+
+The .jar files are build with Maven.
+
+cd /PATH_TO_JAVA_APPS/simple/
+mvn clean package
+
+== Scripts usage ==
+
+Although we show how to execute an application with runcompss in each subdirectory, 
+we strongly recommend to use the available bash scripts on the top of each application directory.
+To run an application with the scripts, do the following:
+
+	cd /PATH_TO_JAVA_APPS/simple   # change directory to the application top directory
+	./launch.sh VERSION_TO_EXECUTE # VERSION_TO_EXECUTE it is 'base' in case that the version is '1_base'
+
+TODO: SLURM jobscript: launch_mn.sh

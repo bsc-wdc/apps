@@ -27,8 +27,7 @@ public class Block implements Serializable {
 	private double[][] data;
 	
 	
-	public Block() {	
-	}
+	public Block() {}
 	
 	public Block(int bSize) {
 		M = bSize;

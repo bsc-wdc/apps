@@ -1,6 +1,6 @@
 GCC=g++
 #CFLAGS=-std=c++11 -DDEBUG_BINDING -g -I. -I/opt/COMPSs/Bindings/c/include -I/opt/COMPSs/Bindings/bindings-common/include
-CFLAGS=-std=c++0x -g -fpermissive -I. -I/apps/COMPSs/Trunk2/Bindings/c/include -I/apps/COMPSs/Trunk2/Bindings/bindings-common/include -I/apps/BOOST/1.57/include 
+CFLAGS=-std=c++0x -g -fpermissive -I.  
 #-I/opt/COMPSs/Bindings/c/include -I/opt/COMPSs/Bindings/bindings-common/include
 
 CFILES=Block.cc Matrix.cc

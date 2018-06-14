@@ -28,43 +28,6 @@ Matrix::Matrix(int mSize, int bSize, char mat_name) {
 	}
 }
 
-static Block *get_block(char *file, int M) {
-	Block *result;
-	FILE *fp;
-
-	result = Block::init(M, 0.0);
-	fp = fopen(file, "r");
-	
-	for (int i = 0; i < M; i++) {
-		for (int j = 0; j < M; j++) {
-			fscanf(fp, "%lf ", &(result->data[i][j]));
-		}
-		fscanf(fp, " \n");
-	}
-	fclose(fp);
-	
-	return result;
-}
-
-
-
-static void write_block(Block *b, char *file, int M) {
-	
-	FILE *fp;
-
-	fp = fopen(file , "w");
-	
-	for (int i = 0; i < M; i++) {
-		for (int j = 0; j < M; j++) {
-			fprintf(fp, "%lf ", b->data[i][j]);
-		}
-		fprintf(fp, " \n");
-	}
-	fclose(fp);
-}
-
-
-
 
 void Matrix::print() {
 	for (int i=0; i<N; i++) {
@@ -75,35 +38,4 @@ void Matrix::print() {
 		cout << "\r\n";
 	}
 }
-
-#ifdef COMPSS_WORKER
-
-void multiplyBlocks(char *f1, char *f2, char *f3, int M) {
-
-	Block *block1, *block2, *block3;
-
-	block1 = get_block(f1, M);
-	block2 = get_block(f2, M);
-	block3 = get_block(f3, M);
-
-	block1->multiply(*(block2), *(block3));
-
-	write_block(block1, f1, M);
-
-}
-
-
-void init_block(char *file, int bSize, double val) {
-	cout << "init block " << file << endl;
-        FILE *fp = fopen(file, "w");
-        for (int i = 0; i < bSize; i++){
-        	for (int j = 0; j < bSize; j++){
-        		fprintf(fp, "%lf ", val);
-        	}
-        	fprintf(fp, " \n");
-        }
-	fclose(fp);
-}
-
-#endif
 

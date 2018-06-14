@@ -57,35 +57,18 @@ int main(int argc, char **argv) {
 		for (int i = 0; i < N; i++){
 			for (int j = 0; j < N; j++){
 
-				cout << "creating iteration " << i << " " << j << endl;
-
 				stringstream ss1, ss2, ss3;
 
-        		ss1 << "files/A." << i << "." << j;
-				ss2 << "files/B." << i << "." << j;
-				ss3 << "files/C." << i << "." << j;
+        			ss1 << "A." << i << "." << j;
+				ss2 << "B." << i << "." << j;
+				ss3 << "C." << i << "." << j;
 
-        		std::string tmp1 = ss1.str();
-				std::string tmp2 = ss2.str();
-				std::string tmp3 = ss3.str();
-
-        		char * f1 = new char[tmp1.size() + 1];
-				char * f2 = new char[tmp2.size() + 1];
-				char * f3 = new char[tmp3.size() + 1];
-
-        		std::copy(tmp1.begin(), tmp1.end(), f1);
-				std::copy(tmp2.begin(), tmp2.end(), f2);
-				std::copy(tmp3.begin(), tmp3.end(), f3);
-
-        		f1[tmp1.size()] = '\0';
-				f2[tmp2.size()] = '\0';
-				f3[tmp3.size()] = '\0';
-
-				cout << "cridant a init block " << f1 << endl;
+        			char * f1 = strdup(ss1.str().c_str());
+				char * f2 = strdup(ss2.str().c_str());
+				char * f3 = strdup(ss3.str().c_str());
+				
 				init_block(f1,M,val);
-				cout << "cridant a init block " << f2 << endl;
 				init_block(f2,M,val);
-				cout << "cridant a init block " << f3 << endl;
 				init_block(f3,M,0.0);		
 			}
 		}		
@@ -96,43 +79,29 @@ int main(int argc, char **argv) {
 		cout << "Initialization ends...\n";
 
 		for (int i=0; i<N; i++) {
-        	for (int j=0; j<N; j++) {
-            	for (int k=0; k<N; k++) {
+        		for (int j=0; j<N; j++) {
+            			for (int k=0; k<N; k++) {
 					stringstream ss1, ss2, ss3;
-					ss1 << "files/C." << i << "." << j;
-					ss2 << "files/A." << i << "." << k;
-					ss3 << "files/B." << k << "." << j;
-
-					std::string tmp1 = ss1.str();
-					std::string tmp2 = ss2.str();
-					std::string tmp3 = ss3.str();
-
-					char * f1 = new char[tmp1.size() + 1];
-					std::copy(tmp1.begin(), tmp1.end(), f1);
-					f1[tmp1.size()] = '\0';
-
-                	char * f2 = new char[tmp2.size() + 1];
-                	std::copy(tmp2.begin(), tmp2.end(), f2);
-                	f2[tmp2.size()] = '\0';
-
-                	char * f3 = new char[tmp3.size() + 1];
-                	std::copy(tmp3.begin(), tmp3.end(), f3);
-                	f3[tmp3.size()] = '\0';
+					ss1 << "C." << i << "." << j;
+					ss2 << "A." << i << "." << k;
+					ss3 << "B." << k << "." << j;
+					
+					char * f1 = strdup(ss1.str().c_str());
+                                	char * f2 = strdup(ss2.str().c_str());
+                                	char * f3 = strdup(ss3.str().c_str());
 
 					multiplyBlocks(f1, f2, f3, M);
-            	}
-            }
-        }
+            			}
+            		}
+        	}
 
 // Uncomment this code chunk to check that every C file exists, check them in the files folder for results.
 /*
 		for (int i = 0; i < N; i++){
 			for (int j = 0; j < N; j++){
 				stringstream ss;
-				std::string tmp = ss.str();
-                char * f = new char[tmp.size() + 1];
-                std::copy(tmp.begin(), tmp.end(), f);
-                f[tmp.size()] = '\0';
+				ss1 << "C." << i << "." << j;
+				char * f = strdup(ss.str().c_str());
 				FILE* file = compss_fopen(f,"r");
 				fclose(file);
 			}

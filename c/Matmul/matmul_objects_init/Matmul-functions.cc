@@ -1,5 +1,5 @@
 /*
- *  Copyright 2002-2015 Barcelona Supercomputing Center (www.bsc.es)
+ *  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,13 +26,11 @@
 #include "Matrix.h"
 #include "Block.h"
 
-/*
-void initMatrix(Matrix *matrix, int mSize, int nSize, double val) {
-	*matrix = Matrix::init(mSize, nSize, val);
+void initBlock(Block *block, int bSize, double initVal){
+        block->init(bSize,initVal);
 }
 
 
 void multiplyBlocks(Block *block1, Block *block2, Block *block3) {
 	block1->multiply(*block2, *block3);
 }
-*/

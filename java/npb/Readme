@@ -1,0 +1,44 @@
+This is the Readme for:
+NAS Parallel Benchmarks
+
+[Name]: NAS Parallel Benchmarks
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: GPL
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+The NAS parallel benchmarks (NPB) are a set of kernels that evaluate diverse computation and communication patterns, and they are widely used for parallel performance benchmarking. Four of these kernels were implemented in sequential Java to be executed with COMPSs:
+1. Embarrassingly Parallel (EP): a test for computation performance that generates pseudorandom floating point numbers and has few communications.
+2. Fast Fourier Transform (FT): this benchmark tests computation performance by solving a differential equation with FFTs and communication by sending large messages.
+3. Integer Sort (IS): this kernel also tests computation, but especially communication performance. It sorts a large array of integers and is characterised by numerous transfers.
+4. Conjugate Gradiant (CG): it estimates the smallest eigenvalue of a large sparse symmetric positive-definite matrix using the inverse iteration with the conjugate gradient method as a subroutine for solving systems of linear equations.
+
+== Versions ==
+We can't talk about the versions concept we used before, each program here it is a new kind of benchmark and it is implemented it's way, the description is enough explanatory about in what consists.
+
+== Build ==
+
+The .jar files are build with Maven.
+
+cd ~/PATH_TO_JAVA_APPS/npb/
+mvn clean package
+
+== Scripts usage ==
+
+Interactive script: launch.sh
+
+Although we showed how to execute an application with runcompss in each subdirectory,
+we strongly recommend to use the available bash scripts on the top of each application directory.
+To run an application with the scripts, do the following:
+
+        cd /PATH_TO_JAVA_APPS/npb # change directory to the application top directory
+        ./launch.sh VERSION_TO_EXECUTE # VERSION_TO_EXECUTE it is 'base' in case that the version is '1_base'
+
+TODO: SLURM jobscript: launch_mn.sh
+
+== References ==
+http://www.nas.nasa.gov/Software/NPB/
+
+Last Update Nov. 2014

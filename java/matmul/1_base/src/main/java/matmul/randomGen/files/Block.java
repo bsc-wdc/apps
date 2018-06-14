@@ -40,7 +40,6 @@ public class Block {
 			String nextLine;
 			for (int i = 0; i < BLOCK_SIZE; i++) {
 				nextLine = br.readLine();
-				System.err.println("NEXT : " + nextLine);
 				tokens = new StringTokenizer( nextLine );
 				for (int j = 0; j < BLOCK_SIZE && tokens.hasMoreTokens(); j++) {
 					data[i][j] = Double.parseDouble( tokens.nextToken() );
@@ -75,13 +74,14 @@ public class Block {
 		}
 	}
 
-	protected void printBlock() {
+	public void printBlock() {
 		for (int i = 0; i < BLOCK_SIZE; i++) {
-			for(int j = 0; j < BLOCK_SIZE; j++) {
-				System.out.print(data[i][j] + " " );
+			for (int j = 0; j < BLOCK_SIZE; j++) {
+				System.out.print((new Double (data[i][j])).toString() + " ");
 			}
 			System.out.println();
 		}
+		
 	}
 
 	public void blockToDisk(String filename) {

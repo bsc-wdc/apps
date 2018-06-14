@@ -40,13 +40,7 @@ public:
 
 	void init(int mSize, int bSize, double val, char mat_name);
 
-	void multiply(Matrix matrix1, Matrix matrix2);
-
 	void print();
-
-	static Block *get_block(char *file, int M);
-
-	static void write_block(Block *b, char *file, int M);
 
 private:
 	int N;

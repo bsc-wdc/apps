@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Project>
-	  <Worker Name="localhost">
-            <InstallDir>/opt/COMPSs/Runtime/scripts/system/</InstallDir>
-            <WorkingDir>/tmp/localhost/</WorkingDir>
-	    <AppDir>/home/jorgee/margarita_svn/bar/tutorial_apps/python/array_increment_mpi/</AppDir>
-          </Worker>
-</Project>
-

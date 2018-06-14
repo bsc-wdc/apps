@@ -1,0 +1,53 @@
+
+
+README for Wise2/Dynamite development
+
+
+Wise2/Dynamite is written and maintained by Ewan Birney
+<birney@ebi.ac.uk>. More info at
+
+http://www.sanger.ac.uk/Software/Wise2
+
+
+INSTALLATION
+-------------
+
+cd into src and type
+
+make all
+
+possibly followed by
+
+make test
+
+
+there is not a make install. binaries are in src/bin after make.
+
+If you want pthreads change options in src/makefile
+
+
+
+DEVELOPEMENT
+------------
+
+The Wise2 package is now in its sunset period. I am only doing bug
+fixes on it. I have not had a proper "serious" bug in the code base
+for around 2 years (there is an outstanding issue with memory in HMMs
+on certain HMM types not delt with)
+
+
+My active coding has moved to the exonerate code base (Guy Slater
+being the lead developer there). Many of the ideas and concepts behind
+Wise2 I hope will make it into the exonerate code base eventually.
+
+
+The Wise2.2 series therefore will be a slow moving release series,
+mainly focused on providing support for Ensembl, as well as providing
+a "rock solid" genewise implementation.
+
+
+
+
+
+
+

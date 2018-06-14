@@ -25,6 +25,7 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.LinkedList;
 
+
 public class HMMPfam {
 
     private static final String SEQUENCE = "seqF";
@@ -49,27 +50,37 @@ public class HMMPfam {
     private static final byte[] intBytes = new byte[INT_SIZE];
     private static final byte iniSeq = 0x3e;
     private static final int v20Magic = 0xe8ededb5;
-    private static String fragsDirName;
-    private static String hmmpfamBin = "/usr/local/bin/hmmpfam";
+
+    private static final String fragsDirName;
+    private static final String hmmpfamBin;
+
     private static CommandLineArgs clArgs;
     private static int[] dbFragsNumModels = null;
     private static int totalNumModels = 0;
     private static boolean debug = false;
 
     static {
+        String fDirTmp = "";
         File fragsDir = new File(FRAGS_DIR);
         if (!fragsDir.exists() && !fragsDir.mkdir()) {
             System.out.println("Cannot create the fragments directory");
             System.exit(1);
         }
         try {
-            fragsDirName = fragsDir.getCanonicalPath();
+            fDirTmp = fragsDir.getCanonicalPath();
         } catch (Exception e) {
             System.out.println("Cannot get the name of the fragments directory");
             e.printStackTrace();
             System.exit(1);
         }
+        fragsDirName = fDirTmp;
         fragsDir.deleteOnExit();
+
+        String binPath = System.getenv("HMMER_BINARY");
+        if (binPath == null) {
+            binPath = "/usr/local/bin/hmmpfam";
+        }
+        hmmpfamBin = binPath;
     }
 
     public static void main(String args[]) throws Exception {
@@ -103,14 +114,12 @@ public class HMMPfam {
         /* FIRST PHASE
          * Segment the query sequences file, the database file or both
          */
-
         split(fSeq, fDB, seqFrags, dbFrags, numSeqFrags, numDBFrags);
 
 
         /* SECOND PHASE
          * Launch hmmpfam for each pair of seq - db fragments
          */
-
         numSeqFrags = seqFrags.size();
         numDBFrags = dbFrags.size();
         String commonArgs = clArgs.getArgs();
@@ -140,7 +149,6 @@ public class HMMPfam {
         /* THIRD PHASE
          * Merge all output in a single file
          */
-
         // Merge all DB outputs for the same DB fragment
         for (int db = 0; db < numDBFrags; db++) {
             int neighbor = 1;
@@ -165,7 +173,6 @@ public class HMMPfam {
             }
             neighbor *= 2;
         }
-
 
         try {
             prepareResultFile(outputs[0][0], outputName, seqsName, dbName);
@@ -588,6 +595,7 @@ public class HMMPfam {
         dstFos.close();
 
     }
+
 
     // Class to parse and store the command line arguments of hmmpfam provided by the user
     public static class CommandLineArgs {

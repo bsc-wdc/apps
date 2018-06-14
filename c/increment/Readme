@@ -11,9 +11,18 @@ Increment
 == Description ==
 Increment is an application that takes three different values and increases them a number of given times. The purpose of this application is to show parallelism between the different increments. 
 
+== Setup ==
+Generate a project_test.xml with the current diretory as application dir.
+
+mvn process-resources
+
+== Build ==
+
+compss_build_app increment
+
 == Execution instructions ==
 Usage:
-runcompss --lang=c --project=xml/project.xml master/increment <N> <initValue1> <initValue2> <initValue3>
+runcompss --project=xml/project_test.xml master/increment <N> <initValue1> <initValue2> <initValue3>
 
 where:
 		 * - N: Number of times to increase the counters
@@ -23,9 +32,14 @@ where:
 
 
 == Execution Example ==
-runcompss --lang=c --project=xml/project.xml master/increment 10 1 2 3
+runcompss --project=xml/project_test.xml master/increment 10 1 2 3
 
+This execution example can be run by executing the run.sh script
 
-== Build ==
-buildapp increment
+./run.sh
+
+== All in One ==
+All the previous steps automatically executed with maven
+
+mvn clean install exec:exec
 

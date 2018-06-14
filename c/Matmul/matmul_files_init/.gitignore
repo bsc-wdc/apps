@@ -1,0 +1,7 @@
+A.*
+B.*
+C.*
+lib/
+master/
+worker/
+xml/project_test.xml

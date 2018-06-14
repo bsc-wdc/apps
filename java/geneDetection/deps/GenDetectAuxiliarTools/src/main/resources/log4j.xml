@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{dd/MM/yy hh:mm:ss:sss}] %5p %-35.35c{2}: %m%n" />
+		</layout>
+	</appender>
+
+
+	<logger name="eu.elasticlm.api.samples">
+		<level value="INFO"/>
+	</logger>
+	
+	<logger name="eu.elasticlm.api">
+		<level value="INFO"/>
+	</logger>
+      
+	<logger name="eu.elasticlm.security">
+		<level value="INFO" />
+	</logger>
+     
+    <logger name="org.apache.xml.security">
+		<level value="ERROR" />
+	</logger>
+
+	<logger name="org.apache.axis2.jaxws">
+		<level value="ERROR" />
+	</logger>
+    
+	<logger name="org.apache.rampat">
+		<level value="ERROR" />
+	</logger>
+	
+	<root>
+		<priority value="ERROR" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</log4j:configuration>

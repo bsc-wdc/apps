@@ -1,5 +1,5 @@
 /*
- *  Copyright 2002-2015 Barcelona Supercomputing Center (www.bsc.es)
+ *  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -68,25 +68,13 @@ int main(int argc, char **argv) {
                 	for (int j=0; j<N; j++) {
                         	for (int k=0; k<N; k++) {
 					stringstream ss1, ss2, ss3;
-					ss1 << "files/C." << i << "." << j;
-					ss2 << "files/A." << i << "." << k;
-					ss3 << "files/B." << k << "." << j;
+					ss1 << "C." << i << "." << j;
+					ss2 << "A." << i << "." << k;
+					ss3 << "B." << k << "." << j;
 
-					std::string tmp1 = ss1.str();
-					std::string tmp2 = ss2.str();
-					std::string tmp3 = ss3.str();
-
-					char * f1 = new char[tmp1.size() + 1];
-					std::copy(tmp1.begin(), tmp1.end(), f1);
-					f1[tmp1.size()] = '\0';
-
-                                        char * f2 = new char[tmp2.size() + 1];
-                                        std::copy(tmp2.begin(), tmp2.end(), f2);
-                                        f2[tmp2.size()] = '\0';
-
-                                        char * f3 = new char[tmp3.size() + 1];
-                                        std::copy(tmp3.begin(), tmp3.end(), f3);
-                                        f3[tmp3.size()] = '\0';
+					char* f1 = strdup(ss1.str().c_str());
+					char* f2 = strdup(ss2.str().c_str());
+					char* f3 = strdup(ss3.str().c_str());
 
 					multiplyBlocks(f1, f2, f3, M);
                         	}
@@ -97,23 +85,17 @@ int main(int argc, char **argv) {
 // Uncomment this code chunk to check that every C file exists, check them in the files folder for results.
 
 
-		for (int i = 0; i < N; i++){
+		/*for (int i = 0; i < N; i++){
 			for (int j = 0; j < N; j++){
-				cout << "vaig a obrir el bloc " << i << " " << j << endl;
 				stringstream ss;
-                                ss << "files/C." << i << "." << j;
+                                ss << "C." << i << "." << j;
 
-                                std::string tmp = ss.str();
+                                const char *f = ss.str().c_str();
 
-                                char * f = new char[tmp.size() + 1];
-                                std::copy(tmp.begin(), tmp.end(), f);
-                                f[tmp.size()] = '\0';
 				FILE* file = compss_fopen(f,"r");
-				//FILE* file = fopen(f,"r");
 				fclose(file);
-				cout << "tanco el bloc " << i << " " << j << endl;
 			}
-		}
+		}*/
 
 
 		compss_off();
