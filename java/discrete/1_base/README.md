@@ -3,7 +3,8 @@
 ## Folder structure
 
 ├── **binary** : contains executable files  
-├── **data** : data for sample executions  
+├── **data** : data for sample executions     
+├── **discrete_src** : sources for the executables in binary   
 ├── **pom.xml** : POM file  
 ├── **README.md** : this MarkDown readme file  
 ├── **scripts** : launch scripts examples  
@@ -46,4 +47,10 @@ values evaluated for each parameter, the more accurate will be the solution.
 outputs a trajectory and an energy file, which are used to calculate a coefficient
 for each configuration.  The main result of the application is the configuration
 that minimises that coefficient.
+
+## Instructions
+
+Before running the application, you need to compile DMDSetup and Discrete. First, run 'make' in 
+**discrete_src/discrete0.2.4** and **discrete_src/setup0.2.1**. Then, copy **discrete_src/exe/DMDSetup0.2.1** 
+and **discrete_src/exe/discrete0.2.4** to **binary** as DMDSetup and discrete respectively. 
 
