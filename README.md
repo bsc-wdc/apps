@@ -1,43 +1,42 @@
 # COMPSs applications folder
 
-This folder contains all the applications developed by the Workflows and Distributed
-Computing grou that can be executed at MareNostrum III. 
+This folder contains example applications developed for [py]COMPSs . 
 
-Its purpose is to share the applications among all the members of the group to ease
-debugging, testing executions or benchmarking executions. Thus, please, when a new
-application is uploaded to the folder, recall setting the file permissions to be 
-accessible for all the members of the group (recommended `rwxrwxr-x`).
-
-```$ chmod -R 775 *```
+Its purpose is to share the applications among the COMPSs users community to ease
+the implementation of new applications and share them with the rest of users.
 
 
 ## Application's Folder Structure 
 
-Each application has a unique folder that hosts all the versions for that application. 
+Application are grouped by language.  
 For instance, the matmul application that has version for PyCOMPSs, COMPSs with files,
 COMPSs using objects and COMPSs with byte arrays and has the following tree directory.
 
 ```
-COMPSs_APPS
-  |- matmul
-  |    |- python
+apps
+  |- python 
+  |    |- app_1
   |    |    |- version_1
-  |    |    |    |- src			Application source code
-  |    |    |    |- dist        	Application binary or jar
-  |    |    |    |- bin         	External binaries needed by the application
-  |    |    |    |- lib         	External libraries needed by the application
-  |    |    |    |- launch.sh     	Execution example (must use enqueue_compss)
+  |    |    |    |- src                 Application source code
+  |    |    |    |- dist                Application binary or jar
+  |    |    |    |- bin                 External binaries needed by the application
+  |    |    |    |- lib                 External libraries needed by the application
+  |    |    |    |- launch.sh           Execution example (must use enqueue_compss)
   |    |    |- ...
   |    |    |- version_n
-  |    |    |- launch.sh		Execution example for automatic process
-  |    |    |- clean.sh			Cleans the folder for *ALL* versions
-  |    |    |- README			Brief description of the application
-  |    |- java
-  |    |    |- ...
-  |    |- c
-  |    	  |- ...
-  |- ...
+  |    |    |- launch.sh                Execution example for automatic process
+  |    |    |- clean.sh                 Cleans the folder for *ALL* versions
+  |    |    |- README                   Brief description of the application
+  |- java
+  |    |- app_1
+  |    |    | ...
+  |- c
+  |    |- ...
+  |- datasets				Small datasets for examples 
+
 ```
+
+## Warnings and MN instructions
 
 **REMINDER**: For each language there **must** be **one** launch.sh and **one** clean.sh script
           that executes the **stable** (base) version of that language. This script is used by
@@ -48,7 +47,7 @@ the source code of that version, and a dist folder with the application binary o
 
 
 **WARNING**: Addtional binaries commonly used by all versions **must** be placed in the
-         application's root folder.
+         application's root folder. 
 
 **WARNING**: Additional input data used by all versions **must** be placed in a new folder
          inside the COMPSs_DATASETS with the **same** application name.

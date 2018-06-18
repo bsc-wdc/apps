@@ -19,69 +19,65 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-
 public class ProcessHandler {
 
-    private Process proc;
-    private OutputStream stdout;
-    private OutputStream stderr;
+	private Process proc;
+	private OutputStream stdout;
+	private OutputStream stderr;
 
+	public ProcessHandler(Process proc, OutputStream stdout, OutputStream stderr) {
+		this.proc = proc;
+		this.stdout = stdout;
+		this.stderr = stderr;
+	}
 
-    public ProcessHandler(Process proc, OutputStream stdout, OutputStream stderr) {
-        this.proc = proc;
-        this.stdout = stdout;
-        this.stderr = stderr;
-    }
+	public int waitFor() {
+		StreamReader out = new StreamReader(proc.getInputStream(), stdout);
+		StreamReader err = new StreamReader(proc.getErrorStream(), stderr);
 
-    public int waitFor() {
-        StreamReader out = new StreamReader(proc.getInputStream(), stdout);
-        StreamReader err = new StreamReader(proc.getErrorStream(), stderr);
+		out.start();
+		err.start();
 
-        out.start();
-        err.start();
+		int exit = -1;
 
-        int exit = -1;
+		try {
+			exit = proc.waitFor();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		out.interrupt();
+		err.interrupt();
 
-        try {
-            exit = proc.waitFor();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        out.interrupt();
-        err.interrupt();
+		return exit;
+	}
 
-        return exit;
-    }
+	private class StreamReader extends Thread {
 
+		private InputStream is;
+		private OutputStream os;
 
-    private class StreamReader extends Thread {
+		public StreamReader(InputStream is, OutputStream os) {
+			this.is = is;
+			this.os = os;
+		}
 
-        private InputStream is;
-        private OutputStream os;
+		@Override
+		public void run() {
+			int read;
+			byte[] b = new byte[1024];
 
+			try {
+				while (!Thread.currentThread().isInterrupted()) {
+					read = is.read(b);
+					if (read > 0 && os != null) {
+						os.write(b, 0, read);
+					}
+				}
+				is.close();
+			} catch (IOException e) {
+				// ignore
+			}
+		}
+	}
 
-        public StreamReader(InputStream is, OutputStream os) {
-            this.is = is;
-            this.os = os;
-        }
-
-        @Override
-        public void run() {
-            int read;
-            byte[] b = new byte[1024];
-
-            try {
-                while (!Thread.currentThread().isInterrupted()) {
-                    read = is.read(b);
-                    if (read > 0 && os != null) {
-                        os.write(b, 0, read);
-                    }
-                }
-                is.close();
-            } catch (IOException e) {
-                // ignore
-            }
-        }
-    }
-    
 }

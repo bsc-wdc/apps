@@ -1,0 +1,10 @@
+ &INPUT
+  TSNAP=1000
+  NBLOC=300
+  TEMP=300
+  SEED=2831
+  FVDW=1.
+  FSOLV=1.
+  EPS=1.
+ &END 
+

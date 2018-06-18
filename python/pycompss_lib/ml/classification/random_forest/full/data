@@ -1,0 +1,5 @@
+dt_test_2
+python generate_classification_data.py --name=dt_test_2 --n_samples=20 --n_features=10 --n_classes=3 --file_per_feature=True --path=/home/bscuser/datasets/dt_test_2/
+
+dt_test_3
+python generate_classification_data.py --name=dt_test_3 --n_samples=100000 --n_features=100 --n_classes=3 --file_per_feature=True --path=/home/bscuser/datasets/dt_test_3/

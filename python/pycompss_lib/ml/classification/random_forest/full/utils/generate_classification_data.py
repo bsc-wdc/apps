@@ -4,7 +4,6 @@ from distutils import util
 from sklearn.datasets import make_classification
 from random import randint
 import sys
-
 import running_utils
 
 if __name__ == "__main__":
