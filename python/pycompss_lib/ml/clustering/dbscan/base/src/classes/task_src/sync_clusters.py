@@ -1,5 +1,5 @@
 from collections import defaultdict
-from classes import constants
+import constants
 from pycompss.api.task import task
 from pycompss.api.parameter import FILE_OUT
 

@@ -1,8 +1,8 @@
 from collections import defaultdict
 import numpy as np
 from pycompss.api.task import task
-from classes import constants
-from classes.DS import DisjointSet
+import constants
+from DS import DisjointSet
 
 
 def orq_scan_merge(data, epsilon, min_points, TH_1, count_tasks, quocient,

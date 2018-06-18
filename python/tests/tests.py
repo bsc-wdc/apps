@@ -16,7 +16,7 @@ class ImportTests(unittest.TestCase):
         from pycompss_lib.ml.clustering import Kmeans
 
     def test_import_dbscan(self):
-        from pycompss_lib.ml.clustering import DBScan
+        from pycompss_lib.ml.clustering import DBSCAN
 
     def test_import_pca(self):
         from pycompss_lib.ml.analysis import pca
