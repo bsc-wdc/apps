@@ -1,6 +1,7 @@
 # Python3 compatibility imports
 from __future__ import division
 
+import itertools
 import sys
 
 from pycompss.api.parameter import *
@@ -50,7 +51,7 @@ def get_feature_file(path, index):
 @task(returns=object)
 def get_feature(path, i):
     print("@task get_feature")
-    return read_csv(get_feature_file(path, i), header=None, squeeze=True)
+    return read_csv(get_feature_file(path, i), header=None, squeeze=True).values
 
 
 @task(returns=np.ndarray)
@@ -68,7 +69,7 @@ def feature_selection(n_features):
 @task(returns=object)
 def get_y(path):
     print("@task get_y")
-    return read_csv(path + 'y.dat', dtype=object, header=None, squeeze=True)
+    return read_csv(path + 'y.dat', dtype=object, header=None, squeeze=True).values
 
 
 def gini_index(counter, size):
@@ -86,33 +87,31 @@ def gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size):
 
 
 def test_split(sample, y, feature):
+    y_sample = y[sample]
     min_score = sys.float_info.max
     b_value = None
-    sort_indices = feature[sample].argsort().values
     l_frequencies = Counter()
     l_size = 0
-    r_frequencies = Counter(y[sample])
+    r_frequencies = Counter(y_sample)
     r_size = len(sample)
-    for k in range(len(sort_indices)):
-        i = sort_indices[k]
-        s = sample[i]
-        l_frequencies[y[s]] += 1
-        r_frequencies[y[s]] -= 1
+    data = sorted(zip(feature[sample], y_sample), key=lambda e: e[0])
+    i1, i2 = itertools.tee(data)
+    next(i2, None)
+    pairs_iter = itertools.izip_longest(i1, i2, fillvalue=None)
+    for el, next_el in pairs_iter:
+        el_class = el[1]
+        l_frequencies[el_class] += 1
+        r_frequencies[el_class] -= 1
         l_size += 1
         r_size -= 1
-        try:
-            s_next = sample[sort_indices[k + 1]]
-            if y[s] == y[s_next]:
-                continue
-        except IndexError:  # Last element
-            pass
+        if next_el and el_class == next_el[1]:
+            continue
         score = gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size)
         if score < min_score:
             min_score = score
-            try:
-                s_next = sample[sort_indices[k + 1]]
-                b_value = (feature[s] + feature[s_next]) / 2
-            except IndexError:  # Last element
+            if next_el:
+                b_value = (el[0] + next_el[0]) / 2
+            else:  # Last element
                 b_value = np.float64(np.inf)
     return min_score, b_value
 
@@ -156,7 +155,7 @@ def get_groups(sample, path, index, value):
     left = []
     right = []
     if len(sample) > 0:
-        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True)
+        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True).values
         for i in sample:
             if feature[i] < value:
                 left.append(i)
@@ -195,7 +194,7 @@ def compute_split_simple(tree_path, sample, n_features, path, y):
     b_index = None
     b_value = None
     for index in index_selection:
-        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True)
+        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True).values
         score, value = test_split(sample, y, feature)
         if score < b_score:
             b_score, b_value, b_index = score, value, index
@@ -287,12 +286,12 @@ class DecisionTree:
                 nodes_to_split.append((tree_path + 'R', right_group, depth + 1))
                 nodes_to_split.append((tree_path + 'L', left_group, depth + 1))
             else:
-                left_subtree_nodes = build_subtree(left_group, y, tree_path + 'L', self.max_depth - depth, len(features),
-                                                   self.path_in)
+                left_subtree_nodes = build_subtree(left_group, y, tree_path + 'L', self.max_depth - depth,
+                                                   len(features), self.path_in)
                 nodes_to_persist.append(left_subtree_nodes)
 
-                right_subtree_nodes = build_subtree(right_group, y, tree_path + 'R', self.max_depth - depth, len(features),
-                                                    self.path_in)
+                right_subtree_nodes = build_subtree(right_group, y, tree_path + 'R', self.max_depth - depth,
+                                                    len(features), self.path_in)
                 nodes_to_persist.append(right_subtree_nodes)
             if len(nodes_to_persist) >= 1000:
                 flush_nodes(file_out, nodes_to_persist)

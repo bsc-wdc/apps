@@ -1,7 +1,10 @@
+BASE_PATH=$HOME
+
 #     --qos=debug \
 #     --tracing=true \
 
 enqueue_compss \
+    --pythonpath="${BASE_PATH}/apps/python/pycompss_lib/ml/classification/random_forest/full/src" \
     --num_nodes=16 \
     --exec_time=30 \
     --cpus_per_node=48 \
