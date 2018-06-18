@@ -51,7 +51,7 @@ def get_feature_file(path, index):
 @task(returns=object)
 def get_feature(path, i):
     print("@task get_feature")
-    return read_csv(get_feature_file(path, i), header=None, squeeze=True)
+    return read_csv(get_feature_file(path, i), header=None, squeeze=True).values
 
 
 @task(returns=np.ndarray)
@@ -69,7 +69,7 @@ def feature_selection(n_features):
 @task(returns=object)
 def get_y(path):
     print("@task get_y")
-    return read_csv(path + 'y.dat', dtype=object, header=None, squeeze=True)
+    return read_csv(path + 'y.dat', dtype=object, header=None, squeeze=True).values
 
 
 def gini_index(counter, size):
@@ -155,7 +155,7 @@ def get_groups(sample, path, index, value):
     left = []
     right = []
     if len(sample) > 0:
-        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True)
+        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True).values
         for i in sample:
             if feature[i] < value:
                 left.append(i)
@@ -194,7 +194,7 @@ def compute_split_simple(tree_path, sample, n_features, path, y):
     b_index = None
     b_value = None
     for index in index_selection:
-        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True)
+        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True).values
         score, value = test_split(sample, y, feature)
         if score < b_score:
             b_score, b_value, b_index = score, value, index
