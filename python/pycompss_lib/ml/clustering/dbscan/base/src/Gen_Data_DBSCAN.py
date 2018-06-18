@@ -6,6 +6,7 @@ import sys
 import numpy as np
 from itertools import product
 
+
 @task(returns=list)
 def init_data(comb, path, num_points_max, centers, std):
     data = []
@@ -22,7 +23,6 @@ def init_data(comb, path, num_points_max, centers, std):
     if len(data) > 0:
         data = np.vstack(data)
         tmp_vec = -2*np.ones(np.shape(data)[0])
-#        data = [data, tmp_vec]
         np.savetxt(path, data)
         return [len(tmp_vec)]
     else:
@@ -30,15 +30,13 @@ def init_data(comb, path, num_points_max, centers, std):
         for num, k in enumerate(comb):
             data[0][num] = np.random.uniform(low=float(k)/10,
                                              high=float(k+1)/10)
-#        tmp_vec = -2*np.ones(np.shape(data)[0])
-#        data = [data, tmp_vec]
         np.savetxt(path, data)
         return [1]
-#    return data_pos
+
 
 def main(file_count, dimensions):
     dimensions = literal_eval(dimensions)
-    num_points_max = 30
+    num_points_max = 3000
     dim = len(dimensions)
     num_centers = len(dimensions)
     centers = np.random.sample((num_centers, dim))
@@ -48,8 +46,6 @@ def main(file_count, dimensions):
 #    path = "/gpfs/projects/bsc19/COMPSs_DATASETS/dbscan/"+str(file_count)
     path = "~/DBSCAN/data/"+str(file_count)
     path = os.path.expanduser(path)
-#    if not(os.path.exists(path)):
-#        os.makedirs(path)
     perm = []
     prod = 1
     for i in range(len(dimensions)):
