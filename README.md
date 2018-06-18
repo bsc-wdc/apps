@@ -34,7 +34,7 @@ apps
   |    |- ...
   |- datasets				Small datasets for examples 
 
-``
+```
 
 ## Warnings and MN instructions
 

@@ -4,10 +4,6 @@
   scriptDir=$(pwd)
 
   # Set common arguments
-  jobDependency=None
-  numNodes=2
-  executionTime=5
-  tasksPerNode=16
   tracing=false
 
   # Set arguments:
