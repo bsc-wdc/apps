@@ -2,11 +2,11 @@
 
 ## Folder structure
 
-├── **sample** : launch scripts examples
-├── **src** : RandomForest sources
-├── **utils** : testing utilities
-├── **data** : commands to generate test data
-└── **README.md** : this MarkDown readme file  
+├── **sample** : launch scripts examples   
+├── **src** : RandomForest sources   
+├── **utils** : testing utilities   
+├── **data** : commands to generate test data   
+└── **README.md** : this MarkDown readme file    
 
 ## Random Forest 
 
@@ -22,6 +22,7 @@ This module includes the classes DecisionTree and RandomForestClassifier.
     tree.fit()
 
 ---
+
 
     from pycompss_lib.ml.classification.random_forest.full.src.forest import RandomForestClassifier
 
