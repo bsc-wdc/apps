@@ -96,7 +96,8 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-
+# Vi
+*.swp
 
 # ========== C & C++ ignores =================
 # Prerequisites
