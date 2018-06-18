@@ -2,12 +2,12 @@
 
 ## Folder structure
 
-├── **sample** : launch scripts examples
-├── **src** : RandomForest sources  
-├── **tests** : comparing with sklearn 
-├── **utils** : testing utilities
-├── **data** : commands to generate test data
-└── **README.md** : this MarkDown readme file  
+├── **sample** : launch scripts examples    
+├── **src** : RandomForest sources    
+├── **tests** : comparing with sklearn     
+├── **utils** : testing utilities    
+├── **data** : commands to generate test data    
+└── **README.md** : this MarkDown readme file      
 
 ## Random Forest 
 
