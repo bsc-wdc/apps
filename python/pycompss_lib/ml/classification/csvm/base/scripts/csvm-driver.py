@@ -1,10 +1,10 @@
 import argparse
 import numpy as np
-from cascadesvm import CascadeSVM
-from time import time
+from pycompss_lib.ml.classification import CascadeSVM
 import csv
 import os
 from sklearn.datasets import load_svmlight_file
+
 
 def main():    
     parser = argparse.ArgumentParser()
