@@ -1,11 +1,19 @@
 # PyCOMPSs library and examples
 
+## Dependencies
+
+The dependencies of PyCOMPSs tests and lib can be found in: requirements.txt. To install them issue:
+
+`pip install -r requirements.txt`
+
+
+
 ## Tests 
 
 To run the pycomss_lib tests issue:
 
 
-`python tests/tests.py`
+`./run_tests.sh`
 
 
 ## Library applications available
@@ -18,60 +26,40 @@ To run the pycomss_lib tests issue:
 
 ##### Classification
 
-CascadeSVM
+* CascadeSVM
 
-`from pycompss_lib.ml.classification import CascadeSVM`
+* RandomForest
 
-RandomForest
-
-`from pycompss_lib.ml.classification import RandomForestClassifier`
 
 ##### Clustering
 
-Kmeans
+* Kmeans
 
-`from pycompss_lib.ml.clustering import Kmeans`
+* DBScan
 
-DBScan
-
-`from pycompss_lib.ml.clustering import DBScan`
 
 ##### Analysis
 
-PCA
+* PCA
 
-`from pycompss_lib.ml.analysis import PCA`
 
 #### Math
 
 ##### Linalg
 
-Cholesky
+* Cholesky
 
-`from pycompss_lib.math.linalg import cholesky`
+* Matmul
 
-Matmul
+* QR
 
-`from pycompss_lib.math.linalg import matmul`
-
-QR
-
-`from pycompss_lib.math.linalg import qr`
 
 #### Algorithms
 
-Max Norm
+* Max Norm
 
-`from pycompss_lib.algorithms import max_norm`
+* Terasort
 
-Terasort
+* Sort
 
-`from pycompss_lib.algorithms import terasort`
-
-Sort
-
-`from pycompss_lib.algorithms import sort`
-
-Sort by Key
-
-`from pycompss_lib.algorithms import sort_by_key`
+* Sort by Key
