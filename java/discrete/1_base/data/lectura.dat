@@ -1,8 +1,0 @@
- &INPUT
- ,FILE9='input.pdb'
- ,FILE20='trajectory.pdb'
- ,FILE16='../atomtypes.dat'                            
- ,FILE17='../potentials.dat'                                   
- ,TSNAP=10000
- ,NATOM1=831
- &END
