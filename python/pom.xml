@@ -98,8 +98,4 @@
 		</pluginManagement>
 	</build>
 
-	<!-- SUB-MODULES -->
-	<modules>
-                <module>examples/array_increment_mpi</module>
-	</modules>
 </project>

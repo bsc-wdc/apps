@@ -144,27 +144,15 @@
 
     <!-- SUB-MODULES -->
     <modules>
-        <module>blast/1_base</module>
-        <module>blast/2_allone</module>
+        <module>blast/1_allone</module>
+        <module>blast/2_tree</module>
         <module>blast/3_binary</module>
-        <module>blast/4_blanks</module>
-        <module>COMPSsMolecule/1_base</module>
-        <module>molecules/1_base</module>
         <module>terasort/1_base</module>
         <module>discrete/1_base</module>
-        <module>discrete/2_blanks</module>
-        <module>geneDetection/1_base</module>
-        <module>geneDetection/2_blanks</module>
+        <module>geneDetection</module>
         <module>hmmer/1_obj</module>
-        <module>hmmer/2_obj_blanks</module>
-        <module>hmmer/3_ws</module>
-        <module>hrt/1_base</module>
-        <module>hrt/2_blanks</module>
-        <module>kmeans/1_base</module>
-        <module>kmeans/2_apps</module>
-        <module>kmeans/3_apps_frag</module>
-        <module>kmeans/4_apps_psco</module>
-        <module>luxrender/1_base</module>
+        <module>kmeans/1_apps</module>
+        <module>kmeans/2_apps_psco</module>
         <module>matmul/1_base</module>
         <module>matmul/2_apps</module>
         <module>matmul/3_mpi</module>

@@ -9,7 +9,7 @@
 		<groupId>es.bsc.compss.apps.java</groupId>
 		<artifactId>compss-apps-java</artifactId>
 		<version>2.2.rc1803</version>
-		<relativePath>../..</relativePath>
+		<relativePath>..</relativePath>
 	</parent>
 
 	<!-- PROJECT INFORMATION -->
