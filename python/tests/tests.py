@@ -6,6 +6,10 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 class ImportTests(unittest.TestCase):
 
+    def test_import_fft(self):
+        from pycompss_lib.math import fft
+        from pycompss_lib.math.fft import fft
+
     def test_import_cascadecsvm(self):
         from pycompss_lib.ml.classification import CascadeSVM
 
@@ -60,6 +64,19 @@ class ResultsTest(unittest.TestCase):
         result = max_norm(points, dimensions, fragments, seed)
 
         self.assertEqual(result, expected_output)
+
+    def test_fft(self):
+        import numpy as np
+        from pycompss_lib.math.fft import fft
+
+        arr = np.random.rand(32)
+
+        nfft = np.fft.fft(arr)
+        pfft = fft(arr)
+
+        self.assertTrue(np.allclose(nfft, pfft))
+
+
 
 
 def main():
