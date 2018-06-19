@@ -55,7 +55,7 @@ class ResultsTest(unittest.TestCase):
         from pycompss_lib.algorithms import max_norm
         
         points, dimensions, fragments, seed = 16000, 3, 16, 666
-        expected_output = 17137.68885398087
+        expected_output = 16410.464761528907
 
         result = max_norm(points, dimensions, fragments, seed)
 

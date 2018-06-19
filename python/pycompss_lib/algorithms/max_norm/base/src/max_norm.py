@@ -31,24 +31,26 @@ def compute_maximum(X):
     return maximum
 
 
-def init_random(size, dim):
-    return [10000 * random.random(dim) for _ in range(size)]
+def init_random(size, dim, seed):
+    lst = []
+    for i in range(size):
+        if seed is not None:
+            random.seed(seed+i)
+        lst.append(10000 * random.random(dim))
+    return lst
 
 
 @task(returns=list)
-def genFragment(size, dim):
-    return init_random(size, dim)
+def genFragment(size, dim, seed):
+    return init_random(size, dim, seed)
 
 
 def max_norm(numP, dim, numFrag, seed=None):
     from pycompss.api.api import compss_wait_on
 
-    if seed is not None:
-        random.seed(seed)
-
     size = int(numP / numFrag)
 
-    X = [genFragment(size, dim) for _ in range(numFrag)]
+    X = [genFragment(size, dim, seed) for _ in range(numFrag)]
     maxs = [compute_maximum(X[i]) for i in range(numFrag)]
     result = mergeReduce(maxFinal, maxs)
     result = compss_wait_on(result)
