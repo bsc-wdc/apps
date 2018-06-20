@@ -148,11 +148,10 @@
         <module>blast/2_tree</module>
         <module>blast/3_binary</module>
         <module>terasort/1_base</module>
-        <module>discrete/1_base</module>
-        <module>geneDetection</module>
+        <!-- <module>geneDetection</module> -->
         <module>hmmer/1_obj</module>
         <module>kmeans/1_apps</module>
-        <module>kmeans/2_apps_psco</module>
+        <!-- <module>kmeans/2_apps_psco</module> -->
         <module>matmul/1_base</module>
         <module>matmul/2_apps</module>
         <module>matmul/3_mpi</module>
@@ -162,6 +161,6 @@
         <module>sparseLU/1_base</module>
         <module>sortByKey/1_base</module>
         <module>wordcount/1_base</module>
-        <module>wordcount/2_psco</module>
+        <!-- <module>wordcount/2_psco</module> -->
     </modules>
 </project>
