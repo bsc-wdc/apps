@@ -4,7 +4,9 @@ from pycompss.api.task import task
 from pycompss.api.parameter import *
 #from pycompss.functions.reduce import mergeReduce
 import random
-
+import numpy as np
+import time
+import sys
 
 def mergeReduce(function, data):
     """ Apply function cumulatively to the items of data,
@@ -26,15 +28,15 @@ def mergeReduce(function, data):
             return data[x]
 
 
-def init_board_gauss(numV, dim, K):
+def init_board_gauss(numV, dim, K, c):
     n = int(float(numV) / K)
+    r = numV % K
     data = []
-    random.seed(5)
     for k in range(K):
-        c = [random.uniform(-1, 1) for i in range(dim)]
+        #c = [random.uniform(-1, 1) for i in range(dim)]
         s = random.uniform(0.05, 0.5)
-        for i in range(n):
-            d = np.array([np.random.normal(c[j], s) for j in range(dim)])
+        for i in range(n+r):
+            d = np.array([np.random.normal(c[k][j], s) for j in range(dim)])
             data.append(d)
 
     Data = np.array(data)[:numV]
@@ -42,16 +44,16 @@ def init_board_gauss(numV, dim, K):
 
 
 def init_board_random(numV, dim):
-    from numpy import random
-    random.seed(5)
-    return [random.random(dim) for _ in range(numV)]
+    #from numpy import random
+    np.random.seed(5)
+    return [np.random.random(dim) for _ in range(numV)]
 
 
 @task(returns=dict)
 def cluster_points_partial(XP, mu, ind):
-    import numpy as np
+    #import numpy as np
     dic = {}
-    XP = np.array(XP)
+    #XP = np.array(XP)
     for x in enumerate(XP):
         bestmukey = min([(i[0], np.linalg.norm(x[1] - mu[i[0]]))
                          for i in enumerate(mu)], key=lambda t: t[1])[0]
@@ -64,8 +66,8 @@ def cluster_points_partial(XP, mu, ind):
 
 @task(returns=dict)
 def partial_sum(XP, clusters, ind):
-    import numpy as np
-    XP = np.array(XP)
+    #import numpy as np
+    #XP = np.array(XP)
     p = [(i, [(XP[j - ind]) for j in clusters[i]]) for i in clusters]
     dic = {}
     for i, l in p:
@@ -102,32 +104,33 @@ def has_converged(mu, oldmu, epsilon, iter, maxIterations):
 
 
 def init_random(dim, k):
-    from numpy import random
-    random.seed(5)
+    #from numpy import random
+    np.random.seed(5)
     #ind = random.randint(0, len(X) - 1)
-    m = np.array([random.random(dim) for _ in range(k)])
+    m = np.array([np.random.random(dim) for _ in range(k)])
     # return random.sample(X[ind], k)
     return m
 
 
 @task(returns=list)
-def genFragment(numv, dim):
+def genFragment(numv, dim, mu, k):
     # if mode == "gauss":
-    #    return init_board_gauss(numv, dim, k)
+    #    return init_board_gauss(numv, dim, k, mu)
     # else:
     return init_board_random(numv, dim)
 
 
 def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
     from pycompss.api.api import compss_wait_on
-    import time
+    #import time
     size = int(numV / numFrag)
 
     startTime = time.time()
-    X = [genFragment(size, dim) for _ in range(numFrag)]
+    mu = init_random(dim,k)
+    X = [genFragment(size, dim, mu, k) for _ in range(numFrag)]
     print "Points generation Time {} (s)".format(time.time() - startTime)
 
-    mu = init_random(dim, k)
+    #mu = init_random(dim, k)
     oldmu = []
     n = 0
     startTime = time.time()
@@ -141,14 +144,18 @@ def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
         mu = mergeReduce(reduceCentersTask, partialResult)
         mu = compss_wait_on(mu)
         mu = [mu[c][1] / mu[c][0] for c in mu]
+        while len(mu) < k:
+            indP = np.random.randint(0, size)
+            indF = np.random.randint(0, numFrag)
+            mu.append(X[indF][indP])
         n += 1
     print "Kmeans Time {} (s)".format(time.time() - startTime)
     return (n, mu)
 
 if __name__ == "__main__":
-    import sys
-    import time
-    import numpy as np
+    #import sys
+    #import time
+    #import numpy as np
 
     numV = int(sys.argv[1])
     dim = int(sys.argv[2])
@@ -157,4 +164,5 @@ if __name__ == "__main__":
 
     startTime = time.time()
     result = kmeans_frag(numV, k, dim, 1e-4, 10, numFrag)
-    print "Ellapsed Time {} (s)".format(time.time() - startTime)
+    print "Elapsed Time {} (s)".format(time.time() - startTime)
+    print result

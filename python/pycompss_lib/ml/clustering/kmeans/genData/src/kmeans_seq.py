@@ -1,8 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from pycompss.api.task import task
-from pycompss.api.parameter import *
-#from pycompss.functions.reduce import mergeReduce
 import random
 
 
@@ -47,7 +44,6 @@ def init_board_random(numV, dim):
     return [random.random(dim) for _ in range(numV)]
 
 
-@task(returns=dict)
 def cluster_points_partial(XP, mu, ind):
     import numpy as np
     dic = {}
@@ -62,7 +58,6 @@ def cluster_points_partial(XP, mu, ind):
     return dic
 
 
-@task(returns=dict)
 def partial_sum(XP, clusters, ind):
     import numpy as np
     XP = np.array(XP)
@@ -73,7 +68,6 @@ def partial_sum(XP, clusters, ind):
     return dic
 
 
-@task(returns=dict, priority=True)
 def reduceCentersTask(a, b):
     for key in b:
         if key not in a:
@@ -110,7 +104,6 @@ def init_random(dim, k):
     return m
 
 
-@task(returns=list)
 def genFragment(numv, dim):
     # if mode == "gauss":
     #    return init_board_gauss(numv, dim, k)
@@ -119,7 +112,6 @@ def genFragment(numv, dim):
 
 
 def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
-    from pycompss.api.api import compss_wait_on
     import time
     size = int(numV / numFrag)
 
@@ -139,7 +131,6 @@ def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
             X[f], clusters[f], f * size) for f in range(numFrag)]
 
         mu = mergeReduce(reduceCentersTask, partialResult)
-        mu = compss_wait_on(mu)
         mu = [mu[c][1] / mu[c][0] for c in mu]
         n += 1
     print "Kmeans Time {} (s)".format(time.time() - startTime)

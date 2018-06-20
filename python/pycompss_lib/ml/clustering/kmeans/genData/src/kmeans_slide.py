@@ -73,7 +73,7 @@ def partial_sum(XP, clusters, ind):
     return dic
 
 
-@task(returns=dict, priority=True)
+@task(returns=dict) #, priority=True)
 def reduceCentersTask(a, b):
     for key in b:
         if key not in a:
@@ -156,5 +156,5 @@ if __name__ == "__main__":
     numFrag = int(sys.argv[4])
 
     startTime = time.time()
-    result = kmeans_frag(numV, k, dim, 1e-4, 10, numFrag)
+    result = kmeans_frag(numV, k, dim, 1e-4, 3, numFrag)
     print "Ellapsed Time {} (s)".format(time.time() - startTime)
