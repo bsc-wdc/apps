@@ -15,7 +15,4 @@
   find . -type f -name '*tar.gz' -delete
 
   #Clean specific files
-  find . -type f -name 'A*' | grep '1_matmul_files' | xargs rm -rf {}
-  find . -type f -name 'B*' | grep '1_matmul_files' | xargs rm -rf {}
-  find . -type f -name 'C*' | grep '1_matmul_files' | xargs rm -rf {}
   find . -type d -name 'results' -exec rm -rf "{}" \;

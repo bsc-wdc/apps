@@ -1,119 +1,85 @@
-#
-#  Copyright 2002-2014 Barcelona Supercomputing Center (www.bsc.es)
-#
-#  Licensed under the Apache License, Version 2.0 (the "License");
-#  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-#  limitations under the License.
-#
-
-
-
-'''
-@author: etejedor
-'''
-
-### HELPER FUNCTIONS ###
-
-def initialize_variables():
-    for i in range(MSIZE):
-        A.append([])
-        B.append([])
-        C.append([])
-        for j in range(MSIZE):
-            A[i].append("A.%d.%d" % (i,j))
-            B[i].append("B.%d.%d" % (i,j))
-            C[i].append("C.%d.%d" % (i,j))
-
-def fill_matrices():
-    for c in ['A', 'B', 'C']:
-        for i in range(MSIZE):
-            for j in range(MSIZE):
-                tmp = "%s.%d.%d" % (c,i,j)
-                f = open(tmp, 'w')
-                for _ in range(BSIZE):
-                    for jj in range(BSIZE):
-                        if c == 'C':
-                            f.write('0.0')
-                        else:
-                            f.write('2.0')
-                        if jj < BSIZE - 1:
-                            f.write(' ')
-                    f.write('\n')
-                f.close()
-
-def load_block(fi):
-    b = []
-    f = open(fi, 'r')
-    for line in f:
-        split_line = line.split(' ')
-        r = []
-        for num in split_line:
-            r.append(float(num))
-        b.append(r)
-    f.close()
-    return b
-
-def store_block(b, fi, size):
-    f = open(fi, 'w')
-    for row in b:
-        for j in range(size):
-            num = row[j]
-            f.write(str(num))
-            if j < size - 1:
-                f.write(' ')
-        f.write('\n')  
-
-
-
-### TASK SELECTION ###
-
+from pycompss.api.constraint import constraint
 from pycompss.api.task import task
 from pycompss.api.parameter import *
+import numpy as np
+import ctypes
+import os
 
-@task(fa = FILE, fb = FILE, fc = FILE_INOUT)
-def multiply(fa, fb, fc, size):
-    a = load_block(fa)
-    b = load_block(fb)
-    c = load_block(fc)
-    for i in range(size):
-        for j in range(size):
-            for k in range(size):
-                c[i][j] += a[i][k] * b[k][j];
-    #store_block(c, fc, size)
+mkl_rt = ctypes.CDLL('libmkl_rt.so')
 
+def mkl_set_num_threads(cores):
+    mkl_rt.mkl_set_num_threads(ctypes.byref(ctypes.c_int(cores)))
 
+def initialize_variables(MKLProc):
+    for matrix in [A, B]:
+        for i in range(MSIZE):
+            matrix.append([])
+            for j in range(MSIZE):
+                mb = createBlock(BSIZE, False, MKLProc)
+                matrix[i].append(mb)
+    for i in range(MSIZE):
+        C.append([])
+        for j in range(MSIZE):
+            mb = createBlock(BSIZE, True, MKLProc)
+            C[i].append(mb)
 
-### MAIN PROGRAM ###
+@constraint (ComputingUnits="${ComputingUnits}")
+@task(returns=list)
+def createBlock(BSIZE, res, MKLProc):
+    mkl_set_num_threads(MKLProc)
+    if res:
+        block = np.array(np.zeros((BSIZE, BSIZE)), dtype=np.double, copy=False)
+    else:
+        block = np.array(np.random.random((BSIZE, BSIZE)), dtype=np.double,copy=False)
+    mb = np.matrix(block, dtype=np.double, copy=False)
+    return mb
+
+@constraint (ComputingUnits="${ComputingUnits}")
+@task(c=INOUT)
+def multiply(a, b, c, MKLProc):
+    mkl_set_num_threads(MKLProc)
+    c += a * b
 
 if __name__ == "__main__":
-    
-    import sys
     import time
+    begginingTime = time.time()
+    import sys
+    from pycompss.api.api import barrier
     
     args = sys.argv[1:]
     
     MSIZE = int(args[0])
     BSIZE = int(args[1])
-    
+    MKLProc = int(args[2])
     A = []
     B = []
     C = []
-    
-    initialize_variables()
-    fill_matrices()
-    start = time.time()
+
+    startTime = time.time()
+
+    initialize_variables(MKLProc)
+
+    barrier()
+
+    initTime = time.time() - startTime
+    startMulTime = time.time()
+
     for i in range(MSIZE):
         for j in range(MSIZE):
             for k in range(MSIZE):
-                multiply(A[i][k], B[k][j], C[i][j], BSIZE)
-    end = time.time()
-    print "Ellapsed time"
-    print end-start
+                multiply(A[i][k], B[k][j], C[i][j], MKLProc)
+
+    barrier()
+
+    mulTime = time.time() - startMulTime
+    mulTransTime = time.time() - startMulTime
+    totalTime = time.time() - startTime
+    totalTimeWithImports = time.time() - begginingTime
+    print("PARAMS:------------------")
+    print("MSIZE:{}" + str(MSIZE))
+    print("BSIZE:{}" + str(BSIZE))
+    print("initT:{}" + str(initTime))
+    print("multT:{}" + str(mulTime)) 
+    print("mulTransT:{}" + str(mulTransTime))
+    print("totalTime:{}" + str(totalTime))
+    

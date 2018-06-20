@@ -55,7 +55,7 @@ class ResultsTest(unittest.TestCase):
     def test_cascadecsvm(self):
         from pycompss_lib.ml.classification import CascadeSVM
 
-    def test_import_max_norm(self):
+    def test_max_norm(self):
         from pycompss_lib.algorithms import max_norm
         
         points, dimensions, fragments, seed = 16000, 3, 16, 666
@@ -76,7 +76,8 @@ class ResultsTest(unittest.TestCase):
 
         self.assertTrue(np.allclose(nfft, pfft))
 
-
+    def test_matmul(self):
+        from pycompss_lib.math.linalg import matmul
 
 
 def main():
