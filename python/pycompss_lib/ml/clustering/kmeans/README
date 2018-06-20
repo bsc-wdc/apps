@@ -12,27 +12,34 @@ kmeans
 kmeans
 
 == Versions ==
-* - base: base version
-* - 2_2steps: Base algorithm version 2: better task granularity 
-* - 3_2stepsnotwait:  
-* - 4_nruns: execute n runs of kmeans function.
-* - 5_initMode: 3 ways to initialize centers: random, kmeans++||, kmeans++ 
-* - 6_spark: 
-* - 7_merge:
-* - 8_mmap:   
-* - 9_genData: generates data and runs kmeans
-* - 10_genData:
-* - 11_tensorflow
-* - 12_latest: common version with dataClay 
-                                                                                                                    
-== Execution instructions ==                                                                                        
-Usage:                                                                                                                             
-kmeans.py <numPoints> <dim> <k> <fragments>                                                      
-                                                                                                                    
-where:                                                                                                              
-                 * - numPoints: number of points                                                                    
-                 * - dim: dimension of the points (2)                                                               
-                 * - fragments: number of fragments                                                                 
-                 * - k: number of centers                                                                                                                                        
-== Build ==                                                                                                         
+* 1  - base: base version
+* 2  - base2: Base algorithm version 2: better task granularity
+* 3  - base3: Base 2 algorithm without wait
+* 4  - initMode: Base 2 with 3 ways to initialize centers: random, kmeans++ ||, kmeans++
+* 5  - spark: Spark like implementation with initModes. Reads dataset from files compatible with Spark
+* 6  - merge: Spark implementation with merge-reduce
+
+* 8  - mmap: Implementation using memory mapped files
+* 9  - genData: Generates data and runs kmeans
+* 10 - genData2: Generates data and runs kmeans (Version 2)
+* 11 - tensorflow: Implementation using tensorflow
+* 12 - latest: Latest version
+* 13 - latest_oo: Object oriented latest version (common version with dataClay)
+* 14 - latest_files: Latest version with dataset from files
+* 15 - apps: Latest version
+* 16 - apps_mergereduce: Latest version with merge-reduce
+* 17 - apps_initmodes: Latest version with init modes (random, kmeans++ ||, kmeans++)
+* 18 - official: Official version
+
+== Execution instructions ==
+Usage:
+kmeans.py <numPoints> <dim> <k> <fragments>
+
+where:
+                 * - numPoints: number of points
+                 * - dim: dimension of the points (2)
+                 * - fragments: number of fragments
+                 * - k: number of centers
+
+== Build ==
 No build is required
