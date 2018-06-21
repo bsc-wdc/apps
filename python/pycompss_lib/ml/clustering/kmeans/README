@@ -23,8 +23,7 @@ kmeans
 * 9  - latest: Latest version
 * 10 - latest_oo: Object oriented latest version (common version with dataClay)
 * 11 - latest_files: Latest version with dataset from files
-
-* 18 - official: Official version
+* 12 - library: Library official version
 
 == Execution instructions ==
 Usage:
