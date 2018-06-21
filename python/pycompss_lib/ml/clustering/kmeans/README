@@ -26,7 +26,7 @@ kmeans
 * 12 - library: Library official version
 
 == Execution instructions ==
-Usage:
+Usage (latest version):
 kmeans.py <numPoints> <dim> <k> <fragments>
 
 where:
