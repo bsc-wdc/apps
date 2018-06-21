@@ -140,7 +140,7 @@ def readFragment(file_name):
     return pickle.load(open(file_name, 'rb'))
 
 
-def kmeans_frag(dataset_path, numV, k, dim, epsilon, maxIterations):
+def kmeans(dataset_path, numV, k, dim, epsilon, maxIterations):
     """
     Kmeans main code
     :param dataset_path: Dataset path
@@ -192,5 +192,5 @@ if __name__ == "__main__":
     k = int(sys.argv[4])
 
     startTime = time.time()
-    result = kmeans_frag(dataset_path, numV, k, dim, 1e-4, 10)
+    result = kmeans(dataset_path, numV, k, dim, 1e-4, 10)
     print("Elapsed Time {} (s)".format(time.time() - startTime))

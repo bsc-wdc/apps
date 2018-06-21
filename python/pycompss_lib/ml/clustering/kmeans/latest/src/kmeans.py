@@ -147,7 +147,7 @@ def genFragment(numv, dim, k, seed, mode="random"):
         return init_board_random(numv, dim, seed)
 
 
-def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
+def kmeans(numV, k, dim, epsilon, maxIterations, numFrag):
     from pycompss.api.api import compss_wait_on
     size = int(numV / numFrag)
     seed = 5
@@ -187,5 +187,5 @@ if __name__ == "__main__":
     numFrag = int(sys.argv[4])
 
     startTime = time.time()
-    result = kmeans_frag(numV, k, dim, 1e-4, 10, numFrag)
+    result = kmeans(numV, k, dim, 1e-4, 10, numFrag)
     print("Elapsed Time {} (s)".format(time.time() - startTime))
