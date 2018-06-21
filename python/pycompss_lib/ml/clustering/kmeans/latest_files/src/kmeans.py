@@ -1,7 +1,6 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 #
-#  Copyright 2002-2015 Barcelona Supercomputing Center (www.bsc.es)
+#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -15,6 +14,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
+
+# -*- coding: utf-8 -*-
 
 import os
 from pycompss.api.task import task
@@ -128,6 +129,7 @@ def has_converged(mu, oldmu, epsilon, iter, maxIterations):
             # Maximum number of iterations reached
             return True
 
+
 @task(returns=list, file_name=FILE_IN)
 def readFragment(file_name):
     """
@@ -152,7 +154,6 @@ def kmeans_frag(dataset_path, numV, k, dim, epsilon, maxIterations):
     from pycompss.api.api import compss_wait_on
 
     seed = 5
-    startTime = time.time()
     X = [readFragment(dataset_path + os.path.sep + file_name) for file_name in os.listdir(dataset_path)]
     numFrag = len(X)
     size = int(numV / numFrag)
@@ -176,9 +177,9 @@ def kmeans_frag(dataset_path, numV, k, dim, epsilon, maxIterations):
             X[indF] = compss_wait_on(X[indF])
             mu.append(X[indF][indP])
         n += 1
-        print "Iteration Time {} (s)".format(time.time() - startTime)
-    print "Kmeans Time {} (s)".format(time.time() - startTime)
-    return (n, mu)
+        print("Iteration Time {} (s)".format(time.time() - startTime))
+    print("Kmeans Time {} (s)".format(time.time() - startTime))
+    return n, mu
 
 
 if __name__ == "__main__":
@@ -192,4 +193,4 @@ if __name__ == "__main__":
 
     startTime = time.time()
     result = kmeans_frag(dataset_path, numV, k, dim, 1e-4, 10)
-    print "Elapsed Time {} (s)".format(time.time() - startTime)
+    print("Elapsed Time {} (s)".format(time.time() - startTime))

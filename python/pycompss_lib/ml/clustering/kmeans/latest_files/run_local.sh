@@ -2,26 +2,28 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/kmeans.py
+  execFile=src/kmeans.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
   # Retrieve arguments
-  jobDependency=$1
-  numNodes=$2
-  executionTime=$3
-  tasksPerNode=$4
-  tracing=$5
+  tracing=$1
 
   # Leave application args on $@
-  shift 5
+  shift 1
+
+  # Generate dataset
+  cd generator
+  ./generateData.sh 16000 4 3 4
+  cd ..
+  if [ -d dataset ]; then
+      rm -rf dataset
+  fi
+  mkdir dataset
+  mv generator/*.txt dataset/.
 
   # Enqueue the application
-  enqueue_compss \
-    --job_dependency=$jobDependency \
-    --num_nodes=$numNodes \
-    --exec_time=$executionTime \
-    --tasks_per_node=$tasksPerNode \
+  runcompss \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
@@ -32,8 +34,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing dataset_path numV dim k
+#       ./run_local.sh tracing dataset_path numV dim k
 #
 # Example:
-#       ./launch.sh None 2 5 16 false /path/to/dataset/ 16000 3 4
+#       ./run_local.sh false $(pwd)/dataset/ 16000 3 4
 #
