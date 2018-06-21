@@ -1,7 +1,6 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 #
-#  Copyright 2002-2015 Barcelona Supercomputing Center (www.bsc.es)
+#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -15,9 +14,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-from KMeans import Board
-from pycompss.api.task import task 
 
+# -*- coding: utf-8 -*-
+
+from KMeans import Board
+from pycompss.api.task import task
 import numpy as np
 
 __author__ = 'Alex Barcelo <alex.barcelo@bsc.es>'
@@ -43,6 +44,7 @@ def mergeReduce(function, data):
         else:
             return data[x]
 
+
 @task(returns=dict, priority=True)
 def reduceCentersTask(a, b):
     """  Reduce method to sum the result of two partial_sum methods
@@ -66,13 +68,12 @@ def has_converged(mu, oldmu, epsilon, iter, maxIterations):
             aux = [np.linalg.norm(oldmu[i] - mu[i]) for i in range(len(mu))]
             distancia = sum(aux)
             if distancia < epsilon * epsilon:
-                print "Distancia_T: " + str(distancia)
+                print("Distancia_T: " + str(distancia))
                 return True
             else:
-                print "Distancia_F: " + str(distancia)
+                print("Distancia_F: " + str(distancia))
                 return False
         else:
-            # detencion pq se ha alcanzado el maximo de iteraciones
             return True
 
 
@@ -83,7 +84,7 @@ def init_random(dim, k, seed):
 
 
 def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
-    from pycompss.api.api import compss_wait_on 
+    from pycompss.api.api import compss_wait_on
     size = numV // numFrag  # points per fragment, I assume, and I hope that the division is exact
 
     startTime = time.time()
@@ -95,19 +96,16 @@ def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
 
     mu = list(init_random(dim, k, 5))  # consistency, mu is a list
 
-    print "Points generation Time {} (s)".format(time.time() - startTime)
+    print("Points generation Time {} (s)".format(time.time() - startTime))
 
     oldmu = []
     n = 0
     startTime = time.time()
     while not has_converged(mu, oldmu, epsilon, n, maxIterations):
         oldmu = mu
-
         partialResult = list()
-        # clusters = list()
         for f, frag in enumerate(X.fragments):
             cluster = frag.cluster_points(mu)
-            # clusters.append(cluster)
             partialResult.append(frag.partial_sum(cluster))
 
         mu = mergeReduce(reduceCentersTask, partialResult)
@@ -120,8 +118,9 @@ def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
             mu.append(X[indF][indP])
         n += 1
 
-    print "Kmeans Time {} (s)".format(time.time() - startTime)
-    return (n, mu)
+    print("Kmeans Time {} (s)".format(time.time() - startTime))
+    return n, mu
+
 
 if __name__ == "__main__":
     import sys
@@ -134,4 +133,4 @@ if __name__ == "__main__":
 
     startTime = time.time()
     result = kmeans_frag(numV, k, dim, 1e-4, 10, numFrag)
-    print "Ellapsed Time {} (s)".format(time.time() - startTime)
+    print("Elapsed Time {} (s)".format(time.time() - startTime))
