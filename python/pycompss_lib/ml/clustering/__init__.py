@@ -1,4 +1,4 @@
-from kmeans.base.src.kmeans import Kmeans
+from kmeans.latest.src.kmeans import kmeans
 from dbscan.base.src.DBSCAN import DBSCAN
 
-__all__ = ['Kmeans', 'DBSCAN']
+__all__ = ['kmeans', 'DBSCAN']

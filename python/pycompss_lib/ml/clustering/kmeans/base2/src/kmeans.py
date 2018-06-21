@@ -35,9 +35,9 @@ def cluster_points_partial(XP, mu, ind):
 
 @task(returns=dict)
 def partial_sum(XP, clusters, ind):
-    print clusters
+    print(clusters)
     p = [(i, [(XP[j - ind]) for j in clusters[i]]) for i in clusters]
-    print p
+    print(p)
     dic = {}
     for i, l in p:
         dic[i] = (len(l), np.sum(l, axis=0))
@@ -88,17 +88,17 @@ def init_board_gauss(N, k):
 
 
 def has_converged(mu, oldmu, epsilon, iter, maxIterations):
-    print "iter: " + str(iter)
-    print "maxIterations: " + str(maxIterations)
+    print("iter: " + str(iter))
+    print("maxIterations: " + str(maxIterations))
     if oldmu != []:
         if iter < maxIterations:
             aux = [np.linalg.norm(oldmu[i] - mu[i]) for i in range(len(mu))]
             distancia = sum(aux)
             if distancia < epsilon * epsilon:
-                print "Distancia_T: " + str(distancia)
+                print("Distancia_T: " + str(distancia))
                 return True
             else:
-                print "Distancia_F: " + str(distancia)
+                print("Distancia_F: " + str(distancia))
                 return False
         else:
             # detencion pq se ha alcanzado el maximo de iteraciones
@@ -122,7 +122,7 @@ def kmeans_frag(X, k, epsilon, maxIterations, numFrag):
         precenters = reduceCenters(partialResult)  # partial merge would be better
 
         mu = [precenters[c][1] / precenters[c][0] for c in precenters]
-        print mu
+        print(mu)
         n += 1
     return n
 
@@ -140,4 +140,4 @@ if __name__ == "__main__":
     # X = init_board_gauss(numV, k)
     result = kmeans_frag(X, k, 1e-8, 10, numFrag)
 
-    print result
+    print(result)

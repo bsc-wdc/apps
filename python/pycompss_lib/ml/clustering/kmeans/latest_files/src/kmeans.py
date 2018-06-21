@@ -113,17 +113,17 @@ def has_converged(mu, oldmu, epsilon, iter, maxIterations):
     :param maxIterations: Max number of iterations
     :return: True if converged. False on the contrary.
     """
-    print "iter: " + str(iter)
-    print "maxIterations: " + str(maxIterations)
+    print("iter: " + str(iter))
+    print("maxIterations: " + str(maxIterations))
     if oldmu != []:
         if iter < maxIterations:
             aux = [np.linalg.norm(oldmu[i] - mu[i]) for i in range(len(mu))]
             distancia = sum(aux)
             if distancia < epsilon * epsilon:
-                print "Distancia_T: " + str(distancia)
+                print("Distancia_T: " + str(distancia))
                 return True
             else:
-                print "Distancia_F: " + str(distancia)
+                print("Distancia_F: " + str(distancia))
                 return False
         else:
             # Maximum number of iterations reached
@@ -140,7 +140,7 @@ def readFragment(file_name):
     return pickle.load(open(file_name, 'rb'))
 
 
-def kmeans_frag(dataset_path, numV, k, dim, epsilon, maxIterations):
+def kmeans(dataset_path, numV, k, dim, epsilon, maxIterations):
     """
     Kmeans main code
     :param dataset_path: Dataset path
@@ -192,5 +192,5 @@ if __name__ == "__main__":
     k = int(sys.argv[4])
 
     startTime = time.time()
-    result = kmeans_frag(dataset_path, numV, k, dim, 1e-4, 10)
+    result = kmeans(dataset_path, numV, k, dim, 1e-4, 10)
     print("Elapsed Time {} (s)".format(time.time() - startTime))

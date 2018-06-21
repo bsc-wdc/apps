@@ -33,7 +33,7 @@ def mergeReduce(function, data):
     :return: result of reduce the data to a single value
     """
     from collections import deque
-    q = deque(xrange(len(data)))
+    q = deque(list(range(len(data))))
     while len(q):
         x = q.popleft()
         if len(q):
@@ -147,7 +147,7 @@ def genFragment(numv, dim, k, seed, mode="random"):
         return init_board_random(numv, dim, seed)
 
 
-def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
+def kmeans(numV, k, dim, epsilon, maxIterations, numFrag):
     from pycompss.api.api import compss_wait_on
     size = int(numV / numFrag)
     seed = 5
@@ -160,7 +160,7 @@ def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
     while not has_converged(mu, oldmu, epsilon, n, maxIterations):
         oldmu = mu
         partialResult = []
-        for f in xrange(numFrag):
+        for f in range(numFrag):
             cluster = cluster_points_partial(X[f], mu, f * size)
             partialResult.append(partial_sum(X[f], cluster, f * size))
 
@@ -187,5 +187,5 @@ if __name__ == "__main__":
     numFrag = int(sys.argv[4])
 
     startTime = time.time()
-    result = kmeans_frag(numV, k, dim, 1e-4, 10, numFrag)
+    result = kmeans(numV, k, dim, 1e-4, 10, numFrag)
     print("Elapsed Time {} (s)".format(time.time() - startTime))

@@ -34,7 +34,7 @@ def mergeReduce(function, data):
     :return: result of reduce the data to a single value
     """
     from collections import deque
-    q = deque(xrange(len(data)))
+    q = deque(list(range(len(data))))
     while len(q):
         x = q.popleft()
         if len(q):
@@ -61,8 +61,8 @@ def reduceCentersTask(a, b):
 
 
 def has_converged(mu, oldmu, epsilon, iter, maxIterations):
-    print "iter: " + str(iter)
-    print "maxIterations: " + str(maxIterations)
+    print("iter: " + str(iter))
+    print("maxIterations: " + str(maxIterations))
     if oldmu != []:
         if iter < maxIterations:
             aux = [np.linalg.norm(oldmu[i] - mu[i]) for i in range(len(mu))]
@@ -83,7 +83,7 @@ def init_random(dim, k, seed):
     return m
 
 
-def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
+def kmeans(numV, k, dim, epsilon, maxIterations, numFrag):
     from pycompss.api.api import compss_wait_on
     size = numV // numFrag  # points per fragment, I assume, and I hope that the division is exact
 
@@ -132,5 +132,5 @@ if __name__ == "__main__":
     numFrag = int(sys.argv[4])
 
     startTime = time.time()
-    result = kmeans_frag(numV, k, dim, 1e-4, 10, numFrag)
+    result = kmeans(numV, k, dim, 1e-4, 10, numFrag)
     print("Elapsed Time {} (s)".format(time.time() - startTime))

@@ -20,8 +20,8 @@
 from analysis.pca.base.src import pca
 from classification.csvm.base.src.cascadesvm import CascadeSVM
 from classification.random_forest.base.src.forest import RandomForestClassifier
-from clustering.kmeans.base.src.kmeans import Kmeans
+from clustering.kmeans.latest.src.kmeans import kmeans
 from clustering.dbscan.base.src.DBSCAN import DBSCAN
 from regression.linear_regression.apps_objects.src import linearRegression
 
-__all__ = ['pca', 'CascadeSVM', 'RandomForestClassifier', 'Kmeans', 'DBSCAN', 'linearRegression']
+__all__ = ['pca', 'CascadeSVM', 'RandomForestClassifier', 'kmeans', 'DBSCAN', 'linearRegression']
