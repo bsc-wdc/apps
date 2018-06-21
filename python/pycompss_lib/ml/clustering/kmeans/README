@@ -18,9 +18,9 @@ kmeans
 * 4  - initMode: Base 2 with 3 ways to initialize centers: random, kmeans++ ||, kmeans++
 * 5  - spark: Spark like implementation with initModes. Reads dataset from files compatible with Spark
 * 6  - merge: Spark implementation with merge-reduce
+* 7  - genData: Generates data and runs kmeans
 
 
-* 9  - genData: Generates data and runs kmeans
 * 10 - genData2: Generates data and runs kmeans (Version 2)
 * 11 - tensorflow: Implementation using tensorflow
 * 12 - latest: Latest version

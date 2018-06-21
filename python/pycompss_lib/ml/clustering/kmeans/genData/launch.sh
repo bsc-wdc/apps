@@ -22,9 +22,6 @@
     --num_nodes=$numNodes \
     --exec_time=$executionTime \
     --tasks_per_node=$tasksPerNode \
-    --master_working_dir=. \
-    --worker_working_dir=scratch \
-    --library_path=/gpfs/apps/MN3/INTEL/mkl/lib/intel64 \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
@@ -35,12 +32,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch jobDependency numNodes executionTime tasksPerNode tracing m nip#         a b 
+#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing numberOfPoints dimensions centers numFragments initMode
 #
 # Example:
-#       ./launch None 2 5 16 false 16000 3 4 16
+#       ./launch.sh None 2 5 16 false 600 3 4 2 random
 #
-#  numV = numero de punts
-#  dim = dimensions del punt
-#  k = numero de centres
-#  numFrag = numero de fragments 
