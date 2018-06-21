@@ -24,7 +24,7 @@ from pycompss.api.parameter import *
 
 def chunks(l, n, balanced=False):
     if not balanced or not len(l) % n:
-        for i in xrange(0, len(l), n):
+        for i in range(0, len(l), n):
             yield l[i:i + n]
     else:
         rest = len(l) % n
@@ -33,7 +33,7 @@ def chunks(l, n, balanced=False):
             yield l[start: start + n + 1]
             rest -= 1
             start += n + 1
-        for i in xrange(start, len(l), n):
+        for i in range(start, len(l), n):
             yield l[i:i + n]
 
 
@@ -47,7 +47,7 @@ def mergeReduce(function, data):
     """
     from collections import deque
     dataNew = data[:]
-    q = deque(xrange(len(dataNew)))
+    q = deque(list(range(len(dataNew))))
     while len(q):
         x = q.popleft()
         if len(q):
@@ -121,7 +121,7 @@ def cost(Y, C):
 
 
 def bestMuKey(X, C):
-    w = [0 for i in xrange(len(C))]
+    w = [0 for i in range(len(C))]
     for x in X:
         bestmukey = min([(i[0], np.linalg.norm(x - np.array(C[i[0]])))
                         for i in enumerate(C)], key=lambda t: t[1])[0]

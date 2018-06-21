@@ -33,7 +33,7 @@ def mergeReduce(function, data):
     :return: result of reduce the data to a single value
     """
     from collections import deque
-    q = deque(xrange(len(data)))
+    q = deque(list(range(len(data))))
     while len(q):
         x = q.popleft()
         if len(q):
@@ -160,7 +160,7 @@ def kmeans(numV, k, dim, epsilon, maxIterations, numFrag):
     while not has_converged(mu, oldmu, epsilon, n, maxIterations):
         oldmu = mu
         partialResult = []
-        for f in xrange(numFrag):
+        for f in range(numFrag):
             cluster = cluster_points_partial(X[f], mu, f * size)
             partialResult.append(partial_sum(X[f], cluster, f * size))
 
