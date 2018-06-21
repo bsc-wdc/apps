@@ -24,9 +24,6 @@ kmeans
 * 10 - latest_oo: Object oriented latest version (common version with dataClay)
 * 11 - latest_files: Latest version with dataset from files
 
-* 15 - apps: Latest version
-* 16 - apps_mergereduce: Latest version with merge-reduce
-* 17 - apps_initmodes: Latest version with init modes (random, kmeans++ ||, kmeans++)
 * 18 - official: Official version
 
 == Execution instructions ==
