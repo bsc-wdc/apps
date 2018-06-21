@@ -1,7 +1,6 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 #
-#  Copyright 2002-2015 Barcelona Supercomputing Center (www.bsc.es)
+#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -15,12 +14,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-__author__ = 'Sandra Corella <sandra.corella@bsc.es>'
-__copyright__ = '2016 Barcelona Supercomputing Center (BSC-CNS)'
+
+# -*- coding: utf-8 -*-
 
 from pycompss.api.task import task
-from pycompss.api.parameter import *
 import numpy as np
+
+__author__ = 'Sandra Corella <sandra.corella@bsc.es>'
+__copyright__ = '2016 Barcelona Supercomputing Center (BSC-CNS)'
 
 
 def mergeReduce(function, data):
@@ -53,7 +54,6 @@ def init_board_gauss(numV, dim, K, seed):
         for i in range(n):
             d = np.array([np.random.normal(c[j], s) for j in range(dim)])
             data.append(d)
-
     Data = np.array(data)[:numV]
     return Data
 
@@ -61,7 +61,6 @@ def init_board_gauss(numV, dim, K, seed):
 def init_board_random(numV, dim, seed):
     np.random.seed(seed)
     return np.random.random((numV, dim))
-    #return [np.random.random(dim) for _ in range(numV)]
 
 
 def init_random(dim, k, seed):
@@ -100,7 +99,6 @@ def partial_sum(XP, clusters, ind):
     :param ind: point first ind
     :return: {cluster_ind: (#points, sum(points))}
     """
-    #XP = np.array(XP)
     dic = {}
     for i in clusters:
         p_idx = np.array(clusters[i]) - ind
@@ -125,21 +123,21 @@ def reduceCentersTask(a, b):
 
 
 def has_converged(mu, oldmu, epsilon, iter, maxIterations):
-    print "iter: " + str(iter)
-    print "maxIterations: " + str(maxIterations)
+    print("iter: " + str(iter))
+    print("maxIterations: " + str(maxIterations))
     if oldmu != []:
         if iter < maxIterations:
             aux = [np.linalg.norm(oldmu[i] - mu[i]) for i in range(len(mu))]
             distancia = sum(aux)
             if distancia < epsilon * epsilon:
-                print "Distancia_T: " + str(distancia)
+                print("Distancia_T: " + str(distancia))
                 return True
             else:
-                print "Distancia_F: " + str(distancia)
+                print("Distancia_F: " + str(distancia))
                 return False
         else:
-            # detencion pq se ha alcanzado el maximo de iteraciones
             return True
+
 
 @task(returns=list)
 def genFragment(numv, dim, k, seed, mode="random"):
@@ -153,9 +151,7 @@ def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
     from pycompss.api.api import compss_wait_on
     size = int(numV / numFrag)
     seed = 5
-    startTime = time.time()
     X = [genFragment(size, dim, k, seed + i) for i in range(numFrag)]
-    print "Points generation Time {} (s)".format(time.time() - startTime)
 
     mu = init_random(dim, k, seed)
     oldmu = []
@@ -164,15 +160,9 @@ def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
     while not has_converged(mu, oldmu, epsilon, n, maxIterations):
         oldmu = mu
         partialResult = []
-        #clusters = []
         for f in xrange(numFrag):
             cluster = cluster_points_partial(X[f], mu, f * size)
-            #clusters.append(cluster)
-            partialResult.append(partial_sum(X[f], cluster, f * size)) 
-        #clusters = [cluster_points_partial(
-        #    X[f], mu, f * size) for f in range(numFrag)]
-        #partialResult = [partial_sum(
-        #    X[f], clusters[f], f * size) for f in range(numFrag)]
+            partialResult.append(partial_sum(X[f], cluster, f * size))
 
         mu = mergeReduce(reduceCentersTask, partialResult)
         mu = compss_wait_on(mu)
@@ -182,9 +172,9 @@ def kmeans_frag(numV, k, dim, epsilon, maxIterations, numFrag):
             indF = np.random.randint(0, numFrag)
             mu.append(X[indF][indP])
         n += 1
-        print "Iteration Time{} (s)".format(time.time() - startTime)
-    print "Kmeans Time {} (s)".format(time.time() - startTime)
-    return (n, mu)
+        print("Iteration Time {} (s)".format(time.time() - startTime))
+    print("Kmeans Time {} (s)".format(time.time() - startTime))
+    return n, mu
 
 
 if __name__ == "__main__":
@@ -198,4 +188,4 @@ if __name__ == "__main__":
 
     startTime = time.time()
     result = kmeans_frag(numV, k, dim, 1e-4, 10, numFrag)
-    print "Ellapsed Time {} (s)".format(time.time() - startTime)
+    print("Elapsed Time {} (s)".format(time.time() - startTime))

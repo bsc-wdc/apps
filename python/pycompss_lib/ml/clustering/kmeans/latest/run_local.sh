@@ -2,26 +2,18 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/kmeans.py
+  execFile=src/kmeans.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
   # Retrieve arguments
-  jobDependency=$1
-  numNodes=$2
-  executionTime=$3
-  tasksPerNode=$4
-  tracing=$5
+  tracing=$1
 
   # Leave application args on $@
-  shift 5
+  shift 1
 
   # Enqueue the application
-  enqueue_compss \
-    --job_dependency=$jobDependency \
-    --num_nodes=$numNodes \
-    --exec_time=$executionTime \
-    --tasks_per_node=$tasksPerNode \
+  runcompss \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
@@ -32,8 +24,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing numV dim k numFrag
+#       ./run_local.sh tracing numV dim k numFrag
 #
 # Example:
-#       ./launch.sh None 2 5 16 false 16000 3 4 16
+#       ./run_local.sh false 16000 3 4 16
 #

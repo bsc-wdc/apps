@@ -20,8 +20,8 @@ kmeans
 * 6  - merge: Spark implementation with merge-reduce
 * 7  - genData: Generates data and runs kmeans
 * 8  - tensorflow: Implementation using tensorflow
+* 9 - latest: Latest version
 
-* 12 - latest: Latest version
 * 13 - latest_oo: Object oriented latest version (common version with dataClay)
 * 14 - latest_files: Latest version with dataset from files
 * 15 - apps: Latest version
