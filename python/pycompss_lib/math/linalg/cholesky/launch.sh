@@ -7,15 +7,15 @@
   jobDependency=None
   numNodes=2
   executionTime=5
-  tasksPerNode=16
+  tasksPerNode=48
   tracing=false
 
   # Set arguments
-  matrixSize=4
-  blockSize=4096
-  computingUnits=4
-  MKL_NUM_THREADS=16
+  appArgs="4 512 8"
+  #  - MSIZE = 4 = Matrix size
+  #  - BSIZE = 512 = Block size
+  #  - mkl_threads = 8
 
-  # Execute specifcversion launch  
-  ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $matrixSize $blockSize $computingUnits $MKL_NUM_THREADS False
-
+  # Execute specifcversion launch
+  # ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
