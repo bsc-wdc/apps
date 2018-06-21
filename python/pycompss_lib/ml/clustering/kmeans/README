@@ -19,7 +19,7 @@ kmeans
 * 5  - spark: Spark like implementation with initModes. Reads dataset from files compatible with Spark
 * 6  - merge: Spark implementation with merge-reduce
 
-* 8  - mmap: Implementation using memory mapped files
+
 * 9  - genData: Generates data and runs kmeans
 * 10 - genData2: Generates data and runs kmeans (Version 2)
 * 11 - tensorflow: Implementation using tensorflow
