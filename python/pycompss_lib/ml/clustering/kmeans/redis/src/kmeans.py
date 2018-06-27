@@ -64,8 +64,6 @@ def kmeans_frag(fragments, dimensions, num_centres = 10, iterations = 20, seed =
   labels = [[] for _ in range(len(fragments))]
   # Note: this implementation treats the centres as files, never as PSCOs.
   for it in range(iterations):
-    print(centres)
-    print('--------')
     partial_results = []
     for (i, frag) in enumerate(fragments):
       # For each fragment compute, for each point, the nearest centre.
