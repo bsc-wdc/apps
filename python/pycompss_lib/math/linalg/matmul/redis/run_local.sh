@@ -1,15 +1,13 @@
 
-
-# Set a single standalone Redis instance
 redis-server --daemonize yes
 
-
 runcompss --lang=python \
---pythonpath=$(pwd)/src:$(pwd)/COMPSs-Redis-bundle/python \
---classpath=$(pwd)/COMPSs-Redis-bundle/compss-redisPSCO.jar \
+--storage_impl=redis \
 --storage_conf=$(pwd)/storage_conf.txt \
+--pythonpath=$(pwd)/src \
 --debug \
 --graph \
-src/matmul.py 4 8 4 16 true
+src/matmul.py 4 2 4 16 true
+
 
 pkill redis
