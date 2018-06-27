@@ -42,6 +42,9 @@ compss/runtime/config/xml/resources/src/main/java/es/bsc/compss/types/resources/
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
+*.py*.pyc
+*.pyo
 
 # C extensions
 *.so
