@@ -3,3 +3,9 @@ python generate_classification_data.py --name=dt_test_2 --n_samples=20 --n_featu
 
 dt_test_3
 python generate_classification_data.py --name=dt_test_3 --n_samples=100000 --n_features=100 --n_classes=3 --file_per_feature=True --path=/home/bscuser/datasets/dt_test_3/
+
+dt_test_4
+python generate_classification_data.py --name=dt_test_4 --n_samples=20000 --n_features=25 --n_classes=3 --file_per_feature=True --path=/home/bscuser/datasets/dt_test_4/
+
+hdf5_4
+python generate_classification_data.py --name=4 --n_samples=20000 --n_features=25 --n_classes=3 --hdf5=True --path=/home/bscuser/datasets/

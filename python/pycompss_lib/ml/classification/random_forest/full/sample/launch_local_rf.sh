@@ -10,4 +10,4 @@ runcompss \
         --n_features=25 \
         --path_out= \
         --n_estimators=10 \
-        --max_depth=3 \
+        --max_depth=10 \

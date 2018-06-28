@@ -4,7 +4,7 @@ BASE_PATH="/home/bscuser/git"
 #     --tracing=true \
 runcompss \
     --pythonpath="${BASE_PATH}/apps/python/pycompss_lib/ml/classification/random_forest/full/src" \
-    sample/main_decision_tree.py \
+    main_decision_tree.py \
         --path_in=/home/bscuser/datasets/dt_test_2/ \
         --n_instances=20 \
         --n_features=10 \
