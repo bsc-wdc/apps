@@ -8,11 +8,11 @@ def multiply(A, B, C):
   '''
   C += A.block * B.block
 
-def matmul(A, B, C, set_barrier = False):
+def dot(A, B, C, set_barrier = False):
   '''A COMPSs-PSCO blocked matmul algorithm
   A and B (blocks) are PSCOs, while C (blocks) are objects
   '''
-  n, m = len(A), len(B)
+  n, m = len(A), len(B[0])
   # as many rows as A, as many columns as B
   for i in range(n):
     for j in range(m):
@@ -26,7 +26,7 @@ def matmul(A, B, C, set_barrier = False):
 
 
 
-'''Code for testing purposes.
+'''Code for experimental purposes.
 '''
 def parse_args():
   import argparse
@@ -84,7 +84,7 @@ def main(num_blocks, elems_per_block, check_result, seed):
         l[-1].append(generate_block(elems_per_block, num_blocks, seed = seed + bid, psco = True))
         bid += 1
       C[-1].append(generate_block(elems_per_block, num_blocks, psco = False, set_to_zero = True))
-  matmul(A, B, C, True)
+  dot(A, B, C, True)
   # Persist the result in a distributed manner (i.e: exploit data locality &
   # avoid memory flooding)
   for i in range(num_blocks):
