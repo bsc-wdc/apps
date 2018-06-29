@@ -26,12 +26,14 @@ def cluster_and_partial_sums(fragment, labels, centres, norm):
       labels.append(0)
   # Compute the big stuff
   associates = np.zeros(c)
+  # Get the labels for each point
   for (i, point) in enumerate(fragment.mat):
     distances = np.zeros(c)
     for (j, centre) in enumerate(centres):
       distances[j] = np.linalg.norm(point - centre, norm)
     labels[i] = np.argmin(distances)
     associates[labels[i]] += 1
+  # Add each point to its associate centre
   for (i, point) in enumerate(fragment.mat):
     ret[labels[i]] += point / associates[labels[i]]
   return ret
@@ -73,9 +75,9 @@ def kmeans_frag(fragments, dimensions, num_centres = 10, iterations = 20, seed =
       partial_results.append(partial_result)
     # Bring the partial sums to the master, compute new centres when syncing
     new_centres = np.matrix(np.zeros(centres.shape))
-    from pycompss.api.api import compss_wait_on as sync
+    from pycompss.api.api import compss_wait_on
     for partial in partial_results:
-      partial = sync(partial)
+      partial = compss_wait_on(partial)
       # Mean of means, single step
       new_centres += partial / float( len(fragments) )
     if np.linalg.norm(centres - new_centres, norms[norm]) < epsilon:
@@ -87,8 +89,8 @@ def kmeans_frag(fragments, dimensions, num_centres = 10, iterations = 20, seed =
   # In any case, now it is time to update the labels in the master
   ret_labels = []
   for label_list in labels:
-    from pycompss.api.api import compss_wait_on as sync
-    to_add = sync(label_list)
+    from pycompss.api.api import compss_wait_on
+    to_add = compss_wait_on(label_list)
     ret_labels += to_add
   return centres, ret_labels
 
@@ -188,7 +190,6 @@ def main(seed, numpoints, dimensions, centres, fragments, mode, iterations, epsi
     # Note that the seed is different for each fragment. This is done to avoid
     # having repeated data.
     r = min(numpoints, l + points_per_fragment)
-    print('Generating fragment...')
     fragment_list.append(
       generate_fragment(r - l, dimensions, mode, seed + l)
     )
@@ -207,8 +208,8 @@ def main(seed, numpoints, dimensions, centres, fragments, mode, iterations, epsi
       return l[i % len(l)]
     idx = 0
     for frag in fragment_list:
-      from pycompss.api.api import compss_wait_on as sync
-      frag = sync(frag)
+      from pycompss.api.api import compss_wait_on
+      frag = compss_wait_on(frag)
       for (i, p) in enumerate(frag.mat):
         col = color_wheel(labels[idx])
         plt.scatter(p[0, 0], p[0, 1], color = col)

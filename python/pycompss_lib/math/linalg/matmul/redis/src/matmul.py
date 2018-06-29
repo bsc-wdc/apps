@@ -23,9 +23,6 @@ def dot(A, B, C, set_barrier = False):
     compss_barrier()   
 
 
-
-
-
 '''Code for experimental purposes.
 '''
 def parse_args():
