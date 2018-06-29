@@ -1,149 +1,121 @@
-from pycompss.api.constraint import constraint
 from pycompss.api.task import task
 from pycompss.api.parameter import *
-from block import Block
-from storage.storage_object import StorageObject
-import numpy as np
-import os
 
-def initialize_variables(A, B, MKLProc, MSIZE):
-    for matrix in [A, B]:
-        for i in range(MSIZE):
-            matrix.append([])
-            for j in range(MSIZE):
-                mb = createBlock(BSIZE, False, MKLProc, MSIZE)
-                matrix[i].append(mb)
-    for i in range(MSIZE):
-        C.append([])
-        for j in range(MSIZE):
-            mb = createMatrix(BSIZE, True, MKLProc, MSIZE)
-            C[i].append(mb)
+@task(C = INOUT)
+def multiply(A, B, C):
+  '''Multiplies two blocks and acumulates the result in an INOUT
+  matrix
+  '''
+  C += A.block * B.block
 
-@constraint (ComputingUnits="${ComputingUnits}")
-@task(returns=list)
-def createBlock(BSIZE, res, MKLProc, MSIZE = 1):
-    os.environ["MKL_NUM_THREADS"]=str(MKLProc)
-    to_add = np.zeros((BSIZE, BSIZE)) if res else np.random.random((BSIZE, BSIZE))
-    if not res:
-      for i in range(BSIZE):
-        # Work with stochastic matrices to ensure high precision
-        to_add[i] /= (np.sum(to_add[i]) * float(MSIZE))
-    mb = np.matrix(to_add, dtype=np.double, copy=False)
-    ret = Block(mb)
-    ret.make_persistent()
-    return ret
-
-def createMatrix(BSIZE, res, MKLProc, MSIZE = 1):
-    os.environ["MKL_NUM_THREADS"]=str(MKLProc)
-    to_add = np.zeros((BSIZE, BSIZE)) if res else np.random.random((BSIZE, BSIZE)) 
-    if not res:
-      for i in range(BSIZE):
-        # Work with stochastic matrices to ensure high precision
-        to_add[i] /= (np.sum(to_add[i]) * float(MSIZE))
-    mb = np.matrix(np.array(to_add), dtype=np.double, copy=False)
-    return mb
+def matmul(A, B, C, set_barrier = False):
+  '''A COMPSs-PSCO blocked matmul algorithm
+  A and B (blocks) are PSCOs, while C (blocks) are objects
+  '''
+  n, m = len(A), len(B)
+  # as many rows as A, as many columns as B
+  for i in range(n):
+    for j in range(m):
+      for k in range(n):
+        multiply(A[i][j], B[i][j], C[i][j])
+  if set_barrier:
+    from pycompss.api.api import compss_barrier
+    compss_barrier()   
 
 
-@constraint (ComputingUnits="${ComputingUnits}")
-@task(c = INOUT)
-def multiply(a_object, b_object, c, MKLProc):
-    os.environ["MKL_NUM_THREADS"]=str(MKLProc)
-    c += a_object.block * b_object.block
 
-def multiply_seq(a_object, b_object, c):
-    a = a_object.get_block()
-    b = b_object.get_block()
-    c += a * b
+
+
+'''Code for testing purposes.
+'''
+def parse_args():
+  import argparse
+  parser = argparse.ArgumentParser(description = 'A COMPSs-PSCO blocked matmul implementation')
+  parser.add_argument('-b', '--num_blocks', type = int, default = 1,
+                     help = 'Number of blocks (N in NxN)'
+                     )
+  parser.add_argument('-e', '--elems_per_block', type = int, default = 2,
+                     help = 'Elements per block (N in NxN)'
+                     )
+  parser.add_argument('--check_result', action = 'store_true',
+                     help = 'Check obtained result'
+                     )
+  parser.add_argument('--seed', type = int, default = 0,
+                     help = 'Pseudo-Random seed'
+                     )
+  return parser.parse_args()
 
 @task()
-def persist_result(obj):
-    to_persist = Block(obj)
-    to_persist.make_persistent()
+def generate_block(size, num_blocks, seed = 0, psco = False, set_to_zero = False):
+  '''Generate a square block of given size.
+  '''
+  import numpy as np
+  np.random.seed(seed)
+  b = np.matrix(
+    np.random.random((size, size)) if not set_to_zero else np.zeros((size, size))
+  )
+  # Normalize matrix to ensure more numerical precision
+  if not set_to_zero:
+    b /= np.sum(b) * float(num_blocks)
+  if psco:
+    from block import Block
+    ret = Block(b)
+    ret.make_persistent()
+  else:
+    ret = b
+  return ret
+
+@task()
+def persist_result(b):
+  from block import Block
+  bl = Block(b)
+  bl.make_persistent()
+
+def main(num_blocks, elems_per_block, check_result, seed):
+  # Generate the dataset in a distributed manner
+  # i.e: avoid having the master a whole matrix
+  A, B, C = [], [], []
+  for i in range(num_blocks):
+    for l in [A, B, C]:
+      l.append([])
+    bid = 0
+    for j in range(num_blocks):
+      for l in [A, B]:
+        l[-1].append(generate_block(elems_per_block, num_blocks, seed = seed + bid, psco = True))
+        bid += 1
+      C[-1].append(generate_block(elems_per_block, num_blocks, psco = False, set_to_zero = True))
+  matmul(A, B, C, True)
+  # Persist the result in a distributed manner (i.e: exploit data locality &
+  # avoid memory flooding)
+  for i in range(num_blocks):
+    for j in range(num_blocks):
+      persist_result(C[i][j])
+      # If we are not going to check the result, we can safely delete the Cij intermediate
+      # matrices
+      if not check_result:
+        from pycompss.api.api import compss_delete_object as del_obj
+        del_obj(C[i][j])
+  # Check if we get the same result if multiplying sequentially (no tasks)
+  # Note that this implies having the whole A and B matrices in the master,
+  # so it is advisable to set --check_result only with small matrices
+  if check_result:
+    from pycompss.api.api import compss_wait_on
+    for i in range(num_blocks):
+      for j in range(num_blocks):
+        A[i][j] = compss_wait_on(A[i][j])
+        B[i][j] = compss_wait_on(B[i][j])
+    for i in range(num_blocks):
+      for j in range(num_blocks):
+        Cij = compss_wait_on(C[i][j])
+        Dij = generate_block(elems_per_block, num_blocks, psco = False, set_to_zero = True)
+        Dij = compss_wait_on(Dij)
+        for k in range(num_blocks):
+          Dij += A[i][k].block * B[k][j].block
+        import numpy as np
+        assert(np.allclose(Cij, Dij), 'Block %d-%d gives different products!' % (i, j))
+    print('Distributed and sequential results coincide!')
+
 
 if __name__ == "__main__":
-    import time
-    begginingTime = time.time()
-    import sys
-    from pycompss.api.api import compss_barrier
-
-    args = sys.argv[1:]
-
-    MSIZE = int(args[0])
-    BSIZE = int(args[1])
-    ProcCoreCount = int(args[2])
-    MKLProc = int(args[3])
-    check = len(args) >= 5 and args[4] == 'true'
-    A = []
-    B = []
-    C = []
-
-    startTime = time.time()
-
-    initialize_variables(A, B, MKLProc, MSIZE)
-
-    compss_barrier()
-
-    initTime = time.time() - startTime
-    startMulTime = time.time()
-
-    for i in range(MSIZE):
-        for j in range(MSIZE):
-            for k in range(MSIZE):
-                # This loop order maximizes "data diversity"
-                ks = (i + k) % MSIZE
-                multiply(A[i][ks], B[ks][j], C[i][j], MKLProc)
-
-    for i in range(MSIZE):
-        for j in range(MSIZE):
-            from pycompss.api.api import compss_delete_object as del_obj
-            persist_result(C[i][j])
-            if not check:
-              del_obj(C[i][j])
-
-    compss_barrier()
-
-    mulTime = time.time() - startMulTime
-    mulTransTime = time.time() - startMulTime
-    totalTime = time.time() - startTime
-    totalTimeWithImports = time.time() - begginingTime
-    print "PARAMS:------------------"
-    print "MSIZE:{}".format(MSIZE)
-    print "BSIZE:{}".format(BSIZE)
-    print "initT:{}".format(initTime)
-    print "multT:{}".format(mulTime)
-    print "mulTransT:{}".format(mulTransTime)
-    print "procCore:{}".format(ProcCoreCount)
-    print "totalTime:{}".format(totalTime)
-
-    if check:
-        from pycompss.api.api import compss_wait_on as sync
-        for i in range(MSIZE):
-            for j in range(MSIZE):
-                A[i][j] = sync(A[i][j])
-                B[i][j] = sync(B[i][j])
-                print('Block %d-%d' % (i, j))
-                print(A[i][j])
-                print(B[i][j])
-
-        for i in range(MSIZE):
-            for j in range(MSIZE):
-                to_check = createMatrix(BSIZE, True, MKLProc)
-                to_check = sync(to_check)
-                C[i][j] = sync(C[i][j])
-                for k in range(MSIZE):
-                    multiply_seq(A[i][k], B[k][j], to_check)
-                C[i][j] = sync(C[i][j])
-                to_check = sync(to_check)
-                print('Block %d-%d' % (i, j))
-                print(C[i][j])
-                print("-------------------------------------------------")
-                if not np.allclose(C[i][j], to_check):
-                    print('Seq and parallel results differ')
-                    print('Seq:')
-                    print(to_check)
-                    print('Parallel:')
-                    print(C[i][j])
-                    sys.exit(0)
-                else:
-                    print('This block is OK')
-        print('Seq and parallel results are OK')
+  opts = parse_args()
+  main(**vars(opts))

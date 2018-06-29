@@ -5,9 +5,8 @@ runcompss --lang=python \
 --storage_impl=redis \
 --storage_conf=$(pwd)/storage_conf.txt \
 --pythonpath=$(pwd)/src \
---debug \
 --graph \
-src/matmul.py 4 2 4 16 true
+src/matmul.py --num_blocks 4 --elems_per_block 4 --check_result --seed 91
 
 
 pkill redis
