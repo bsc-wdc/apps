@@ -30,7 +30,7 @@ class ImportTests(unittest.TestCase):
 
     def test_import_matmul(self):
         from pycompss_lib.math.linalg import matmul
-        from matmul import dot, initialize_variables
+        from pycompss_lib.math.linalg.matmul import dot, initialize_variables
 
     def test_import_qr(self):
         from pycompss_lib.math.linalg import qr
@@ -79,9 +79,17 @@ class ResultsTest(unittest.TestCase):
 
     def test_matmul(self):
         from pycompss_lib.math.linalg.matmul import dot
-        #from mm import dot, initialize_variables
-        #A, B, C = matmul.initialize_variables(4, 16, 1)
+        from pycompss_lib.math.linalg.matmul import initialize_variables
+        import numpy as np
 
+        A, B, C = initialize_variables(4, 16, 1)
+        dot(A, B, C, 4, 1)
+
+        Ajoin = np.bmat(A)
+        Bjoin = np.bmat(B)
+        Cjoin = np.bmat(C)
+
+        self.assertTrue(np.allclose(Cjoin, np.dot(Ajoin, Bjoin)))
 
 def main():
     unittest.main()
