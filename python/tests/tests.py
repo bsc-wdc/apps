@@ -30,6 +30,7 @@ class ImportTests(unittest.TestCase):
 
     def test_import_matmul(self):
         from pycompss_lib.math.linalg import matmul
+        from matmul import dot, initialize_variables
 
     def test_import_qr(self):
         from pycompss_lib.math.linalg import qr
