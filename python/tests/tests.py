@@ -77,7 +77,9 @@ class ResultsTest(unittest.TestCase):
         self.assertTrue(np.allclose(nfft, pfft))
 
     def test_matmul(self):
-        from pycompss_lib.math.linalg import matmul
+        from pycompss_lib.math.linalg.matmul import dot
+        #from mm import dot, initialize_variables
+        #A, B, C = matmul.initialize_variables(4, 16, 1)
 
 
 def main():

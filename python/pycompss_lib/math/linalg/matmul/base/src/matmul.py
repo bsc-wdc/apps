@@ -5,12 +5,22 @@ import numpy as np
 import ctypes
 import os
 
-mkl_rt = ctypes.CDLL('libmkl_rt.so')
+## UNCOMMENT IN CASE MKL IS INSTALLED IN YOUR MACHINE
+
+#try:
+#    mkl_rt = ctypes.CDLL('libmkl_rt.so')
+#except:
+#    use_mkl = False
 
 def mkl_set_num_threads(cores):
-    mkl_rt.mkl_set_num_threads(ctypes.byref(ctypes.c_int(cores)))
+#    if use_mkl:
+#        mkl_rt.mkl_set_num_threads(ctypes.byref(ctypes.c_int(cores)))
+    pass
 
-def initialize_variables(MKLProc):
+def initialize_variables(MSIZE, BSIZE, MKLProc):
+    A = []
+    B = []
+    C = []
     for matrix in [A, B]:
         for i in range(MSIZE):
             matrix.append([])
@@ -22,6 +32,7 @@ def initialize_variables(MKLProc):
         for j in range(MSIZE):
             mb = createBlock(BSIZE, True, MKLProc)
             C[i].append(mb)
+    return A, B, C
 
 @constraint (ComputingUnits="${ComputingUnits}")
 @task(returns=list)
@@ -40,46 +51,50 @@ def multiply(a, b, c, MKLProc):
     mkl_set_num_threads(MKLProc)
     c += a * b
 
-if __name__ == "__main__":
-    import time
-    begginingTime = time.time()
-    import sys
-    from pycompss.api.api import barrier
-    
-    args = sys.argv[1:]
-    
-    MSIZE = int(args[0])
-    BSIZE = int(args[1])
-    MKLProc = int(args[2])
-    A = []
-    B = []
-    C = []
-
-    startTime = time.time()
-
-    initialize_variables(MKLProc)
-
-    barrier()
-
-    initTime = time.time() - startTime
-    startMulTime = time.time()
-
+def dot(A, B, C, MSIZE, MKLProc):
     for i in range(MSIZE):
         for j in range(MSIZE):
             for k in range(MSIZE):
                 multiply(A[i][k], B[k][j], C[i][j], MKLProc)
 
+def main():
+    import time, sys
+    from pycompss.api.api import barrier
+    
+    args = sys.argv[1:]
+
+    MSIZE = int(args[0])
+    BSIZE = int(args[1])
+    MKLProc = int(args[2]) 
+    
+    print(MSIZE)
+    print(BSIZE)
+    print(MKLProc)
+
+    start_time = time.time()
+
+    A, B, C = initialize_variables(MSIZE, BSIZE, MKLProc)
+
     barrier()
 
-    mulTime = time.time() - startMulTime
-    mulTransTime = time.time() - startMulTime
-    totalTime = time.time() - startTime
-    totalTimeWithImports = time.time() - begginingTime
+    start_mult_time = time.time()
+    init_time = start_mult_time - start_time
+
+    dot(A, B, C, MSIZE, MKLProc)
+
+    barrier()
+
+    mul_time = time.time() - start_mult_time
+    total_time = time.time() - start_time
+
     print("PARAMS:------------------")
-    print("MSIZE:{}" + str(MSIZE))
-    print("BSIZE:{}" + str(BSIZE))
-    print("initT:{}" + str(initTime))
-    print("multT:{}" + str(mulTime)) 
-    print("mulTransT:{}" + str(mulTransTime))
-    print("totalTime:{}" + str(totalTime))
-    
+    print("MSIZE: " + str(MSIZE))
+    print("BSIZE: " + str(BSIZE))
+    print("MKL threads: " + str(MKLProc))
+    print("Initialization time: " + str(start_mult_time))
+    print("Multiplication time: " + str(mul_time))
+    print("Total time: " + str(total_time))
+
+if __name__ == "__main__":
+    main()
+
