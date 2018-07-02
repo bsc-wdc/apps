@@ -1,5 +1,6 @@
 import argparse
 from distutils import util
+import numpy as np
 
 from sklearn.datasets import make_classification
 from random import randint
@@ -32,6 +33,7 @@ if __name__ == "__main__":
         n_clusters_per_class=2,
         shuffle=True,
         random_state=seed)
+    X = X.astype(dtype=np.float32)
     X_train = X[:len(X) / 2]
     y_train = y[:len(y) / 2]
     X_test = X[len(X) / 2:]

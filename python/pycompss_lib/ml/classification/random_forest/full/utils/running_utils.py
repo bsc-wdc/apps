@@ -81,10 +81,12 @@ class Dataset(object):
                     np.savetxt(dataset_path + 'train_y.dat', y_train, fmt='%s')
                     np.savetxt(dataset_path + 'test_y.dat', y_test, fmt='%s')
         else:
-            X_train_transposed = zip(*X_train)
+            X_train_transposed = X_train.T
+            np.save(dataset_path + 'x_t.npy', X_train_transposed, allow_pickle=False)
             for i in range(len(X_train_transposed)):
                 np.savetxt(dataset_path + 'x_' + str(i) + '.dat', X_train_transposed[i])
             if self.prediction_type == 'regr':
                 np.savetxt(dataset_path + 'y.dat', y_train)
             else:
+                y_train = y_train.astype(dtype=np.float32)
                 np.savetxt(dataset_path + 'y.dat', y_train, fmt='%s')
