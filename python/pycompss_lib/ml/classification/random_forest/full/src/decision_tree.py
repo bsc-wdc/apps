@@ -158,14 +158,14 @@ def get_best_split(tree_path, sample, y_s, features_file, *scores_and_values_and
     if b_value is not None:
         b_value = b_value.item()
     node = Node(tree_path, b_index, b_value)
-    left_group, y_l, right_group, y_r = get_groups(sample, y_s, features_file, b_index, b_value)
+    features_mmap = np.load(features_file, mmap_mode='r', allow_pickle=False)
+    left_group, y_l, right_group, y_r = get_groups(sample, y_s, features_mmap, b_index, b_value)
     return node, left_group, y_l, right_group, y_r
 
 
-def get_groups(sample, y_s, features_file, index, value):
+def get_groups(sample, y_s, features_mmap, index, value):
     if index is None:
         return sample, y_s, np.array([], dtype=np.int64), np.array([], dtype=np.int64)
-    features_mmap = np.load(features_file, mmap_mode='r', allow_pickle=False)
     feature = features_mmap[index][sample]
     mask = feature < value
     left = sample[mask]
@@ -201,19 +201,18 @@ def compute_split(tree_path, sample, depth, n_instances, features, path, y_s):
     return node, left_group, y_l, right_group, y_r
 
 
-def compute_split_simple(tree_path, sample, n_features, features_file, y_s):
+def compute_split_simple(tree_path, sample, n_features, features_mmap, y_s):
     index_selection = feature_selection(n_features)
     b_score = float_info.max
     b_index = None
     b_value = None
     for index in index_selection:
-        features_mmap = np.load(features_file, mmap_mode='r', allow_pickle=False)
         feature = features_mmap[index]
         score, value = test_split(sample, y_s, feature)
         if score < b_score:
             b_score, b_value, b_index = score, value, index
     node = Node(tree_path, b_index, b_value)
-    left_group, y_l, right_group, y_r = get_groups(sample, y_s, features_file, b_index, b_value)
+    left_group, y_l, right_group, y_r = get_groups(sample, y_s, features_mmap, b_index, b_value)
     return node, left_group, y_l, right_group, y_r
 
 
@@ -239,11 +238,12 @@ def build_subtree(sample, y_s, tree_path, max_depth, n_features, features_file):
     print("@task build_subtree")
     if not sample.size:
         return []
+    features_mmap = np.load(features_file, mmap_mode='r', allow_pickle=False)
     nodes_to_split = [(tree_path, sample, y_s, 1)]
     node_list_to_persist = []
     while nodes_to_split:
         tree_path, sample, y_s, depth = nodes_to_split.pop()
-        node, left_group, y_l, right_group, y_r = compute_split_simple(tree_path, sample, n_features, features_file, y_s)
+        node, left_group, y_l, right_group, y_r = compute_split_simple(tree_path, sample, n_features, features_mmap, y_s)
         if not left_group.size or not right_group.size:
             leaf = build_leaf(y_s, tree_path)
             node_list_to_persist.append(leaf)
