@@ -1,13 +1,30 @@
-#!/bin/bash
+#!/bin/bash -e
 
-redis-server --daemonize yes
+  # Define script variables
+  scriptDir=$(dirname $0)
+  execFile=src/kmeans.py
+  appClasspath=${scriptDir}/src/
+  appPythonpath=${scriptDir}/src/
 
-runcompss \
---storage_impl=redis \
---pythonpath=$(pwd)/src \
---storage_conf=$(pwd)/storage_conf.txt \
--t \
--g \
-$(pwd)/src/kmeans.py --numpoints 10000 --mode normal --plot_result --seed 7
+  
+  # Retrieve arguments
+  tracing=$1
 
-pkill redis
+  # Leave the application args on $0
+  shift 1
+
+  # Init the storage backend
+  redis-server --daemonize yes
+
+  # Launch the application
+  runcompss \
+  --storage_impl=redis \
+  --pythonpath=$(pwd)/src \
+  --tracing=$tracing \
+  --storage_conf=$(pwd)/storage_conf.txt \
+  -t \
+  -g \
+  $(pwd)/src/kmeans.py $@
+
+  # Kill the storage backend
+  pkill redis
