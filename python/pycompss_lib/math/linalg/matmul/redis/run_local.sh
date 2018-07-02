@@ -1,12 +1,29 @@
+#!/bin/bash -e
 
-redis-server --daemonize yes
+  # Define script variables
+  scriptDir=$(dirname $0)
+  execFile=src/matmul.py
+  appClasspath=${scriptDir}/src/
+  appPythonpath=${scriptDir}/src/
 
-runcompss --lang=python \
---storage_impl=redis \
---storage_conf=$(pwd)/storage_conf.txt \
---pythonpath=$(pwd)/src \
---graph \
-src/matmul.py --num_blocks 4 --elems_per_block 4 --check_result --seed 91
+  # Retrieve arguments
+  tracing=$1
 
+  # Leave application args $@
+  shift 1
 
-pkill redis
+  # Set a standalone Redis backend
+  redis-server --daemonize yes
+
+  # Launch runcompss with all the appropriate arguments
+  runcompss --lang=python \
+  --storage_impl=redis \
+  --storage_conf=$(pwd)/storage_conf.txt \
+  --pythonpath=$(pwd)/src \
+  --graph \
+  --tracing=$tracing \
+  --debug \
+  $execFile $@
+
+  # End the storage standalone backend
+  pkill redis
