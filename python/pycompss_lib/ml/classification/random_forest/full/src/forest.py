@@ -1,4 +1,6 @@
 from decision_tree import DecisionTree
+from decision_tree import get_feature_task
+from decision_tree import get_y
 
 import numpy as np
 
@@ -21,10 +23,16 @@ class RandomForestClassifier:
         self.trees = []
 
     def fit(self):
+        features = []
+        for i in range(self.n_features):
+            features.append(get_feature_task(self.path_in, i))
+        y = get_y(self.path_in)
 
         for i in range(self.n_estimators):
             tree = DecisionTree(self.path_in, self.n_instances, self.n_features,
                                 self.path_out, 'tree_' + str(i), self.max_depth)
+            tree.features = features
+            tree.y = y
             self.trees.append(tree)
 
         for tree in self.trees:

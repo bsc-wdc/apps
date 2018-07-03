@@ -10,7 +10,7 @@ from six.moves import range
 from collections import Counter
 
 import numpy as np
-from math import sqrt, floor
+from math import sqrt, floor, frexp
 from pandas import read_csv
 from pycompss.api.task import task
 
@@ -62,7 +62,7 @@ def get_feature(path, i):
     return read_csv(get_feature_path(path, i), header=None, squeeze=True).values
 
 
-@task(returns=np.ndarray)
+@task(priority=True, returns=np.ndarray)
 def sample_selection(n_instances):
     print("@task sample_selection")
     bootstrap = np.random.choice(n_instances, size=n_instances, replace=True)
@@ -185,17 +185,16 @@ def build_leaf(y_s, tree_path):
     return Leaf(tree_path, len(y_s), frequencies, mode)
 
 
-def compute_split(tree_path, sample, depth, n_instances, features, path, y_s):
+def compute_split(tree_path, sample, depth, features, features_file, y_s):
     n_features = len(features)
     index_selection = feature_selection(n_features)
-    chunk = max(1, int(floor(10000 * 2 ** (depth - 1) / n_instances)))
+    chunk = 2**(max(depth, 20) - 1)
     scores_and_values_and_indices = []
     while (len(index_selection)) > 0:
         indices_to_test = index_selection[:chunk]
         index_selection = index_selection[chunk:]
         scores_and_values_and_indices.append(
             test_splits(sample, y_s, indices_to_test, *[features[i] for i in indices_to_test]))
-    features_file = get_features_file(path)
     node, left_group, y_l, right_group, y_r = get_best_split(tree_path, sample, y_s, features_file,
                                                              *scores_and_values_and_indices)
     return node, left_group, y_l, right_group, y_r
@@ -280,36 +279,44 @@ class DecisionTree:
         self.path_out = path_out
         self.name_out = name_out
         self.max_depth = max_depth
+        if self.max_depth:
+            self.distribute_depth = self.max_depth // 2
+        else:
+            self.distribute_depth = (frexp(self.n_instances)[1] - 1) // 2
+            self.max_depth = 2**30
+        self.features = []
+        self.y = None
 
     def fit(self):
         """
         Fits the DecisionTree.
         """
         tree_sample = sample_selection(self.n_instances)
-        features = []  # Chunking would require task refactoring
         features_file = get_features_file(self.path_in)
-        for i in range(self.n_features):
-            features.append(get_feature_task(self.path_in, i))
-        y = get_y(self.path_in)
-        nodes_to_split = [('/', tree_sample, y, 1)]
+        if not self.features:
+            for i in range(self.n_features):
+                self.features.append(get_feature_task(self.path_in, i))
+        if not self.y:
+            self.y = get_y(self.path_in)
+        nodes_to_split = [('/', tree_sample, self.y, 1)]
         file_out = self.path_out + self.name_out
         open(file_out, 'w').close()  # Create new empty file deleting previous content
         nodes_to_persist = []
         while nodes_to_split:
             tree_path, sample, y_s, depth = nodes_to_split.pop()
-            node, left_group, y_l, right_group, y_r = compute_split(tree_path, sample, depth, self.n_instances,
-                                                                    features, self.path_in, y_s)
+            node, left_group, y_l, right_group, y_r = compute_split(tree_path, sample, depth,
+                                                                    self.features, features_file, y_s)
             nodes_to_persist.append(node)
-            if depth < self.max_depth // 2:
+            if depth < self.distribute_depth:
                 nodes_to_split.append((tree_path + 'R', right_group, y_r, depth + 1))
                 nodes_to_split.append((tree_path + 'L', left_group, y_l, depth + 1))
             else:
                 left_subtree_nodes = build_subtree(left_group, y_l, tree_path + 'L', self.max_depth - depth,
-                                                   len(features), features_file)
+                                                   len(self.features), features_file)
                 nodes_to_persist.append(left_subtree_nodes)
 
                 right_subtree_nodes = build_subtree(right_group, y_r, tree_path + 'R', self.max_depth - depth,
-                                                    len(features), features_file)
+                                                    len(self.features), features_file)
                 nodes_to_persist.append(right_subtree_nodes)
             if len(nodes_to_persist) >= 1000:
                 flush_nodes(file_out, nodes_to_persist)

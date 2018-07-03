@@ -1,3 +1,5 @@
+import time
+
 import numpy as np
 import pandas
 import scipy as sp
@@ -81,7 +83,7 @@ class Dataset(object):
                     np.savetxt(dataset_path + 'train_y.dat', y_train, fmt='%s')
                     np.savetxt(dataset_path + 'test_y.dat', y_test, fmt='%s')
         else:
-            X_train_transposed = X_train.T
+            X_train_transposed = X_train.T.copy()
             np.save(dataset_path + 'x_t.npy', X_train_transposed, allow_pickle=False)
             for i in range(len(X_train_transposed)):
                 np.savetxt(dataset_path + 'x_' + str(i) + '.dat', X_train_transposed[i])
