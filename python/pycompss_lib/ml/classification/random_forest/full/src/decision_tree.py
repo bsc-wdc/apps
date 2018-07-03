@@ -296,7 +296,7 @@ class DecisionTree:
         if not self.features:
             for i in range(self.n_features):
                 self.features.append(get_feature_task(self.path_in, i))
-        if not self.y:
+        if self.y is None:
             self.y = get_y(self.path_in)
         nodes_to_split = [('/', tree_sample, self.y, 1)]
         file_out = self.path_out + self.name_out
