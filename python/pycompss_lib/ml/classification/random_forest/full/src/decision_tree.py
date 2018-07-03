@@ -278,12 +278,8 @@ class DecisionTree:
         self.n_features = n_features
         self.path_out = path_out
         self.name_out = name_out
-        self.max_depth = max_depth
-        if self.max_depth:
-            self.distribute_depth = self.max_depth // 2
-        else:
-            self.distribute_depth = (frexp(self.n_instances)[1] - 1) // 2
-            self.max_depth = 2**30
+        self.max_depth = max_depth if max_depth is not None else np.inf
+        self.distribute_depth = (frexp(self.n_instances)[1] - 1) // 2
         self.features = []
         self.y = None
 
