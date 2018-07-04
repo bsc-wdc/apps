@@ -18,13 +18,11 @@
 
   # Launch the application
   runcompss \
-  --storage_impl=redis \
   --pythonpath=$(pwd)/src \
   --tracing=$tracing \
-  --storage_conf=$(pwd)/storage_conf.txt \
   -t \
   -g \
-  $(pwd)/src/kmeans.py $@ --use_storage
+  $(pwd)/src/kmeans.py $@
 
   # Kill the storage backend
   pkill redis

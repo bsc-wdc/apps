@@ -1,6 +1,5 @@
 from pycompss.api.task import task
 from pycompss.api.parameter import *
-from psco import PSCO
 import numpy as np
 '''A PSCO based implementation of the K-Means algorithm.
 Tested with the official COMPSs-Redis implementation.
@@ -143,11 +142,14 @@ def parse_arguments():
   parser.add_argument('--plot_result', action = 'store_true',
     help = 'Plot the resulting clustering (only works if dim = 2).'
   )
+  parser.add_argument('--use_storage', action = 'store_true',
+    help = 'Use storage?'
+  )
   return parser.parse_args()
 
 
 @task(returns = 1)
-def generate_fragment(points, dim, mode, seed):
+def generate_fragment(points, dim, mode, seed, use_storage):
   '''Generate a random fragment of the specified number of points using the
   specified mode and the specified seed. Note that the generation is
   distributed (the master will never see the actual points).
@@ -173,12 +175,17 @@ def generate_fragment(points, dim, mode, seed):
   if mx > 0.0:
     mat /= mx
   # Create a PSCO and persist it in our storage.
+  if use_storage:
+    from psco import PSCO
+  else:
+    from fake_psco import PSCO
   ret = PSCO(mat)
-  ret.make_persistent()
+  if use_storage:
+    ret.make_persistent()
   return ret
 
 
-def main(seed, numpoints, dimensions, centres, fragments, mode, iterations, epsilon, lnorm, plot_result):
+def main(seed, numpoints, dimensions, centres, fragments, mode, iterations, epsilon, lnorm, plot_result, use_storage):
   '''This will be executed if called as main script. Look @ kmeans_frag for
   the KMeans function.
   '''
@@ -191,7 +198,7 @@ def main(seed, numpoints, dimensions, centres, fragments, mode, iterations, epsi
     # having repeated data.
     r = min(numpoints, l + points_per_fragment)
     fragment_list.append(
-      generate_fragment(r - l, dimensions, mode, seed + l)
+      generate_fragment(r - l, dimensions, mode, seed + l, use_storage)
     )
   centres, labels =  kmeans_frag(fragments = fragment_list,
                                  dimensions = dimensions,
