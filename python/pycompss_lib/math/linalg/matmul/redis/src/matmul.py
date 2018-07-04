@@ -40,10 +40,13 @@ def parse_args():
   parser.add_argument('--seed', type = int, default = 0,
                      help = 'Pseudo-Random seed'
                      )
+  parser.add_argument('--use_storage', action = 'store_true',
+                     help = 'Use storage?'
+                     )
   return parser.parse_args()
 
 @task()
-def generate_block(size, num_blocks, seed = 0, psco = False, set_to_zero = False):
+def generate_block(size, num_blocks, seed = 0, psco = False, use_storage = True, set_to_zero = False):
   '''Generate a square block of given size.
   '''
   import numpy as np
@@ -55,9 +58,13 @@ def generate_block(size, num_blocks, seed = 0, psco = False, set_to_zero = False
   if not set_to_zero:
     b /= np.sum(b) * float(num_blocks)
   if psco:
-    from block import Block
+    if use_storage:
+      from block import Block
+    else:
+      from fake_block import Block
     ret = Block(b)
-    ret.make_persistent()
+    if use_storage:
+      ret.make_persistent()
   else:
     ret = b
   return ret
@@ -68,25 +75,27 @@ def persist_result(b):
   bl = Block(b)
   bl.make_persistent()
 
-def main(num_blocks, elems_per_block, check_result, seed):
+def main(num_blocks, elems_per_block, check_result, seed, use_storage):
   # Generate the dataset in a distributed manner
   # i.e: avoid having the master a whole matrix
   A, B, C = [], [], []
   for i in range(num_blocks):
     for l in [A, B, C]:
       l.append([])
+    # Keep track of blockId to initialize with different random seeds
     bid = 0
     for j in range(num_blocks):
       for l in [A, B]:
-        l[-1].append(generate_block(elems_per_block, num_blocks, seed = seed + bid, psco = True))
+        l[-1].append(generate_block(elems_per_block, num_blocks, seed = seed + bid, psco = True, use_storage = use_storage))
         bid += 1
-      C[-1].append(generate_block(elems_per_block, num_blocks, psco = False, set_to_zero = True))
+      C[-1].append(generate_block(elems_per_block, num_blocks, psco = False, set_to_zero = True, use_storage = use_storage))
   dot(A, B, C, True)
   # Persist the result in a distributed manner (i.e: exploit data locality &
   # avoid memory flooding)
   for i in range(num_blocks):
     for j in range(num_blocks):
-      persist_result(C[i][j])
+      if use_storage:
+        persist_result(C[i][j])
       # If we are not going to check the result, we can safely delete the Cij intermediate
       # matrices
       if not check_result:
