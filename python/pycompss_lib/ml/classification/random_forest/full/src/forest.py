@@ -32,7 +32,7 @@ class RandomForestClassifier:
             tree = DecisionTree(self.path_in, self.n_instances, self.n_features,
                                 self.path_out, 'tree_' + str(i), self.max_depth)
             tree.features = features
-            tree.y = y
+            tree.y = y.codes
             self.trees.append(tree)
 
         for tree in self.trees:

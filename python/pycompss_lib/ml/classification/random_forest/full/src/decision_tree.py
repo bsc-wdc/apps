@@ -10,7 +10,7 @@ from six.moves import range
 from collections import Counter
 
 import numpy as np
-from math import sqrt, floor, frexp
+from math import sqrt, frexp
 from pandas import read_csv
 from pycompss.api.task import task
 
@@ -81,11 +81,11 @@ def m_try(n_features):
 @task(returns=object)
 def get_y(path):
     print("@task get_y")
-    return read_csv(path + 'y.dat', dtype=object, header=None, squeeze=True).values
+    return read_csv(path + 'y.dat', dtype="category", header=None, squeeze=True).values
 
 
 def gini_index(counter, size):
-    return 1 - sum((counter[key] / size) ** 2 for key in counter)
+    return 1 - sum(val ** 2 for val in counter.values())/(size**2)
 
 
 # Maximizing the Gini gain is equivalent to minimizing this weighted_sum
@@ -165,7 +165,7 @@ def get_best_split(tree_path, sample, y_s, features_file, *scores_and_values_and
 
 def get_groups(sample, y_s, features_mmap, index, value):
     if index is None:
-        return sample, y_s, np.array([], dtype=np.int64), np.array([], dtype=np.int64)
+        return sample, y_s, np.array([], dtype=np.int64), np.array([], dtype=np.int8)
     feature = features_mmap[index][sample]
     mask = feature < value
     left = sample[mask]
