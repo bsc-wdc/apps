@@ -188,7 +188,7 @@ def build_leaf(y_s, tree_path):
 def compute_split(tree_path, sample, depth, features, features_file, y_s):
     n_features = len(features)
     index_selection = feature_selection(n_features)
-    chunk = 2**(max(depth, 20) - 1)
+    chunk = 2**(min(depth, 20) - 1)
     scores_and_values_and_indices = []
     while (len(index_selection)) > 0:
         indices_to_test = index_selection[:chunk]
