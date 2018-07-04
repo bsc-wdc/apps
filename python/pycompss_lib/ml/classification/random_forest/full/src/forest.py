@@ -26,13 +26,14 @@ class RandomForestClassifier:
         features = []
         for i in range(self.n_features):
             features.append(get_feature_task(self.path_in, i))
-        y = get_y(self.path_in)
+        y, y_cats = get_y(self.path_in)
 
         for i in range(self.n_estimators):
             tree = DecisionTree(self.path_in, self.n_instances, self.n_features,
                                 self.path_out, 'tree_' + str(i), self.max_depth)
             tree.features = features
-            tree.y = y.codes
+            tree.y = y
+            tree.y_cats = y_cats
             self.trees.append(tree)
 
         for tree in self.trees:

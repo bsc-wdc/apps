@@ -81,7 +81,8 @@ def m_try(n_features):
 @task(returns=object)
 def get_y(path):
     print("@task get_y")
-    return read_csv(path + 'y.dat', dtype="category", header=None, squeeze=True).values
+    y = read_csv(path + 'y.dat', dtype="category", header=None, squeeze=True).values
+    return y.codes, y.categories
 
 
 def gini_index(counter, size):
@@ -282,6 +283,7 @@ class DecisionTree:
         self.distribute_depth = (frexp(self.n_instances)[1] - 1) // 2
         self.features = []
         self.y = None
+        self.y_cats = None
 
     def fit(self):
         """
@@ -293,7 +295,7 @@ class DecisionTree:
             for i in range(self.n_features):
                 self.features.append(get_feature_task(self.path_in, i))
         if self.y is None:
-            self.y = get_y(self.path_in)
+            self.y, self.y_cats = get_y(self.path_in)
         nodes_to_split = [('/', tree_sample, self.y, 1)]
         file_out = self.path_out + self.name_out
         open(file_out, 'w').close()  # Create new empty file deleting previous content
