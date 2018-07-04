@@ -78,7 +78,7 @@ def m_try(n_features):
     return int(sqrt(n_features))
 
 
-@task(returns=object)
+@task(returns=2)
 def get_y(path):
     print("@task get_y")
     y = read_csv(path + 'y.dat', dtype="category", header=None, squeeze=True).values
