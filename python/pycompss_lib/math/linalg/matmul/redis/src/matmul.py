@@ -1,3 +1,6 @@
+'''A matrix multiplication implementation with (optionally) PSCOs
+author: Sergio Rodriguez Guasch < sergio rodriguez at bsc dot es > 
+'''
 from pycompss.api.task import task
 from pycompss.api.parameter import *
 
@@ -104,6 +107,8 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
   # Check if we get the same result if multiplying sequentially (no tasks)
   # Note that this implies having the whole A and B matrices in the master,
   # so it is advisable to set --check_result only with small matrices
+  # Explicit correctness (i.e: an actual dot product is performed) must be checked
+  # manually
   if check_result:
     from pycompss.api.api import compss_wait_on
     for i in range(num_blocks):
