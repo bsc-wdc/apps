@@ -54,7 +54,6 @@ def get_feature_path(path, index):
 
 @task(returns=object)
 def get_feature_task(*args):
-    print("@task get_feature_task")
     return get_feature(*args)
 
 
@@ -64,7 +63,6 @@ def get_feature(path, i):
 
 @task(priority=True, returns=2)
 def sample_selection(n_instances, y_codes):
-    print("@task sample_selection")
     bootstrap = np.random.choice(n_instances, size=n_instances, replace=True)
     bootstrap.sort()
     return bootstrap, y_codes[bootstrap]
@@ -80,41 +78,50 @@ def m_try(n_features):
 
 @task(returns=3)
 def get_y(path):
-    print("@task get_y")
     y = read_csv(path + 'y.dat', dtype="category", header=None, squeeze=True).values
     return y, y.codes, len(y.categories)
 
 
-# Maximizing the Gini gain is equivalent to minimizing this proxy function
-def gini_proxy(l_frequencies, l_size, r_frequencies, r_size):
+# Modified Gini criteria to balance the tree
+def balancing_criteria(l_frequencies, l_size, r_frequencies, r_size):
     val = 0
-    if l_size:
-        val += r_size*(np.sum(np.square(l_frequencies)))
-    if r_size:
-        val += l_size*(np.sum(np.square(r_frequencies)))
+    # if l_size:
+    val += r_size*(np.sum(np.square(l_frequencies)))
+    # if r_size:
+    val += l_size*(np.sum(np.square(r_frequencies)))
     return -val
 
 
-def test_split(sample, y_s, feature, n_classes):
+# Maximizing the Gini gain is equivalent to minimizing this proxy function
+def gini_criteria_proxy(l_weight, l_length, r_weight, r_length):
+    return - l_weight/l_length - r_weight/r_length
+
+
+def test_split_old(sample, y_s, feature, n_classes):
     min_score = float_info.max
     b_value = None
     l_frequencies = np.zeros((n_classes,), dtype=np.int64)
+    # l_sum_sq = 0
     l_size = 0
     r_frequencies = np.bincount(y_s, minlength=n_classes)
+    # r_sum_sq = np.sum(np.square(r_frequencies))
     r_size = len(y_s)
-    data = sorted(izip(feature[sample], y_s), key=lambda e: e[0])
+    data = sorted(zip(feature[sample], y_s), key=lambda e: e[0])
     i1, i2 = tee(data)
     next(i2, None)
     pairs_iter = izip_longest(i1, i2, fillvalue=None)
     for el, next_el in pairs_iter:
         el_class = el[1]
+        # l_sum_sq += l_frequencies[el_class]*2 + 1
         l_frequencies[el_class] += 1
+        # r_sum_sq -= r_frequencies[el_class]*2 - 1
         r_frequencies[el_class] -= 1
         l_size += 1
         r_size -= 1
         if next_el and el_class == next_el[1]:
             continue
-        score = gini_proxy(l_frequencies, l_size, r_frequencies, r_size)
+        score = balancing_criteria(l_frequencies, l_size, r_frequencies, r_size)
+        # score = gini_proxy_2(l_sum_sq, l_size, r_sum_sq, r_size)
         if score < min_score:
             min_score = score
             if next_el:
@@ -124,9 +131,42 @@ def test_split(sample, y_s, feature, n_classes):
     return min_score, b_value
 
 
+def test_split(sample, y_s, feature, n_classes):
+    size = y_s.shape[0]
+    if size == 0:
+        return float_info.max, np.float64(np.inf)
+
+    f = feature[sample]
+    sort_indices = np.argsort(f)
+    y_sorted = y_s[sort_indices]
+    f_sorted = f[sort_indices]
+
+    l_frequencies = np.zeros((n_classes, size), dtype=np.int64)
+    l_frequencies[y_sorted, np.arange(size)] = 1
+
+    r_frequencies = np.zeros((n_classes, size), dtype=np.int64)
+    r_frequencies[:, 1:] = l_frequencies[:, :0:-1]
+
+    l_weight = np.sum(np.square(np.cumsum(l_frequencies, axis=-1)), axis=0)
+    r_weight = np.sum(np.square(np.cumsum(r_frequencies, axis=-1)), axis=0)[::-1]
+
+    l_length = np.arange(1, size + 1, dtype=np.int32)
+    r_length = np.arange(size - 1, -1, -1, dtype=np.int32)
+    r_length[size - 1] = 1  # Avoiding division by zero, the right score will be 0 anyways
+
+    # Maximizing the Gini gain is equivalent to minimizing this proxy function
+    scores = gini_criteria_proxy(l_weight, l_length, r_weight, r_length)
+
+    min_index = np.argmin(scores)
+    if min_index + 1 == size:
+        b_value = np.float64(np.inf)
+    else:
+        b_value = (f_sorted[min_index] + f_sorted[min_index + 1]) / 2
+    return scores[min_index], b_value
+
+
 @task(returns=tuple)
 def test_splits(sample, y_s, n_classes, feature_indices, *features):
-    print("@task test_splits")
     min_score = float_info.max
     b_value = None
     b_index = None
@@ -142,7 +182,6 @@ def test_splits(sample, y_s, n_classes, feature_indices, *features):
 
 @task(features_file=FILE_IN, returns=(Node, list, list, list, list))
 def get_best_split(tree_path, sample, y_s, features_file, *scores_and_values_and_indices):
-    print("@task get_best_split")
     min_score = float_info.max
     b_index = None
     b_value = None
@@ -219,7 +258,6 @@ def flush_nodes(file_out, nodes_to_persist):
 
 @task(file_out=FILE_INOUT)
 def flush_nodes_task(file_out, *nodes_to_persist):
-    print('@task flush_nodes_task')
     with open(file_out, "a") as tree_file:
         for item in nodes_to_persist:
             if isinstance(item, (Leaf, Node)):
@@ -231,7 +269,6 @@ def flush_nodes_task(file_out, *nodes_to_persist):
 
 @task(features_file=FILE_IN, returns=list)
 def build_subtree(sample, y_s, n_classes, tree_path, max_depth, n_features, features_file):
-    print("@task build_subtree")
     if not sample.size:
         return []
     features_mmap = np.load(features_file, mmap_mode='r', allow_pickle=False)
