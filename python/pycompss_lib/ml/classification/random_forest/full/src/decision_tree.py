@@ -1,7 +1,7 @@
 # Python3 compatibility imports
 from __future__ import division
 
-from itertools import izip, izip_longest, tee
+from itertools import izip_longest, tee
 from sys import float_info
 
 from pycompss.api.parameter import *
@@ -100,7 +100,7 @@ def gini_criteria_proxy(l_weight, l_length, r_weight, r_length):
 def test_split_old(sample, y_s, feature, n_classes):
     min_score = float_info.max
     b_value = None
-    l_frequencies = np.zeros((n_classes,), dtype=np.int64)
+    l_frequencies = np.zeros((n_classes,), dtype=np.int64)  # type: np.ndarray
     # l_sum_sq = 0
     l_size = 0
     r_frequencies = np.bincount(y_s, minlength=n_classes)
@@ -141,7 +141,7 @@ def test_split(sample, y_s, feature, n_classes):
     y_sorted = y_s[sort_indices]
     f_sorted = f[sort_indices]
 
-    l_frequencies = np.zeros((n_classes, size), dtype=np.int64)
+    l_frequencies = np.zeros((n_classes, size), dtype=np.int64)  # type: np.ndarray
     l_frequencies[y_sorted, np.arange(size)] = 1
 
     r_frequencies = np.zeros((n_classes, size), dtype=np.int64)
@@ -151,7 +151,7 @@ def test_split(sample, y_s, feature, n_classes):
     r_weight = np.sum(np.square(np.cumsum(r_frequencies, axis=-1)), axis=0)[::-1]
 
     l_length = np.arange(1, size + 1, dtype=np.int32)
-    r_length = np.arange(size - 1, -1, -1, dtype=np.int32)
+    r_length = np.arange(size - 1, -1, -1, dtype=np.int32)  # type: np.ndarray
     r_length[size - 1] = 1  # Avoiding division by zero, the right score will be 0 anyways
 
     # Maximizing the Gini gain is equivalent to minimizing this proxy function
@@ -276,7 +276,8 @@ def build_subtree(sample, y_s, n_classes, tree_path, max_depth, n_features, feat
     node_list_to_persist = []
     while nodes_to_split:
         tree_path, sample, y_s, depth = nodes_to_split.pop()
-        node, left_group, y_l, right_group, y_r = compute_split_simple(tree_path, sample, n_features, features_mmap, y_s, n_classes)
+        node, left_group, y_l, right_group, y_r = compute_split_simple(tree_path, sample, n_features, features_mmap,
+                                                                       y_s, n_classes)
         if not left_group.size or not right_group.size:
             leaf = build_leaf(y_s, tree_path)
             node_list_to_persist.append(leaf)
