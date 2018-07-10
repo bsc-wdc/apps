@@ -20,7 +20,7 @@ def dot(A, B, C, set_barrier = False):
   for i in range(n):
     for j in range(m):
       for k in range(n):
-        multiply(A[i][j], B[i][j], C[i][j])
+        multiply(A[i][k], B[k][j], C[i][j])
   if set_barrier:
     from pycompss.api.api import compss_barrier
     compss_barrier()   
@@ -48,7 +48,7 @@ def parse_args():
                      )
   return parser.parse_args()
 
-@task()
+@task(returns = 1)
 def generate_block(size, num_blocks, seed = 0, psco = False, use_storage = True, set_to_zero = False):
   '''Generate a square block of given size.
   '''
