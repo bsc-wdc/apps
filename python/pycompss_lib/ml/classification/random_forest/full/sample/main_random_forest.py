@@ -15,7 +15,7 @@ def main():
     parser.add_argument('--n_features', type=int, help='Number of attributes in the sample.')
     parser.add_argument('--path_out', help='Path of the output directory.')
     parser.add_argument('--n_estimators', type=int, help='Number of trees to build.')
-    parser.add_argument('--max_depth', type=int, help='Depth of the decision tree.')
+    parser.add_argument('--max_depth', type=int, default=None, help='Depth of the decision tree.')
 
     args = parser.parse_args()
 

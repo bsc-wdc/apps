@@ -1,5 +1,6 @@
 import argparse
 from distutils import util
+import numpy as np
 
 from sklearn.datasets import make_classification
 from random import randint
@@ -16,6 +17,8 @@ if __name__ == "__main__":
     parser.add_argument('--path')
     parser.add_argument('--file_per_feature', default=False, type=util.strtobool,
                         help='Whether to use separate output files for each feature.')
+    parser.add_argument('--hdf5', default=False, type=util.strtobool,
+                        help='Whether to use hdf5 file format. Overrides file_per_feature.')
     args = parser.parse_args()
     if len(sys.argv) > 1:
         dataset_id = sys.argv[1]
@@ -30,6 +33,7 @@ if __name__ == "__main__":
         n_clusters_per_class=2,
         shuffle=True,
         random_state=seed)
+    X = X.astype(dtype=np.float32)
     X_train = X[:len(X) / 2]
     y_train = y[:len(y) / 2]
     X_test = X[len(X) / 2:]
@@ -37,4 +41,4 @@ if __name__ == "__main__":
     ds_kwargs = {k: v for k, v in vars(args).items() if k in ('name', 'path') and v is not None}
     ds_kwargs['prediction_type'] = 'class'
     ds = running_utils.Dataset(**ds_kwargs)
-    ds.save(X_train, y_train, X_test, y_test, args.file_per_feature)
+    ds.save(X_train, y_train, X_test, y_test, args.file_per_feature, args.hdf5)

@@ -34,7 +34,7 @@ in order to build each tree.
 
 ## License
 
-This module is a derivative work of the sklearn.ensemble.src module rleeased under BSD 3 clause license. Original note:
+This module is a derivative work of the sklearn.ensemble.src module released under BSD 3 clause license. Original note:
 
 Authors: Gilles Louppe <g.louppe@gmail.com>  
          Brian Holt <bdholt1@gmail.com>  

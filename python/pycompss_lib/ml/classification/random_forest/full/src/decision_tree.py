@@ -1,8 +1,8 @@
 # Python3 compatibility imports
 from __future__ import division
 
-import itertools
-import sys
+from itertools import izip, izip_longest, tee
+from sys import float_info
 
 from pycompss.api.parameter import *
 from six.moves import range
@@ -10,7 +10,7 @@ from six.moves import range
 from collections import Counter
 
 import numpy as np
-from math import sqrt, floor
+from math import sqrt, frexp
 from pandas import read_csv
 from pycompss.api.task import task
 
@@ -44,60 +44,68 @@ class Leaf(object):
                 .format(self.tree_path, self.size, self.mode, frequencies_str))
 
 
-def get_feature_file(path, index):
+def get_features_file(path):
+    return path + 'x_t.npy'
+
+
+def get_feature_path(path, index):
     return path + 'x_' + str(index) + '.dat'
 
 
 @task(returns=object)
+def get_feature_task(*args):
+    print("@task get_feature_task")
+    return get_feature(*args)
+
+
 def get_feature(path, i):
-    print("@task get_feature")
-    return read_csv(get_feature_file(path, i), header=None, squeeze=True).values
+    return read_csv(get_feature_path(path, i), header=None, squeeze=True).values
 
 
-@task(returns=np.ndarray)
-def sample_selection(n_instances):
+@task(priority=True, returns=2)
+def sample_selection(n_instances, y_codes):
     print("@task sample_selection")
     bootstrap = np.random.choice(n_instances, size=n_instances, replace=True)
     bootstrap.sort()
-    return bootstrap
+    return bootstrap, y_codes[bootstrap]
 
 
 def feature_selection(n_features):
-    return np.random.choice(n_features, size=int(sqrt(n_features)), replace=False)
+    return np.random.choice(n_features, size=m_try(n_features), replace=False)
 
 
-@task(returns=object)
+def m_try(n_features):
+    return int(sqrt(n_features))
+
+
+@task(returns=3)
 def get_y(path):
     print("@task get_y")
-    return read_csv(path + 'y.dat', dtype=object, header=None, squeeze=True).values
+    y = read_csv(path + 'y.dat', dtype="category", header=None, squeeze=True).values
+    return y, y.codes, len(y.categories)
 
 
-def gini_index(counter, size):
-    return 1 - sum((counter[key] / size) ** 2 for key in counter)
-
-
-# Maximizing the Gini gain is equivalent to minimizing this weighted_sum
-def gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size):
-    weighted_sum = 0
+# Maximizing the Gini gain is equivalent to minimizing this proxy function
+def gini_proxy(l_frequencies, l_size, r_frequencies, r_size):
+    val = 0
     if l_size:
-        weighted_sum += l_size * gini_index(l_frequencies, l_size)
+        val += r_size*(np.sum(np.square(l_frequencies)))
     if r_size:
-        weighted_sum += r_size * gini_index(r_frequencies, r_size)
-    return weighted_sum
+        val += l_size*(np.sum(np.square(r_frequencies)))
+    return -val
 
 
-def test_split(sample, y, feature):
-    y_sample = y[sample]
-    min_score = sys.float_info.max
+def test_split(sample, y_s, feature, n_classes):
+    min_score = float_info.max
     b_value = None
-    l_frequencies = Counter()
+    l_frequencies = np.zeros((n_classes,), dtype=np.int64)
     l_size = 0
-    r_frequencies = Counter(y_sample)
-    r_size = len(sample)
-    data = sorted(zip(feature[sample], y_sample), key=lambda e: e[0])
-    i1, i2 = itertools.tee(data)
+    r_frequencies = np.bincount(y_s, minlength=n_classes)
+    r_size = len(y_s)
+    data = sorted(izip(feature[sample], y_s), key=lambda e: e[0])
+    i1, i2 = tee(data)
     next(i2, None)
-    pairs_iter = itertools.izip_longest(i1, i2, fillvalue=None)
+    pairs_iter = izip_longest(i1, i2, fillvalue=None)
     for el, next_el in pairs_iter:
         el_class = el[1]
         l_frequencies[el_class] += 1
@@ -106,7 +114,7 @@ def test_split(sample, y, feature):
         r_size -= 1
         if next_el and el_class == next_el[1]:
             continue
-        score = gini_weighted_sum(l_frequencies, l_size, r_frequencies, r_size)
+        score = gini_proxy(l_frequencies, l_size, r_frequencies, r_size)
         if score < min_score:
             min_score = score
             if next_el:
@@ -117,14 +125,14 @@ def test_split(sample, y, feature):
 
 
 @task(returns=tuple)
-def test_splits(sample, y, feature_indices, *features):
+def test_splits(sample, y_s, n_classes, feature_indices, *features):
     print("@task test_splits")
-    min_score = sys.float_info.max
+    min_score = float_info.max
     b_value = None
     b_index = None
     for t in range(len(feature_indices)):
         feature = features[t]
-        score, value = test_split(sample, y, feature)
+        score, value = test_split(sample, y_s, feature, n_classes)
         if score < min_score:
             min_score = score
             b_index = feature_indices[t]
@@ -132,10 +140,10 @@ def test_splits(sample, y, feature_indices, *features):
     return min_score, b_value, b_index
 
 
-@task(priority=True, returns=(Node, int, float))
-def get_best_split(tree_path, sample, path, *scores_and_values_and_indices):
+@task(features_file=FILE_IN, returns=(Node, list, list, list, list))
+def get_best_split(tree_path, sample, y_s, features_file, *scores_and_values_and_indices):
     print("@task get_best_split")
-    min_score = sys.float_info.max
+    min_score = float_info.max
     b_index = None
     b_value = None
     for i in range(len(scores_and_values_and_indices)):
@@ -147,60 +155,61 @@ def get_best_split(tree_path, sample, path, *scores_and_values_and_indices):
     if b_value is not None:
         b_value = b_value.item()
     node = Node(tree_path, b_index, b_value)
-    left_group, right_group = get_groups(sample, path, b_index, b_value)
-    return node, left_group, right_group
+    features_mmap = np.load(features_file, mmap_mode='r', allow_pickle=False)
+    left_group, y_l, right_group, y_r = get_groups(sample, y_s, features_mmap, b_index, b_value)
+    return node, left_group, y_l, right_group, y_r
 
 
-def get_groups(sample, path, index, value):
-    left = []
-    right = []
-    if len(sample) > 0:
-        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True).values
-        for i in sample:
-            if feature[i] < value:
-                left.append(i)
-            else:
-                right.append(i)
-    return left, right
+def get_groups(sample, y_s, features_mmap, index, value):
+    if index is None:
+        return sample, y_s, np.array([], dtype=np.int64), np.array([], dtype=np.int8)
+    feature = features_mmap[index][sample]
+    mask = feature < value
+    left = sample[mask]
+    right = sample[~mask]
+    y_l = y_s[mask]
+    y_r = y_s[~mask]
+    return left, y_l, right, y_r
 
 
-def build_leaf(sample, y, tree_path):
-    frequencies = Counter(y[sample])
+def build_leaf(y_s, tree_path):
+    frequencies = Counter(y_s)
     most_common = frequencies.most_common(1)
     if most_common:
         mode = most_common[0][0]
     else:
         mode = None
-    return Leaf(tree_path, len(sample), frequencies, mode)
+    return Leaf(tree_path, len(y_s), frequencies, mode)
 
 
-def compute_split(tree_path, sample, depth, n_instances, features, path, y):
+def compute_split(tree_path, sample, depth, features, features_file, y_s, n_classes):
     n_features = len(features)
     index_selection = feature_selection(n_features)
-    chunk = max(1, int(floor(10000 * 2 ** (depth - 1) / n_instances)))
+    chunk = 2**(min(depth, 20) - 1)
     scores_and_values_and_indices = []
     while (len(index_selection)) > 0:
         indices_to_test = index_selection[:chunk]
         index_selection = index_selection[chunk:]
         scores_and_values_and_indices.append(
-            test_splits(sample, y, indices_to_test, *[features[i] for i in indices_to_test]))
-    node, left_group, right_group = get_best_split(tree_path, sample, path, *scores_and_values_and_indices)
-    return node, left_group, right_group
+            test_splits(sample, y_s, n_classes, indices_to_test, *[features[i] for i in indices_to_test]))
+    node, left_group, y_l, right_group, y_r = get_best_split(tree_path, sample, y_s, features_file,
+                                                             *scores_and_values_and_indices)
+    return node, left_group, y_l, right_group, y_r
 
 
-def compute_split_simple(tree_path, sample, n_features, path, y):
+def compute_split_simple(tree_path, sample, n_features, features_mmap, y_s, n_classes):
     index_selection = feature_selection(n_features)
-    b_score = sys.float_info.max
+    b_score = float_info.max
     b_index = None
     b_value = None
     for index in index_selection:
-        feature = read_csv(get_feature_file(path, index), header=None, squeeze=True).values
-        score, value = test_split(sample, y, feature)
+        feature = features_mmap[index]
+        score, value = test_split(sample, y_s, feature, n_classes)
         if score < b_score:
             b_score, b_value, b_index = score, value, index
     node = Node(tree_path, b_index, b_value)
-    left_group, right_group = get_groups(sample, path, b_index, b_value)
-    return node, left_group, right_group
+    left_group, y_l, right_group, y_r = get_groups(sample, y_s, features_mmap, b_index, b_value)
+    return node, left_group, y_l, right_group, y_r
 
 
 def flush_nodes(file_out, nodes_to_persist):
@@ -220,26 +229,30 @@ def flush_nodes_task(file_out, *nodes_to_persist):
                     tree_file.write(node.to_json() + '\n')
 
 
-@task(returns=list)
-def build_subtree(sample, y, tree_path, max_depth, n_features, path_in):
-    nodes_to_split = [(tree_path, sample, 1)]
+@task(features_file=FILE_IN, returns=list)
+def build_subtree(sample, y_s, n_classes, tree_path, max_depth, n_features, features_file):
+    print("@task build_subtree")
+    if not sample.size:
+        return []
+    features_mmap = np.load(features_file, mmap_mode='r', allow_pickle=False)
+    nodes_to_split = [(tree_path, sample, y_s, 1)]
     node_list_to_persist = []
     while nodes_to_split:
-        tree_path, sample, depth = nodes_to_split.pop()
-        node, left_group, right_group = compute_split_simple(tree_path, sample, n_features, path_in, y)
-        if not left_group or not right_group:
-            leaf = build_leaf(sample, y, tree_path)
+        tree_path, sample, y_s, depth = nodes_to_split.pop()
+        node, left_group, y_l, right_group, y_r = compute_split_simple(tree_path, sample, n_features, features_mmap, y_s, n_classes)
+        if not left_group.size or not right_group.size:
+            leaf = build_leaf(y_s, tree_path)
             node_list_to_persist.append(leaf)
         else:
             node_list_to_persist.append(node)
             if depth < max_depth:
-                nodes_to_split.append((tree_path + 'R', right_group, depth + 1))
-                nodes_to_split.append((tree_path + 'L', left_group, depth + 1))
+                nodes_to_split.append((tree_path + 'R', right_group, y_r, depth + 1))
+                nodes_to_split.append((tree_path + 'L', left_group, y_l, depth + 1))
             else:
-                left = build_leaf(left_group, y, tree_path + 'L')
+                left = build_leaf(y_l, tree_path + 'L')
                 node_list_to_persist.append(left)
 
-                right = build_leaf(right_group, y, tree_path + 'R')
+                right = build_leaf(y_r, tree_path + 'R')
                 node_list_to_persist.append(right)
     return node_list_to_persist
 
@@ -262,36 +275,42 @@ class DecisionTree:
         self.n_features = n_features
         self.path_out = path_out
         self.name_out = name_out
-        self.max_depth = max_depth
+        self.max_depth = max_depth if max_depth is not None else np.inf
+        self.distribute_depth = (frexp(self.n_instances)[1] - 1) // 2
+        self.features = []
+        self.y_codes = None
+        self.n_classes = None
 
     def fit(self):
         """
         Fits the DecisionTree.
         """
-        tree_sample = sample_selection(self.n_instances)
-        features = []  # Chunking would require task refactoring
-        for i in range(self.n_features):
-            features.append(get_feature(self.path_in, i))
-        y = get_y(self.path_in)
-        nodes_to_split = [('/', tree_sample, 1)]
+        if self.y_codes is None:
+            _, self.y_codes, self.n_classes = get_y(self.path_in)
+        tree_sample, y_s = sample_selection(self.n_instances, self.y_codes)
+        features_file = get_features_file(self.path_in)
+        if not self.features:
+            for i in range(self.n_features):
+                self.features.append(get_feature_task(self.path_in, i))
+        nodes_to_split = [('/', tree_sample, y_s, 1)]
         file_out = self.path_out + self.name_out
         open(file_out, 'w').close()  # Create new empty file deleting previous content
         nodes_to_persist = []
         while nodes_to_split:
-            tree_path, sample, depth = nodes_to_split.pop()
-            node, left_group, right_group = compute_split(tree_path, sample, depth, self.n_instances, features,
-                                                          self.path_in, y)
+            tree_path, sample, y_s, depth = nodes_to_split.pop()
+            node, left_group, y_l, right_group, y_r = compute_split(tree_path, sample, depth, self.features,
+                                                                    features_file, y_s, self.n_classes)
             nodes_to_persist.append(node)
-            if depth < self.max_depth // 2:
-                nodes_to_split.append((tree_path + 'R', right_group, depth + 1))
-                nodes_to_split.append((tree_path + 'L', left_group, depth + 1))
+            if depth < self.distribute_depth:
+                nodes_to_split.append((tree_path + 'R', right_group, y_r, depth + 1))
+                nodes_to_split.append((tree_path + 'L', left_group, y_l, depth + 1))
             else:
-                left_subtree_nodes = build_subtree(left_group, y, tree_path + 'L', self.max_depth - depth,
-                                                   len(features), self.path_in)
+                left_subtree_nodes = build_subtree(left_group, y_l, self.n_features, tree_path + 'L',
+                                                   self.max_depth - depth, self.n_classes, features_file)
                 nodes_to_persist.append(left_subtree_nodes)
 
-                right_subtree_nodes = build_subtree(right_group, y, tree_path + 'R', self.max_depth - depth,
-                                                    len(features), self.path_in)
+                right_subtree_nodes = build_subtree(right_group, y_r, self.n_features, tree_path + 'R',
+                                                    self.max_depth - depth, self.n_classes, features_file)
                 nodes_to_persist.append(right_subtree_nodes)
             if len(nodes_to_persist) >= 1000:
                 flush_nodes(file_out, nodes_to_persist)
