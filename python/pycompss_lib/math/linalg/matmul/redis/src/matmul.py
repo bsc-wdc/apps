@@ -123,7 +123,9 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
         for k in range(num_blocks):
           Dij += A[i][k].block * B[k][j].block
         import numpy as np
-        assert(np.allclose(Cij, Dij), 'Block %d-%d gives different products!' % (i, j))
+        if not np.allclose(Cij, Dij):
+          print('Block %d-%d gives different products!' % (i, j))
+          return
     print('Distributed and sequential results coincide!')
 
 
