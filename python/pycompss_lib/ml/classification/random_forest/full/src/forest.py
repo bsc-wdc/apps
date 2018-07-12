@@ -12,13 +12,15 @@ class RandomForestClassifier:
                  n_features,
                  path_out,
                  n_estimators=10,
-                 max_depth=None):
+                 max_depth=None,
+                 distr_depth=None):
         self.path_in = path_in
         self.n_instances = n_instances
         self.n_features = n_features
         self.path_out = path_out
         self.n_estimators = n_estimators
         self.max_depth = max_depth
+        self.distr_depth = distr_depth
 
         self.trees = []
 
@@ -30,7 +32,7 @@ class RandomForestClassifier:
 
         for i in range(self.n_estimators):
             tree = DecisionTree(self.path_in, self.n_instances, self.n_features,
-                                self.path_out, 'tree_' + str(i), self.max_depth)
+                                self.path_out, 'tree_' + str(i), self.max_depth, self.distr_depth)
             tree.features = features
             tree.y_codes = y_codes
             tree.n_classes = n_classes

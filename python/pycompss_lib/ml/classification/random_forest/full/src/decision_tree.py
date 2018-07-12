@@ -297,7 +297,7 @@ def build_subtree(sample, y_s, n_classes, tree_path, max_depth, n_features, feat
 
 class DecisionTree:
 
-    def __init__(self, path_in, n_instances, n_features, path_out, name_out, max_depth=None):
+    def __init__(self, path_in, n_instances, n_features, path_out, name_out, max_depth=None, distr_depth=None):
         """
         Decision tree with distributed splits using pyCOMPSs.
 
@@ -314,7 +314,7 @@ class DecisionTree:
         self.path_out = path_out
         self.name_out = name_out
         self.max_depth = max_depth if max_depth is not None else np.inf
-        self.distribute_depth = (frexp(self.n_instances)[1] - 1) // 2
+        self.distr_depth = distr_depth if distr_depth is not None else (frexp(self.n_instances)[1] - 1) // 3
         self.features = []
         self.y_codes = None
         self.n_classes = None
@@ -339,7 +339,7 @@ class DecisionTree:
             node, left_group, y_l, right_group, y_r = compute_split(tree_path, sample, depth, self.features,
                                                                     features_file, y_s, self.n_classes)
             nodes_to_persist.append(node)
-            if depth < self.distribute_depth:
+            if depth < self.distr_depth:
                 nodes_to_split.append((tree_path + 'R', right_group, y_r, depth + 1))
                 nodes_to_split.append((tree_path + 'L', left_group, y_l, depth + 1))
             else:
