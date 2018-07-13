@@ -13,6 +13,7 @@ import numpy as np
 from math import sqrt, frexp
 from pandas import read_csv
 from pycompss.api.task import task
+from pycompss.api.api import compss_delete_object
 
 
 class Node(object):
@@ -253,6 +254,8 @@ def compute_split_simple(tree_path, sample, n_features, features_mmap, y_s, n_cl
 
 def flush_nodes(file_out, nodes_to_persist):
     flush_nodes_task(file_out, *nodes_to_persist)
+    for obj in nodes_to_persist:
+        compss_delete_object(obj)
     del nodes_to_persist[:]
 
 
@@ -338,6 +341,8 @@ class DecisionTree:
             tree_path, sample, y_s, depth = nodes_to_split.pop()
             node, left_group, y_l, right_group, y_r = compute_split(tree_path, sample, depth, self.features,
                                                                     features_file, y_s, self.n_classes)
+            compss_delete_object(sample)
+            compss_delete_object(y_s)
             nodes_to_persist.append(node)
             if depth < self.distr_depth:
                 nodes_to_split.append((tree_path + 'R', right_group, y_r, depth + 1))
@@ -346,12 +351,18 @@ class DecisionTree:
                 left_subtree_nodes = build_subtree(left_group, y_l, self.n_features, tree_path + 'L',
                                                    self.max_depth - depth, self.n_classes, features_file)
                 nodes_to_persist.append(left_subtree_nodes)
+                compss_delete_object(left_group)
+                compss_delete_object(y_l)
 
                 right_subtree_nodes = build_subtree(right_group, y_r, self.n_features, tree_path + 'R',
                                                     self.max_depth - depth, self.n_classes, features_file)
                 nodes_to_persist.append(right_subtree_nodes)
+                compss_delete_object(right_group)
+                compss_delete_object(y_r)
+
             if len(nodes_to_persist) >= 1000:
                 flush_nodes(file_out, nodes_to_persist)
+        
         flush_nodes(file_out, nodes_to_persist)
 
     def predict(self):
