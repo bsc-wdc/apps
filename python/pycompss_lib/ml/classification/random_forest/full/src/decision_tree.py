@@ -49,17 +49,17 @@ def get_features_file(path):
     return path + 'x_t.npy'
 
 
-def get_feature_path(path, index):
-    return path + 'x_' + str(index) + '.dat'
+@task(features_file=FILE_IN, returns=object)
+def get_feature_task(features_file, i):
+    return np.array(get_feature_mmap(features_file, i))
 
 
-@task(returns=object)
-def get_feature_task(*args):
-    return get_feature(*args)
+def get_feature_mmap(features_file, i):
+    return get_features_mmap(features_file)[i]
 
 
-def get_feature(path, i):
-    return read_csv(get_feature_path(path, i), header=None, squeeze=True).values
+def get_features_mmap(features_file):
+    return np.load(features_file, mmap_mode='r', allow_pickle=False)
 
 
 @task(priority=True, returns=2)
@@ -83,53 +83,9 @@ def get_y(path):
     return y, y.codes, len(y.categories)
 
 
-# Modified Gini criteria to balance the tree
-def balancing_criteria(l_frequencies, l_size, r_frequencies, r_size):
-    val = 0
-    # if l_size:
-    val += r_size*(np.sum(np.square(l_frequencies)))
-    # if r_size:
-    val += l_size*(np.sum(np.square(r_frequencies)))
-    return -val
-
-
 # Maximizing the Gini gain is equivalent to minimizing this proxy function
 def gini_criteria_proxy(l_weight, l_length, r_weight, r_length):
     return - l_weight/l_length - r_weight/r_length
-
-
-def test_split_old(sample, y_s, feature, n_classes):
-    min_score = float_info.max
-    b_value = None
-    l_frequencies = np.zeros((n_classes,), dtype=np.int64)  # type: np.ndarray
-    # l_sum_sq = 0
-    l_size = 0
-    r_frequencies = np.bincount(y_s, minlength=n_classes)
-    # r_sum_sq = np.sum(np.square(r_frequencies))
-    r_size = len(y_s)
-    data = sorted(zip(feature[sample], y_s), key=lambda e: e[0])
-    i1, i2 = tee(data)
-    next(i2, None)
-    pairs_iter = izip_longest(i1, i2, fillvalue=None)
-    for el, next_el in pairs_iter:
-        el_class = el[1]
-        # l_sum_sq += l_frequencies[el_class]*2 + 1
-        l_frequencies[el_class] += 1
-        # r_sum_sq -= r_frequencies[el_class]*2 - 1
-        r_frequencies[el_class] -= 1
-        l_size += 1
-        r_size -= 1
-        if next_el and el_class == next_el[1]:
-            continue
-        score = balancing_criteria(l_frequencies, l_size, r_frequencies, r_size)
-        # score = gini_proxy_2(l_sum_sq, l_size, r_sum_sq, r_size)
-        if score < min_score:
-            min_score = score
-            if next_el:
-                b_value = (el[0] + next_el[0]) / 2
-            else:  # Last element
-                b_value = np.float64(np.inf)
-    return min_score, b_value
 
 
 def test_split(sample, y_s, feature, n_classes):
@@ -222,7 +178,7 @@ def build_leaf(y_s, tree_path):
     return Leaf(tree_path, len(y_s), frequencies, mode)
 
 
-def compute_split(tree_path, sample, depth, features, features_file, y_s, n_classes):
+def compute_split_chunked(tree_path, sample, depth, features, features_file, y_s, n_classes):
     n_features = len(features)
     index_selection = feature_selection(n_features)
     chunk = 2**(min(depth, 20) - 1)
@@ -237,7 +193,7 @@ def compute_split(tree_path, sample, depth, features, features_file, y_s, n_clas
     return node, left_group, y_l, right_group, y_r
 
 
-def compute_split_simple(tree_path, sample, n_features, features_mmap, y_s, n_classes):
+def compute_split(tree_path, sample, n_features, features_mmap, y_s, n_classes):
     index_selection = feature_selection(n_features)
     b_score = float_info.max
     b_index = None
@@ -279,8 +235,8 @@ def build_subtree(sample, y_s, n_classes, tree_path, max_depth, n_features, feat
     node_list_to_persist = []
     while nodes_to_split:
         tree_path, sample, y_s, depth = nodes_to_split.pop()
-        node, left_group, y_l, right_group, y_r = compute_split_simple(tree_path, sample, n_features, features_mmap,
-                                                                       y_s, n_classes)
+        node, left_group, y_l, right_group, y_r = compute_split(tree_path, sample, n_features, features_mmap,
+                                                                y_s, n_classes)
         if not left_group.size or not right_group.size:
             leaf = build_leaf(y_s, tree_path)
             node_list_to_persist.append(leaf)
@@ -332,15 +288,15 @@ class DecisionTree:
         features_file = get_features_file(self.path_in)
         if not self.features:
             for i in range(self.n_features):
-                self.features.append(get_feature_task(self.path_in, i))
+                self.features.append(get_feature_task(features_file, i))
         nodes_to_split = [('/', tree_sample, y_s, 1)]
         file_out = self.path_out + self.name_out
         open(file_out, 'w').close()  # Create new empty file deleting previous content
         nodes_to_persist = []
         while nodes_to_split:
             tree_path, sample, y_s, depth = nodes_to_split.pop()
-            node, left_group, y_l, right_group, y_r = compute_split(tree_path, sample, depth, self.features,
-                                                                    features_file, y_s, self.n_classes)
+            node, left_group, y_l, right_group, y_r = compute_split_chunked(tree_path, sample, depth, self.features,
+                                                                            features_file, y_s, self.n_classes)
             compss_delete_object(sample)
             compss_delete_object(y_s)
             nodes_to_persist.append(node)
