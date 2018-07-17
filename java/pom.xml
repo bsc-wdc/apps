@@ -155,7 +155,6 @@
         <module>matmul/1_base</module>
         <module>matmul/2_apps</module>
         <module>matmul/3_mpi</module>
-        <module>nmmb/1_base</module>
         <module>npb/1_base</module>
         <module>simple/1_base</module>
         <module>sparseLU/1_base</module>
