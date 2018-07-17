@@ -1,5 +1,9 @@
+from collections import Counter
+
+from pycompss.api.api import compss_wait_on
+
 from decision_tree import DecisionTree
-from decision_tree import get_feature_task
+from decision_tree import get_features_file, get_feature_task
 from decision_tree import get_y
 
 import numpy as np
@@ -22,30 +26,37 @@ class RandomForestClassifier:
         self.max_depth = max_depth
         self.distr_depth = distr_depth
 
+        self.y = None
+        self.y_codes = None
+        self.n_classes = None
         self.trees = []
 
     def fit(self):
         features = []
+        features_file = get_features_file(self.path_in)
         for i in range(self.n_features):
-            features.append(get_feature_task(self.path_in, i))
-        y, y_codes, n_classes = get_y(self.path_in)
+            features.append(get_feature_task(features_file, i))
+        self.y, self.y_codes, self.n_classes = get_y(self.path_in)
 
         for i in range(self.n_estimators):
             tree = DecisionTree(self.path_in, self.n_instances, self.n_features,
                                 self.path_out, 'tree_' + str(i), self.max_depth, self.distr_depth)
             tree.features = features
-            tree.y_codes = y_codes
-            tree.n_classes = n_classes
+            tree.y_codes = self.y_codes
+            tree.n_classes = self.n_classes
             self.trees.append(tree)
 
         for tree in self.trees:
             tree.fit()
 
-    def predict_probabilities(self, test_data_path):
-        return sum(tree.predict_probabilities(test_data_path) for tree in self.trees) / len(self.trees)
+        self.y, self.y_codes, self.n_classes = compss_wait_on(self.y, self.y_codes, self.n_classes)
 
-    def predict(self, test_data_path):
-        probabilities = self.predict_probabilities(test_data_path)
-        # TODO
-        # return self.classes_.take(np.argmax(probabilities, axis=1), axis=0)
+    def predict_probabilities(self, test_data_file):
+        return sum(tree.predict_probabilities(test_data_file) for tree in self.trees) / len(self.trees)
 
+    def predict(self, test_data_file, soft_voting=False):
+        if soft_voting:
+            probabilities = self.predict_probabilities(test_data_file)
+            return self.classes_.take(np.argmax(probabilities, axis=1), axis=0)
+
+        return Counter(tree.predict(test_data_file) for tree in self.trees).most_common(1)

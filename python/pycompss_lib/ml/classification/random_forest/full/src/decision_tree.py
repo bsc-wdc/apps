@@ -1,7 +1,5 @@
 # Python3 compatibility imports
 from __future__ import division
-
-from itertools import izip_longest, tee
 from sys import float_info
 
 from pycompss.api.parameter import *
@@ -12,8 +10,12 @@ from collections import Counter
 import numpy as np
 from math import sqrt, frexp
 from pandas import read_csv
+from pandas.api.types import CategoricalDtype
 from pycompss.api.task import task
 from pycompss.api.api import compss_delete_object
+
+import prediction
+from test_split import test_split
 
 
 class Node(object):
@@ -24,7 +26,7 @@ class Node(object):
         self.value = value
 
     def to_json(self):
-        return ('{{"type": "NODE", "tree_path": "{}", '
+        return ('{{"tree_path": "{}", "type": "NODE", '
                 '"index": {}, "value": {}}}'
                 .format(self.tree_path, self.index, self.value))
 
@@ -38,9 +40,9 @@ class Leaf(object):
         self.mode = mode
 
     def to_json(self):
-        frequencies_str = ', '.join(map('%r: %r'.__mod__, self.frequencies.most_common()))
+        frequencies_str = ', '.join(map('"%r": %r'.__mod__, self.frequencies.items()))
         frequencies_str = '{' + frequencies_str + '}'
-        return ('{{"type": "LEAF", "tree_path": "{}", '
+        return ('{{"tree_path": "{}", "type": "LEAF", '
                 '"size": {}, "mode": {}, "frequencies": {}}}'
                 .format(self.tree_path, self.size, self.mode, frequencies_str))
 
@@ -79,47 +81,8 @@ def m_try(n_features):
 
 @task(returns=3)
 def get_y(path):
-    y = read_csv(path + 'y.dat', dtype="category", header=None, squeeze=True).values
+    y = read_csv(path + 'y.dat', dtype= CategoricalDtype(ordered=True), header=None, squeeze=True).values
     return y, y.codes, len(y.categories)
-
-
-# Maximizing the Gini gain is equivalent to minimizing this proxy function
-def gini_criteria_proxy(l_weight, l_length, r_weight, r_length):
-    return - l_weight/l_length - r_weight/r_length
-
-
-def test_split(sample, y_s, feature, n_classes):
-    size = y_s.shape[0]
-    if size == 0:
-        return float_info.max, np.float64(np.inf)
-
-    f = feature[sample]
-    sort_indices = np.argsort(f)
-    y_sorted = y_s[sort_indices]
-    f_sorted = f[sort_indices]
-
-    l_frequencies = np.zeros((n_classes, size), dtype=np.int64)  # type: np.ndarray
-    l_frequencies[y_sorted, np.arange(size)] = 1
-
-    r_frequencies = np.zeros((n_classes, size), dtype=np.int64)
-    r_frequencies[:, 1:] = l_frequencies[:, :0:-1]
-
-    l_weight = np.sum(np.square(np.cumsum(l_frequencies, axis=-1)), axis=0)
-    r_weight = np.sum(np.square(np.cumsum(r_frequencies, axis=-1)), axis=0)[::-1]
-
-    l_length = np.arange(1, size + 1, dtype=np.int32)
-    r_length = np.arange(size - 1, -1, -1, dtype=np.int32)  # type: np.ndarray
-    r_length[size - 1] = 1  # Avoiding division by zero, the right score will be 0 anyways
-
-    # Maximizing the Gini gain is equivalent to minimizing this proxy function
-    scores = gini_criteria_proxy(l_weight, l_length, r_weight, r_length)
-
-    min_index = np.argmin(scores)
-    if min_index + 1 == size:
-        b_value = np.float64(np.inf)
-    else:
-        b_value = (f_sorted[min_index] + f_sorted[min_index + 1]) / 2
-    return scores[min_index], b_value
 
 
 @task(returns=tuple)
@@ -321,8 +284,12 @@ class DecisionTree:
         
         flush_nodes(file_out, nodes_to_persist)
 
-    def predict(self):
-        pass
+    def predict(self, test_data_path):
+        test_data = np.load(test_data_path, allow_pickle=False)
+        file_tree = self.path_out + self.name_out
+        prediction.predict(file_tree, test_data)
 
-    def predict_probabilities(self):
-        pass
+    def predict_probabilities(self, test_data_path):
+        test_data = np.load(test_data_path, allow_pickle=False)
+        file_tree = self.path_out + self.name_out
+        prediction.predict_probabilities(file_tree, test_data, self.n_classes)

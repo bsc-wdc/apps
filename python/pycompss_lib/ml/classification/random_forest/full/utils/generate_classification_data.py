@@ -34,7 +34,6 @@ if __name__ == "__main__":
     X_test = np.empty(shape=(args.n_samples, args.n_features), dtype=np.float32)
     y_test = np.empty(shape=(args.n_samples,), dtype=np.float32)
     while created_samples < args.n_samples:
-        print 'hey'
         sample_chunk_size = min(max_sample_chunk_size, args.n_samples - created_samples)
         [X_train_chunk, y_train_chunk] = make_classification(
             n_samples=sample_chunk_size,
