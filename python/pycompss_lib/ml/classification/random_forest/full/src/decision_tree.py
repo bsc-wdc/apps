@@ -284,12 +284,10 @@ class DecisionTree:
         
         flush_nodes(file_out, nodes_to_persist)
 
-    def predict(self, test_data_path):
-        test_data = np.load(test_data_path, allow_pickle=False)
+    def predict(self, x_test):
         file_tree = self.path_out + self.name_out
-        prediction.predict(file_tree, test_data)
+        return prediction.predict(file_tree, x_test)
 
-    def predict_probabilities(self, test_data_path):
-        test_data = np.load(test_data_path, allow_pickle=False)
+    def predict_probabilities(self, x_test):
         file_tree = self.path_out + self.name_out
-        prediction.predict_probabilities(file_tree, test_data, self.n_classes)
+        return prediction.predict_probabilities(file_tree, x_test, self.n_classes)

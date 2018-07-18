@@ -87,12 +87,16 @@ class Dataset(object):
 
         if npy:
             np.save(dataset_path + 'x.npy', X_train, allow_pickle=False)
+            np.save(dataset_path + 'x_test.npy', X_test, allow_pickle=False)
             np.save(dataset_path + 'x_t.npy', X_train_transposed, allow_pickle=False)
             if self.prediction_type == 'regr':
                 np.savetxt(dataset_path + 'y.dat', y_train)
+                np.savetxt(dataset_path + 'y_test.dat', y_test)
             else:
                 y_train = y_train.astype(dtype=np.float32)
+                y_test = y_test.astype(dtype=np.float32)
                 np.savetxt(dataset_path + 'y.dat', y_train, fmt='%s')
+                np.savetxt(dataset_path + 'y_test.dat', y_test, fmt='%s')
 
         # Default:
         if not hdf5 and not file_per_feature and not npy:

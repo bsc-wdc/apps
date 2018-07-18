@@ -7,6 +7,7 @@ from decision_tree import get_features_file, get_feature_task
 from decision_tree import get_y
 
 import numpy as np
+import warnings
 
 
 class RandomForestClassifier:
@@ -51,12 +52,30 @@ class RandomForestClassifier:
 
         self.y, self.y_codes, self.n_classes = compss_wait_on(self.y, self.y_codes, self.n_classes)
 
-    def predict_probabilities(self, test_data_file):
-        return sum(tree.predict_probabilities(test_data_file) for tree in self.trees) / len(self.trees)
+    def predict_probabilities(self):
+        try:
+            x_test = np.load(self.path_in + 'x_test.npy', allow_pickle=False)
+        except IOError:
+            warnings.warn('No test data found in the input path.')
+        return sum(tree.predict_probabilities(x_test) for tree in self.trees) / len(self.trees)
 
-    def predict(self, test_data_file, soft_voting=False):
+    def predict(self, file_name='x_test.npy', soft_voting=False):
+        try:
+            x_test = np.load(self.path_in + file_name, allow_pickle=False)
+        except IOError:
+            warnings.warn('No test data found in the input path.')
+            return
+
         if soft_voting:
-            probabilities = self.predict_probabilities(test_data_file)
-            return self.classes_.take(np.argmax(probabilities, axis=1), axis=0)
+            probabilities = self.predict_probabilities(x_test)
+            return self.y.take(np.argmax(probabilities, axis=1), axis=0)
 
-        return Counter(tree.predict(test_data_file) for tree in self.trees).most_common(1)
+        if len(x_test.shape) == 1:
+            return Counter(tree.predict(x_test) for tree in self.trees).most_common(1)[0][0]
+        elif len(x_test.shape) == 2:
+            my_array = np.empty((len(self.trees), len(x_test)), np.int64)
+            for i, tree in enumerate(self.trees):
+                my_array[i, :] = tree.predict(x_test)
+            return np.apply_along_axis(lambda x: np.argmax(np.bincount(x)), 0, my_array)
+        else:
+            raise ValueError
