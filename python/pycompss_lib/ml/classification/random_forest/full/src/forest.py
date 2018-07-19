@@ -67,7 +67,7 @@ class RandomForestClassifier:
         return sum(tree.predict_probabilities(x_test) for tree in self.trees) / len(self.trees)
 
     def predict(self, file_name='x_test.npy', soft_voting=False):
-        """ Predicts class codes using a fitted forest and returns an integer or an array. """
+        """ Predicts classes using a fitted forest and returns an integer or an array. """
         try:
             x_test = np.load(self.path_in + file_name, allow_pickle=False)
         except IOError:
@@ -79,11 +79,13 @@ class RandomForestClassifier:
             return self.y.take(np.argmax(probabilities, axis=1), axis=0)
 
         if len(x_test.shape) == 1:
-            return Counter(tree.predict(x_test) for tree in self.trees).most_common(1)[0][0]
+            predicted = Counter(tree.predict(x_test) for tree in self.trees).most_common(1)[0][0]
+            return self.y.categories[predicted]  # Convert code to real value
         elif len(x_test.shape) == 2:
             my_array = np.empty((len(self.trees), len(x_test)), np.int64)
             for i, tree in enumerate(self.trees):
                 my_array[i, :] = tree.predict(x_test)
-            return np.apply_along_axis(lambda x: np.argmax(np.bincount(x)), 0, my_array)
+            predicted = np.apply_along_axis(lambda x: np.argmax(np.bincount(x)), 0, my_array)
+            return self.y.categories[predicted]  # Convert codes to real values
         else:
             raise ValueError

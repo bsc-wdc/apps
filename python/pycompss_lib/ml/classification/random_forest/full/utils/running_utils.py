@@ -11,20 +11,6 @@ from pycompss.api.task import task
 DATA_PATH = '/home/bscuser/datasets/'
 
 
-def are_equal(a, b):
-    if isinstance(a, (np.ndarray, list, tuple)):
-        for i in range(len(a)):
-            if not are_equal(a[i], b[i]):
-                return False
-        return True
-    elif isinstance(a, sp.sparse.csr.csr_matrix):
-        return (a != b).nnz == 0
-    elif isinstance(a, np.float64):
-        return abs(a - b) < 1e-10
-    else:
-        return a == b or np.isnan(a) and np.isnan(b)
-
-
 @task(returns=pandas.DataFrame)
 def to_dataframe(path):
     return read_csv(path, sep=' ', header=None, squeeze=True)

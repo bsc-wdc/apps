@@ -1,7 +1,6 @@
 from __future__ import division
 import os
 import json
-import warnings
 
 import numpy as np
 from pycompss.api.api import compss_open

@@ -2,7 +2,7 @@ import argparse
 import time
 
 from pycompss.api.api import compss_barrier
-from decision_tree import DecisionTree
+from decision_tree import DecisionTreeClassifier
 
 
 def main():
@@ -19,7 +19,7 @@ def main():
 
     args = parser.parse_args()
 
-    tree = DecisionTree(args.path_in, args.n_instances, args.n_features, args.path_out, args.name_out, args.max_depth)
+    tree = DecisionTreeClassifier(args.path_in, args.n_instances, args.n_features, args.path_out, args.name_out, args.max_depth)
     tree.fit()
 
     compss_barrier()

@@ -81,7 +81,7 @@ def m_try(n_features):
 
 @task(returns=3)
 def get_y(path):
-    y = read_csv(path + 'y.dat', dtype= CategoricalDtype(ordered=True), header=None, squeeze=True).values
+    y = read_csv(path + 'y.dat', dtype=CategoricalDtype(), header=None, squeeze=True).values
     return y, y.codes, len(y.categories)
 
 

@@ -3,7 +3,6 @@ import argparse
 import time
 import numpy as np
 
-from pandas.core.dtypes.dtypes import CategoricalDtype
 from pycompss.api.api import compss_barrier, compss_open
 from forest import RandomForestClassifier
 from pandas import read_csv
@@ -13,7 +12,7 @@ def main():
     initial_time = time.time()
     parser = argparse.ArgumentParser(description='Random forest classifier.')
 
-    # DecisionTree params
+    # RandomForestClassifier params
     parser.add_argument('--path_in', help='Path of the dataset directory.')
     parser.add_argument('--n_instances', type=int, help='Number of instances in the sample.')
     parser.add_argument('--n_features', type=int, help='Number of attributes in the sample.')
@@ -44,14 +43,13 @@ def main():
 
     y_predicted = forest.predict()
     if y_predicted is not None:
-        y_real = read_csv(args.path_in + 'y_test.dat', dtype=CategoricalDtype(ordered=True), header=None,
-                          squeeze=True).values.codes
-
-        accuracy = (len(y_real) - np.count_nonzero(y_predicted - y_real))/len(y_real)
-        print 'accuracy: ', accuracy
+        y_real = read_csv(args.path_in + 'y_test.dat', header=None, dtype=object,
+                          squeeze=True)
+        accuracy = (np.count_nonzero(y_predicted == y_real))/len(y_real)
 
         predict_time = time.time()
         print('Predict time: ' + str(predict_time - open_time))
+        print 'Accuracy: ', accuracy
 
 
 if __name__ == "__main__":
