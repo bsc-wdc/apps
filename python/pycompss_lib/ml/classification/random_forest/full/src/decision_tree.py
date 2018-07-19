@@ -217,7 +217,7 @@ def build_subtree(sample, y_s, n_classes, tree_path, max_depth, n_features, feat
     return node_list_to_persist
 
 
-class DecisionTree:
+class DecisionTreeClassifier:
 
     def __init__(self, path_in, n_instances, n_features, path_out, name_out, max_depth=None, distr_depth=None):
         """
@@ -243,7 +243,7 @@ class DecisionTree:
 
     def fit(self):
         """
-        Fits the DecisionTree.
+        Fits the DecisionTreeClassifier.
         """
         if self.y_codes is None:
             _, self.y_codes, self.n_classes = get_y(self.path_in)
@@ -285,9 +285,11 @@ class DecisionTree:
         flush_nodes(file_out, nodes_to_persist)
 
     def predict(self, x_test):
+        """ Predicts class codes for the input data using a fitted tree and returns an integer or an array. """
         file_tree = self.path_out + self.name_out
         return prediction.predict(file_tree, x_test)
 
     def predict_probabilities(self, x_test):
+        """ Predicts class probabilities by class code using a fitted tree and returns a 1D or 2D array. """
         file_tree = self.path_out + self.name_out
         return prediction.predict_probabilities(file_tree, x_test, self.n_classes)

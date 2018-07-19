@@ -1,8 +1,9 @@
+from __future__ import division
 from collections import Counter
 
 from pycompss.api.api import compss_wait_on
 
-from decision_tree import DecisionTree
+from decision_tree import DecisionTreeClassifier
 from decision_tree import get_features_file, get_feature_task
 from decision_tree import get_y
 
@@ -33,6 +34,9 @@ class RandomForestClassifier:
         self.trees = []
 
     def fit(self):
+        """
+        Fits the RandomForestClassifier.
+        """
         features = []
         features_file = get_features_file(self.path_in)
         for i in range(self.n_features):
@@ -40,7 +44,7 @@ class RandomForestClassifier:
         self.y, self.y_codes, self.n_classes = get_y(self.path_in)
 
         for i in range(self.n_estimators):
-            tree = DecisionTree(self.path_in, self.n_instances, self.n_features,
+            tree = DecisionTreeClassifier(self.path_in, self.n_instances, self.n_features,
                                 self.path_out, 'tree_' + str(i), self.max_depth, self.distr_depth)
             tree.features = features
             tree.y_codes = self.y_codes
@@ -53,13 +57,17 @@ class RandomForestClassifier:
         self.y, self.y_codes, self.n_classes = compss_wait_on(self.y, self.y_codes, self.n_classes)
 
     def predict_probabilities(self):
+        """ Predicts class probabilities by class code using a fitted forest and returns a 1D or 2D array. """
         try:
             x_test = np.load(self.path_in + 'x_test.npy', allow_pickle=False)
         except IOError:
             warnings.warn('No test data found in the input path.')
+            return
+
         return sum(tree.predict_probabilities(x_test) for tree in self.trees) / len(self.trees)
 
     def predict(self, file_name='x_test.npy', soft_voting=False):
+        """ Predicts class codes using a fitted forest and returns an integer or an array. """
         try:
             x_test = np.load(self.path_in + file_name, allow_pickle=False)
         except IOError:
