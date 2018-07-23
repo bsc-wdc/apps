@@ -8,6 +8,7 @@ from decision_tree import get_features_file, get_feature_task
 from decision_tree import get_y
 
 import numpy as np
+from numpy.lib import format
 import warnings
 
 
@@ -39,13 +40,14 @@ class RandomForestClassifier:
         """
         features = []
         features_file = get_features_file(self.path_in)
+        self._features_file_check(features_file)
         for i in range(self.n_features):
             features.append(get_feature_task(features_file, i))
         self.y, self.y_codes, self.n_classes = get_y(self.path_in)
 
         for i in range(self.n_estimators):
-            tree = DecisionTreeClassifier(self.path_in, self.n_instances, self.n_features,
-                                self.path_out, 'tree_' + str(i), self.max_depth, self.distr_depth)
+            tree = DecisionTreeClassifier(self.path_in, self.n_instances, self.n_features, self.path_out,
+                                          'tree_' + str(i), self.max_depth, self.distr_depth)
             tree.features = features
             tree.y_codes = self.y_codes
             tree.n_classes = self.n_classes
@@ -71,7 +73,7 @@ class RandomForestClassifier:
         try:
             x_test = np.load(self.path_in + file_name, allow_pickle=False)
         except IOError:
-            warnings.warn('No test data found in the input path.')
+            warnings.warn('The test data file does not exist or cannot be read.')
             return
 
         if soft_voting:
@@ -89,3 +91,20 @@ class RandomForestClassifier:
             return self.y.categories[predicted]  # Convert codes to real values
         else:
             raise ValueError
+
+    def _features_file_check(self, features_file):
+        with open(features_file) as fp:
+            version = format.read_magic(fp)
+            try:
+                format._check_version(version)
+            except ValueError:
+                raise ValueError('Unknown version of the features file.')
+            shape, fortran_order, dtype = format._read_array_header(fp, version)
+            if len(shape) != 2:
+                raise ValueError('Cannot read 2D array from the features file.')
+            if (self.n_features, self.n_instances) != shape:
+                raise ValueError('The dimensions of the features file are different than the given dimensions.')
+            if fortran_order:
+                raise ValueError('Fortran order unsupported for features array')
+            if dtype != np.float32:
+                warnings.warn('Datatype ' + str(dtype) + ' has not been tested')

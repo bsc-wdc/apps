@@ -8,6 +8,7 @@ from six.moves import range
 from collections import Counter
 
 import numpy as np
+from numpy.lib import format
 from math import sqrt, frexp
 from pandas import read_csv
 from pandas.api.types import CategoricalDtype
@@ -53,7 +54,12 @@ def get_features_file(path):
 
 @task(features_file=FILE_IN, returns=object)
 def get_feature_task(features_file, i):
-    return np.array(get_feature_mmap(features_file, i))
+    with open(features_file, mode='rb') as fp:
+        version = format.read_magic(fp)
+        shape, fortran_order, dtype = format._read_array_header(fp, version)
+        n_samples = shape[1]
+        fp.seek(i*n_samples*dtype.itemsize, 1)
+        return np.fromfile(fp, dtype=dtype, count=n_samples)
 
 
 def get_feature_mmap(features_file, i):
