@@ -31,19 +31,37 @@ def fft(a):
 
 
 @task(returns=1)
-def reduce(e, o, w):
-    x = np.concatenate((e, o))
+def reduce(even, odd, w):
+    x = np.concatenate((even, odd))
     n = len(x)
 
     for k in range(n / 2):
-        ek = x[k]
-        ok = x[k + n / 2]
+        e = x[k]
+        o = x[k + n / 2]
         wk = w[n - 1, k]
 
-        x[k] = ek + wk * ok
-        x[k + n / 2] = ek - wk * ok
+        x[k] = e + wk * o
+        x[k + n / 2] = e - wk * o
 
     return x
 
+
+def base(even, odd, w):
+    n = len(even) + len(odd)
+    x = np.zeros(n, dtype=complex)
+    e = 0
+    o = 0
+
+    for k in range(n):
+        for m in range(n/2):
+            e += even[m] * w[2 * m, k]
+            o += odd[m] * w[2 * m, k]
+
+        x[k] = e + np.exp(-2 * np.pi * 1j * k / n) * o
+
+    return x
+
+if __name__ == "__main__":
+    main()
 
 

@@ -483,7 +483,7 @@ def merge_dense(has_duplicates, *args):
 def merge_sparse(has_duplicates, *args):
     if not has_duplicates:
         sv = vstack([t[0] for t in args])
-        sl = vstack([t[1] for t in args])
+        sl = np.concatenate([t[1] for t in args])
 
         return sv, sl
     else:
