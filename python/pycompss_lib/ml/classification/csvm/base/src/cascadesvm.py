@@ -89,7 +89,7 @@ class CascadeSVM(object):
 
         self.total_time = time() - self.total_time
 
-    def load_data(self, X=None, y=None, path=None, n_features=None, data_format="csv", cascade_arity=2, n_chunks=4,
+    def load_data(self, X=None, y=None, path=None, n_features=None, data_format="csv", force_dense=True, cascade_arity=2, n_chunks=4,
                   cascade_iterations=5, tol=10 ** -3, C=1.0, kernel="rbf", gamma="auto"):
         """
         Loads a set of vectors to be used in the training process through the fit function. Multiple calls to load_data
@@ -114,7 +114,10 @@ class CascadeSVM(object):
         
         :param data_format: string, optional (default='csv')
             The format of the data in path. It can be 'csv' for CSV with the label in the last column or 'libsvm'.
-        
+
+        :param force_dense: bool, optional (default=True)
+            If set to True, parse data in libsvm format as a NumPy array instead of a sparse matrix.
+
         :param cascade_arity: int, optional (default=2)
             Arity of the reduction stage.
         
@@ -153,6 +156,7 @@ class CascadeSVM(object):
         self._cascade_arity.append(cascade_arity)
         self._nchunks.append(n_chunks)
         self._max_iterations.append(cascade_iterations)
+        self._force_dense = force_dense
         self._tol.append(tol)
         self._clf_params.append({"gamma": gamma, "C": C, "kernel": kernel})
         self.iterations.append(0)
@@ -242,7 +246,8 @@ class CascadeSVM(object):
         chunks = []
 
         for f in files:
-            chunks.append(read_chunk(os.path.join(path, f), data_format=data_format, n_features=n_features))
+            chunks.append(read_chunk(os.path.join(path, f), data_format=data_format, n_features=n_features,
+                                     force_dense=self._force_dense))
 
         return chunks
 
@@ -264,7 +269,8 @@ class CascadeSVM(object):
         chunks = []
 
         for s in range(len(steps) - 1):
-            chunks.append(read_chunk(path, steps[s], steps[s + 1], data_format=data_format, n_features=n_features))
+            chunks.append(read_chunk(path, steps[s], steps[s + 1], data_format=data_format, n_features=n_features,
+                                     force_dense=self._force_dense))
 
         return chunks
 
@@ -442,9 +448,12 @@ def train(return_classifier, has_duplicates, *args, **kwargs):
 
 
 @task(filename=FILE, returns=tuple)
-def read_chunk(filename, start=None, stop=None, data_format=None, n_features=None):
+def read_chunk(filename, start=None, stop=None, data_format=None, n_features=None, force_dense=None):
     if data_format == "libsvm":
         X, y = load_svmlight_file(filename, n_features)
+
+        if force_dense:
+            X = X.toarray()
 
         if start and stop:
             X = X[start:stop]
