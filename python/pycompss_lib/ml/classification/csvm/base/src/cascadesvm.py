@@ -16,6 +16,7 @@ from pycompss.api.task import task
 from scipy.sparse import vstack, issparse, lil_matrix
 from sklearn.datasets import load_svmlight_file
 from sklearn.svm import SVC
+from uuid import uuid4
 
 
 class CascadeSVM(object):
@@ -89,7 +90,7 @@ class CascadeSVM(object):
 
         self.total_time = time() - self.total_time
 
-    def load_data(self, X=None, y=None, path=None, n_features=None, data_format="csv", force_dense=True, cascade_arity=2, n_chunks=4,
+    def load_data(self, X=None, y=None, path=None, n_features=None, data_format="csv", force_dense=False, cascade_arity=2, n_chunks=4,
                   cascade_iterations=5, tol=10 ** -3, C=1.0, kernel="rbf", gamma="auto"):
         """
         Loads a set of vectors to be used in the training process through the fit function. Multiple calls to load_data
@@ -310,8 +311,8 @@ class CascadeSVM(object):
                         if q or not check_convergence:
                             q.append(train(False, *data, **self._clf_params[idx]))
                         elif not q:
-                            sv, sl, self._clf[idx] = compss_wait_on(train(True, *data, **self._clf_params[idx]))
-                            q.append((sv, sl))
+                            sv, sl, si, self._clf[idx] = compss_wait_on(train(True, *data, **self._clf_params[idx]))
+                            q.append((sv, sl, si))
 
                         # delete partial results
                         for d in data:
@@ -431,20 +432,21 @@ class CascadeSVM(object):
 @task(returns=tuple)
 def train(return_classifier, *args, **kwargs):
     if len(args) > 1:
-        X, y = merge(*args)
+        X, y, idx = merge(*args)
     else:
-        X, y = args[0]
+        X, y, idx = args[0]
 
     clf = SVC(random_state=1, **kwargs)
     clf.fit(X, y)
 
     sv = X[clf.support_]
     sl = y[clf.support_]
+    idx = idx[clf.support_]
 
     if return_classifier:
-        return sv, sl, clf
+        return sv, sl, idx, clf
     else:
-        return sv, sl
+        return sv, sl, idx
 
 
 @task(filename=FILE, returns=tuple)
@@ -464,64 +466,23 @@ def read_chunk(filename, start=None, stop=None, data_format=None, n_features=Non
 
         X, y = vecs[:, :-1], vecs[:, -1]
 
-    return X, y
+    # create array of unique identifiers for each vector
+    idx = np.array([uuid4().int for _ in xrange(X.shape[0])])
+
+    return X, y, idx
 
 
 def merge(*args):
     if issparse(args[0][0]):
-        return merge_sparse(*args)
+        sv = vstack([t[0] for t in args])
     else:
-        return merge_dense(*args)
+        sv = np.concatenate([t[0] for t in args])
 
+    sl = np.concatenate([t[1] for t in args])
+    si = np.concatenate([t[2] for t in args])
 
-def merge_dense(*args):
-    sv1, sl1 = args[0]
-    sv1 = np.concatenate((sv1, sl1[:, np.newaxis]), axis=1)
+    si, uniques = np.unique(si, return_index=True)
+    sv = sv[uniques]
+    sl = sl[uniques]
 
-    for t2 in args[1:]:
-        sv2, sl2 = t2
-        sv2 = np.concatenate((sv2, sl2[:, np.newaxis]), axis=1)
-        sv1 = np.concatenate((sv1, sv2))
-
-    sv1 = np.unique(sv1, axis=0)
-
-    return sv1[:, :-1], sv1[:, -1]
-
-
-def merge_sparse(*args):
-    sv1, sl1 = args[0]
-    sv1 = sv1.asformat("lil")
-
-    rows = sv1.rows.tolist()
-    data = sv1.data.tolist()
-
-    for t2 in args[1:]:
-        sv2, sl2 = t2
-        sv2 = sv2.asformat("lil")
-        nrows = len(sv2.rows)
-
-        for i in range(nrows):
-            duplicate = False
-
-            for j in range(len(rows)):
-                # check if column indices are the same
-                if set(sv2.rows[i]) == set(rows[j]):
-
-                    # check if data is the same
-                    data1 = data[j]
-                    data2 = sv2.data[i]
-
-                    if np.allclose(data1, data2):
-                        duplicate = True
-                        break
-
-            if not duplicate:
-                rows.append(sv2.rows[i])
-                data.append(sv2.data[i])
-                sl1 = np.concatenate((sl1, sl2[i, np.newaxis]))
-
-    svs = lil_matrix((len(rows), sv1.shape[1]))
-    svs.rows = np.array(rows, dtype=list)
-    svs.data = np.array(data, dtype=list)
-
-    return svs.asformat("csr"), sl1
+    return sv, sl, si
