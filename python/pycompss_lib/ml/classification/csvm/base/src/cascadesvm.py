@@ -483,7 +483,6 @@ def merge_dense(*args):
         sv2 = np.concatenate((sv2, sl2[:, np.newaxis]), axis=1)
         sv1 = np.concatenate((sv1, sv2))
 
-
     sv1 = np.unique(sv1, axis=0)
 
     return sv1[:, :-1], sv1[:, -1]
