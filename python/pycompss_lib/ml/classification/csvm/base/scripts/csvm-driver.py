@@ -22,6 +22,7 @@ def main():
     parser.add_argument("-o", metavar="OUTPUT_FILE_PATH", help="output file path", type=str, required=False)
     parser.add_argument("-nd", metavar="N_DATASETS", type=int, help="number of times to load the dataset", default=1)
     parser.add_argument("--convergence", help="check for convergence", action="store_true")
+    parser.add_argument("--dense", help="use dense data structures", action="store_true")
     parser.add_argument("train_data", help="CSV file or directory containing CSV files (if a directory is provided N_CHUNKS is ignored)", type=str)
     args = parser.parse_args()
     
@@ -44,20 +45,25 @@ def main():
             y = train[:, -1]        
         
         for _ in range(args.nd):
-            csvm.load_data(X=x, y=y, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)                    
+            csvm.load_data(X=x, y=y, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma,
+                           cascade_iterations=args.i, force_dense=args.dense)
         
     elif args.libsvm:      
         for _ in range(args.nd):
-            csvm.load_data(path=train_data, data_format="libsvm", n_features=args.f, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)
+            csvm.load_data(path=train_data, data_format="libsvm", n_features=args.f, kernel=args.k, C=args.c,
+                           cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i,
+                           force_dense=args.dense)
         
     else:
         for _ in range(args.nd):
-            csvm.load_data(path=train_data, n_features=args.f, kernel=args.k, C=args.c, cascade_arity=args.a, n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)
+            csvm.load_data(path=train_data, n_features=args.f, kernel=args.k, C=args.c, cascade_arity=args.a,
+                           n_chunks=args.n, gamma=gamma, cascade_iterations=args.i)
        
           
     csvm.fit(args.convergence)
         
-    out = [args.k, args.a, args.n, csvm._clf_params[0]["gamma"], args.c, csvm.iterations[0], csvm.converged[0], csvm.read_time, csvm.fit_time, csvm.total_time]
+    out = [args.k, args.a, args.n, csvm._clf_params[0]["gamma"], args.c, csvm.iterations[0], csvm.converged[0],
+           csvm.read_time, csvm.fit_time, csvm.total_time]
         
     if os.path.isdir(train_data):
         n_files = os.listdir(train_data)        
