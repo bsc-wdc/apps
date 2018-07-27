@@ -47,7 +47,7 @@ class RandomForestClassifier:
 
         for i in range(self.n_estimators):
             tree = DecisionTreeClassifier(self.path_in, self.n_instances, self.n_features, self.path_out,
-                                          'tree_' + str(i), self.max_depth, self.distr_depth)
+                                          'tree_' + str(i), self.max_depth, self.distr_depth, True)
             tree.features = features
             tree.y_codes = self.y_codes
             tree.n_classes = self.n_classes
@@ -58,17 +58,15 @@ class RandomForestClassifier:
 
         self.y, self.y_codes, self.n_classes = compss_wait_on(self.y, self.y_codes, self.n_classes)
 
-    def predict_probabilities(self):
+        for tree in self.trees:
+            tree.n_classes = self.n_classes
+
+    def predict_probabilities(self, x_test):
         """ Predicts class probabilities by class code using a fitted forest and returns a 1D or 2D array. """
-        try:
-            x_test = np.load(self.path_in + 'x_test.npy', allow_pickle=False)
-        except IOError:
-            warnings.warn('No test data found in the input path.')
-            return
 
         return sum(tree.predict_probabilities(x_test) for tree in self.trees) / len(self.trees)
 
-    def predict(self, file_name='x_test.npy', soft_voting=False):
+    def predict(self, file_name='x_test.npy', soft_voting=True):
         """ Predicts classes using a fitted forest and returns an integer or an array. """
         try:
             x_test = np.load(self.path_in + file_name, allow_pickle=False)
@@ -78,7 +76,7 @@ class RandomForestClassifier:
 
         if soft_voting:
             probabilities = self.predict_probabilities(x_test)
-            return self.y.take(np.argmax(probabilities, axis=1), axis=0)
+            return self.y.categories[np.argmax(probabilities, axis=1)]
 
         if len(x_test.shape) == 1:
             predicted = Counter(tree.predict(x_test) for tree in self.trees).most_common(1)[0][0]
