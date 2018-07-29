@@ -6,7 +6,6 @@ from pycompss.api.parameter import *
 from six.moves import range
 
 from collections import Counter
-from numba import jit
 
 import numpy as np
 from numpy.lib import format
@@ -206,7 +205,6 @@ def flush_nodes_task(file_out, *nodes_to_persist):
                     tree_file.write(node.to_json() + '\n')
 
 
-@jit(nopython=True)
 def is_constant(array):
     first = array[0]
     for a in array:
