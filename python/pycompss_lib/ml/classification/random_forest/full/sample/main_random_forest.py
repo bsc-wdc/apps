@@ -11,6 +11,7 @@ from pycompss.runtime.binding import get_file
 from forest import RandomForestClassifier
 from pandas import read_csv
 from sklearn.ensemble import RandomForestClassifier as SklearnRFClassifier
+from sklearn.tree import export_graphviz
 
 
 def main():
@@ -66,7 +67,8 @@ def main():
 
     # Compare to sklearn
     # sk_start_time = time.time()
-    # sk_forest = SklearnRFClassifier(max_features=args.n_features)
+    # sk_forest = SklearnRFClassifier(n_estimators=args.n_estimators, max_depth=args.max_depth,
+    #                                 max_features=args.n_features)
     # x_train = np.load(args.path_in + 'x.npy', allow_pickle=False)
     # y_train = read_csv(args.path_in + 'y.dat', header=None, dtype=object, squeeze=True)
     # sk_forest.fit(x_train, y_train)
@@ -76,6 +78,8 @@ def main():
     #     y_predicted = sk_forest.predict(x_test)
     #     sk_accuracy = (np.count_nonzero(y_predicted == y_real)) / len(y_real)
     #     print 'SK_accuracy: ', sk_accuracy
+    # for i, tree in enumerate(sk_forest.estimators_):
+    #     export_graphviz(tree, open('sk_tree_' + str(i), 'w'), precision=6)
 
 
 if __name__ == "__main__":

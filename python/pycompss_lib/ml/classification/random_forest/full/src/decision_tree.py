@@ -15,8 +15,38 @@ from pandas.api.types import CategoricalDtype
 from pycompss.api.task import task
 from pycompss.api.api import compss_delete_object
 
+from sklearn.tree import DecisionTreeClassifier as SklearnDTClassifier
+from sklearn.tree import _tree
+
 import prediction
 from test_split import test_split
+
+
+class TreeWrapper(object):
+    def __init__(self, tree_path, tree):
+        self.tree_path = tree_path
+        self.i_tree = tree.tree_
+        self.classes = tree.classes_
+
+    def write_to(self, tree_file):
+        nodes_to_write = [(0, self.tree_path)]
+        while nodes_to_write:
+            node_id, tree_path = nodes_to_write.pop()
+            if self.i_tree.children_left[node_id] == _tree.TREE_LEAF:
+                frequencies = dict((self.classes[k], int(v)) for k, v in enumerate(self.i_tree.value[node_id][0]))
+                mode = max(frequencies, key=frequencies.get)
+                n_node_samples = self.i_tree.n_node_samples[node_id]
+                frequencies_str = ', '.join(['"{}": {}'.format(k, v) for k, v in frequencies.iteritems()])
+                frequencies_str = '{' + frequencies_str + '}'
+                tree_file.write('{{"tree_path": "{}", "type": "LEAF", '
+                                '"size": {}, "mode": {}, "frequencies": {}}}\n'
+                                .format(tree_path, n_node_samples, mode, frequencies_str))
+            else:
+                tree_file.write('{{"tree_path": "{}", "type": "NODE", '
+                                '"index": {}, "value": {}}}\n'
+                                .format(tree_path, self.i_tree.feature[node_id], self.i_tree.threshold[node_id]))
+                nodes_to_write.append((self.i_tree.children_right[node_id], tree_path + 'R'))
+                nodes_to_write.append((self.i_tree.children_left[node_id], tree_path + 'L'))
 
 
 class InternalNode(object):
@@ -28,7 +58,7 @@ class InternalNode(object):
 
     def to_json(self):
         return ('{{"tree_path": "{}", "type": "NODE", '
-                '"index": {}, "value": {}}}'
+                '"index": {}, "value": {}}}\n'
                 .format(self.tree_path, self.index, self.value))
 
 
@@ -44,7 +74,7 @@ class Leaf(object):
         frequencies_str = ', '.join(map('"%r": %r'.__mod__, self.frequencies.items()))
         frequencies_str = '{' + frequencies_str + '}'
         return ('{{"tree_path": "{}", "type": "LEAF", '
-                '"size": {}, "mode": {}, "frequencies": {}}}'
+                '"size": {}, "mode": {}, "frequencies": {}}}\n'
                 .format(self.tree_path, self.size, self.mode, frequencies_str))
 
 
@@ -73,6 +103,7 @@ def get_features_mmap(features_file):
 @task(priority=True, returns=2)
 def sample_selection(n_instances, y_codes, bootstrap):
     if bootstrap:
+        np.random.seed()
         selection = np.random.choice(n_instances, size=n_instances, replace=True)
         selection.sort()
         return selection, y_codes[selection]
@@ -165,7 +196,8 @@ def compute_split(tree_path, sample, n_features, features_mmap, y_s, n_classes, 
     split_ended = False
     tried_indices = []
     while not split_ended:
-        index_selection = feature_selection(np.setdiff1d(np.arange(n_features), tried_indices), m_try)
+        untried_indices = np.setdiff1d(np.arange(n_features), tried_indices)  # type: np.ndarray
+        index_selection = feature_selection(untried_indices, m_try)
         b_score = float_info.max
         b_index = None
         b_value = None
@@ -199,22 +231,18 @@ def flush_nodes_task(file_out, *nodes_to_persist):
     with open(file_out, "a") as tree_file:
         for item in nodes_to_persist:
             if isinstance(item, (Leaf, InternalNode)):
-                tree_file.write(item.to_json() + '\n')
+                tree_file.write(item.to_json())
             else:
-                for node in item:
-                    tree_file.write(node.to_json() + '\n')
-
-
-def is_constant(array):
-    first = array[0]
-    for a in array:
-        if a != first:
-            return False
-    return True
+                for nested_item in item:
+                    if isinstance(nested_item, TreeWrapper):
+                        nested_item.write_to(tree_file)
+                    else:
+                        tree_file.write(nested_item.to_json())
 
 
 @task(features_file=FILE_IN, returns=list)
 def build_subtree(sample, y_s, n_features, tree_path, max_depth, n_classes, features_file, m_try):
+    np.random.seed()
     if not sample.size:
         return []
     features_mmap = np.load(features_file, mmap_mode='r', allow_pickle=False)
@@ -222,9 +250,12 @@ def build_subtree(sample, y_s, n_features, tree_path, max_depth, n_classes, feat
     node_list_to_persist = []
     while nodes_to_split:
         tree_path, sample, y_s, depth = nodes_to_split.pop()
-        if is_constant(y_s):
-            leaf = build_leaf(y_s, tree_path)
-            node_list_to_persist.append(leaf)
+        if n_features*len(sample) < 1000000:
+            dt = SklearnDTClassifier(max_depth=None if max_depth == np.inf else max_depth - depth)
+            features_mmap = np.load(features_file, mmap_mode='r', allow_pickle=False)
+            x = features_mmap[:, sample].T
+            dt.fit(x, y_s)
+            node_list_to_persist.append(TreeWrapper(tree_path, dt))
         else:
             node, left_group, y_l, right_group, y_r = compute_split(tree_path, sample, n_features, features_mmap,
                                                                     y_s, n_classes, m_try)
