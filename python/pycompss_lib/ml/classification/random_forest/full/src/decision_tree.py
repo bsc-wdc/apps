@@ -1,5 +1,8 @@
 # Python3 compatibility imports
 from __future__ import division
+
+import json
+import os
 from sys import float_info
 
 from pycompss.api.parameter import *
@@ -59,7 +62,7 @@ class InternalNode(object):
     def to_json(self):
         return ('{{"tree_path": "{}", "type": "NODE", '
                 '"index": {}, "value": {}}}\n'
-                .format(self.tree_path, self.index, self.value))
+                .format(self.tree_path, self.index, json.dumps(float(self.value))))
 
 
 class Leaf(object):
@@ -79,7 +82,7 @@ class Leaf(object):
 
 
 def get_features_file(path):
-    return path + 'x_t.npy'
+    return os.path.join(path, 'x_t.npy')
 
 
 @task(features_file=FILE_IN, returns=object)
@@ -117,7 +120,7 @@ def feature_selection(feature_indices, m_try):
 
 @task(returns=3)
 def get_y(path):
-    y = read_csv(path + 'y.dat', dtype=CategoricalDtype(), header=None, squeeze=True).values
+    y = read_csv(os.path.join(path, 'y.dat'), dtype=CategoricalDtype(), header=None, squeeze=True).values
     return y, y.codes, len(y.categories)
 
 
@@ -315,7 +318,7 @@ class DecisionTreeClassifier:
             for i in range(self.n_features):
                 self.features.append(get_feature_task(features_file, i))
         nodes_to_split = [('/', tree_sample, y_s, 1)]
-        file_out = self.path_out + self.name_out
+        file_out = os.path.join(self.path_out, self.name_out)
         open(file_out, 'w').close()  # Create new empty file deleting previous content
         nodes_to_persist = []
         while nodes_to_split:
@@ -349,10 +352,10 @@ class DecisionTreeClassifier:
 
     def predict(self, x_test):
         """ Predicts class codes for the input data using a fitted tree and returns an integer or an array. """
-        file_tree = self.path_out + self.name_out
+        file_tree = os.path.join(self.path_out, self.name_out)
         return prediction.predict(file_tree, x_test)
 
     def predict_probabilities(self, x_test):
         """ Predicts class probabilities by class code using a fitted tree and returns a 1D or 2D array. """
-        file_tree = self.path_out + self.name_out
+        file_tree = os.path.join(self.path_out, self.name_out)
         return prediction.predict_probabilities(file_tree, x_test, self.n_classes)

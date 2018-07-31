@@ -1,4 +1,6 @@
 from __future__ import division
+
+import os
 from collections import Counter
 
 from pycompss.api.api import compss_wait_on
@@ -69,7 +71,7 @@ class RandomForestClassifier:
     def predict(self, file_name='x_test.npy', soft_voting=True):
         """ Predicts classes using a fitted forest and returns an integer or an array. """
         try:
-            x_test = np.load(self.path_in + file_name, allow_pickle=False)
+            x_test = np.load(os.path.join(self.path_in, file_name), allow_pickle=False)
         except IOError:
             warnings.warn('The test data file does not exist or cannot be read.')
             return
