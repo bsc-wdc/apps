@@ -18,8 +18,8 @@ class TestCompareSKLearn(unittest.TestCase):
         self.y_train = y[::2]
         self.x_test = x[1::2]
         self.y_test = y[1::2]
-        np.save('x.npy', self.x_train)
-        np.save('x_t.npy', self.x_train.T.copy(order='C'))
+        np.save('x.npy', self.x_train.astype(np.float32))
+        np.save('x_t.npy', self.x_train.astype(np.float32).T.copy(order='C'))
         np.savetxt('y.dat', self.y_train, fmt='%s')
         np.save('x_test.npy', self.x_test)
 
@@ -34,7 +34,8 @@ class TestCompareSKLearn(unittest.TestCase):
         y_predicted_sk_forest = sk_forest.predict(self.x_test)
         accuracy_sk_forest = (np.count_nonzero(y_predicted_sk_forest == self.y_test)) / len(self.y_test)
 
-        tree = DecisionTreeClassifier(path_in=os.getcwd(), n_instances=75, n_features=4, path_out=os.getcwd(), name_out='test_tree')
+        tree = DecisionTreeClassifier(path_in=os.getcwd(), n_instances=75, n_features=4, path_out=os.getcwd(),
+                                      name_out='test_tree')
         tree.fit()
         y_predicted_tree = tree.predict(self.x_test)
         accuracy_tree = (np.count_nonzero(y_predicted_tree == self.y_test)) / len(self.y_test)

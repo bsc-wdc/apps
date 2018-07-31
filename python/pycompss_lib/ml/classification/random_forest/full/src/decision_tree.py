@@ -279,7 +279,7 @@ def build_subtree(sample, y_s, n_features, tree_path, max_depth, n_classes, feat
 class DecisionTreeClassifier:
 
     def __init__(self, path_in, n_instances, n_features, path_out, name_out, max_depth=None, distr_depth=None,
-                 bootstrap=False):
+                 bootstrap=False, try_features=None):
         """
         Decision tree with distributed splits using pyCOMPSs.
 
@@ -291,6 +291,7 @@ class DecisionTreeClassifier:
         :param max_depth: Depth of the decision tree.
         :param distr_depth: Nodes are split in a distributed way up to this depth.
         :param bootstrap: Randomly select n_instances samples with repetition (used in random forests).
+        :param try_features: Number of features to try (at least) for splitting each node.
         """
         self.path_in = path_in
         self.n_instances = n_instances
@@ -303,8 +304,15 @@ class DecisionTreeClassifier:
         self.y = None
         self.y_codes = None
         self.n_classes = None
-        self.m_try = n_features
         self.bootstrap = bootstrap
+        if try_features is None:
+            self.m_try = n_features
+        elif try_features == 'sqrt':
+            self.m_try = max(1, int(sqrt(n_features)))
+        elif try_features == 'third':
+            self.m_try = max(1, int(n_features/3))
+        else:
+            self.m_try = int(try_features)
 
     def fit(self):
         """

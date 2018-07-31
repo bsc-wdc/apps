@@ -2,6 +2,7 @@ from __future__ import division
 
 import os
 from collections import Counter
+from math import sqrt
 
 from pycompss.api.api import compss_wait_on
 
@@ -22,7 +23,8 @@ class RandomForestClassifier:
                  path_out,
                  n_estimators=10,
                  max_depth=None,
-                 distr_depth=None):
+                 distr_depth=None,
+                 try_features=None):
         self.path_in = path_in
         self.n_instances = n_instances
         self.n_features = n_features
@@ -30,6 +32,14 @@ class RandomForestClassifier:
         self.n_estimators = n_estimators
         self.max_depth = max_depth
         self.distr_depth = distr_depth
+        if try_features is None:
+            self.try_features = n_features
+        elif try_features == 'sqrt':
+            self.try_features = max(1, int(sqrt(n_features)))
+        elif try_features == 'third':
+            self.try_features = max(1, int(n_features/3))
+        else:
+            self.try_features = int(try_features)
 
         self.y = None
         self.y_codes = None
