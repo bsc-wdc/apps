@@ -60,9 +60,11 @@ class InternalNode(object):
         self.value = value
 
     def to_json(self):
+        if self.value == np.inf:
+            self.value = json.dumps(np.inf)
         return ('{{"tree_path": "{}", "type": "NODE", '
                 '"index": {}, "value": {}}}\n'
-                .format(self.tree_path, self.index, json.dumps(float(self.value))))
+                .format(self.tree_path, self.index, self.value))
 
 
 class Leaf(object):
@@ -180,10 +182,10 @@ def build_leaf(y_s, tree_path):
     return Leaf(tree_path, len(y_s), frequencies, mode)
 
 
-def compute_split_chunked(tree_path, sample, depth, features, features_file, y_s, n_classes, m_try):
+def compute_split_chunked(tree_path, sample, depth, features, features_file, y_s, n_classes, m_try, distr_depth):
     n_features = len(features)
     index_selection = feature_selection(range(n_features), m_try)
-    chunk = 2**(min(depth, 20) - 1)
+    chunk = max(1, int(m_try/(2**(distr_depth-depth))))
     scores_and_values_and_indices = []
     while (len(index_selection)) > 0:
         indices_to_test = index_selection[:chunk]
@@ -333,7 +335,7 @@ class DecisionTreeClassifier:
             tree_path, sample, y_s, depth = nodes_to_split.pop()
             node, left_group, y_l, right_group, y_r = compute_split_chunked(tree_path, sample, depth, self.features,
                                                                             features_file, y_s, self.n_classes,
-                                                                            self.m_try)
+                                                                            self.m_try, self.distr_depth)
             compss_delete_object(sample)
             compss_delete_object(y_s)
             nodes_to_persist.append(node)

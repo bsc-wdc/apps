@@ -26,11 +26,12 @@ def main():
     parser.add_argument('--n_estimators', type=int, help='Number of trees to build.')
     parser.add_argument('--max_depth', type=int, default=None, help='Depth of the decision tree.')
     parser.add_argument('--distr_depth', type=int, default=None, help='Tasks are distributed up to this depth.')
+    parser.add_argument('--try_features', default=None, help='Number of features to try at each split.')
 
     args = parser.parse_args()
 
-    forest = RandomForestClassifier(args.path_in, args.n_instances, args.n_features,
-                                    args.path_out, args.n_estimators, args.max_depth, args.distr_depth)
+    forest = RandomForestClassifier(args.path_in, args.n_instances, args.n_features, args.path_out,
+                                    args.n_estimators, args.max_depth, args.distr_depth, args.try_features)
     forest.fit()
 
     compss_barrier()

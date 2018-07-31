@@ -59,7 +59,7 @@ class RandomForestClassifier:
 
         for i in range(self.n_estimators):
             tree = DecisionTreeClassifier(self.path_in, self.n_instances, self.n_features, self.path_out,
-                                          'tree_' + str(i), self.max_depth, self.distr_depth, True)
+                                          'tree_' + str(i), self.max_depth, self.distr_depth, True, self.try_features)
             tree.features = features
             tree.y_codes = self.y_codes
             tree.n_classes = self.n_classes
