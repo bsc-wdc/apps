@@ -97,6 +97,16 @@ def get_feature_task(features_file, i):
         return np.fromfile(fp, dtype=dtype, count=n_samples)
 
 
+def get_sample_attributes(samples_file, indices):
+    samples_mmap = np.load(samples_file, mmap_mode='r', allow_pickle=False)
+    x = samples_mmap[indices]
+    return x
+
+
+def get_samples_file(path):
+    return os.path.join(path, 'x.npy')
+
+
 def get_feature_mmap(features_file, i):
     return get_features_mmap(features_file)[i]
 
@@ -245,8 +255,8 @@ def flush_nodes_task(file_out, *nodes_to_persist):
                         tree_file.write(nested_item.to_json())
 
 
-@task(features_file=FILE_IN, returns=list)
-def build_subtree(sample, y_s, n_features, tree_path, max_depth, n_classes, features_file, m_try):
+@task(samples_file=FILE_IN, features_file=FILE_IN, returns=list)
+def build_subtree(sample, y_s, n_features, tree_path, max_depth, n_classes, features_file, m_try, samples_file):
     np.random.seed()
     if not sample.size:
         return []
@@ -257,8 +267,7 @@ def build_subtree(sample, y_s, n_features, tree_path, max_depth, n_classes, feat
         tree_path, sample, y_s, depth = nodes_to_split.pop()
         if n_features*len(sample) < 1000000:
             dt = SklearnDTClassifier(max_depth=None if max_depth == np.inf else max_depth - depth)
-            features_mmap = np.load(features_file, mmap_mode='r', allow_pickle=False)
-            x = features_mmap[:, sample].T
+            x = get_sample_attributes(samples_file, sample)
             dt.fit(x, y_s)
             node_list_to_persist.append(TreeWrapper(tree_path, dt))
         else:
@@ -324,6 +333,7 @@ class DecisionTreeClassifier:
             self.y, self.y_codes, self.n_classes = get_y(self.path_in)
         tree_sample, y_s = sample_selection(self.n_instances, self.y_codes, self.bootstrap)
         features_file = get_features_file(self.path_in)
+        samples_file = get_samples_file(self.path_in)
         if not self.features:
             for i in range(self.n_features):
                 self.features.append(get_feature_task(features_file, i))
@@ -344,13 +354,15 @@ class DecisionTreeClassifier:
                 nodes_to_split.append((tree_path + 'L', left_group, y_l, depth + 1))
             else:
                 left_subtree_nodes = build_subtree(left_group, y_l, self.n_features, tree_path + 'L',
-                                                   self.max_depth - depth, self.n_classes, features_file, self.m_try)
+                                                   self.max_depth - depth, self.n_classes, features_file, self.m_try,
+                                                   samples_file)
                 nodes_to_persist.append(left_subtree_nodes)
                 compss_delete_object(left_group)
                 compss_delete_object(y_l)
 
                 right_subtree_nodes = build_subtree(right_group, y_r, self.n_features, tree_path + 'R',
-                                                    self.max_depth - depth, self.n_classes, features_file, self.m_try)
+                                                    self.max_depth - depth, self.n_classes, features_file, self.m_try,
+                                                    samples_file)
                 nodes_to_persist.append(right_subtree_nodes)
                 compss_delete_object(right_group)
                 compss_delete_object(y_r)
