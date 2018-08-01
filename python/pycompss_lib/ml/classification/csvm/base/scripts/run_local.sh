@@ -1,7 +1,7 @@
 BASE_PATH="/home/user"
 
 runcompss \
-    --pythonpath="${BASE_PATH}/apps/python/pycompss_lib/ml/classification/csvm/base/src" \
+    --pythonpath="${BASE_PATH}/apps/python" \
     csvm-driver.py \
         -i 5 \
         --convergence \
