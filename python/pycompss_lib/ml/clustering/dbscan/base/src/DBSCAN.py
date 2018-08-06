@@ -64,7 +64,7 @@ def DBSCAN(epsilon, min_points, datafile, is_mn, print_times, *args, **kwargs):
         compss_barrier()
         print "Partial Scan Tasks Finished"
         ps_time = time.time() - initial_time
-        print "PS Lasted: "+str(ps_time - di_time)
+        print "PS Lasted: "+str(ps_time)
         cp_count = 0
         for comb in itertools.product(*dimension_perms):
             dataset[comb].core_points = compss_wait_on(dataset[comb].core_points)

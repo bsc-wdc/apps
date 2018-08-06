@@ -34,6 +34,10 @@ def main():
                                     args.n_estimators, args.max_depth, args.distr_depth, args.try_features)
     forest.fit()
 
+    execution_time = time.time()
+
+    print('Master script execution time: ' + str(execution_time - initial_time))
+
     compss_barrier()
 
     fit_time = time.time()

@@ -83,7 +83,7 @@ class Square(object):
 
     def update_labels(self, updated_relations, is_mn, file_id):
         if is_mn:
-            path = "/gpfs/projects/bsc19/COMPSs_DATASETS/dbscan/"+str(file_id)
+            path = "/gpfs/projects/bsc19/COMPSs_DATASETS/dbscan2/"+str(file_id)
         else:
             path = "~/DBSCAN/data/"+str(file_id)
         path = os.path.expanduser(path)
