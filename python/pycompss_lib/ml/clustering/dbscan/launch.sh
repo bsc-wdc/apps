@@ -21,4 +21,5 @@
   dataFile=3
 
   # Execute specifc version launch
-  ${scriptDir}/base/launch.sh $numNodes $tracing $qos $executionTime $cpus_per_node $worker_in_master_cpus $scheduler $worker_working_dir $is_mn $epsilon $minPoints $dataFile
+  cd ${scriptDir}/base
+  ./launch.sh $numNodes $tracing $qos $executionTime $cpus_per_node $worker_in_master_cpus $scheduler $worker_working_dir $is_mn $epsilon $minPoints $dataFile
