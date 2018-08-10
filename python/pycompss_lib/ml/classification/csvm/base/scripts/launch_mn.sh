@@ -5,7 +5,7 @@ enqueue_compss \
     --lang=python
     --exec_time=5
     --num_nodes=1
-    --pythonpath="${BASE_PATH}/apps/python/pycompss_lib/ml/classification/csvm/base/src" \
+    --pythonpath="${BASE_PATH}/apps/python" \
     csvm-driver.py \
         -i 5 \
         --convergence \
