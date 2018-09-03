@@ -15,9 +15,11 @@ enqueue_compss \
     --scheduler="es.bsc.compss.scheduler.fifoDataScheduler.FIFODataScheduler" \
     --worker_working_dir=scratch \
     ./main_random_forest.py \
-        --path_in=/gpfs/projects/bsc19/COMPSs_DATASETS/random_forest/dt_test_3/ \
+        --path_in=/gpfs/projects/bsc19/COMPSs_DATASETS/random_forest/dt_test_6/ \
         --n_instances=100000 \
         --n_features=100 \
         --path_out=/gpfs/projects/bsc19/bsc19029/own_results/ \
         --n_estimators=10 \
         --max_depth=3 \
+        --try_features=sqrt \
+        --distr_depth=2 \
