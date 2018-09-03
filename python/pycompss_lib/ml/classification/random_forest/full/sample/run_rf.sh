@@ -20,6 +20,5 @@ enqueue_compss \
         --n_features=100 \
         --path_out=/gpfs/projects/bsc19/bsc19029/own_results/ \
         --n_estimators=10 \
-        --max_depth=3 \
         --try_features=sqrt \
         --distr_depth=2 \
