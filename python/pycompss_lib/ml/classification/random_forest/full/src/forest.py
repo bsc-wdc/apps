@@ -33,7 +33,7 @@ class RandomForestClassifier:
         self.max_depth = max_depth
         self.distr_depth = distr_depth
         if try_features is None:
-            self.try_features = n_features
+            self.try_features = max(1, int(sqrt(n_features)))
         elif try_features == 'sqrt':
             self.try_features = max(1, int(sqrt(n_features)))
         elif try_features == 'third':
