@@ -88,7 +88,7 @@ def get_features_file(path):
 
 
 @task(features_file=FILE_IN, returns=object)
-def get_feature_task(features_file, i):
+def get_feature(features_file, i):
     with open(features_file, mode='rb') as fp:
         version = format.read_magic(fp)
         shape, fortran_order, dtype = format._read_array_header(fp, version)
@@ -234,15 +234,15 @@ def compute_split(tree_path, sample, n_features, features_mmap, y_s, n_classes, 
     return node, left_group, y_l, right_group, y_r
 
 
-def flush_nodes(file_out, nodes_to_persist):
-    flush_nodes_task(file_out, *nodes_to_persist)
+def flush_remove_nodes(file_out, nodes_to_persist):
+    flush_nodes(file_out, *nodes_to_persist)
     for obj in nodes_to_persist:
         compss_delete_object(obj)
     del nodes_to_persist[:]
 
 
 @task(file_out=FILE_INOUT)
-def flush_nodes_task(file_out, *nodes_to_persist):
+def flush_nodes(file_out, *nodes_to_persist):
     with open(file_out, "a") as tree_file:
         for item in nodes_to_persist:
             if isinstance(item, (Leaf, InternalNode)):
@@ -336,7 +336,7 @@ class DecisionTreeClassifier:
         samples_file = get_samples_file(self.path_in)
         if not self.features:
             for i in range(self.n_features):
-                self.features.append(get_feature_task(features_file, i))
+                self.features.append(get_feature(features_file, i))
         nodes_to_split = [('/', tree_sample, y_s, 1)]
         file_out = os.path.join(self.path_out, self.name_out)
         open(file_out, 'w').close()  # Create new empty file deleting previous content
@@ -368,9 +368,9 @@ class DecisionTreeClassifier:
                 compss_delete_object(y_r)
 
             if len(nodes_to_persist) >= 1000:
-                flush_nodes(file_out, nodes_to_persist)
+                flush_remove_nodes(file_out, nodes_to_persist)
         
-        flush_nodes(file_out, nodes_to_persist)
+        flush_remove_nodes(file_out, nodes_to_persist)
 
     def predict(self, x_test):
         """ Predicts class codes for the input data using a fitted tree and returns an integer or an array. """
