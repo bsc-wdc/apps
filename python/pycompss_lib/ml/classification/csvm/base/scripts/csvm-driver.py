@@ -69,13 +69,17 @@ def main():
         n_files = os.listdir(train_data)        
         out.append(len(n_files))
     
-    #if args.t: 
-        #if args.libsvm:
-            #testx, testy = load_svmlight_file(args.t, args.f)
-            #out.append(csvm.score(testx, testy))
-        #else:
-            #test = np.loadtxt(args.t, delimiter=",", dtype=float)
-            #out.append(csvm.score(test[:, :-1], test[:, -1]))
+    if args.t:
+        if args.libsvm:
+            testx, testy = load_svmlight_file(args.t, args.f)
+
+            if args.dense:
+                testx = testx.toarray()
+
+            out.append(csvm.score(testx, testy))
+        else:
+            test = np.loadtxt(args.t, delimiter=",", dtype=float)
+            out.append(csvm.score(test[:, :-1], test[:, -1]))
     
     if args.o:
         with open(args.o, "ab") as f:
