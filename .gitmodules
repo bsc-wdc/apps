@@ -1,0 +1,3 @@
+[submodule "python/pycompss_lib"]
+	path = python/pycompss_lib
+	url = http://palvarez@compss.bsc.es/gitlab/bar/pycompss_lib.git
