@@ -1,0 +1,11 @@
+#!/bin/bash
+
+mpirun -np $1 \
+    python $(pwd)/../src/mpi/mpi_csvm.py train \
+    -f csv \
+    -r 10 \
+    -C 10000 \
+    -g 0.01 \
+    -k rbf \
+    -s model \
+    $(pwd)/../data/sample.csv

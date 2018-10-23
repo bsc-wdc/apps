@@ -1,0 +1,21 @@
+This is the Readme for:
+DBSCAN
+
+[Name]: DBSCAN
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+The DBSCAN is a clustering algorithm based in point density. The implementation within COMPSs paralellises the neighbour queries and the information synchronisation.
+
+== Versions ==
+* - 1_base: base version
+
+== Execution instructions ==
+Usage: the main program is located at ./base/src/DBSCAN.py. The run_local.sh script executes a small local DBSCAN.
+
+== Build ==
+No build is required

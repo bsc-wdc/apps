@@ -1,0 +1,39 @@
+This is the Readme for:
+kmeans
+
+[Name]: kmeans
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+kmeans
+
+== Versions ==
+* 1  - base: base version
+* 2  - base2: Base algorithm version 2: better task granularity
+* 3  - base3: Base 2 algorithm without wait
+* 4  - initMode: Base 2 with 3 ways to initialize centers: random, kmeans++ ||, kmeans++
+* 5  - spark: Spark like implementation with initModes. Reads dataset from files compatible with Spark
+* 6  - merge: Spark implementation with merge-reduce
+* 7  - genData: Generates data and runs kmeans
+* 8  - tensorflow: Implementation using tensorflow
+* 9  - latest: Latest version
+* 10 - latest_oo: Object oriented latest version (common version with dataClay)
+* 11 - latest_files: Latest version with dataset from files
+* 12 - library: Library official version
+
+== Execution instructions ==
+Usage (latest version):
+kmeans.py <numPoints> <dim> <k> <fragments>
+
+where:
+                 * - numPoints: number of points
+                 * - dim: dimension of the points (2)
+                 * - fragments: number of fragments
+                 * - k: number of centers
+
+== Build ==
+No build is required

@@ -1,0 +1,24 @@
+This is the Readme for:
+matmul
+
+[Name]: matmul
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Matrix multiplication
+
+== Versions ==
+* - 1_matmul_files: blocks initialized and stored in files
+* - 2_init_parallel: distributed initialization, doesn't use files 
+* - 3_sum_reduce: each result cell is calculated by reduction instead of accumulating the sums 
+
+== Execution instructions ==
+Usage:
+
+== Build ==
+No build is required
+
