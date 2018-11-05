@@ -15,6 +15,7 @@
  */
 
 #include "Block.h"
+#include <iostream>
 
 Block::Block(int bSize) {
 	M = bSize;

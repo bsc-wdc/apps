@@ -14,6 +14,7 @@
  *  limitations under the License.
  */
 
+#include <iostream>
 #include "Block.h"
 
 Block::Block(int bSize) {

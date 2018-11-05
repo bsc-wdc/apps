@@ -15,6 +15,7 @@
  */
 
 #include "Matrix.h"
+#include <iostream>
 #include <unistd.h>
 #include <sys/time.h>
 

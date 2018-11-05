@@ -17,6 +17,7 @@
 #include "Block.h"
 #include <sys/types.h>
 #include <sys/syscall.h>
+#include <iostream>
 #define gettid() syscall(SYS_gettid)
 
 Block::Block(int bSize) {

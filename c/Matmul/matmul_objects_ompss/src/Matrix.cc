@@ -17,6 +17,7 @@
 //#include <GS_templates.h>
 
 #include "Matrix.h"
+#include <iostream>
 
 Matrix::Matrix(int mSize) {
 	N = mSize;
