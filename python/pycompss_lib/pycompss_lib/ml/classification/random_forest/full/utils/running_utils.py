@@ -46,6 +46,7 @@ class Dataset(object):
 
     def save(self, X_train, y_train, X_test, y_test, file_per_feature=False, hdf5=False, npy=False):
         dataset_path = self.path
+        print 'saving...'
 
         if hdf5:
             dataset_path = dataset_path + self.prediction_type + '_' + self.name + '_'
@@ -74,6 +75,8 @@ class Dataset(object):
         if npy:
             np.save(dataset_path + 'x.npy', X_train, allow_pickle=False)
             np.save(dataset_path + 'x_test.npy', X_test, allow_pickle=False)
+            np.savetxt(dataset_path + 'x.dat', X_train)
+            np.savetxt(dataset_path + 'x_test.dat', X_train)
             np.save(dataset_path + 'x_t.npy', X_train_transposed, allow_pickle=False)
             if self.prediction_type == 'regr':
                 np.savetxt(dataset_path + 'y.dat', y_train)

@@ -4,7 +4,7 @@
 BASE_PATH="/home/bscuser/git"
 
 runcompss \
-    --pythonpath="${BASE_PATH}/pycompss_lib/pycompss_lib/ml/classification/random_forest/base/src" \
+    --pythonpath="${BASE_PATH}/apps/python/pycompss_lib/pycompss_lib/ml/classification/random_forest/base/src" \
     ./main_dense.py \
         --regr=False \
         --path="${BASE_PATH}/apps/datasets/random_forest" \

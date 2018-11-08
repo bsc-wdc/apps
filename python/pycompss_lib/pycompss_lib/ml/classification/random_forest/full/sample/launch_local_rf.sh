@@ -3,7 +3,8 @@ BASE_PATH="/home/bscuser/git"
 #     --qos=debug \
 #     --tracing=true \
 runcompss \
-    --pythonpath="${BASE_PATH}/pycompss_lib/pycompss_lib/ml/classification/random_forest/full/src" \
+    --pythonpath="${BASE_PATH}/apps/python/pycompss_lib/pycompss_lib/ml/classification/random_forest/full/src" \
+    -d \
     main_random_forest.py\
         --path_in=/home/bscuser/datasets/dt_test_4/ \
         --n_instances=20000 \

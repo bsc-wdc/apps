@@ -9,3 +9,6 @@ python generate_classification_data.py --name=dt_test_6 --n_samples=1000000 --n_
 
 dt_test_7
 python generate_classification_data.py --name=dt_test_7 --n_samples=10000000 --n_features=100 --n_classes=3 --npy=True --path=/home/bscuser/datasets/dt_test_7/
+
+dt_test_6b
+python generate_classification_data.py --name=dt_test_6b --n_samples=1000000 --n_features=100 --n_classes=3 --npy=True --path=/home/bscuser/datasets/dt_test_6b/

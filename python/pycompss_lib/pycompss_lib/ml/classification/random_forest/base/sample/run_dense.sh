@@ -17,8 +17,8 @@ enqueue_compss \
     --worker_working_dir=gpfs \
     ./main_dense.py \
         --regr=False \
-        --path=/gpfs/projects/bsc19/COMPSs_DATASETS/random_forest \
-        --name=1e6s1e2f3c \
+        --path=/gpfs/projects/bsc19/COMPSs_DATASETS/random_forest/dt_test_6b \
+        --name="" \
         --sklearn=False \
         --n_estimators=96 \
 

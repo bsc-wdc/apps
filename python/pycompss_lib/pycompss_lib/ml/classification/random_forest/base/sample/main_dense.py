@@ -46,8 +46,8 @@ def main():
 
     time_1 = time.time()
 
-    X_train = read_csv(args.path + '/class_' + args.name + '_train_X.dat', sep=' ', header=None, squeeze=True)
-    y_train = read_csv(args.path + '/class_' + args.name + '_train_y.dat', sep=' ', header=None, squeeze=True)
+    X_train = read_csv(args.path + '/' + args.name + 'x.dat', sep=' ', header=None, squeeze=True)
+    y_train = read_csv(args.path + '/' + args.name + 'y.dat', sep=' ', header=None, squeeze=True)
 
     time_2 = time.time()
 
