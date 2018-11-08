@@ -11,7 +11,6 @@ from six.moves import range
 from collections import Counter
 
 import numpy as np
-from numpy.lib import format
 from math import sqrt, frexp
 from pandas import read_csv
 from pandas.api.types import CategoricalDtype
@@ -60,8 +59,6 @@ class InternalNode(object):
         self.value = value
 
     def to_json(self):
-        if self.index is None:
-            return ''
         if self.value == np.inf:
             self.value = json.dumps(np.inf)
         return ('{{"tree_path": "{}", "type": "NODE", '
@@ -87,16 +84,6 @@ class Leaf(object):
 
 def get_features_file(path):
     return os.path.join(path, 'x_t.npy')
-
-
-@task(features_file=FILE_IN, returns=object)
-def get_feature(features_file, i):
-    with open(features_file, mode='rb') as fp:
-        version = format.read_magic(fp)
-        shape, fortran_order, dtype = format._read_array_header(fp, version)
-        n_samples = shape[1]
-        fp.seek(i * n_samples * dtype.itemsize, 1)
-        return np.fromfile(fp, dtype=dtype, count=n_samples)
 
 
 def get_sample_attributes(samples_file, indices):
@@ -138,6 +125,21 @@ def get_y(path):
     return y, y.codes, len(y.categories)
 
 
+@task(returns=tuple)
+def test_splits(sample, y_s, n_classes, feature_indices, *features):
+    min_score = float_info.max
+    b_value = None
+    b_index = None
+    for t in range(len(feature_indices)):
+        feature = features[t]
+        score, value = test_split(sample, y_s, feature, n_classes)
+        if score < min_score:
+            min_score = score
+            b_index = feature_indices[t]
+            b_value = value
+    return min_score, b_value, b_index
+
+
 def get_groups(sample, y_s, features_mmap, index, value):
     if index is None:
         return sample, y_s, np.array([], dtype=np.int64), np.array([], dtype=np.int8)
@@ -160,36 +162,10 @@ def build_leaf(y_s, tree_path):
     return Leaf(tree_path, len(y_s), frequencies, mode)
 
 
-def compute_split_node(tree_path, sample, features, y_s, n_classes, m_try):
-    n_features = len(features)
-    index_selection = feature_selection(range(n_features), m_try)
-    node, left_group, y_l, right_group, y_r = compute_split_node_task(tree_path, sample, y_s, n_classes,
-                                                                      index_selection,
-                                                                      *[features[i] for i in index_selection])
-    return node, left_group, y_l, right_group, y_r
-
-
-@task(returns=(InternalNode, list, list, list, list))
-def compute_split_node_task(tree_path, sample, y_s, n_classes, index_selection, *features):
-    if len(sample) == 0:
-        return InternalNode(tree_path, None, None), np.array([], dtype=np.int64), np.array([], dtype=np.int8), \
-               np.array([], dtype=np.int64), np.array([], dtype=np.int8)
-    b_score = float_info.max
-    b_index = None
-    b_value = None
-    for index in range(len(index_selection)):
-        feature = features[index]
-        score, value = test_split(sample, y_s, feature, n_classes)
-        if score < b_score:
-            b_score, b_value, b_index = score, value, index
-    feature = features[b_index][sample]
-    mask = feature < b_value
-    left = sample[mask]
-    right = sample[~mask]
-    y_l = y_s[mask]
-    y_r = y_s[~mask]
-    node = InternalNode(tree_path, index_selection[b_index], b_value)
-    return node, left, y_l, right, y_r
+@task(features_file=FILE_IN, returns=(InternalNode, list, list, list, list))
+def compute_split_node(tree_path, sample, n_features, features_file, y_s, n_classes, m_try):
+    features_mmap = np.load(features_file, mmap_mode='r', allow_pickle=False)
+    return compute_split(tree_path, sample, n_features, features_mmap, y_s, n_classes, m_try)
 
 
 def compute_split(tree_path, sample, n_features, features_mmap, y_s, n_classes, m_try):
@@ -295,7 +271,6 @@ class DecisionTreeClassifier:
         self.name_out = name_out
         self.max_depth = max_depth if max_depth is not None else np.inf
         self.distr_depth = distr_depth if distr_depth is not None else (frexp(self.n_instances)[1] - 1) // 3
-        self.features = []
         self.y = None
         self.y_codes = None
         self.n_classes = None
@@ -318,9 +293,6 @@ class DecisionTreeClassifier:
         tree_sample, y_s = sample_selection(self.n_instances, self.y_codes, self.bootstrap)
         features_file = get_features_file(self.path_in)
         samples_file = get_samples_file(self.path_in)
-        if not self.features:
-            for i in range(self.n_features):
-                self.features.append(get_feature(features_file, i))
         tree_traversal = [('/', tree_sample, y_s, 0)]
         file_out = os.path.join(self.path_out, self.name_out)
         open(file_out, 'w').close()  # Create new empty file deleting previous content
@@ -330,7 +302,8 @@ class DecisionTreeClassifier:
             tree_path, sample, y_s, depth = tree_traversal.pop()
             if depth < self.max_depth:
                 if depth < self.distr_depth:
-                    node, left_group, y_l, right_group, y_r = compute_split_node(tree_path, sample, self.features, y_s,
+                    node, left_group, y_l, right_group, y_r = compute_split_node(tree_path, sample,
+                                                                                 self.n_features, features_file, y_s,
                                                                                  self.n_classes, self.m_try)
                     compss_delete_object(sample)
                     compss_delete_object(y_s)

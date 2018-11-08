@@ -7,7 +7,7 @@ from math import sqrt
 from pycompss.api.api import compss_wait_on
 
 from decision_tree import DecisionTreeClassifier
-from decision_tree import get_features_file, get_feature
+from decision_tree import get_features_file
 from decision_tree import get_y
 
 import numpy as np
@@ -50,17 +50,13 @@ class RandomForestClassifier:
         """
         Fits the RandomForestClassifier.
         """
-        features = []
         features_file = get_features_file(self.path_in)
         self._features_file_check(features_file)
-        for i in range(self.n_features):
-            features.append(get_feature(features_file, i))
         self.y, self.y_codes, self.n_classes = get_y(self.path_in)
 
         for i in range(self.n_estimators):
             tree = DecisionTreeClassifier(self.path_in, self.n_instances, self.n_features, self.path_out,
                                           'tree_' + str(i), self.max_depth, self.distr_depth, True, self.try_features)
-            tree.features = features
             tree.y_codes = self.y_codes
             tree.n_classes = self.n_classes
             self.trees.append(tree)
