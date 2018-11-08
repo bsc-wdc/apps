@@ -25,11 +25,13 @@ def main():
     parser.add_argument('--path_out', help='Path of the output directory.')
     parser.add_argument('--name_out', help='Name of the output file.')
     parser.add_argument('--max_depth', type=int, help='Depth of the decision tree.')
+    parser.add_argument('--distr_depth', type=int, default=None, help='Tasks are distributed up to this depth.')
+    parser.add_argument('--try_features', default=None, help='Number of features to try at each split.')
 
     args = parser.parse_args()
 
     tree = DecisionTreeClassifier(args.path_in, args.n_instances, args.n_features, args.path_out, args.name_out,
-                                  args.max_depth)
+                                  args.max_depth, args.distr_depth, False, args.try_features)
     tree.fit()
 
     compss_barrier()

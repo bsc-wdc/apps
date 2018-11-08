@@ -60,6 +60,8 @@ class InternalNode(object):
         self.value = value
 
     def to_json(self):
+        if self.index is None:
+            return ''
         if self.value == np.inf:
             self.value = json.dumps(np.inf)
         return ('{{"tree_path": "{}", "type": "NODE", '
@@ -136,40 +138,6 @@ def get_y(path):
     return y, y.codes, len(y.categories)
 
 
-@task(returns=tuple)
-def test_splits(sample, y_s, n_classes, feature_indices, *features):
-    min_score = float_info.max
-    b_value = None
-    b_index = None
-    for t in range(len(feature_indices)):
-        feature = features[t]
-        score, value = test_split(sample, y_s, feature, n_classes)
-        if score < min_score:
-            min_score = score
-            b_index = feature_indices[t]
-            b_value = value
-    return min_score, b_value, b_index
-
-
-@task(features_file=FILE_IN, returns=(InternalNode, list, list, list, list))
-def get_best_split(tree_path, sample, y_s, features_file, *scores_and_values_and_indices):
-    min_score = float_info.max
-    b_index = None
-    b_value = None
-    for i in range(len(scores_and_values_and_indices)):
-        score, value, index = scores_and_values_and_indices[i]
-        if score < min_score:
-            min_score = score
-            b_value = value
-            b_index = index
-    if b_value is not None:
-        b_value = b_value.item()
-    node = InternalNode(tree_path, b_index, b_value)
-    features_mmap = np.load(features_file, mmap_mode='r', allow_pickle=False)
-    left_group, y_l, right_group, y_r = get_groups(sample, y_s, features_mmap, b_index, b_value)
-    return node, left_group, y_l, right_group, y_r
-
-
 def get_groups(sample, y_s, features_mmap, index, value):
     if index is None:
         return sample, y_s, np.array([], dtype=np.int64), np.array([], dtype=np.int8)
@@ -192,19 +160,36 @@ def build_leaf(y_s, tree_path):
     return Leaf(tree_path, len(y_s), frequencies, mode)
 
 
-def compute_split_chunked(tree_path, sample, depth, features, features_file, y_s, n_classes, m_try, distr_depth):
+def compute_split_node(tree_path, sample, features, y_s, n_classes, m_try):
     n_features = len(features)
     index_selection = feature_selection(range(n_features), m_try)
-    chunk = max(1, int(m_try / (2 ** (distr_depth - depth))))
-    scores_and_values_and_indices = []
-    while (len(index_selection)) > 0:
-        indices_to_test = index_selection[:chunk]
-        index_selection = index_selection[chunk:]
-        scores_and_values_and_indices.append(
-            test_splits(sample, y_s, n_classes, indices_to_test, *[features[i] for i in indices_to_test]))
-    node, left_group, y_l, right_group, y_r = get_best_split(tree_path, sample, y_s, features_file,
-                                                             *scores_and_values_and_indices)
+    node, left_group, y_l, right_group, y_r = compute_split_node_task(tree_path, sample, y_s, n_classes,
+                                                                      index_selection,
+                                                                      *[features[i] for i in index_selection])
     return node, left_group, y_l, right_group, y_r
+
+
+@task(returns=(InternalNode, list, list, list, list))
+def compute_split_node_task(tree_path, sample, y_s, n_classes, index_selection, *features):
+    if len(sample) == 0:
+        return InternalNode(tree_path, None, None), np.array([], dtype=np.int64), np.array([], dtype=np.int8), \
+               np.array([], dtype=np.int64), np.array([], dtype=np.int8)
+    b_score = float_info.max
+    b_index = None
+    b_value = None
+    for index in range(len(index_selection)):
+        feature = features[index]
+        score, value = test_split(sample, y_s, feature, n_classes)
+        if score < b_score:
+            b_score, b_value, b_index = score, value, index
+    feature = features[b_index][sample]
+    mask = feature < b_value
+    left = sample[mask]
+    right = sample[~mask]
+    y_l = y_s[mask]
+    y_r = y_s[~mask]
+    node = InternalNode(tree_path, index_selection[b_index], b_value)
+    return node, left, y_l, right, y_r
 
 
 def compute_split(tree_path, sample, n_features, features_mmap, y_s, n_classes, m_try):
@@ -345,10 +330,8 @@ class DecisionTreeClassifier:
             tree_path, sample, y_s, depth = tree_traversal.pop()
             if depth < self.max_depth:
                 if depth < self.distr_depth:
-                    node, left_group, y_l, right_group, y_r = compute_split_chunked(tree_path, sample, depth,
-                                                                                    self.features, features_file, y_s,
-                                                                                    self.n_classes, self.m_try,
-                                                                                    self.distr_depth)
+                    node, left_group, y_l, right_group, y_r = compute_split_node(tree_path, sample, self.features, y_s,
+                                                                                 self.n_classes, self.m_try)
                     compss_delete_object(sample)
                     compss_delete_object(y_s)
                     nodes_to_persist.append(node)
