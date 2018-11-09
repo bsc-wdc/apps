@@ -33,8 +33,8 @@ python/examples/SUMMARY
 python/notebooks
 python/pom.xml
 python/pycompss_lib
-python/README.md
+python/pycompss_lib/README.md
 python/requirements.txt
-python/run_tests.sh
-python/tests
+python/pycompss_lib/run_tests.sh
+python/pycompss_lib/tests
 README.md
