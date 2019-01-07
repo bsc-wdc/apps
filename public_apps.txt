@@ -19,15 +19,12 @@ java/sparseLU
 java/terasort
 pom.xml
 public_apps.txt
-python
-python/examples
 python/examples/cnn
 python/examples/gauss_quadrature
 python/examples/genetic_algorithm
 python/examples/mandelbrot
 python/examples/mnum
 python/examples/neurons
-python/examples/ngsa_mini
 python/examples/postUpdate.sh
 python/examples/SUMMARY
 python/notebooks
