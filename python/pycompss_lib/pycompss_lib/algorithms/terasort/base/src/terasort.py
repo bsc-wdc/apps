@@ -25,7 +25,7 @@ range_max = sys.maxsize
 
 
 @task(returns=list)
-def gen_fragment(num_entries, seed):
+def gen_fragment(num_entries, _seed):
     """
     Generate a fragment with random numbers.
     A fragment is a list of tuples, where the first element of each tuple
@@ -36,11 +36,11 @@ def gen_fragment(num_entries, seed):
     fragment structure = [(k1, v1), (k2, v2), ..., (kn, vn)]
 
     :param num_entries: Number of k,v pairs within a fragment
-    :param seed: The seed for the random generator
+    :param _seed: The seed for the random generator
     :return: Fragment
     """
     import random
-    random.seed(seed)
+    random.seed(_seed)
     fragment = []
     for n in range(num_entries):
         fragment.append((random.randrange(range_min, range_max), random.random()))
@@ -66,8 +66,9 @@ def filter_fragment(fragment, ranges):
     :return: Multireturn of the buckets.
     """
     buckets = []
-    for range in ranges:
-        buckets.append([k_v for k_v in fragment if k_v[0] >= range[0] and k_v[0] < range[1]])
+    for _range in ranges:
+        buckets.append([k_v for k_v in fragment if
+                        _range[0] <= k_v[0] < _range[1]])
     return tuple(buckets)
 
 
@@ -148,7 +149,7 @@ def terasort(num_fragments, num_entries, num_buckets, seed):
     #         for kv in elem:
     #             assert(kv[0] >= ranges[i][0] and kv[0] < ranges[i][1])
 
-    result = {}
+    result = dict()
     for key, value in buckets.items():
         result[key] = combine_and_sort_bucket_elements(*tuple(value))
 
