@@ -91,7 +91,7 @@ def combine_and_sort_bucket_elements(*args):
     return sorted_by_key
 
 
-def generate_ranges():
+def generate_ranges(num_buckets):
     """
     Generate the ranges of each bucket.
     The ranges structure:
@@ -131,7 +131,7 @@ def terasort(num_fragments, num_entries, num_buckets, seed):
         buckets[i] = []
 
     # Init ranges
-    ranges = generate_ranges()
+    ranges = generate_ranges(num_buckets)
     assert(len(ranges) == num_buckets)
 
     for d in dataset:
@@ -168,12 +168,12 @@ if __name__ == "__main__":
     arg1 = sys.argv[1] if len(sys.argv) > 1 else 16
     arg2 = sys.argv[2] if len(sys.argv) > 2 else 50
 
-    num_fragments = int(arg1)  # Default: 16
-    num_entries = int(arg2)    # Default: 50
+    num_of_fragments = int(arg1)  # Default: 16
+    num_of_entries = int(arg2)    # Default: 50
     # be very careful with the following argument (since it is in a decorator)
-    num_buckets = 10           # int(sys.argv[3])
+    num_of_buckets = 10           # int(sys.argv[3])
     seed = 5
 
     startTime = time.time()
-    terasort(num_fragments, num_entries, num_buckets, seed)
+    terasort(num_of_fragments, num_of_entries, num_of_buckets, seed)
     print("Elapsed Time {} (s)".format(time.time() - startTime))
