@@ -1,18 +1,30 @@
 #!/bin/bash -e
 
-  # Define script directory for relative calls
-  scriptDir=$(pwd)
+  # Define script variables
+  scriptDir=$(pwd)/$(dirname $0)
+  execFile=${scriptDir}/base/src/terasort.py
+  appPythonpath=${scriptDir}
 
-  # Set common arguments
-  numFragments=10
-  numEntries=100
-  tracing=false
+  # Retrieve arguments
+  tracing=$1
 
-  # Set arguments
-  appArgs="${numFragments} ${numEntries}"
+  # Leave application args on $@
+  shift 1
 
-  # Execute specific version launch
-  cd base
-  # cdbasebase_oo
-  ./run_local.sh $tracing $appArgs
-  cd ..
+  # Enqueue the application
+  runcompss \
+    --tracing=$tracing \
+    --classpath=$appClasspath \
+    --pythonpath=$appPythonpath \
+    --lang=python \
+    $execFile $@
+
+
+######################################################
+# APPLICATION EXECUTION EXAMPLE
+# Call:
+#       ./run.sh tracing numFragments numEntries
+#
+# Example:
+#       ./launch.sh false 10 100
+#
