@@ -97,11 +97,6 @@ def terasort(num_fragments, num_entries, num_buckets, seed):
     for key, bucket in buckets.items():
         result[key] = compss_wait_on(bucket)
 
-    print("*********** FINAL RESULT ************")
-    import pprint
-    pprint.pprint(result)
-    print("*************************************")
-
 
 if __name__ == "__main__":
     import sys
