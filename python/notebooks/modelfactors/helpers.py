@@ -72,6 +72,18 @@ def create_empty_mod_factors(mod_factors_doc):
         mod_factors[key] = trace_dict
     return mod_factors
 
+def create_mod_factors_from_list(trace_names, mod_factors_doc):
+    """Creates 2D dictionary of the model factors and initializes with an empty string for the given trace_names.
+    The mod_factors dictionary has the format: [mod factor key][trace].
+    """
+    mod_factors = {}
+    for key in mod_factors_doc:
+        trace_dict = {}
+        for name in trace_names:
+            trace_dict[name] = 0.0
+        mod_factors[key] = trace_dict
+    return mod_factors
+
 ###############################################################################
 ########################### AUXILIAR FUNCTIONS ################################
 ###############################################################################
@@ -185,6 +197,19 @@ def get_traces_from_args(trace_list):
     print_overview(traces)
     return traces
 
+def get_traces_from_csv(trace_list, processes):
+    """Builts the trace dictionary.
+    Returns list of trace paths and dictionary with the number of processes.
+    """
+    assert len(trace_list) == len(processes)
+    traces = OrderedDict()
+    i = 0
+    for trace_name in trace_list:
+        traces[trace_name] = Trace(trace_name, processes[trace_name])
+        i += 1
+    print_overview(traces)
+    return traces
+
 def get_num_processes(prv_file):
     """Gets the number of processes in a trace from the according .row file.
     The number of processes in a trace is always stored at the fourth position
@@ -209,51 +234,10 @@ def print_overview(traces):
     for k, v in traces.items():
         line = k
         line += ', ' + str(v.get_processes()) + ' processes'
-        line += ', ' + human_readable(os.path.getsize(v.get_path()))
+        if os.path.isfile(v.get_path()):
+            line += ', ' + human_readable(os.path.getsize(v.get_path()))
         print(line)
     print('')
-
-def read_mod_factors_csv(debug, project, mod_factors_doc):
-    """Reads the model factors table from a csv file."""
-    delimiter = ';'
-    file_path = project
-
-    # Read csv to list of lines
-    if os.path.isfile(file_path) and file_path[-4:] == '.csv':
-        with open(file_path, 'r') as f:
-            lines = f.readlines()
-        lines = [line.rstrip('\n') for line in lines]
-    else:
-        raise Exception('==ERROR==', file_path, 'is not a valid csv file.')
-
-    # Get the number of processes of the traces
-    processes = lines[0].split(delimiter)
-    processes.pop(0)
-
-    # Create artificial trace_list and trace_processes
-    trace_list = []
-    trace_processes = {}
-    for process in processes:
-        trace_list.append(process)
-        trace_processes[process] = int(process)
-
-    # Create empty mod_factors handle
-    mod_factors = create_mod_factors(trace_list)
-
-    # Get mod_factor_doc keys
-    mod_factors_keys = list(mod_factors_doc.items())
-
-    # Iterate over the data lines
-    for index, line in enumerate(lines[1:len(mod_factors_keys)+1]):
-        key = mod_factors_keys[index][0]
-        line = line.split(delimiter)
-        for index, trace in enumerate(trace_list):
-            mod_factors[key][trace] = float(line[index+1])
-
-    if debug:
-        print_mod_factors_table(mod_factors, trace_list, trace_processes)
-
-    return mod_factors, trace_list, trace_processes
 
 
 def print_raw_data_table(raw_data, traces, raw_data_doc):
