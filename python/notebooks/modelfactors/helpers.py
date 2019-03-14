@@ -8,27 +8,31 @@ import numpy
 import fnmatch
 import subprocess
 from collections import OrderedDict
+import ipywidgets as widgets
 
 
 __version__ = "0.3.6 + PyCOMPSs"
 
 
-###############################################################################
-########################### CLASSES ###########################################
-###############################################################################
+# ########################################################################### #
+# ############################## CLASSES #################################### #
+# ########################################################################### #
 
 class Trace(object):
     def __init__(self, path, processes):
         self.path = path
         self.processes = processes
+
     def get_path(self):
         return self.path
+
     def get_processes(self):
         return self.processes
 
-###############################################################################
-############################ CREATION FUNCTIONS ###############################
-###############################################################################
+
+# ########################################################################### #
+# ########################## CREATION FUNCTIONS ############################# #
+# ########################################################################### #
 
 def create_raw_data(trace_name, raw_data_doc):
     """Creates 2D dictionary of the raw input data and initializes with zero.
@@ -41,6 +45,7 @@ def create_raw_data(trace_name, raw_data_doc):
         raw_data[key] = trace_dict
     return raw_data
 
+
 def create_empty_raw_data(raw_data_doc):
     """Creates 2D dictionary of the raw input data with empty dictionaries for the traces.
     The raw_data dictionary has the format: [raw data key]{}.
@@ -50,6 +55,7 @@ def create_empty_raw_data(raw_data_doc):
         trace_dict = {}
         raw_data[key] = trace_dict
     return raw_data
+
 
 def create_mod_factors(trace_name, mod_factors_doc):
     """Creates 2D dictionary of the model factors and initializes with an empty string.
@@ -62,6 +68,7 @@ def create_mod_factors(trace_name, mod_factors_doc):
         mod_factors[key] = trace_dict
     return mod_factors
 
+
 def create_empty_mod_factors(mod_factors_doc):
     """Creates 2D dictionary of the model factors with empty dictionaries for the traces.
     The mod_factors dictionary has the format: [mod factor key]{}.
@@ -71,6 +78,7 @@ def create_empty_mod_factors(mod_factors_doc):
         trace_dict = {}
         mod_factors[key] = trace_dict
     return mod_factors
+
 
 def create_mod_factors_from_list(trace_names, mod_factors_doc):
     """Creates 2D dictionary of the model factors and initializes with an empty string for the given trace_names.
@@ -84,9 +92,10 @@ def create_mod_factors_from_list(trace_names, mod_factors_doc):
         mod_factors[key] = trace_dict
     return mod_factors
 
-###############################################################################
-########################### AUXILIAR FUNCTIONS ################################
-###############################################################################
+
+# ########################################################################### #
+# ######################### AUXILIAR FUNCTIONS ############################## #
+# ########################################################################### #
 
 def which(cmd):
     """Returns path to cmd in path or None if not available."""
@@ -100,12 +109,12 @@ def which(cmd):
 
 def human_readable(size, precision=1):
     """Converts a given size in bytes to the value in human readable form."""
-    suffixes=['B','KB','MB','GB','TB']
+    suffixes = ['B', 'KB', 'MB', 'GB', 'TB']
     suffixIndex = 0
     while size > 1024 and suffixIndex < 4:
         suffixIndex += 1
         size = size/1024.0
-    return "%.*f%s"%(precision,size,suffixes[suffixIndex])
+    return "%.*f%s" % (precision, size, suffixes[suffixIndex])
 
 
 def check_installation(debug):
@@ -140,7 +149,7 @@ def run_command(cmd, debug):
     if debug:
         print('==DEBUG== Executing:', ' '.join(cmd))
 
-    #In debug mode, keep the output. Otherwise, redirect it to devnull.
+    # In debug mode, keep the output. Otherwise, redirect it to devnull.
     if debug:
         out = tempfile.NamedTemporaryFile(suffix='.out', prefix=cmd[0]+'_', dir='./', delete=False)
         err = tempfile.NamedTemporaryFile(suffix='.err', prefix=cmd[0]+'_', dir='./', delete=False)
@@ -172,9 +181,10 @@ def save_remove(path, debug):
         if debug:
             print('==DEBUG== Failed to remove ' + path + '!')
 
-###############################################################################
-############################# HELPER FUNCTIONS ################################
-###############################################################################
+
+# ########################################################################### #
+# ########################### HELPER FUNCTIONS ############################## #
+# ########################################################################### #
 
 def get_traces_from_args(trace_list):
     """Filters the given list to extract traces, i.e. matching *.prv and sorts
@@ -197,6 +207,7 @@ def get_traces_from_args(trace_list):
     print_overview(traces)
     return traces
 
+
 def get_traces_from_csv(trace_list, processes):
     """Builts the trace dictionary.
     Returns list of trace paths and dictionary with the number of processes.
@@ -210,6 +221,7 @@ def get_traces_from_csv(trace_list, processes):
     print_overview(traces)
     return traces
 
+
 def get_num_processes(prv_file):
     """Gets the number of processes in a trace from the according .row file.
     The number of processes in a trace is always stored at the fourth position
@@ -217,8 +229,9 @@ def get_num_processes(prv_file):
     Please note: return value needs to be integer because this function is also
     used as sorting key.
     """
-    cpus = open( prv_file[:-4] + '.row' ).readline().rstrip().split(' ')[3]
+    cpus = open(prv_file[:-4] + '.row').readline().rstrip().split(' ')[3]
     return int(cpus)
+
 
 def get_list_proc(traces):
     """Retrieve the traces and their processes"""
@@ -227,6 +240,7 @@ def get_list_proc(traces):
     for trace_name in trace_list:
         trace_processes[trace_name] = traces[trace_name].get_processes()
     return trace_list, trace_processes
+
 
 def print_overview(traces):
     """Prints an overview of the traces that will be processed."""
@@ -254,7 +268,7 @@ def print_raw_data_table(raw_data, traces, raw_data_doc):
         line += str(trace_processes[trace]).rjust(15)
     print(line)
 
-    print(''.ljust(len(line),'='))
+    print(''.ljust(len(line), '='))
 
     for data_key in raw_data_doc:
         line = raw_data_doc[data_key].ljust(longest_name)
@@ -279,17 +293,17 @@ def print_mod_factors_table(mod_factors, traces, mod_factors_doc):
         line += str(trace_processes[trace]).rjust(10)
     print(line)
 
-    print(''.ljust(len(line),'='))
+    print(''.ljust(len(line), '='))
 
     for mod_key in mod_factors_doc:
         line = mod_factors_doc[mod_key].ljust(longest_name)
-        if mod_key in ['speedup','ipc','freq']:
+        if mod_key in ['speedup', 'ipc', 'freq']:
             for trace in trace_list:
                 line += ' | '
                 try:
                     line += ('{0:.2f}'.format(mod_factors[mod_key][trace])).rjust(10)
                 except ValueError:
-                    #except NaN
+                    # except NaN
                     line += ('{}'.format(mod_factors[mod_key][trace])).rjust(10)
         else:
             for trace in trace_list:
@@ -301,7 +315,7 @@ def print_mod_factors_table(mod_factors, traces, mod_factors_doc):
                     line += ('{}'.format(mod_factors[mod_key][trace])).rjust(10)
         print(line)
         # Print empty line to separate values
-        if mod_key in ['global_eff','freq_scale']:
+        if mod_key in ['global_eff', 'freq_scale']:
             line = ''.ljust(longest_name)
             for trace in trace_list:
                 line += ' | '
@@ -310,9 +324,9 @@ def print_mod_factors_table(mod_factors, traces, mod_factors_doc):
     print('')
 
 
-###############################################################################
-########################### REDUCTION FUNCTIONS ###############################
-###############################################################################
+# ########################################################################### #
+# ######################### REDUCTION FUNCTIONS ############################# #
+# ########################################################################### #
 
 def merge_reduce(function, data):
     """ Apply function cumulatively to the items of data,
@@ -334,6 +348,7 @@ def merge_reduce(function, data):
         else:
             return dataNew[x]
 
+
 def merge_reduce_accum(function, data):
     """ Apply function cumulatively to the items of data,
         from left to right in binary tree structure, so as to
@@ -354,11 +369,10 @@ def merge_reduce_accum(function, data):
         else:
             return dataNew[x]
 
-###############################################################################
-############################### WIDGETS #######################################
-###############################################################################
 
-import ipywidgets as widgets
+# ########################################################################### #
+# ############################# WIDGETS ##################################### #
+# ########################################################################### #
 
 class wdgts(object):
     style = {'description_width': 'initial'}
@@ -366,65 +380,65 @@ class wdgts(object):
     # List of traces to process. Accepts wild cards and automatically filters for valid traces
     w_trace_folder = widgets.Text(value=os.getcwd() + os.path.sep + 'traces/gromacs_jesus/',
                                   description='List of traces:',
-                                  layout={'width':'60%'})
+                                  layout={'width': '60%'})
     # Increase output verbosity to debug level
     w_debug = widgets.Checkbox(value=False,
                                description='Debug')
     # Define whether the measurements are weak or strong scaling (default: auto)
-    w_scaling = widgets.ToggleButtons(options=['auto', 'weak','strong'],
+    w_scaling = widgets.ToggleButtons(options=['auto', 'weak', 'strong'],
                                       description='Scaling',
-                                      button_style='info', # 'success', 'info', 'warning', 'danger' or ''
+                                      button_style='info',  # 'success', 'info', 'warning', 'danger' or ''
                                       tooltips=['Automatic measurements scaling', 'weak measurements scaling', 'Strong measurements scaling'])
     # Run only the projection for the given modelfactors.csv (default: false)
     w_project = widgets.Text(value='false',
                              placeholder='modelfactors.csv',
                              description='CSV projection file path:',
                              style=style,
-                             layout={'width':'60%'})
+                             layout={'width': '60%'})
     # Limit number of cores for the projection (default: 10000)
     w_limit = widgets.IntText(value=10000,
                               description='Projection # cores:',
                               style=style,
-                              layout={'width':'60%'})
+                              layout={'width': '60%'})
     # Select model for prediction (default: amdahl)
-    w_model = widgets.ToggleButtons(options=['amdahl','pipe','linear'],
+    w_model = widgets.ToggleButtons(options=['amdahl', 'pipe', 'linear'],
                                     description='Model',
-                                    button_style='info', # 'success', 'info', 'warning', 'danger' or ''
+                                    button_style='info',  # 'success', 'info', 'warning', 'danger' or ''
                                     tooltips=['Amdahl model prediction', 'Pipe model prediction', 'Linear model prediction'])
     # Set bounds for the prediction (default: yes)
     w_bounds = widgets.Checkbox(value=True,
                                 description='Prediction bounds')
     # Set error restrains for prediction (default: first). first: prioritize smallest run; equal: no priority; decrease: decreasing priority for larger runs
-    w_sigma = widgets.ToggleButtons(options=['first','equal','decrease'],
+    w_sigma = widgets.ToggleButtons(options=['first', 'equal', 'decrease'],
                                     description='Sigma',
-                                    button_style='info', # 'success', 'info', 'warning', 'danger' or ''
+                                    button_style='info',  # 'success', 'info', 'warning', 'danger' or ''
                                     tooltips=['Prioritize smallest run', 'No priority', 'Decreasing priority for larger runs'])
     # Path of the configuration files
     w_cfgs = widgets.Text(value=os.getcwd() + os.path.sep + 'cfgs',
                           placeholder='cfgs',
                           description='Configuration files path:',
                           style=style,
-                         layout={'width':'60%'})
+                          layout={'width': '60%'})
     # Path of matplotlib output file
     w_gp_out = widgets.Text(value=os.getcwd() + os.path.sep + 'results.gp',
                             placeholder='Output_file.gp',
                             description='Gnuplot output file:',
                             style=style,
-                            layout={'width':'60%'})
+                            layout={'width': '60%'})
     # Path of matplotlib output file
     w_mpl_out = widgets.Text(value=os.getcwd() + os.path.sep + 'results.png',
                              placeholder='Output_file.png',
                              description='Matplotlib Output file:',
                              style=style,
-                             layout={'width':'60%'})
+                             layout={'width': '60%'})
     # Path of csv output file
     w_csv = widgets.Text(value=os.getcwd() + os.path.sep + 'results.csv',
                          placeholder='Output_file.csv',
                          description='CSV output file:',
                          style=style,
-                         layout={'width':'60%'})
+                         layout={'width': '60%'})
     # Choose reduction strategy
     w_reduction = widgets.ToggleButtons(options=['Accumulate', 'Reduce', 'MergeReduce', 'MergeReduceAccumulate'],
                                         description='Reductions',
-                                        button_style='success', # 'success', 'info', 'warning', 'danger' or ''
+                                        button_style='success',  # 'success', 'info', 'warning', 'danger' or ''
                                         tooltips=['Accummulate in the same loop', 'Simple reduce function', 'Reduce in pairs', 'Reduce in pairs accumulating'])
