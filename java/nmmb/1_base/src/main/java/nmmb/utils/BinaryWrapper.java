@@ -2,7 +2,6 @@ package nmmb.utils;
 
 /**
  * Contains the file names of the binary executables used by the FIXED phase
- *
  */
 public class BinaryWrapper {
 

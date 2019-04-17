@@ -9,7 +9,6 @@ import java.nio.file.StandardCopyOption;
 
 /**
  * Helper class to manage the file system
- *
  */
 public class FileManagement {
 

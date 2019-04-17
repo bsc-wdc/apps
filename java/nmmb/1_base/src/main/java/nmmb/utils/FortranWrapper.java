@@ -2,7 +2,6 @@ package nmmb.utils;
 
 /**
  * Contains the filenames of the fortran executables used by the FIXED phase
- * 
  */
 public class FortranWrapper {
 
@@ -53,8 +52,9 @@ public class FortranWrapper {
     public static final String TOPSOILTYPE = "topsoiltype";
     public static final String VCGENERATOR = "vcgenerator";
 
-    public static final String[] FIXED_FORTRAN_F90_FILES = new String[] { BOTSOILTYPE, DEEPTEMPERATURE, ENVELOPE, LANDUSE, LANDUSENEW,
-            SMMOUNT, ROUGHNESS, STDH, STDHTOPO, SNOWALBEDO, TOPO, TOPOSEAMASK, TOPSOILTYPE, VCGENERATOR };
+    public static final String[] FIXED_FORTRAN_F90_FILES = new String[] { BOTSOILTYPE, DEEPTEMPERATURE, ENVELOPE,
+            LANDUSE, LANDUSENEW, SMMOUNT, ROUGHNESS, STDH, STDHTOPO, SNOWALBEDO, TOPO, TOPOSEAMASK, TOPSOILTYPE,
+            VCGENERATOR };
 
     public static final String[] FIXED_FORTRAN_F_FILES = new String[] { GFDLCO2 };
 
@@ -76,7 +76,8 @@ public class FortranWrapper {
 
     public static final String[] VARIABLE_FORTRAN_F90_DEP_FILES = new String[] { MODULE_FLT };
 
-    public static final String[] VARIABLE_FORTRAN_F90_FILES = new String[] { ALBEDO, ALBEDO_RRTM_1DEG, VEG_FRAC, Z0_VEGUSTAR };
+    public static final String[] VARIABLE_FORTRAN_F90_FILES = new String[] { ALBEDO, ALBEDO_RRTM_1DEG, VEG_FRAC,
+            Z0_VEGUSTAR };
 
     public static final String[] VARIABLE_FORTRAN_F_FILES = new String[] { CNV_RRTM, DUST_START, INC_RRTM };
 

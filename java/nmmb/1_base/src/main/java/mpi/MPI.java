@@ -2,7 +2,6 @@ package mpi;
 
 /**
  * Fake MPI tasks implementation
- *
  */
 public class MPI {
 

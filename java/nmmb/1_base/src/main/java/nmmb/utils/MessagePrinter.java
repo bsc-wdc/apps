@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Helper class to print messages
- *
  */
 public class MessagePrinter {
 

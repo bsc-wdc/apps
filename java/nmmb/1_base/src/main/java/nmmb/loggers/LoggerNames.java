@@ -2,7 +2,6 @@ package nmmb.loggers;
 
 /**
  * Contains the logger names
- * 
  */
 public class LoggerNames {
 

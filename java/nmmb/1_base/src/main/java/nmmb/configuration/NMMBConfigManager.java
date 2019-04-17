@@ -6,7 +6,6 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 /**
  * Loads the NMMB configuration
- * 
  */
 public class NMMBConfigManager {
 

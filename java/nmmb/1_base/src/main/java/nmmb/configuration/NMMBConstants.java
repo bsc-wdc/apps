@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 
 /**
  * Class to represent the constant names and environment variable names for NMMB
- * 
  */
 public class NMMBConstants {
 

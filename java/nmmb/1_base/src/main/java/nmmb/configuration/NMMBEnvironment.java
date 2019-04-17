@@ -5,7 +5,6 @@ import java.io.File;
 
 /**
  * Retrieve information from environment variables
- * 
  */
 public class NMMBEnvironment {
 

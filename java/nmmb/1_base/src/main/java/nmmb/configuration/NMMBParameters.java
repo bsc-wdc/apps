@@ -20,7 +20,6 @@ import nmmb.utils.FortranWrapper;
 
 /**
  * Representation of the parameters of a NMMB execution
- * 
  */
 public class NMMBParameters {
 
@@ -318,7 +317,6 @@ public class NMMBParameters {
 
     /**
      * Actions to perform to setup an NMMB execution
-     * 
      */
     public void prepareExecution() {
         LOGGER_MAIN.info("Preparing execution...");
@@ -377,7 +375,6 @@ public class NMMBParameters {
 
     /**
      * Actions to setup the FIXED Step of an NMMB execution
-     * 
      */
     public void prepareFixedExecution() {
         LOGGER_FIXED.debug("   - INCLUDE PATH : " + NMMBEnvironment.FIX_INCLUDE_DIR);
@@ -470,10 +467,12 @@ public class NMMBParameters {
         String currentDateSTR = NMMBConstants.STR_TO_DATE.format(currentDate);
         String hourSTR = (this.HOUR < 10) ? "0" + String.valueOf(this.HOUR) : String.valueOf(this.HOUR);
         String folderOutputCase = NMMBEnvironment.OUTNMMB + CASE + File.separator;
-        String folderOutput = NMMBEnvironment.OUTNMMB + CASE + File.separator + currentDateSTR + hourSTR + File.separator;
+        String folderOutput = NMMBEnvironment.OUTNMMB + CASE + File.separator + currentDateSTR + hourSTR
+                + File.separator;
 
         if (!FileManagement.createDir(folderOutputCase)) {
-            LOGGER_MAIN.debug("Cannot create folder output case : " + folderOutputCase + " because it already exists. Skipping");
+            LOGGER_MAIN.debug(
+                    "Cannot create folder output case : " + folderOutputCase + " because it already exists. Skipping");
         }
 
         if (!FileManagement.createDir(folderOutput)) {
@@ -498,10 +497,11 @@ public class NMMBParameters {
      */
     public void prepareVariableExecution(Date currentDate) {
         // Clean specific files
-        final String[] outputFiles = new String[] { "sst2dvar_grb_0.5", "fcst", "llstmp", "llsmst", "llgsno", "llgcic", "llgsst",
-                "llspl.000", "llgsst05", "albedo", "albase", "vegfrac", "z0base", "z0", "ustar", "sst05", "dzsoil", "tskin", "sst", "snow",
-                "snowheight", "cice", "seamaskcorr", "landusecorr", "landusenewcorr", "topsoiltypecorr", "vegfraccorr", "z0corr",
-                "z0basecorr", "emissivity", "canopywater", "frozenprecratio", "smst", "sh2o", "stmp" };
+        final String[] outputFiles = new String[] { "sst2dvar_grb_0.5", "fcst", "llstmp", "llsmst", "llgsno", "llgcic",
+                "llgsst", "llspl.000", "llgsst05", "albedo", "albase", "vegfrac", "z0base", "z0", "ustar", "sst05",
+                "dzsoil", "tskin", "sst", "snow", "snowheight", "cice", "seamaskcorr", "landusecorr", "landusenewcorr",
+                "topsoiltypecorr", "vegfraccorr", "z0corr", "z0basecorr", "emissivity", "canopywater",
+                "frozenprecratio", "smst", "sh2o", "stmp" };
 
         for (String file : outputFiles) {
             String filePath = NMMBEnvironment.OUTPUT + file;
@@ -513,8 +513,8 @@ public class NMMBParameters {
         // Clean regular expr files
         File folder = new File(NMMBEnvironment.OUTPUT);
         for (File file : folder.listFiles()) {
-            if ((file.getName().endsWith(".gfs")) || (file.getName().startsWith("gfs.")) || (file.getName().startsWith("boco."))
-                    || (file.getName().startsWith("boco_chem."))) {
+            if ((file.getName().endsWith(".gfs")) || (file.getName().startsWith("gfs."))
+                    || (file.getName().startsWith("boco.")) || (file.getName().startsWith("boco_chem."))) {
 
                 if (!FileManagement.deleteFile(file)) {
                     LOGGER_VARIABLE.debug("Cannot erase previous " + file.getName() + " because it doesn't exist.");
@@ -570,7 +570,8 @@ public class NMMBParameters {
                     }
                     Files.createSymbolicLink(Paths.get(link), Paths.get(target));
                     LOGGER_VARIABLE.debug("Softlink from : " + link + " to " + target);
-                } catch (UnsupportedOperationException | IOException | SecurityException | InvalidPathException exception) {
+                } catch (UnsupportedOperationException | IOException | SecurityException
+                        | InvalidPathException exception) {
                     LOGGER_VARIABLE.error("[ERROR] Cannot create output symlink", exception);
                     LOGGER_VARIABLE.error("Aborting...");
                     System.exit(1);
@@ -614,7 +615,8 @@ public class NMMBParameters {
                         }
                         Files.createSymbolicLink(Paths.get(link), Paths.get(target));
                         LOGGER_VARIABLE.debug("Softlink from : " + link + " to " + target);
-                    } catch (UnsupportedOperationException | IOException | SecurityException | InvalidPathException exception) {
+                    } catch (UnsupportedOperationException | IOException | SecurityException
+                            | InvalidPathException exception) {
                         LOGGER_VARIABLE.error("[ERROR] Cannot create output symlink", exception);
                         LOGGER_VARIABLE.error("Aborting...");
                         System.exit(1);
@@ -744,13 +746,14 @@ public class NMMBParameters {
         if (NMMBEnvironment.CHEMIC == null || NMMBEnvironment.CHEMIC.isEmpty()) {
             LOGGER_UMO_MODEL.debug("Cannot copy from CHEMIC because source doesn't exist. Skipping...");
         } else {
-            String dataFolderPath = NMMBEnvironment.CHEMIC + "MEGAN" + File.separator + "out" + File.separator + "aqmeii-reg"
-                    + File.separator;
+            String dataFolderPath = NMMBEnvironment.CHEMIC + "MEGAN" + File.separator + "out" + File.separator
+                    + "aqmeii-reg" + File.separator;
             File dataFolder = new File(dataFolderPath);
             File[] contentFiles = dataFolder.listFiles();
             if (contentFiles != null) {
                 for (File file : contentFiles) {
-                    if (file.getName().equals("isop.dat") || (file.getName().startsWith("lai") && file.getName().endsWith(".dat"))
+                    if (file.getName().equals("isop.dat")
+                            || (file.getName().startsWith("lai") && file.getName().endsWith(".dat"))
                             || file.getName().equals("meteo-data.dat")
                             || (file.getName().startsWith("pftp_") && file.getName().endsWith(".dat"))) {
 
@@ -881,7 +884,8 @@ public class NMMBParameters {
             System.exit(1);
         }
 
-        String solarSrc = NMMBEnvironment.DATMOD + "fix" + File.separator + "fix_rad" + File.separator + "solarconstantdata.txt";
+        String solarSrc = NMMBEnvironment.DATMOD + "fix" + File.separator + "fix_rad" + File.separator
+                + "solarconstantdata.txt";
         String solarTarget = NMMBEnvironment.UMO_OUT + "solarconstantdata.txt";
         if (!FileManagement.copyFile(solarSrc, solarTarget)) {
             LOGGER_UMO_MODEL.error("[ERROR] Error copying " + solarSrc + " file to " + solarTarget);
@@ -903,7 +907,8 @@ public class NMMBParameters {
         }
 
         // Copy files for GoCart climatology conc. and opt. properties
-        String fixGocartFolderPath = NMMBEnvironment.DATMOD + "fix" + File.separator + "fix_gocart_clim" + File.separator;
+        String fixGocartFolderPath = NMMBEnvironment.DATMOD + "fix" + File.separator + "fix_gocart_clim"
+                + File.separator;
         File fixGocartFolder = new File(fixGocartFolderPath);
         for (File file : fixGocartFolder.listFiles()) {
             if (file.getName().startsWith("2000")) {
@@ -916,7 +921,8 @@ public class NMMBParameters {
             }
         }
 
-        String ncepAerosolSrc = NMMBEnvironment.DATMOD + "fix" + File.separator + "fix_aeropt_luts" + File.separator + "NCEP_AEROSOL.bin";
+        String ncepAerosolSrc = NMMBEnvironment.DATMOD + "fix" + File.separator + "fix_aeropt_luts" + File.separator
+                + "NCEP_AEROSOL.bin";
         String ncepAerosolTarget = NMMBEnvironment.UMO_OUT + "NCEP_AEROSOL.bin";
         if (!FileManagement.copyFile(ncepAerosolSrc, ncepAerosolTarget)) {
             LOGGER_UMO_MODEL.error("[ERROR] Error copying " + ncepAerosolSrc + " file to " + ncepAerosolTarget);
@@ -979,9 +985,10 @@ public class NMMBParameters {
         try {
             Files.createSymbolicLink(Paths.get(globalPrdlosTarget), Paths.get(globalPrdlosSrc));
         } catch (UnsupportedOperationException | IOException | SecurityException | InvalidPathException exception) {
-            LOGGER_UMO_MODEL.error("[ERROR] Cannot create symlink " + globalPrdlosTarget + " from " + globalPrdlosSrc, exception);
-            LOGGER_UMO_MODEL.error("Aborting...");
-            System.exit(1);
+            LOGGER_UMO_MODEL.warn("[WARN] Cannot create symlink " + globalPrdlosTarget + " from " + globalPrdlosSrc,
+                    exception);
+            // LOGGER_UMO_MODEL.error("Aborting...");
+            // System.exit(1);
         }
 
         String globalClimSrc = NMMBEnvironment.DATMOD + "global_o3clim.txt";
@@ -989,9 +996,10 @@ public class NMMBParameters {
         try {
             Files.createSymbolicLink(Paths.get(globalClimTarget), Paths.get(globalClimSrc));
         } catch (UnsupportedOperationException | IOException | SecurityException | InvalidPathException exception) {
-            LOGGER_UMO_MODEL.error("[ERROR] Cannot create symlink " + globalClimTarget + " from " + globalClimSrc, exception);
-            LOGGER_UMO_MODEL.error("Aborting...");
-            System.exit(1);
+            LOGGER_UMO_MODEL.warn("[WARN] Cannot create symlink " + globalClimTarget + " from " + globalClimSrc,
+                    exception);
+            // LOGGER_UMO_MODEL.error("Aborting...");
+            // System.exit(1);
         }
     }
 
@@ -1005,7 +1013,8 @@ public class NMMBParameters {
         String currentDateSTR = NMMBConstants.STR_TO_DATE.format(currentDate);
         String hourSTR = (this.HOUR < 10) ? "0" + String.valueOf(this.HOUR) : String.valueOf(this.HOUR);
         String folderOutputCase = NMMBEnvironment.OUTNMMB + this.CASE + File.separator;
-        String folderOutput = NMMBEnvironment.OUTNMMB + this.CASE + File.separator + currentDateSTR + hourSTR + File.separator;
+        String folderOutput = NMMBEnvironment.OUTNMMB + this.CASE + File.separator + currentDateSTR + hourSTR
+                + File.separator;
 
         String historyFilePath = NMMBEnvironment.UMO_OUT + "history_INIT.hhh";
         FileManagement.deleteFile(historyFilePath);
@@ -1015,12 +1024,15 @@ public class NMMBParameters {
             String historySrc;
             if (this.NHOURS_INIT < 100) {
                 if (this.NHOURS_INIT < 10) {
-                    historySrc = NMMBEnvironment.UMO_OUT + "nmmb_hst_01_bin_000" + String.valueOf(this.NHOURS_INIT) + "h_00m_00.00s";
+                    historySrc = NMMBEnvironment.UMO_OUT + "nmmb_hst_01_bin_000" + String.valueOf(this.NHOURS_INIT)
+                            + "h_00m_00.00s";
                 } else {
-                    historySrc = NMMBEnvironment.UMO_OUT + "nmmb_hst_01_bin_00" + String.valueOf(this.NHOURS_INIT) + "h_00m_00.00s";
+                    historySrc = NMMBEnvironment.UMO_OUT + "nmmb_hst_01_bin_00" + String.valueOf(this.NHOURS_INIT)
+                            + "h_00m_00.00s";
                 }
             } else {
-                historySrc = NMMBEnvironment.UMO_OUT + "nmmb_hst_01_bin_0" + String.valueOf(this.NHOURS_INIT) + "h_00m_00.00s";
+                historySrc = NMMBEnvironment.UMO_OUT + "nmmb_hst_01_bin_0" + String.valueOf(this.NHOURS_INIT)
+                        + "h_00m_00.00s";
             }
 
             if (!FileManagement.copyFile(historySrc, historyTarget)) {
@@ -1085,7 +1097,8 @@ public class NMMBParameters {
         String currentDateSTR = NMMBConstants.STR_TO_DATE.format(currentDate);
         String hourSTR = (this.HOUR < 10) ? "0" + String.valueOf(this.HOUR) : String.valueOf(this.HOUR);
         String folderOutputCase = NMMBEnvironment.OUTNMMB + this.CASE + File.separator;
-        String folderOutput = NMMBEnvironment.OUTNMMB + this.CASE + File.separator + currentDateSTR + hourSTR + File.separator;
+        String folderOutput = NMMBEnvironment.OUTNMMB + this.CASE + File.separator + currentDateSTR + hourSTR
+                + File.separator;
 
         String lmimjmSrc = folderOutputCase + "lmimjm.inc";
         String lmimjmTarget = NMMBEnvironment.POST_CARBONO + "lmimjm.inc";
@@ -1094,7 +1107,7 @@ public class NMMBParameters {
             LOGGER_POST.error("Aborting...");
             System.exit(1);
         }
-        
+
         // Clean new_postall.f if needed
         String postAllTarget = NMMBEnvironment.POST_CARBONO + "new_postall.f";
         LOGGER_POST.debug("Delete previous: " + postAllTarget);
@@ -1219,7 +1232,8 @@ public class NMMBParameters {
         }
 
         if (this.CLEAN_BINARIES) {
-            String preExecutablePath = NMMBEnvironment.POST_CARBONO + FortranWrapper.NEW_POSTALL + FortranWrapper.SUFFIX_EXE;
+            String preExecutablePath = NMMBEnvironment.POST_CARBONO + FortranWrapper.NEW_POSTALL
+                    + FortranWrapper.SUFFIX_EXE;
             File preExecutable = new File(preExecutablePath);
             if (preExecutable.exists()) {
                 preExecutable.delete();

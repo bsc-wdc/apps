@@ -18,7 +18,6 @@ import nmmb.loggers.LoggerNames;
 
 /**
  * Helper class to execute bash commands
- *
  */
 public class BashCMDExecutor {
 
@@ -130,7 +129,8 @@ public class BashCMDExecutor {
         LOGGER.debug("[CMD EXECUTION WRAPPER] ------------------------------------");
         LOGGER.debug("[CMD EXECUTION WRAPPER] CMD OUTPUT:");
         if (process != null) {
-            try (BufferedReader outputReader = (this.redirectOutput != null) ? new BufferedReader(new FileReader(this.redirectOutput))
+            try (BufferedReader outputReader = (this.redirectOutput != null)
+                    ? new BufferedReader(new FileReader(this.redirectOutput))
                     : new BufferedReader(new InputStreamReader(process.getInputStream()));) {
 
                 String line = null;
