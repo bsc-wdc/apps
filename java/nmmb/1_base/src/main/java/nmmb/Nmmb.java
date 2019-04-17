@@ -33,7 +33,6 @@ public class Nmmb {
 
     /**
      * Prints the usage
-     * 
      */
     private static void usage() {
         LOGGER_MAIN.info("Invalid parameters for nmmb.Nmmb");
@@ -68,16 +67,18 @@ public class Nmmb {
 
                 compilationEvs[i++] = BINARY.fortranCompiler(FortranWrapper.MC_FLAG, FortranWrapper.SHARED_FLAG,
                         FortranWrapper.CONVERT_PREFIX, FortranWrapper.CONVERT_VALUE, FortranWrapper.TRACEBACK_FLAG,
-                        FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE, FortranWrapper.OPT_FLAG, FortranWrapper.FPMODEL_PREFIX,
-                        FortranWrapper.FPMODEL_VALUE, FortranWrapper.STACK_FLAG, FortranWrapper.OFLAG, executable, src);
+                        FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE, FortranWrapper.OPT_FLAG,
+                        FortranWrapper.FPMODEL_PREFIX, FortranWrapper.FPMODEL_VALUE, FortranWrapper.STACK_FLAG,
+                        FortranWrapper.OFLAG, executable, src);
             }
             for (String fortranFile : FortranWrapper.FIXED_FORTRAN_F_FILES) {
                 String executable = NMMBEnvironment.FIX + fortranFile + FortranWrapper.SUFFIX_EXE;
                 String src = NMMBEnvironment.FIX + fortranFile + FortranWrapper.SUFFIX_F_SRC;
                 compilationEvs[i++] = BINARY.fortranCompiler(FortranWrapper.MC_FLAG, FortranWrapper.SHARED_FLAG,
                         FortranWrapper.CONVERT_PREFIX, FortranWrapper.CONVERT_VALUE, FortranWrapper.TRACEBACK_FLAG,
-                        FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE, FortranWrapper.OPT_FLAG, FortranWrapper.FPMODEL_PREFIX,
-                        FortranWrapper.FPMODEL_VALUE, FortranWrapper.STACK_FLAG, FortranWrapper.OFLAG, executable, src);
+                        FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE, FortranWrapper.OPT_FLAG,
+                        FortranWrapper.FPMODEL_PREFIX, FortranWrapper.FPMODEL_VALUE, FortranWrapper.STACK_FLAG,
+                        FortranWrapper.OFLAG, executable, src);
             }
             // Sync master to wait for compilation
             for (i = 0; i < compilationEvs.length; ++i) {
@@ -175,9 +176,9 @@ public class Nmmb {
         String lookup_aerosol2_rh90 = NMMBEnvironment.OUTPUT + "lookup_aerosol2.dat.rh90";
         String lookup_aerosol2_rh95 = NMMBEnvironment.OUTPUT + "lookup_aerosol2.dat.rh95";
         String lookup_aerosol2_rh99 = NMMBEnvironment.OUTPUT + "lookup_aerosol2.dat.rh99";
-        fixedBinariesEvs[i++] = BINARY.run_aerosol(nmmbParams.isCompileBinaries(), nmmbParams.isCleanBinaries(), lookup_aerosol2_rh00,
-                lookup_aerosol2_rh50, lookup_aerosol2_rh70, lookup_aerosol2_rh80, lookup_aerosol2_rh90, lookup_aerosol2_rh95,
-                lookup_aerosol2_rh99);
+        fixedBinariesEvs[i++] = BINARY.run_aerosol(nmmbParams.isCompileBinaries(), nmmbParams.isCleanBinaries(),
+                lookup_aerosol2_rh00, lookup_aerosol2_rh50, lookup_aerosol2_rh70, lookup_aerosol2_rh80,
+                lookup_aerosol2_rh90, lookup_aerosol2_rh95, lookup_aerosol2_rh99);
 
         /* Wait for binaries completion and check exit value *****************************/
         for (i = 0; i < fixedBinariesEvs.length; ++i) {
@@ -231,15 +232,17 @@ public class Nmmb {
             String object = NMMBEnvironment.VRB + fortranFile + FortranWrapper.SUFFIX_OBJECT;
             String src = NMMBEnvironment.VRB + fortranFile + FortranWrapper.SUFFIX_F90_SRC;
 
-            depCompilationEvs[objectIndex++] = BINARY.fortranCompileObject(FortranWrapper.MC_FLAG, FortranWrapper.SHARED_FLAG,
-                    FortranWrapper.CONVERT_PREFIX, FortranWrapper.CONVERT_VALUE, FortranWrapper.TRACEBACK_FLAG,
-                    FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE, FortranWrapper.OPT_FLAG, FortranWrapper.FPMODEL_PREFIX,
-                    FortranWrapper.FPMODEL_VALUE, FortranWrapper.STACK_FLAG, FortranWrapper.CFLAG, src, FortranWrapper.OFLAG, object,
+            depCompilationEvs[objectIndex++] = BINARY.fortranCompileObject(FortranWrapper.MC_FLAG,
+                    FortranWrapper.SHARED_FLAG, FortranWrapper.CONVERT_PREFIX, FortranWrapper.CONVERT_VALUE,
+                    FortranWrapper.TRACEBACK_FLAG, FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE,
+                    FortranWrapper.OPT_FLAG, FortranWrapper.FPMODEL_PREFIX, FortranWrapper.FPMODEL_VALUE,
+                    FortranWrapper.STACK_FLAG, FortranWrapper.CFLAG, src, FortranWrapper.OFLAG, object,
                     FortranWrapper.MODULE_FLAG, moduleDir);
         }
         // Sync to check compilation status (dependency with task object is also respected if this sync is erased)
         for (int i = 0; i < depCompilationEvs.length; ++i) {
-            LOGGER_VARIABLE.debug("Compilation of " + i + " dependant binary ended with status " + depCompilationEvs[i]);
+            LOGGER_VARIABLE
+                    .debug("Compilation of " + i + " dependant binary ended with status " + depCompilationEvs[i]);
             if (depCompilationEvs[i] != 0) {
                 throw new TaskExecutionException("[ERROR] Error compiling binary " + i);
             }
@@ -248,31 +251,35 @@ public class Nmmb {
         /* Build the fortran executables *************************************************/
         Integer[] compilationEvs = new Integer[FortranWrapper.VARIABLE_FORTRAN_F90_FILES.length
                 + FortranWrapper.VARIABLE_FORTRAN_F_FILES.length + FortranWrapper.VARIABLE_GFORTRAN_F_FILES.length
-                + FortranWrapper.VARIABLE_FORTRAN_F_FILES_WITH_W3.length + FortranWrapper.VARIABLE_FORTRAN_F_FILES_WITH_DEPS.length + 1];
+                + FortranWrapper.VARIABLE_FORTRAN_F_FILES_WITH_W3.length
+                + FortranWrapper.VARIABLE_FORTRAN_F_FILES_WITH_DEPS.length + 1];
 
         int executableIndex = 0;
         for (String fortranFile : FortranWrapper.VARIABLE_FORTRAN_F90_FILES) {
             String executable = NMMBEnvironment.VRB + fortranFile + FortranWrapper.SUFFIX_EXE;
             String src = NMMBEnvironment.VRB + fortranFile + FortranWrapper.SUFFIX_F90_SRC;
 
-            compilationEvs[executableIndex++] = BINARY.fortranCompiler(FortranWrapper.MC_FLAG, FortranWrapper.SHARED_FLAG,
-                    FortranWrapper.CONVERT_PREFIX, FortranWrapper.CONVERT_VALUE, FortranWrapper.TRACEBACK_FLAG,
-                    FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE, FortranWrapper.OPT_FLAG, FortranWrapper.FPMODEL_PREFIX,
-                    FortranWrapper.FPMODEL_VALUE, FortranWrapper.STACK_FLAG, FortranWrapper.OFLAG, executable, src);
+            compilationEvs[executableIndex++] = BINARY.fortranCompiler(FortranWrapper.MC_FLAG,
+                    FortranWrapper.SHARED_FLAG, FortranWrapper.CONVERT_PREFIX, FortranWrapper.CONVERT_VALUE,
+                    FortranWrapper.TRACEBACK_FLAG, FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE,
+                    FortranWrapper.OPT_FLAG, FortranWrapper.FPMODEL_PREFIX, FortranWrapper.FPMODEL_VALUE,
+                    FortranWrapper.STACK_FLAG, FortranWrapper.OFLAG, executable, src);
         }
         for (String fortranFile : FortranWrapper.VARIABLE_FORTRAN_F_FILES) {
             String executable = NMMBEnvironment.VRB + fortranFile + FortranWrapper.SUFFIX_EXE;
             String src = NMMBEnvironment.VRB + fortranFile + FortranWrapper.SUFFIX_F_SRC;
-            compilationEvs[executableIndex++] = BINARY.fortranCompiler(FortranWrapper.MC_FLAG, FortranWrapper.SHARED_FLAG,
-                    FortranWrapper.CONVERT_PREFIX, FortranWrapper.CONVERT_VALUE, FortranWrapper.TRACEBACK_FLAG,
-                    FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE, FortranWrapper.OPT_FLAG, FortranWrapper.FPMODEL_PREFIX,
-                    FortranWrapper.FPMODEL_VALUE, FortranWrapper.STACK_FLAG, FortranWrapper.OFLAG, executable, src);
+            compilationEvs[executableIndex++] = BINARY.fortranCompiler(FortranWrapper.MC_FLAG,
+                    FortranWrapper.SHARED_FLAG, FortranWrapper.CONVERT_PREFIX, FortranWrapper.CONVERT_VALUE,
+                    FortranWrapper.TRACEBACK_FLAG, FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE,
+                    FortranWrapper.OPT_FLAG, FortranWrapper.FPMODEL_PREFIX, FortranWrapper.FPMODEL_VALUE,
+                    FortranWrapper.STACK_FLAG, FortranWrapper.OFLAG, executable, src);
         }
 
         for (String fortranFile : FortranWrapper.VARIABLE_GFORTRAN_F_FILES) {
             String executable = NMMBEnvironment.VRB + fortranFile + FortranWrapper.SUFFIX_EXE;
             String src = NMMBEnvironment.VRB + fortranFile + FortranWrapper.SUFFIX_F_SRC;
-            compilationEvs[executableIndex++] = BINARY.gfortranCompiler(FortranWrapper.BIG_O_FLAG, src, FortranWrapper.OFLAG, executable);
+            compilationEvs[executableIndex++] = BINARY.gfortranCompiler(FortranWrapper.BIG_O_FLAG, src,
+                    FortranWrapper.OFLAG, executable);
         }
 
         for (String fortranFile : FortranWrapper.VARIABLE_FORTRAN_F_FILES_WITH_W3) {
@@ -280,20 +287,22 @@ public class Nmmb {
             String src = NMMBEnvironment.VRB + fortranFile + FortranWrapper.SUFFIX_F_SRC;
             String w3LibFlag = "-L" + NMMBEnvironment.UMO_LIBS + FortranWrapper.W3_LIB_DIR;
             String bacioLibFlag = "-L" + NMMBEnvironment.UMO_LIBS + FortranWrapper.BACIO_LIB_DIR;
-            compilationEvs[executableIndex++] = BINARY.fortranCompilerWithW3(FortranWrapper.MC_FLAG, FortranWrapper.SHARED_FLAG,
-                    FortranWrapper.CONVERT_PREFIX, FortranWrapper.CONVERT_VALUE, FortranWrapper.TRACEBACK_FLAG,
-                    FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE, FortranWrapper.OPT_FLAG, FortranWrapper.FPMODEL_PREFIX,
-                    FortranWrapper.FPMODEL_VALUE, FortranWrapper.STACK_FLAG, FortranWrapper.OFLAG, executable, src, w3LibFlag, bacioLibFlag,
+            compilationEvs[executableIndex++] = BINARY.fortranCompilerWithW3(FortranWrapper.MC_FLAG,
+                    FortranWrapper.SHARED_FLAG, FortranWrapper.CONVERT_PREFIX, FortranWrapper.CONVERT_VALUE,
+                    FortranWrapper.TRACEBACK_FLAG, FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE,
+                    FortranWrapper.OPT_FLAG, FortranWrapper.FPMODEL_PREFIX, FortranWrapper.FPMODEL_VALUE,
+                    FortranWrapper.STACK_FLAG, FortranWrapper.OFLAG, executable, src, w3LibFlag, bacioLibFlag,
                     FortranWrapper.W3_FLAG, FortranWrapper.BACIO_FLAG);
         }
         for (String fortranFile : FortranWrapper.VARIABLE_FORTRAN_F_FILES_WITH_DEPS) {
             String executable = NMMBEnvironment.VRB + fortranFile + FortranWrapper.SUFFIX_EXE;
             String src = NMMBEnvironment.VRB + fortranFile + FortranWrapper.SUFFIX_F_SRC;
             String object = NMMBEnvironment.VRB + FortranWrapper.MODULE_FLT + FortranWrapper.SUFFIX_OBJECT;
-            compilationEvs[executableIndex++] = BINARY.fortranCompileWithObject(FortranWrapper.MC_FLAG, FortranWrapper.SHARED_FLAG,
-                    FortranWrapper.CONVERT_PREFIX, FortranWrapper.CONVERT_VALUE, FortranWrapper.TRACEBACK_FLAG,
-                    FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE, FortranWrapper.OPT_FLAG, FortranWrapper.FPMODEL_PREFIX,
-                    FortranWrapper.FPMODEL_VALUE, FortranWrapper.STACK_FLAG, FortranWrapper.OFLAG, executable, src, object);
+            compilationEvs[executableIndex++] = BINARY.fortranCompileWithObject(FortranWrapper.MC_FLAG,
+                    FortranWrapper.SHARED_FLAG, FortranWrapper.CONVERT_PREFIX, FortranWrapper.CONVERT_VALUE,
+                    FortranWrapper.TRACEBACK_FLAG, FortranWrapper.ASSUME_PREFIX, FortranWrapper.ASSUME_VALUE,
+                    FortranWrapper.OPT_FLAG, FortranWrapper.FPMODEL_PREFIX, FortranWrapper.FPMODEL_VALUE,
+                    FortranWrapper.STACK_FLAG, FortranWrapper.OFLAG, executable, src, object);
         }
         String source = NMMBEnvironment.VRB + FortranWrapper.READ_PAUL_SOURCE + FortranWrapper.SUFFIX_F90_SRC;
         String executable = NMMBEnvironment.VRB + FortranWrapper.READ_PAUL_SOURCE + FortranWrapper.SUFFIX_EXE;
@@ -477,18 +486,19 @@ public class Nmmb {
         int binaryIndex = 0;
 
         variableMP.printInfoMsg("degrib gfs global data");
-        variableBinariesEvs[binaryIndex++] = BINARY.degribgfs_generic_05(CW, ICEC, SH, SOILT2, SOILT4, SOILW2, SOILW4, TT, VV, HH, PRMSL,
-                SOILT1, SOILT3, SOILW1, SOILW3, SST_TS, UU, WEASD);
+        variableBinariesEvs[binaryIndex++] = BINARY.degribgfs_generic_05(CW, ICEC, SH, SOILT2, SOILT4, SOILW2, SOILW4,
+                TT, VV, HH, PRMSL, SOILT1, SOILT3, SOILW1, SOILW3, SST_TS, UU, WEASD);
 
         variableMP.printInfoMsg("GFS 2 Model");
-        variableBinariesEvs[binaryIndex++] = BINARY.gfs2model_rrtm(CW, ICEC, SH, SOILT2, SOILT4, SOILW2, SOILW4, TT, VV, HH, PRMSL, SOILT1,
-                SOILT3, SOILW1, SOILW3, SST_TS, UU, WEASD, GFS_file);
+        variableBinariesEvs[binaryIndex++] = BINARY.gfs2model_rrtm(CW, ICEC, SH, SOILT2, SOILT4, SOILW2, SOILW4, TT, VV,
+                HH, PRMSL, SOILT1, SOILT3, SOILW1, SOILW3, SST_TS, UU, WEASD, GFS_file);
 
         variableMP.printInfoMsg("INC RRTM");
         variableBinariesEvs[binaryIndex++] = BINARY.inc_rrtm(GFS_file, deco);
 
         variableMP.printInfoMsg("CNV RRTM");
-        variableBinariesEvs[binaryIndex++] = BINARY.cnv_rrtm(GFS_file, llspl000, outtmp, outmst, outsst, outsno, outcic);
+        variableBinariesEvs[binaryIndex++] = BINARY.cnv_rrtm(GFS_file, llspl000, outtmp, outmst, outsst, outsno,
+                outcic);
 
         variableMP.printInfoMsg("Degrib 0.5 deg sst");
         variableBinariesEvs[binaryIndex++] = BINARY.degribsst(llgsst05, sstfileinPath);
@@ -503,21 +513,22 @@ public class Nmmb {
         variableBinariesEvs[binaryIndex++] = BINARY.vegfrac(llspl000, seamask, vegfrac, vegfracmnth);
 
         variableMP.printInfoMsg("Prepare z0 and initial ustar");
-        variableBinariesEvs[binaryIndex++] = BINARY.z0vegfrac(seamask, landuse, topsoiltype, height, stdh, vegfrac, z0base, z0, ustar);
+        variableBinariesEvs[binaryIndex++] = BINARY.z0vegfrac(seamask, landuse, topsoiltype, height, stdh, vegfrac,
+                z0base, z0, ustar);
 
         variableMP.printInfoMsg("Interpolate to model grid and execute allprep (fcst)");
-        variableBinariesEvs[binaryIndex++] = BINARY.allprep(llspl000, llgsst05, sst05, height, seamask, stdh, deeptemperature, snowalbedo,
-                z0, z0base, landuse, landusenew, topsoiltype, vegfrac, albedorrtm, llgsst, llgsno, llgcic, llsmst, llstmp, albedorrtmcorr,
-                dzsoil, tskin, sst, snow, snowheight, cice, seamaskcorr, landusecorr, landusenewcorr, topsoiltypecorr, vegfraccorr, z0corr,
-                z0basecorr, emissivity, canopywater, frozenprecratio, smst, sh2o, stmp, dsg, fcst, albedo, ustar, fcstDir, bocoPrefix,
-                llsplPrefix);
+        variableBinariesEvs[binaryIndex++] = BINARY.allprep(llspl000, llgsst05, sst05, height, seamask, stdh,
+                deeptemperature, snowalbedo, z0, z0base, landuse, landusenew, topsoiltype, vegfrac, albedorrtm, llgsst,
+                llgsno, llgcic, llsmst, llstmp, albedorrtmcorr, dzsoil, tskin, sst, snow, snowheight, cice, seamaskcorr,
+                landusecorr, landusenewcorr, topsoiltypecorr, vegfraccorr, z0corr, z0basecorr, emissivity, canopywater,
+                frozenprecratio, smst, sh2o, stmp, dsg, fcst, albedo, ustar, fcstDir, bocoPrefix, llsplPrefix);
 
         variableMP.printInfoMsg("Prepare the dust related variable (soildust)");
         variableBinariesEvs[binaryIndex++] = BINARY.readpaulsource(seamask, source, sourceNETCDF, sourceNCIncludeDir);
 
         variableMP.printInfoMsg("Dust Start");
-        variableBinariesEvs[binaryIndex++] = BINARY.dust_start(llspl000, soildust, snow, topsoiltypecorr, landusecorr, landusenewcorr,
-                kount_landuse, kount_landusenew, vegfrac, height, seamask, source, z0corr, roughness);
+        variableBinariesEvs[binaryIndex++] = BINARY.dust_start(llspl000, soildust, snow, topsoiltypecorr, landusecorr,
+                landusenewcorr, kount_landuse, kount_landusenew, vegfrac, height, seamask, source, z0corr, roughness);
 
         /* Wait for binaries completion and check exit value *****************************/
         for (int i = 0; i < variableBinariesEvs.length; ++i) {
@@ -559,9 +570,10 @@ public class Nmmb {
             if ((file.getName().startsWith("lai") && file.getName().endsWith(".dat"))
                     || (file.getName().startsWith("pftp_") && file.getName().endsWith(".dat"))
                     || (file.getName().startsWith("PET") && file.getName().endsWith("txt"))
-                    || (file.getName().startsWith("PET") && file.getName().endsWith("File")) || (file.getName().startsWith("boco."))
-                    || (file.getName().startsWith("boco_chem.")) || (file.getName().startsWith("nmm_b_history."))
-                    || (file.getName().startsWith("tr")) || (file.getName().startsWith("RRT")) || (file.getName().endsWith(".TBL"))
+                    || (file.getName().startsWith("PET") && file.getName().endsWith("File"))
+                    || (file.getName().startsWith("boco.")) || (file.getName().startsWith("boco_chem."))
+                    || (file.getName().startsWith("nmm_b_history.")) || (file.getName().startsWith("tr"))
+                    || (file.getName().startsWith("RRT")) || (file.getName().endsWith(".TBL"))
                     || (file.getName().startsWith("fcstdone.")) || (file.getName().startsWith("restartdone."))
                     || (file.getName().startsWith("nmmb_rst_")) || (file.getName().startsWith("nmmb_hst_"))) {
 
@@ -580,7 +592,8 @@ public class Nmmb {
                 // Copy file
                 String targetPath = NMMBEnvironment.UMO_OUT + file.getName();
                 if (!FileManagement.copyFile(file.getAbsolutePath(), targetPath)) {
-                    throw new TaskExecutionException("[ERROR] Error copying file from " + file.getName() + " to " + targetPath);
+                    throw new TaskExecutionException(
+                            "[ERROR] Error copying file from " + file.getName() + " to " + targetPath);
                 }
             }
         }
@@ -589,7 +602,8 @@ public class Nmmb {
         String chemicRegTarget = NMMBEnvironment.UMO_OUT + "chemic-reg";
         if (!FileManagement.copyFile(chemicRegSrc, chemicRegTarget)) {
             // TODO: Really no error when file does not exist?
-            LOGGER_UMO_MODEL.debug("Cannot copy file from " + chemicRegSrc + " to " + chemicRegTarget + ". Skipping...");
+            LOGGER_UMO_MODEL
+                    .debug("Cannot copy file from " + chemicRegSrc + " to " + chemicRegTarget + ". Skipping...");
         }
 
         String gwdSrc = NMMBEnvironment.OUTPUT + "GWD.bin";
@@ -602,13 +616,15 @@ public class Nmmb {
         String inputDomain1Src = NMMBEnvironment.OUTPUT + "fcst";
         String inputDomain1Target = NMMBEnvironment.UMO_OUT + "input_domain_01";
         if (!FileManagement.copyFile(inputDomain1Src, inputDomain1Target)) {
-            throw new TaskExecutionException("[ERROR] Error copying file from " + inputDomain1Src + " to " + inputDomain1Target);
+            throw new TaskExecutionException(
+                    "[ERROR] Error copying file from " + inputDomain1Src + " to " + inputDomain1Target);
         }
 
         String inputDomain2Src = NMMBEnvironment.OUTPUT + "soildust";
         String inputDomain2Target = NMMBEnvironment.UMO_OUT + "main_input_filename2";
         if (!FileManagement.copyFile(inputDomain2Src, inputDomain2Target)) {
-            throw new TaskExecutionException("[ERROR] Error copying file from " + inputDomain2Src + " to " + inputDomain2Target);
+            throw new TaskExecutionException(
+                    "[ERROR] Error copying file from " + inputDomain2Src + " to " + inputDomain2Target);
         }
 
         // Copy aerosols scavenging coeff
@@ -666,14 +682,14 @@ public class Nmmb {
             String historySrc = NMMBEnvironment.OUTNMMB + nmmbParams.getCase() + File.separator + "history_INIT.hhh";
             String historyTarget = NMMBEnvironment.UMO_OUT + "history_INIT.hhh";
             if (!FileManagement.copyFile(historySrc, historyTarget)) {
-                throw new TaskExecutionException("[ERROR] Error copying file from " + historySrc + " to " + historyTarget);
+                throw new TaskExecutionException(
+                        "[ERROR] Error copying file from " + historySrc + " to " + historyTarget);
             }
         }
     }
 
     /**
      * Performs the UMO Model simulation step
-     * 
      */
     private static void doUMOModel(NMMBParameters nmmbParams, Date currentDate) throws TaskExecutionException {
         LOGGER_UMO_MODEL.info("Enter UMO Model process");
@@ -707,13 +723,14 @@ public class Nmmb {
 
     /**
      * Performs the POST step
-     * 
      */
     private static void doPost(NMMBParameters nmmbParams, Date currentDate) throws TaskExecutionException {
         // Define model output folder by case and date
         String currentDateSTR = NMMBConstants.STR_TO_DATE.format(currentDate);
-        String hourSTR = (nmmbParams.getHour() < 10) ? "0" + String.valueOf(nmmbParams.getHour()) : String.valueOf(nmmbParams.getHour());
-        String folderOutput = NMMBEnvironment.OUTNMMB + nmmbParams.getCase() + File.separator + currentDateSTR + hourSTR + File.separator;
+        String hourSTR = (nmmbParams.getHour() < 10) ? "0" + String.valueOf(nmmbParams.getHour())
+                : String.valueOf(nmmbParams.getHour());
+        String folderOutput = NMMBEnvironment.OUTNMMB + nmmbParams.getCase() + File.separator + currentDateSTR + hourSTR
+                + File.separator;
 
         LOGGER_POST.info("Postproc_carbono process for DAY: " + currentDateSTR);
 
@@ -752,9 +769,7 @@ public class Nmmb {
     /**
      * Main NMMB Workflow
      * 
-     * @param args
-     *            args[0] : Configuration file path
-     * 
+     * @param args args[0] : Configuration file path
      * @throws MainExecutionException
      */
     public static void main(String[] args) throws MainExecutionException {
@@ -816,7 +831,9 @@ public class Nmmb {
                 try {
                     doVariable(nmmbParams, currentDate);
                 } catch (TaskExecutionException tee) {
-                    LOGGER_VARIABLE.error("[ERROR] Task exception on variable phase at date " + currentDateSTR + ". Aborting...", tee);
+                    LOGGER_VARIABLE.error(
+                            "[ERROR] Task exception on variable phase at date " + currentDateSTR + ". Aborting...",
+                            tee);
                     throw new MainExecutionException(tee);
                 } finally {
                     Long endVariable = System.currentTimeMillis();
@@ -832,7 +849,9 @@ public class Nmmb {
                 try {
                     doUMOModel(nmmbParams, currentDate);
                 } catch (TaskExecutionException tee) {
-                    LOGGER_UMO_MODEL.error("[ERROR] Task exception on UMO Model phase at date " + currentDateSTR + ". Aborting...", tee);
+                    LOGGER_UMO_MODEL.error(
+                            "[ERROR] Task exception on UMO Model phase at date " + currentDateSTR + ". Aborting...",
+                            tee);
                     throw new MainExecutionException(tee);
                 } finally {
                     Long endUMO = System.currentTimeMillis();
@@ -849,7 +868,8 @@ public class Nmmb {
                 try {
                     doPost(nmmbParams, currentDate);
                 } catch (TaskExecutionException tee) {
-                    LOGGER_POST.error("[ERROR] Task exception on Post phase at date " + currentDateSTR + ". Aborting...", tee);
+                    LOGGER_POST.error(
+                            "[ERROR] Task exception on Post phase at date " + currentDateSTR + ". Aborting...", tee);
                     throw new MainExecutionException(tee);
                 } finally {
                     Long endPost = System.currentTimeMillis();
@@ -864,7 +884,7 @@ public class Nmmb {
             // Getting next simulation day
             currentDate = Date.from(currentDate.toInstant().plusSeconds(NMMBConstants.ONE_DAY_IN_SECONDS));
         }
-        
+
         // Print execution time
         Long endTime = System.currentTimeMillis();
         LOGGER_MAIN.info("[TIME] TOTAL START   = " + startTime);
