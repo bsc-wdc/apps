@@ -1,12 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>sort_by_key</artifactId>
 	<packaging>jar</packaging>
 
 	<parent>
-        <groupId>es.bsc.compss.apps.java</groupId>
+		<groupId>es.bsc.compss.apps.java</groupId>
 		<artifactId>compss-apps-java</artifactId>
 		<version>2.4</version>
 		<relativePath>../..</relativePath>
@@ -17,28 +18,28 @@
 	<description>Sort By Key application</description>
 	<url>http://compss.bsc.es/projects/bar/wiki/application_pages/apps/java/sort_by_key</url>
 	<dependencies>
-        <dependency>
-            <groupId>es.bsc.compss</groupId>
-            <artifactId>compss-api</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>es.bsc.compss</groupId>
+			<artifactId>compss-api</artifactId>
+		</dependency>
 	</dependencies>
 	<repositories>
 
-            <repository>
-                <snapshots>
-                    <enabled>false</enabled>
-                </snapshots>
-                <id>central</id>
-                <name>Central Repository</name>
-                <url>http://repo1.maven.apache.org/maven2</url>
-           </repository>
-           <repository>
-                <id>compss-repo</id>
-                <name>BSC Workflows and Distributed Computing group</name>
-                <url>http://compss.bsc.es/artifactory/libs-release</url>
-           </repository>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>http://repo1.maven.apache.org/maven2</url>
+		</repository>
+		<repository>
+			<id>compss-repo</id>
+			<name>BSC Workflows and Distributed Computing group</name>
+			<url>http://compss.bsc.es/artifactory/libs-release</url>
+		</repository>
 
-        </repositories>
+	</repositories>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -49,7 +50,7 @@
 				<configuration>
 					<source>${maven.compiler.source}</source>
 					<target>${maven.compiler.target}</target>
-                                </configuration>
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -59,40 +60,40 @@
 					<execution>
 						<id>copy</id>
 						<phase>validate</phase>
-						 <goals> 
-		                                	<goal>copy-dependencies</goal> 
-		                           	 </goals> 
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/lib</outputDirectory> 
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
 							<silent>true</silent>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 			<plugin>
-                                <artifactId>maven-resources-plugin</artifactId>
-                                <version>2.6</version>
-                                <executions>
-                                        <execution>
-                                                <id>copy-final-jar</id>
-                                                <phase>package</phase>
-                                                <goals>
-                                                        <goal>copy-resources</goal>
-                                                </goals>
-                                                <configuration>
-                                                        <outputDirectory>${basedir}</outputDirectory>
-                                                        <resources>
-                                                                <resource>
-                                                                        <directory>${project.build.directory}</directory>
-                                                                        <includes>
-                                                                                <include>${project.artifactId}.jar</include>
-                                                                        </includes>
-                                                                </resource>
-                                                        </resources>
-                                                </configuration>
-                                        </execution>
-                                </executions>
-                        </plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>copy-final-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.build.directory}</directory>
+									<includes>
+										<include>${project.artifactId}.jar</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
 		</plugins>
 	</build>
