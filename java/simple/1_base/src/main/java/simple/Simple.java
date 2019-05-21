@@ -40,7 +40,9 @@ public class Simple {
 
 		
 		// Execute increment (c -> 2)
-		SimpleImpl.increment(counterName);
+		for (int i = 0; i < initialValue; i++) {
+            SimpleImpl.increment(counterName);
+        }
 
 
 		// Open the file and print final counter value (should be 2)

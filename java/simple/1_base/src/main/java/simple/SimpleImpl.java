@@ -27,6 +27,7 @@ public class SimpleImpl {
 	public static void increment(String counterFile) {
 		try
 		{
+            Thread.sleep(1000);
 			FileInputStream fis = new FileInputStream(counterFile);
 			int count = fis.read();
 			fis.close();
@@ -43,6 +44,9 @@ public class SimpleImpl {
 		{
 			ioe.printStackTrace();
 		}
+        catch(InterruptedException ie){
+			ie.printStackTrace();
+        }
 	}
 	
 }

@@ -1,3 +1,684 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ccc0f62b98bb886bce9d5acd05f6d868c5f7512d3c3a24aac70b05add345fec3
-size 61884
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
+COMP Superscalar
+
+OVERVIEW: 
+COMP Superscalar (COMPSs) is a programming model which aims to ease the development of applications for distributed infrastructures, such as Clusters, Grids and Clouds. COMP superscalar also features a runtime system that exploits the inherent parallelism of applications at execution time.
+
+For the sake of programming productivity, the COMPSs model has the following key characteristics:
+
+Sequential programming: COMPSs programmers do not need to deal with the typical duties of parallelization and distribution, such as thread creation and synchronization, data distribution, messaging or fault tolerance. Instead, the model is based on sequential programming, which makes it appealing to users that either lack parallel programming expertise or are looking for better programmability.
+Infrastructure unaware: COMPSs offers a model that abstracts the application from the underlying distributed infrastructure. Hence, COMPSs programs do not include any detail that could tie them to a particular platform, like deployment or resource management. This makes applications portable between infrastructures with diverse characteristics.
+Standard programming languages: COMPSs is based on the popular programming language Java, but also offers language bindings for Python and C/C++ applications. This facilitates the learning of the model, since programmers can reuse most of their previous knowledge.
+APIs: In the case of COMPSs applications in Java, the model does not require to use any special API call, pragma or construct in the application; everything is pure standard Java syntax and libraries. With regard the Python and C/C++ bindings, a small set of API calls should be used on the COMPSs applications. 
+OBJECTIVES: 
+The last years have witnessed unprecedented changes in parallel and distributed infrastructures. Parallel multi-core architectures have gained widespread use; the ever-growing need of scientific applications for computing and storage capabilities has motivated the appearance of Grids; Clouds have emerged by combining virtualisation technologies, service-orientation and business models to deliver IT resources on demand over the Internet.
+
+The size and complexity of these new infrastructures poses a challenge for programmers to exploit them. Some of the diffculties are inherent to concurrent and distributed programming, e.g. dealing with threading, messaging, data partitioning and transfer, etc. On the other hand, other issues are related to the singularities of each scenario, like the risk of vendor lock-in when writing an application for a particular Cloud provider.
+
+In the face of such a challenge, programming productivity has become crucial for software developers. There is a strong need for high-productivity programming models and languages, which should provide simple means for writing parallel and distributed applications that can run on current infrastructures without sacrificing performance. In that sense, COMPSs provides a programming model and runtime system for easily developing and parallelising Java applications on distributed infrastructures.
+
+PROJECTS/AREAS: 
+Projects where COMPSs team is currently involved are:
+transPLANT
+Human Brain Project
+EUBrazilCloudConnect
+ASCETiC
+EUROSERVER
+Severo Ochoa
+Previous projects are:
+CoreGRID
+XtreemOS
+VENUS-C
+OPTIMIS
+EUBrazilOpenBio
+ScalaLife
+IS-ENES
+
+ADDITIONAL INFORMATION: 
+Contact
+rosa.m.badia.at.bsc.es
