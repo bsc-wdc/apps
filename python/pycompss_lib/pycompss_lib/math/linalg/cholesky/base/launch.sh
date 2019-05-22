@@ -16,11 +16,12 @@
   # Leave application args on $@
   shift 5
 
+  export ComputingUnits="1"
+
   # Enqueue the application
   enqueue_compss \
     --job_dependency=$jobDependency \
     --num_nodes=$numNodes \
-    --max_tasks_per_node=$tasksPerNode \
     --exec_time=$executionTime \
     --master_working_dir=. \
     --worker_working_dir=gpfs \
@@ -37,5 +38,5 @@
 #       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing MSIZE BSIZE MKL_NUM_THREADS
 #
 # Example:
-#       ./launch.sh None 2 10 16 true 4 512 8
+#       ./launch.sh None 2 10 48 true 4 512 8
 #

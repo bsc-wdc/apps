@@ -15,7 +15,7 @@
     --job_dependency=$1 \
     --exec_time=$3 \
     --num_nodes=$2 \
-    --tasks_per_node=$4 \
+    --max_tasks_per_node=$4 \
     --master_working_dir=$WORK_DIR \
     --worker_working_dir=scratch \
     --library_path=/gpfs/apps/MN3/INTEL/mkl/lib/intel64 \

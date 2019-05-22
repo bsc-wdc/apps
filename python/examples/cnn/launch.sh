@@ -1,13 +1,14 @@
 #!/bin/bash -e
 
+  # WARNING ========================> Needs a Python version with TF
   # Define script directory for relative calls
   scriptDir=$(dirname $0)
 
   # Set common arguments
   jobDependency=None
-  numNodes=2
-  executionTime=5
-  tasksPerNode=16
+  numNodes=5
+  executionTime=120
+  tasksPerNode=48
   tracing=false
   
   # Set arguments

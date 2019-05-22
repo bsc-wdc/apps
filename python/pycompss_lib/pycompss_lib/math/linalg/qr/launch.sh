@@ -5,9 +5,8 @@
 
   # Set common arguments
   jobDependency=None
-  numNodes=2
-  executionTime=5
-  tasksPerNode=48
+  numNodes=5
+  executionTime=30
   tracing=false
 
   # Set arguments
@@ -19,4 +18,4 @@
 
   # Execute specifcversion launch
   # ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
-  ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tracing $appArgs

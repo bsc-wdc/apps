@@ -5,8 +5,8 @@
 
   # Set common arguments
   jobDependency=None
-  numNodes=2
-  executionTime=5
+  numNodes=5
+  executionTime=30
   tasksPerNode=48
   tracing=false
 
