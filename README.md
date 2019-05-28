@@ -35,6 +35,10 @@ apps
   |- datasets				Small datasets for examples 
 
 ```
+## Datasets
+
+The datasets for the applications are on the Capella VM (bsccs1000.int.bsc.es). You can access them through SSH or via browser using the link: http://http://compss.bsc.es/repo/datasets.
+
 
 ## Warnings and MN instructions
 
