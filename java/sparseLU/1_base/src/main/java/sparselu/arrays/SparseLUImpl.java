@@ -109,6 +109,7 @@ public class SparseLUImpl {
         if (block == null)
                 System.out.println("null");
         else {
+            
                 for (int k = 0; k < M*M; k++) {
                         System.out.print(block[k] + " ");
                 }

@@ -59,9 +59,6 @@
     <!-- REPOSITORIES -->
     <repositories>
         <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
             <id>central</id>
             <name>Central Repository</name>
             <url>http://repo1.maven.apache.org/maven2</url>
@@ -144,6 +141,7 @@
 
     <!-- SUB-MODULES -->
     <modules>
+	<module>reverseIndex/1_base</module>    
         <module>blast/1_allone</module>
         <module>blast/2_tree</module>
         <module>blast/3_binary</module>

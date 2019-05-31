@@ -7,15 +7,12 @@ Reverse Index
 [License Agreement]: GPL
 [Platform]: COMPSs
 
-== Implementations ==
-
-reverse.Reverse :
-	Extracts the links from a webpage (.html) using htmlparser.
-
-
-== Execution instructions ==
-
-runcompss -d --classpath=${PWD}/lib/htmllexer-2.1.jar:${PWD}/lib/htmlparser-2.1.jar:${PWD}/reverse.jar reverse.Reverse true /home/mdomingu/git/apps/java/reverseIndex/1_base/test 3 /home/mdomingu/git/apps/java/reverseIndex/1_base/out.txt /tmp
+[Body]
+== Description ==
+Given a directory, this application parses all the files in it and writes all the links found in a result output file.
+Files are distributed in a given number of chunks. Chunks of files are processed in parallel. 
+Later, once processed, chunks are merge to a final result file. Merging tasks are done also in parallel.
+In the result file, after each link appears the filename of the files that contains that link. 
 
 Arguments:
 	1. Debug: if true, prints debug information
@@ -24,16 +21,26 @@ Arguments:
 	4. Output filename: filename for the result file where the application merges all the links found
 	5. Temp directory: directory where the application writes the (*.part) temporary files
 
-== Build ==
-
-Change to the version directory you want to compile and execute:
-
-	mvn clean package
-
-All the .jar files needed by the application will be automatically generated.
 
 == Execution instructions ==
 The test directory under this project contains 3 html pages to be parsed as example.
-We assume that you are going to execute the application in its main directory, so ${PWD} inthis case could be resolved as /PATH_TO_JAVA_APPS/reverseIndex/1_base/ .
+{{{
+export CLASSPATH=$CLASSPATH:/YOUR_PATH_TO/reverseindex.jar
+export CLASSPATH=$CLASSPATH:/YOUR_PATH_TO/htmlparser.jar
+runcompssext --app=reverse.Reverse --project=/YOUR_PATH_TO/project.xml --resources=/YOUR_PATH_TO/resources.xml --cline_args="true /YOUR_PATH_TO/test 3 /YOUR_PATH_TO/results.txt /YOUR_PATH_TO/tmp"
+}}}
 
-runcompss -d --classpath=${PWD}/lib/htmllexer-2.1.jar:${PWD}/lib/htmlparser-2.1.jar:${PWD}/reverse.jar reverse.Reverse true /home/mdomingu/git/apps/java/reverseIndex/1_base/test 3 /home/mdomingu/git/apps/java/reverseIndex/1_base/out.txt /tmp
+
+== Dependencies ==
+
+For compilation and/or execution there are some jars found in the lib directory of this project that could be needed:
+
+* activation.jar
+* commons-compress-1.4.1.jar
+* filterbuilder.jar
+* htmllexer.jar
+* htmlparser.jar
+* sitecapturer.jar
+* tar.jar
+* thumbelina.jar
+

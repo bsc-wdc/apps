@@ -28,7 +28,7 @@
     <!-- PROPERTIES -->
     <properties>
         <!-- COMPSs version -->
-        <compss.version>${project.version}</compss.version>
+	<compss.version>2.4.rc1905</compss.version>
 
         <!-- JUNIT Test -->
         <junit.version>4.12</junit.version>
@@ -67,9 +67,6 @@
     <!-- REPOSITORIES -->
     <repositories>
         <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
             <id>central</id>
             <name>Central Repository</name>
             <url>http://repo1.maven.apache.org/maven2</url>

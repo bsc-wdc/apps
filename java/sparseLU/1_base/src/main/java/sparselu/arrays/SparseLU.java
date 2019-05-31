@@ -39,10 +39,11 @@ public class SparseLU {
     private static void genmat() {
             for (int ii = 0; ii < N; ii++) {
                     for (int jj = 0; jj < N; jj++) {
-                            if (isNull(ii, jj))
+                            if (isNull(ii, jj)) {
                                     _A[ii][jj] = null;
-                            else
+                            } else {
                                     _A[ii][jj] = SparseLUImpl.initBlock(ii, jj, N, M);
+                            }         
                     }
             }
     }
@@ -60,8 +61,8 @@ public class SparseLU {
         System.out.println("MATRIX " + name + ":");
         for (int i = 0; i < N; i++) {
                  for (int j = 0; j < N; j++) {
-                         //blockToDisk(matrix[i][j], i, j, name);
-                        SparseLUImpl.printBlock(matrix[i][j], M);
+                          //blockToDisk(matrix[i][j], i, j, name);
+                        SparseLUImpl.printBlock(matrix[i][j], M);                        
                  }
                  System.out.println("");
          }
