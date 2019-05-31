@@ -21,9 +21,10 @@
     --job_dependency=$jobDependency \
     --num_nodes=$numNodes \
     --exec_time=$executionTime \
-    --max_tasks_per_node=$tasksPerNode \
+    --tasks_per_node=$tasksPerNode \
     --master_working_dir=. \
     --worker_working_dir=scratch \
+    --library_path=/gpfs/apps/MN3/INTEL/mkl/lib/intel64 \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \

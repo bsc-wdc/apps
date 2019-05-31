@@ -26,7 +26,7 @@ import numpy as np
 import sys
 from scipy.special.orthogonal import p_roots
 from pycompss.api.task import task
-from pycompss.functions.reduce import mergeReduce
+from pycompss.functions.reduce import merge_reduce
 
 
 @task(returns=float)
@@ -56,7 +56,7 @@ def gauss_quadrature(m, nIP, a, b, f):
     for i in range(m):
         result = compute_interval(a, b, h, i, f, nIP)
         intervals.append(result)
-    result = mergeReduce(sum_two_areas, intervals)
+    result = merge_reduce(sum_two_areas, intervals)
     result = compss_wait_on(result)
     return result
 

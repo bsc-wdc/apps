@@ -16,6 +16,7 @@
 #
 
 # -*- coding: utf-8 -*-
+#from base.src.tasks import *
 from base.src.tasks import *
 import sys
 

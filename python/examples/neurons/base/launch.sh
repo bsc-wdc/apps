@@ -21,10 +21,9 @@
     --job_dependency=$jobDependency \
     --num_nodes=$numNodes \
     --exec_time=$executionTime \
-    --max_tasks_per_node=$tasksPerNode \
+    --tasks_per_node=$tasksPerNode \
     --tracing=$tracing \
     --lang=python \
-    --pythonpath=${scriptDir} \
     $execFile $@
 
 

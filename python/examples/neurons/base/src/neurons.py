@@ -31,8 +31,8 @@ import time
 from numpy import *
 
 #load experiment and analysis parameters
-from src.experiment_params import num_neurons,num_secs,num_bins
-from src.analysis_params import maxlag,num_surrs
+from experiment_params import num_neurons,num_secs,num_bins
+from analysis_params import maxlag,num_surrs
 
 from pycompss.api.task import task
 from pycompss.api.parameter import *
