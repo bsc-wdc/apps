@@ -57,7 +57,7 @@ public class HMMPfam {
     private static CommandLineArgs clArgs;
     private static int[] dbFragsNumModels = null;
     private static int totalNumModels = 0;
-    private static boolean debug = false;
+    private static boolean debug = true;
 
     static {
         String fDirTmp = "";
