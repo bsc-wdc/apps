@@ -7,7 +7,7 @@ the implementation of new applications and share them with the rest of users.
 
 
 
-## dislib (python)
+## The Distributed Computing Library (python only)
 
 The Distributed Computing Library (dislib) provides distributed algorithms ready to use as a library. So far, dislib is highly focused on machine learning algorithms, and is greatly inspired by scikit-learn. However, other types of numerical algorithms might be added in the future. The main objective of dislib is to facilitate the execution of big data analytics algorithms in distributed platforms, such as clusters, clouds, and supercomputers.
 
