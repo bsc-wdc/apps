@@ -4,7 +4,6 @@ c/Matmul
 c/old
 c/pom.xml
 c/saxpy-compss
-datasets/
 java/blast
 java/geneDetection
 java/hmmer
