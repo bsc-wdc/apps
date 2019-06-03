@@ -1,13 +1,31 @@
 #!/bin/bash -e
 
-  # Define script directory for relative calls
-  scriptDir=$(dirname $0)
+  # Define script variables
+  scriptDir=$(pwd)/$(dirname $0)
+  execFile=${scriptDir}/src/mandel.py
+  appClasspath=${scriptDir}/src/
+  appPythonpath=${scriptDir}/src/
 
-  # Set common arguments
-  tracing=false
-  
-  # Set arguments
-  appArgs="100"
+  # Retrieve arguments
+  tracing=$1
 
-  # Execute specifcversion launch  
-  ${scriptDir}/base/run_local.sh $tracing $appArgs
+  # Leave application args on $@
+  shift 1
+
+  # Enqueue the application
+  runcompss \
+    --tracing=$tracing \
+    --classpath=$appClasspath \
+    --pythonpath=$appPythonpath \
+    --lang=python \
+    $execFile $@
+
+
+######################################################
+# APPLICATION EXECUTION EXAMPLE
+# Call:
+#       ./run_local.sh tracing points
+#
+# Example:
+#       ./run_local.sh false 100
+#

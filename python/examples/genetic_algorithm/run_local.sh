@@ -1,16 +1,33 @@
 #!/bin/bash -e
 
-  # Define script directory for relative calls
-  scriptDir=$(pwd)
+  # Define script variables
+  scriptDir=$(dirname $0)
+  execFile=src/gen.py
+  appClasspath=${scriptDir}/src/
+  appPythonpath=${scriptDir}/src/
 
-  # Set common arguments
-  tracing=false
-  
-  # Set arguments
-  appArgs="10 10 20 10"
+  # Retrieve arguments
+  tracing=$1
+
+  # Leave application args on $@
+  shift 1
+
+  # Enqueue the application
+  runcompss \
+    --tracing=$tracing \
+    --classpath=$appClasspath \
+    --pythonpath=$appPythonpath \
+    --lang=python \
+    $execFile $@
 
 
-  # Execute specific version launch
-  cd base
-  ./run_local.sh $tracing $appArgs
-  cd ..
+######################################################
+# APPLICATION EXECUTION EXAMPLE
+# Call:
+#       ./run_local.sh tracing numInd sizeInd target cycles
+#
+# Example:
+#       ./run_local.sh false 10 10 20 10
+
+#
+

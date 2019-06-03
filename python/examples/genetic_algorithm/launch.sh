@@ -1,17 +1,42 @@
 #!/bin/bash -e
 
-  # Define script directory for relative calls
-  scriptDir=$(dirname $0)
+  # Define script variables
+  scriptDir=$(pwd)/$(dirname $0)
+  execFile=${scriptDir}/src/gen.py
+  appClasspath=${scriptDir}/src/
+  appPythonpath=${scriptDir}/src/
 
-  # Set common arguments
-  jobDependency=None
-  numNodes=2
-  executionTime=30
-  tasksPerNode=16
-  tracing=false
-  
-  # Set arguments
-  appArgs="100 100 200 10"
+  # Retrieve arguments
+  jobDependency=$1
+  numNodes=$2
+  executionTime=$3
+  tasksPerNode=$4
+  tracing=$5
 
-  # Execute specifcversion launch  
-  ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  # Leave application args on $@
+  shift 5
+
+  # Enqueue the application
+  enqueue_compss \
+    --job_dependency=$jobDependency \
+    --num_nodes=$numNodes \
+    --exec_time=$executionTime \
+    --tasks_per_node=$tasksPerNode \
+    --master_working_dir=. \
+    --worker_working_dir=scratch \
+    --library_path=/gpfs/apps/MN3/INTEL/mkl/lib/intel64 \
+    --tracing=$tracing \
+    --classpath=$appClasspath \
+    --pythonpath=$appPythonpath \
+    --lang=python \
+    $execFile $@
+
+
+######################################################
+# APPLICATION EXECUTION EXAMPLE
+# Call:
+#       ./launch jobDependency numNodes executionTime tasksPerNode tracing numInd sizeInd target cycles
+#
+# Example:
+#       ./launch None 2 5 16 false 100 100 200 10
+#

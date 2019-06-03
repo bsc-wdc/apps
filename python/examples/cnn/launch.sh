@@ -1,18 +1,38 @@
 #!/bin/bash -e
 
-  # WARNING ========================> Needs a Python version with TF
-  # Define script directory for relative calls
-  scriptDir=$(dirname $0)
+  # Define script variables
+  scriptDir=$(pwd)/$(dirname $0)
+  execFile=${scriptDir}/src/compss_mnist.py
+  appClasspath=${scriptDir}/src/
+  appPythonpath=${scriptDir}/src/
 
-  # Set common arguments
-  jobDependency=None
-  numNodes=5
-  executionTime=120
-  tasksPerNode=48
-  tracing=false
-  
-  # Set arguments
-  appArgs=". 2"
+  # Retrieve arguments
+  jobDependency=$1
+  numNodes=$2
+  executionTime=$3
+  tracing=$4
 
-  # Execute specifcversion launch  
-  ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  # Leave application args on $@
+  shift 4
+
+  # Enqueue the application
+  enqueue_compss \
+    --job_dependency=$jobDependency \
+    --num_nodes=$numNodes \
+    --exec_time=$executionTime \
+    --max_tasks_per_node=$tasksPerNode \
+    --tracing=$tracing \
+    --classpath=$appClasspath \
+    --pythonpath=$appPythonpath \
+    --lang=python \
+    $execFile $@
+
+
+######################################################
+# APPLICATION EXECUTION EXAMPLE
+# Call:
+#       ./launch jobDependency numNodes executionTime tasksPerNode tracing numModels
+#
+# Example:
+#       ./launch None 2 5 false . 2
+#

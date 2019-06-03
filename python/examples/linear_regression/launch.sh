@@ -2,18 +2,26 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/mnum.py
+  execFile=${scriptDir}/src/linearRegression.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
   # Retrieve arguments
-  tracing=$1
+  jobDependency=$1
+  numNodes=$2
+  executionTime=$3
+  tasksPerNode=$4
+  tracing=$5
 
   # Leave application args on $@
-  shift 1
+  shift 5
 
   # Enqueue the application
-  runcompss \
+  enqueue_compss \
+    --job_dependency=$jobDependency \
+    --num_nodes=$numNodes \
+    --exec_time=$executionTime \
+    --max_tasks_per_node=$tasksPerNode \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
@@ -24,8 +32,10 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run_local.sh tracing num precision
+#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing points fragments plotResult
 #
 # Example:
-#       ./run_local.sh false 16 4096
+#       ./launch.sh None 2 5 48 false 6400000 16 True
 #
+
+

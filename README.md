@@ -6,6 +6,17 @@ Its purpose is to share the applications among the COMPSs users community to eas
 the implementation of new applications and share them with the rest of users.
 
 
+
+## dislib (python)
+
+The Distributed Computing Library (dislib) provides distributed algorithms ready to use as a library. So far, dislib is highly focused on machine learning algorithms, and is greatly inspired by scikit-learn. However, other types of numerical algorithms might be added in the future. The main objective of dislib is to facilitate the execution of big data analytics algorithms in distributed platforms, such as clusters, clouds, and supercomputers.
+
+You can find out more at:
+
+* https://dislib.bsc.es/en/stable/
+
+
+
 ## Application's Folder Structure 
 
 Application are grouped by language.  
@@ -16,17 +27,14 @@ COMPSs using objects and COMPSs with byte arrays and has the following tree dire
 apps
   |- python 
   |    |- app_1
-  |    |    |- version_1
-  |    |    |    |- src                 Application source code
-  |    |    |    |- dist                Application binary or jar
-  |    |    |    |- bin                 External binaries needed by the application
-  |    |    |    |- lib                 External libraries needed by the application
-  |    |    |    |- launch.sh           Execution example (must use enqueue_compss)
-  |    |    |- ...
-  |    |    |- version_n
-  |    |    |- launch.sh                Execution example for automatic process
-  |    |    |- clean.sh                 Cleans the folder for *ALL* versions
-  |    |    |- README                   Brief description of the application
+  |    |    |- src                 Application source code
+  |    |    |- dist                Application binary or jar
+  |    |    |- bin                 External binaries needed by the application
+  |    |    |- lib                 External libraries needed by the application
+  |    |    |- run_local.sh        Execution example for local automatic process
+  |    |    |- launch.sh           Execution example for supercomputer automatic process
+  |    |    |- clean.sh            Cleans the folder 
+  |    |    |- README              Brief description of the application
   |- java
   |    |- app_1
   |    |    | ...

@@ -1,16 +1,32 @@
 #!/bin/bash -e
 
-  # Define script directory for relative calls
-  scriptDir=$(pwd)
+  # Define script variables
+  scriptDir=$(dirname $0)
+  execFile=src/compss_mnist.py
+  appClasspath=${scriptDir}/src/
+  appPythonpath=${scriptDir}/src/
 
-  # Set common arguments
-  tracing=false
-  
-  # Set arguments
-  appArgs=". 2"
+  # Retrieve arguments
+  tracing=$1
+
+  # Leave application args on $@
+  shift 1
+
+  # Enqueue the application
+  runcompss \
+    --tracing=$tracing \
+    --classpath=$appClasspath \
+    --pythonpath=$appPythonpath \
+    --lang=python \
+    $execFile $@
 
 
-  # Execute specific version launch
-  cd base
-  ./run_local.sh $tracing $appArgs
-  cd ..
+######################################################
+# APPLICATION EXECUTION EXAMPLE
+# Call:
+#       ./run_local.sh tracing models_dir numModels 
+#
+# Example:
+#       ./run_local.sh false . 2
+#
+

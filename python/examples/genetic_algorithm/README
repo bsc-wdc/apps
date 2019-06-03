@@ -1,26 +1,12 @@
-This is the Readme for:
-geneticAlgorithm
+---------------------- Genetic Algorithm --------------------------------
 
-[Name]: geneticAlgorithm
-[Contact Person]: support-compss@bsc.es
-[Access Level]: public
-[License Agreement]: Apache2
-[Platform]: COMPSs
+Params:
+- #Individuals: size of the population
+- Size_individual: len(individual)
+- Target: goal sum(sum(individual)-target)/len(populations) aprox 0 
+- LifeCycles: steps
 
-[Body]
-== Description ==
-GeneticAlgorithm
+results:
+/gpfs/projects/bsc19/COMPSs_RESULTS/geneticAlgorithm/results
 
-== Versions ==
-* - base: base version
-== Execution instructions ==                                                                                        
-Usage:                                                                                                                             
-gen.py <numIndividuals> <sizeIndividual> <Target> <LifeCycles>                                                      
-                                                                                                                    
-where:                                                                                                              
-                 * - numIndividuals: number of individuals                                                                    
-                 * - sizeIndividual: dimension of the individual                                                               
-                 * - Target: goal                                                                 
-                 * - lifeCycles: steps                                                                                                                                        
-== Build ==                                                                                                         
-No build is required
+-------------------------------------------------------------------------

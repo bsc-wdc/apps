@@ -2,7 +2,7 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=${scriptDir}/src/mnum.py
+  execFile=${scriptDir}/src/terasort.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
@@ -20,8 +20,10 @@
   enqueue_compss \
     --job_dependency=$jobDependency \
     --num_nodes=$numNodes \
+    --max_tasks_per_node=$tasksPerNode \
     --exec_time=$executionTime \
-    --tasks_per_node=$tasksPerNode \
+    --master_working_dir=. \
+    --worker_working_dir=gpfs \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
@@ -32,8 +34,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing num precision
+#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing numFragments numEntries
 #
 # Example:
-#       ./launch.sh None 2 5 16 false 16 4096
+#       ./launch.sh None 2 5 48 false 10 100
 #

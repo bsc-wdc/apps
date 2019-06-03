@@ -1,9 +1,5 @@
-c/increment
-c/K-means c/K-means/Readme
-c/Matmul
-c/old
-c/pom.xml
-c/saxpy-compss
+c
+python
 java/blast
 java/geneDetection
 java/hmmer
@@ -16,21 +12,4 @@ java/simple
 java/sortByKey
 java/sparseLU
 java/terasort
-pom.xml
-public_apps.txt
-python/examples/cnn
-python/examples/gauss_quadrature
-python/examples/genetic_algorithm
-python/examples/mandelbrot
-python/examples/mnum
-python/examples/neurons
-python/examples/postUpdate.sh
-python/examples/SUMMARY
-python/notebooks
-python/pom.xml
-python/pycompss_lib
-python/pycompss_lib/README.md
-python/requirements.txt
-python/pycompss_lib/run_tests.sh
-python/pycompss_lib/tests
-README.md
+java/pom.xml

@@ -1,18 +1,40 @@
 #!/bin/bash -e
 
-  # Define script directory for relative calls
-  scriptDir=$(dirname $0)
+  # Define script variables
+  scriptDir=$(pwd)/$(dirname $0)
+  execFile=${scriptDir}/src/integration.py
+  appClasspath=${scriptDir}/src/
+  appPythonpath=${scriptDir}/src/
 
-  # Set common arguments
-  jobDependency=None
-  numNodes=2
-  executionTime=5
-  tasksPerNode=16
-  tracing=false
-  
-  # Set arguments
-  appArgs="16 3 0 1"
+  # Retrieve arguments
+  jobDependency=$1
+  numNodes=$2
+  executionTime=$3
+  tasksPerNode=$4
+  tracing=$5
 
-  # Execute specifcversion launch  
-  ${scriptDir}/base/launch.sh $jobDependency $numNodes $executionTime $tasksPerNode $tracing $appArgs
+  # Leave application args on $@
+  shift 5
+
+  # Enqueue the application
+  enqueue_compss \
+    --job_dependency=$jobDependency \
+    --num_nodes=$numNodes \
+    --exec_time=$executionTime \
+    --tasks_per_node=$tasksPerNode \
+    --tracing=$tracing \
+    --classpath=$appClasspath \
+    --pythonpath=$appPythonpath \
+    --lang=python \
+    $execFile $@
+
+
+######################################################
+# APPLICATION EXECUTION EXAMPLE
+# Call:
+#	./launch.sh jobDependency numNodes executionTime tasksPerNode tracing m nip a b
+#
+# Example:
+#	./launch.sh None 2 5 16 false 16 3 0 1
+#
 
