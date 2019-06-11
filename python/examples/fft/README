@@ -1,0 +1,41 @@
+This is the Readme for:
+fft
+
+[Name]: fft
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Fast fourier transform
+
+
+== Execution instructions ==
+
+* Usage in local machine:
+
+    ./run_local.sh <TRACING> <ARRAY_LENGTH>
+
+    - Where:
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <ARRAY_LENGTH>.......... Random array length
+
+     - Example: ./run_local.sh false 256
+
+* Usage in supercomputer:
+
+    ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <ARRAY_LENGTH>
+
+    - Where:
+        <JOB_DEPENDENCY>........ Job dependency (run after the given jobid - None if not needed)
+        <NUM_NODES>............. Number of nodes for the reservation
+        <EXECUTION_TIME>........ Walltime
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <ARRAY_LENGTH>.......... Random array length
+
+    - Example: ./launch.sh None 2 10 true 256
+
+== Build ==
+No build is required
