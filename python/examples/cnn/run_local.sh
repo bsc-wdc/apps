@@ -24,9 +24,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run_local.sh tracing models_dir numModels 
+#       ./run_local.sh <TRACING> <BASE_PATH> <NUM_MODELS>
 #
 # Example:
 #       ./run_local.sh false . 2
 #
-

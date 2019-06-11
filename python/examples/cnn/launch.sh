@@ -20,7 +20,6 @@
     --job_dependency=$jobDependency \
     --num_nodes=$numNodes \
     --exec_time=$executionTime \
-    --max_tasks_per_node=$tasksPerNode \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
@@ -31,8 +30,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch jobDependency numNodes executionTime tasksPerNode tracing numModels
+#       ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <BASE_PATH> <NUM_MODELS>
 #
 # Example:
-#       ./launch None 2 5 false . 2
+#       ./launch.sh None 2 5 false . 2
 #
