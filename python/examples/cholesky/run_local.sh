@@ -27,8 +27,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run_local.sh tracing MSIZE BSIZE MKL_NUM_THREADS
+#       ./run_local.sh <TRACING> <COMPUTING_UNITS> <MSIZE> <BSIZE> <MKL_NUM_THREADS>
 #
 # Example:
-#       ./run_local.sh false 4 8 4
+#       ./run_local.sh false 1 4 8 4
 #
