@@ -1,14 +1,35 @@
 
 === Applications ===
 
-- gaussQuadrature: Numerical integration
-- linearRegression: linear regression
-- matmul: matrix multiplication
-- mnum: root finding numerical methods with high precision
-- mandelbrot: Mandelbrot Fractal 
-- geneticAlgorithm: genetic algorithm
-- kmeans: clustering method
-- PCA: principal componen analysis
-- max: find point with maximum norm
-- sortNumbers: sort n numbers
-- wordcount: Count the words appearances.
+=========
+* PUBLIC:
+=========
+
+- cholesky: Cholesky factorization
+- fft: Fast fourier transform
+- gauss_quadrature: Numerical integration
+- genetic_algorithm: Genetic algorithm
+- kmeans-redis: Kmeans using Redis
+- linear_regression: Linear regression
+- mandelbrot: Mandelbrot Fractal
+- matmul-redis: Matrix multiplication using Redis
+- max_norm: Find point with maximum norm
+- mnum: Root finding numerical methods with high precision
+- neurons: Neuron
+- qr: QR factorization
+- sort: Parallel sort
+- sort_by_key: Sort by key
+- terasort: Terasort
+- wordcount: Count the words appearances
+
+==========
+* PRIVATE:
+==========
+
+- cnn: Convolutional neural network
+- gaia: Gaia
+- modelfactors: Paraver traces analysis
+- ngsa_mini: NGS Anallyzer-Mini for PyCOMPSs
+- nmmb: Earth dust simulator (currently known as NMMB-MONARCH)
+- ocean_heat_content: Ocean heat simulator
+-
