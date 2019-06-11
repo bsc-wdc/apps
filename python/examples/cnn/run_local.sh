@@ -12,6 +12,8 @@
   # Leave application args on $@
   shift 1
 
+  export LC_ALL="en_US.UTF-8"
+
   # Enqueue the application
   runcompss \
     --tracing=$tracing \
