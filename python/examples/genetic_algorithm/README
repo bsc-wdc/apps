@@ -1,12 +1,47 @@
----------------------- Genetic Algorithm --------------------------------
+This is the Readme for:
+Genetic Algorithm
 
-Params:
-- #Individuals: size of the population
-- Size_individual: len(individual)
-- Target: goal sum(sum(individual)-target)/len(populations) aprox 0 
-- LifeCycles: steps
+[Name]: genetic_algorithm
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
 
-results:
-/gpfs/projects/bsc19/COMPSs_RESULTS/geneticAlgorithm/results
+[Body]
+== Description ==
+Genetic algorithm
 
--------------------------------------------------------------------------
+
+== Execution instructions ==
+
+* Usage in local machine:
+
+    ./run_local.sh <TRACING> <NUM_IND> <SIZE_IND> <TARGET> <CYCLES>
+
+    - Where:
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <NUM_IND>............... Size of population (# individuals)
+        <SIZE_IND>.............. Size of individual (len(individual))
+        <TARGET>................ Boal sum(sum(individual)-target)/len(populations) aprox 0
+        <CYCLES>................ Steps
+
+     - Example: ./run_local.sh false 10 10 20 10
+
+* Usage in supercomputer:
+
+    ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <NUM_IND> <SIZE_IND> <TARGET> <CYCLES>
+
+    - Where:
+        <JOB_DEPENDENCY>........ Job dependency (run after the given jobid - None if not needed)
+        <NUM_NODES>............. Number of nodes for the reservation
+        <EXECUTION_TIME>........ Walltime
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <NUM_IND>............... Size of population (# individuals)
+        <SIZE_IND>.............. Size of individual (len(individual))
+        <TARGET>................ Boal sum(sum(individual)-target)/len(populations) aprox 0
+        <CYCLES>................ Steps
+
+    - Example: ./launch.sh None 2 5 false 100 100 200 10
+
+== Build ==
+No build is required
