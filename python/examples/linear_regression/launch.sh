@@ -10,18 +10,16 @@
   jobDependency=$1
   numNodes=$2
   executionTime=$3
-  tasksPerNode=$4
-  tracing=$5
+  tracing=$4
 
   # Leave application args on $@
-  shift 5
+  shift 4
 
   # Enqueue the application
   enqueue_compss \
     --job_dependency=$jobDependency \
     --num_nodes=$numNodes \
     --exec_time=$executionTime \
-    --max_tasks_per_node=$tasksPerNode \
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
@@ -32,10 +30,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch.sh jobDependency numNodes executionTime tasksPerNode tracing points fragments plotResult
+#       ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <NUM_POINTS> <FRAGMENTS> <PLOT_RESULTS>
 #
 # Example:
-#       ./launch.sh None 2 5 48 false 6400000 16 True
+#       ./launch.sh None 2 5 false 6400000 16 True
 #
-
-

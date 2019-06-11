@@ -24,7 +24,7 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run_local.sh tracing points fragments plotResult
+#       ./run_local.sh <TRACING> <NUM_POINTS> <FRAGMENTS> <PLOT_RESULTS>
 #
 # Example:
 #       ./run_local.sh false 1024 8 True
