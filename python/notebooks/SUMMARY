@@ -8,7 +8,7 @@
 - cholesky: Cholesky factorization
 - kmeans: Kmeans clustering
 - kmeans_storage: Kmeans clustering using Redis
-- linearRegression: Linear regression
+- linear_regression: Linear regression
 - mandelbrot: Mandelbrot Fractal
 - matmul: Matrix multiplication
 - pca: Principal component analysis

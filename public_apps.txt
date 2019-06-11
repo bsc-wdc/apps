@@ -18,7 +18,7 @@ python/examples/wordcount
 python/notebooks/cholesky
 python/notebooks/kmeans
 python/notebooks/kmeans_storage
-python/notebooks/linearRegression
+python/notebooks/linear_regression
 python/notebooks/mandelbrot
 python/notebooks/matmul
 python/notebooks/pca
