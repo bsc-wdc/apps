@@ -14,8 +14,16 @@
 
   # Launch runcompss with all the appropriate arguments
   runcompss --lang=python \
-  --pythonpath=$(pwd)/src \
+  --pythonpath=${scriptDir}/src \
   --graph \
   --tracing=$tracing \
   $execFile $@ --check_result
 
+  ######################################################
+  # APPLICATION EXECUTION EXAMPLE
+  # Call:
+  #       ./run_local_less.sh <TRACING> -b <NUM_BLOCKS> -e <NUM_ELEMENTS>
+  #
+  # Example:
+  #       ./run_local_less.sh false -b 4 -e 4
+  #

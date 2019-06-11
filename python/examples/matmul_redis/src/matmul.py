@@ -1,6 +1,8 @@
 '''A matrix multiplication implementation with (optionally) PSCOs
-author: Sergio Rodriguez Guasch < sergio rodriguez at bsc dot es > 
+author: Sergio Rodriguez Guasch < sergio rodriguez at bsc dot es >
 '''
+
+import numpy as np
 from pycompss.api.task import task
 from pycompss.api.parameter import *
 
@@ -9,7 +11,6 @@ def multiply(A, B, C):
   '''Multiplies two blocks and acumulates the result in an INOUT
   matrix
   '''
-  import numpy as np
   C += np.dot(A.block, B.block)
 
 def dot(A, B, C, set_barrier = False):
@@ -24,7 +25,7 @@ def dot(A, B, C, set_barrier = False):
         multiply(A[i][k], B[k][j], C[i][j])
   if set_barrier:
     from pycompss.api.api import compss_barrier
-    compss_barrier()   
+    compss_barrier()
 
 
 '''Code for experimental purposes.
@@ -53,7 +54,6 @@ def parse_args():
 def generate_block(size, num_blocks, seed = 0, psco = False, use_storage = True, set_to_zero = False):
   '''Generate a square block of given size.
   '''
-  import numpy as np
   np.random.seed(seed)
   b = np.matrix(
     np.random.random((size, size)) if not set_to_zero else np.zeros((size, size))
@@ -123,7 +123,6 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
         Dij = compss_wait_on(Dij)
         for k in range(num_blocks):
           Dij += np.dot(A[i][k].block, B[k][j].block)
-        import numpy as np
         if not np.allclose(Cij, Dij):
           print('Block %d-%d gives different products!' % (i, j))
           return
