@@ -6,8 +6,7 @@
 =========
 
 - cholesky: Cholesky factorization
-- kmeans: Kmeans clustering
-- kmeans_storage: Kmeans clustering using Redis
+- kmeans: Kmeans clustering (includes base and redis versions)
 - linear_regression: Linear regression
 - mandelbrot: Mandelbrot Fractal
 - matmul: Matrix multiplication
