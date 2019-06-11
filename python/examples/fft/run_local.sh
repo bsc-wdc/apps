@@ -2,18 +2,15 @@
 
   # Define script variables
   scriptDir=$(pwd)/$(dirname $0)
-  execFile=src/cholesky.py
+  execFile=src/fft.py
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
   # Retrieve arguments
   tracing=$1
-  ComputingUnits=$2
 
   # Leave application args on $@
-  shift 2
-
-  export ComputingUnits=${ComputingUnits}
+  shift 1
 
   # Enqueue the application
   runcompss \

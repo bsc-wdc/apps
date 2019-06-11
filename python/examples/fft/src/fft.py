@@ -20,6 +20,7 @@
 import sys
 import numpy as np
 from pycompss.api.task import task
+from pycompss.api.api import compss_wait_on
 
 
 def fft(a):
@@ -85,4 +86,5 @@ if __name__ == "__main__":
     arr_length = int(sys.argv[1])
     arr = np.random.rand(arr_length)
     result = fft(arr)
+    result = compss_wait_on(result)
     print("Result: " + str(result))
