@@ -24,7 +24,7 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run_local.sh tracing num precision
+#       ./run_local.sh <TRACING> <POINTS> <PRECISION>
 #
 # Example:
 #       ./run_local.sh false 16 4096

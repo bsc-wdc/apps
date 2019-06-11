@@ -113,13 +113,14 @@ class MethodP(object):
 class SMethodP(MethodP):
 
     from pycompss.api.task import task
+    from pycompss.api.parameter import IN
     from decimal import Decimal
 
     def __init__(self, fun, err, prec, nump):
         MethodP.__init__(self, fun, err, prec, nump)
         self.rho = (np.sqrt(5.0)+1)/2
 
-    @task(returns=Decimal, priority=True, isModifier=False)
+    @task(returns=Decimal, priority=True, target_direction=IN)
     def iterate(self, x0, x1, f0, f1):
         from decimal import Decimal, getcontext
         getcontext().prec = self.prec

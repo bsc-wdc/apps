@@ -35,6 +35,7 @@ class Error(object):
 class AError(Error):
 
     from pycompss.api.task import task
+    from pycompss.api.parameter import IN
     from decimal import Decimal
 
     @task(returns=Decimal)
@@ -48,7 +49,7 @@ class AError(Error):
         else:
             return Decimal(xn1-x1)
 
-    @task(returns=Decimal, isModifier=False)
+    @task(returns=Decimal, target_direction=IN)
     def decimals(self, e1, e0):
         return -self.p*(abs(e1/e0)).log10()
 
@@ -57,7 +58,7 @@ class AError(Error):
         rho = Decimal(rho)
         self.p = Decimal((rho*rho) / (rho-Decimal(1.0)))
 
-    @task(returns=int, isModifier=False)
+    @task(returns=int, target_direction=IN)
     def converge(self, d):
         return d > self.digits
 
