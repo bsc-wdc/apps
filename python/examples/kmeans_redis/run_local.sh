@@ -6,7 +6,7 @@
   appClasspath=${scriptDir}/src/
   appPythonpath=${scriptDir}/src/
 
-  
+
   # Retrieve arguments
   tracing=$1
 
@@ -19,12 +19,22 @@
   # Launch the application
   runcompss \
   --storage_impl=redis \
-  --pythonpath=$(pwd)/src \
+  --classpath=$appClasspath \
+  --pythonpath=$appPythonpath \
   --tracing=$tracing \
-  --storage_conf=$(pwd)/storage_conf.txt \
+  --storage_conf=${scriptDir}/storage_conf.txt \
   -t \
   -g \
-  $(pwd)/src/kmeans.py $@ --use_storage
+  $execFile $@ --use_storage
 
   # Kill the storage backend
   pkill redis
+
+#####################################################
+# APPLICATION EXECUTION EXAMPLE
+# Call:
+#       ./run_local.sh <TRACING> -n <NUM_POINTS> -d <DIMENSIONS> -c <CENTRES> -f <FRAGMENTS>
+#
+# Example:
+#       ./run_local.sh false -n 160 -d 3 -c 4 -f 4
+#

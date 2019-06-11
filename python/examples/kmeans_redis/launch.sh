@@ -55,3 +55,5 @@
   # -l / --lnorm Norm of vectors (l1 or l2)
   # --plot_result Plot clustering. Only works if dimensions = 2
   # --use_storage
+
+  # ./launch.sh None 3 5 16 false 160 3 4 4
