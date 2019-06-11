@@ -20,13 +20,11 @@
     --lang=python \
     $execFile $@
 
-
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run_local.sh tracing numP sim numFrag 
+#       ./run_local.sh <TRACING> <POINTS> <DIM> <FRAGMENTS>
 #
 # Example:
 #       ./run_local.sh false 16000 3 16
 #
-
