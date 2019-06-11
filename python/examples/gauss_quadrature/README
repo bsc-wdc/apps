@@ -13,17 +13,32 @@ Composite Gauss Quadrature integration. Computes numerical integration
 dividing the domain ([a, b]) in m subintervals using a defined number of
 integration points at each subinterval.
 
-== Versions ==
-* - base: base version
-
 == Execution instructions ==
-Usage:
-integration.py <m> <nIP> <a> <b>
+* Usage in local machine:
 
-where:
-                 * - m: number of intervals
-                 * - nIP: number of integration points
-                 * - [a,b]: integration domain
+    ./run_local.sh <TRACING> <M> <NIP> <A> <B>
+
+    - Where:
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <M>..................... Number of intervals
+        [<A>, <B>].............. Integration domain
+
+     - Example: ./run_local.sh false 16 3 0 1
+
+* Usage in supercomputer:
+
+    ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <M> <NIP> <A> <B>
+
+    - Where:
+        <JOB_DEPENDENCY>........ Job dependency (run after the given jobid - None if not needed)
+        <NUM_NODES>............. Number of nodes for the reservation
+        <EXECUTION_TIME>........ Walltime
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <M>..................... Number of intervals
+        [<A>, <B>].............. Integration domain
+
+    - Example: ./launch.sh None 2 5 false 16 3 0 1
+
 
 == Build ==
 No build is required

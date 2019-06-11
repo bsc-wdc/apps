@@ -24,9 +24,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#	./run_local.sh tracing m nip a b
+#	      ./run_local.sh <TRACING> <M> <NIP> <A> <B>
 #
 # Example:
-#	./run_local.sh false 16 3 0 1
+#	      ./run_local.sh false 16 3 0 1
 #
-
