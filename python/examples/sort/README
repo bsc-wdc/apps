@@ -1,17 +1,47 @@
--------------
-Parallel Sort
--------------
+This is the Readme for:
+Parallel sort
 
-Parameters:
+[Name]: sort
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
 
-    - File data
-    - number of fragments
-    - numbers per range
+[Body]
+== Description ==
+Parallel sort
 
-Example usage:
 
-# Supercomputer:
-./launch.sh None 2 5 True /gpfs/projects/bsc19/COMPSs_APPS/sortNumbers/data/Random6000.txt 5 600
+== Execution instructions ==
 
-# Local (run the generator consider the output path for running):
-./run_local.sh True /path/to/dataset.txt 5 600
+* Usage in local machine:
+
+    ./run_local.sh <TRACING> <FILE> <NUM_FRAGMENTS> <NUM_RANGE>
+
+    - Where:
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <FILE>.................. File to sort
+        <NUM_FRAGMENTS>......... Number of fragments
+        <NUM_RANGE>............. Numbers per range
+
+     - Example:
+             generator/./generate_dataset.sh 102400 200000 $(pwd)/dataset.txt
+             ./run_local.sh false $(pwd)/dataset.txt 5 600./run_local.sh false 1 4 8 4
+
+* Usage in supercomputer:
+
+    ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <FILE> <NUM_FRAGMENTS> <NUM_RANGE>
+
+    - Where:
+        <JOB_DEPENDENCY>........ Job dependency (run after the given jobid - None if not needed)
+        <NUM_NODES>............. Number of nodes for the reservation
+        <EXECUTION_TIME>........ Walltime
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <FILE>.................. File to sort
+        <NUM_FRAGMENTS>......... Number of fragments
+        <NUM_RANGE>............. Numbers per range
+
+    - Example: ./launch.sh None 2 5 false /gpfs/projects/bsc19/COMPSs_DATASETS/sortNumbers/Random6000.txt 5 600
+
+== Build ==
+No build is required

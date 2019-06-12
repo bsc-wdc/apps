@@ -13,7 +13,7 @@
   tracing=$4
 
   # Leave application args on $@
-  shift 5
+  shift 4
 
   # Enqueue the application
   enqueue_compss \
@@ -32,8 +32,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch jobDependency numNodes executionTime tracing file numFrag numRange
+#       ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <FILE> <NUM_FRAGMENTS> <NUM_RANGE>
 #
 # Example:
-#       ./launch None 2 5 false /gpfs/projects/bsc19/COMPSs_DATASETS/sortNumbers/Random6000.txt 5 600
+#       ./launch.sh None 2 5 false /gpfs/projects/bsc19/COMPSs_DATASETS/sortNumbers/Random6000.txt 5 600
 #

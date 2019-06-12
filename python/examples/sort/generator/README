@@ -10,4 +10,4 @@ Parameters:
 
 Example usage:
 
-./generate_dataset.sh 102400 200000 /path/to/dataset.txt
+./generate_dataset.sh 102400 200000 ../dataset.txt
