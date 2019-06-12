@@ -33,5 +33,5 @@
 #       ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <NUM_FRAGMENTS> <DATASET_PATH>
 #
 # Example:
-#       ./launch.sh None 2 5 16 false 1024 ../data/spikes.dat
+#       ./launch.sh None 2 5 16 false 1024 $(pwd)/data/spikes.dat
 #

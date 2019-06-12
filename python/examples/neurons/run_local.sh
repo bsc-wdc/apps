@@ -28,5 +28,5 @@
 #       ./run_local.sh <TRACING> <NUM_FRAGMENTS> <DATASET_PATH>
 #
 # Example:
-#       ./run_local.sh false 10 ../data/spikes.dat
+#       ./run_local.sh false 10 $(pwd)/data/spikes.dat
 #

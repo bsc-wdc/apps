@@ -23,7 +23,7 @@ Neuron application
         <NUM_FRAGMENTS>......... Number of fragments
         <DATASET_PATH>.......... Dataset path
 
-     - Example: ./run_local.sh false 1024 ../data/spikes.dat
+     - Example: ./run_local.sh false 1024 $(pwd)/data/spikes.dat
 
 * Usage in supercomputer:
 
@@ -37,7 +37,7 @@ Neuron application
         <NUM_FRAGMENTS>......... Number of fragments
         <DATASET_PATH>.......... Dataset path
 
-    - Example: ./launch.sh None 2 10 true 1024 ../data/spikes.dat
+    - Example: ./launch.sh None 2 10 true 1024 $(pwd)/data/spikes.dat
 
 == Build ==
 No build is required
