@@ -13,19 +13,51 @@ QR decomposition of a square matrix, MxM blocks, NxN each one
 The computation cost is calculated as follows (links to Wolfram Alpha to compute the amount of executions of each instruction). Look up the code to see the implementation of each function.
 qr: M
 dot: M^2 + 0.5*(M - 1)*M
+
 https://www.wolframalpha.com/input/?i=(sum+from+i+%3D+1+to+M+sum+from+j+%3D+i+%2B+1+to+M+1)++%2B+(sum+from+i+%3D+1+to+M+sum+from+j+%3D+1+to+M+1)
+
 littleQR: 0.5*(M-1)*M
+
 https://www.wolframalpha.com/input/?i=sum+from+i+%3D+1+to+M+sum+from+j+%3D+i+%2B+1+to+M+1
+
 multiplyBlocked: 0.5*(M^2)*(M-1) + (1/6)*M*((2*M^2)-3*M+1)
+
 https://www.wolframalpha.com/input/?i=(sum+from+i+%3D+1+to+M+(sum+from+j+%3D+i+%2B+1+to+M+(sum+from+k+%3D+i+%2B+1+to+M+(1))))
 https://www.wolframalpha.com/input/?i=(sum+from+i+%3D+1+to+M+(sum+from+j+%3D+i+%2B+1+to+M+(sum+from+k+%3D+1+to+M+(1))))
 
-== Versions ==
-* - base: distributed initialisation
 
 == Execution instructions ==
-Usage:
+
+* Usage in local machine:
+
+    ./run_local.sh <TRACING> <COMPUTING_UNITS> <MSIZE> <BSIZE> <MKL_NUM_THREADS> <VERIFY_RESULT>
+
+    - Where:
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <COMPUTING_UNITS>....... Number of cores for the constrained tasks
+        <MSIZE>................. Matrix size
+        <BSIZE>................. Block size
+        <MKL_NUM_THREADS>....... Number of MKL threads
+        <VERIFY_RESULT>......... Verify the result ( True | False )
+
+     - Example: ./run_local.sh false 4 4 8 4 False
+
+* Usage in supercomputer:
+
+    ./launch.sh ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <COMPUTING_UNITS> <MSIZE> <BSIZE> <MKL_NUM_THREADS> <VERIFY_RESULT>
+
+    - Where:
+        <JOB_DEPENDENCY>........ Job dependency (run after the given jobid - None if not needed)
+        <NUM_NODES>............. Number of nodes for the reservation
+        <EXECUTION_TIME>........ Walltime
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <COMPUTING_UNITS>....... Number of cores for the constrained tasks
+        <MSIZE>................. Matrix size
+        <BSIZE>................. Block size
+        <MKL_NUM_THREADS>....... Number of MKL threads
+        <VERIFY_RESULT>......... Verify the result ( True | False )
+
+    - Example: ./launch.sh None 2 10 true 1 4 512 False
 
 == Build ==
 No build is required
-

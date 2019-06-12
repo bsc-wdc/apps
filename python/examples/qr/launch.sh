@@ -11,11 +11,12 @@
   numNodes=$2
   executionTime=$3
   tracing=$4
+  computingUnits=$5
 
   # Leave application args on $@
-  shift 4
+  shift 5
 
-  export ComputingUnits="1"
+  export ComputingUnits="${computingUnits}"
 
   # Enqueue the application
   enqueue_compss \
@@ -33,8 +34,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch.sh jobDependency numNodes executionTime tracing MSIZE BSIZE MKL_NUM_THREADS verify_result
+#       ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <COMPUTING_UNITS> <MSIZE> <BSIZE> <MKL_NUM_THREADS> <VERIFY_RESULT>
 #
 # Example:
-#       ./launch.sh None 2 10 48 true 4 512 False
+#       ./launch.sh None 2 10 true 1 4 512 False
 #
