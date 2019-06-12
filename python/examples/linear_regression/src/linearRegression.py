@@ -50,7 +50,7 @@ def merge_reduce(f, data):
     :return: result of reduce the data to a single value
     """
     from collections import deque
-    q = deque(range(len(data)))
+    q = deque(list(range(len(data))))
     while len(q):
         x = q.popleft()
         if len(q):
@@ -167,7 +167,7 @@ def linear_regression(num_points, dim, fragments, plot_result=False):
     :param fragments: Number of fragments
     :param plot_result: Boolean plot results
     """
-    points_per_frag = num_points / fragments
+    points_per_frag = int(num_points / fragments)
     # Example data: data = [[[1,2,3],[4,5,6]], [[1,2,3],[4,5,6]]]
     data = [[list(randint(100, size=points_per_frag)) for _ in range(fragments)] for _ in range(dim)]
     line = fit(data[0], data[1])
