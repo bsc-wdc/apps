@@ -114,7 +114,7 @@ def sort(nums_file, fragments, num_range):
         num_range = int(len(nums) / fragments)
         print("Using num_range: %s" % num_range)
 
-    nums_per_node = len(nums) / fragments
+    nums_per_node = int(len(nums) / fragments)
     partial_result = {}
     result = []
 
