@@ -82,10 +82,10 @@ def terasort(num_fragments, num_entries, num_buckets, seed):
     #             assert(kv[0] >= ranges[i][0] and kv[0] < ranges[i][1])
 
     result = dict()
-    for key, value in buckets.items():
+    for key, value in list(buckets.items()):
         result[key] = combine_and_sort_bucket_elements(*tuple(value))
 
-    for key, value in result.items():
+    for key, value in list(result.items()):
         result[key] = compss_wait_on(value)
 
 
