@@ -15,6 +15,3 @@
 
   # Clean trace files
   find . -type f -name '*tar.gz' -delete
-
-  # clean results
-  find . -type f -name '*.dat' -delete
