@@ -1,6 +1,4 @@
-##############################
-# KMeans with Redis Notebook #
-##############################
+# KMeans with Redis Notebook
 
 Instructions :
 ==============
