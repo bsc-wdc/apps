@@ -16,17 +16,42 @@ wordcount
 * - merge: Improve
 * - files: files
 * - in: in objects
-* - wordcount: stable version (latest)
-* - tutorial: simpler version for tutorial purposes
+* - wordcount: stable version (LATEST)
 
 == Execution instructions ==
-Usage:
-wordcount.py <datasetPath> <multipleFiles> <blockSize>
+
+* Main input format:
+
+wordcount.py <DATASET_PATH> <MULTIPLE_FILES> <RESULT_FILE> <BLOCK_SIZE>
 
 where:
-                 * - datasetPath: dataset path/file
-                 * - multipleFiles: boolean (True if multiple files, False on the contrary)
-                 * - blockSize: block size (only needed if only one file)
+    <DATASET_PATH>............ Dataset path/file
+                               Available in all versions.
+    <MULTIPLE_FILES>.......... Boolean (True if multiple files, False on the contrary)
+                               Available in:
+                                   - wordcount
+    <RESULT_FILE>............. Results file
+                               Available in:
+                                   - base
+                                   - files
+                                   - in
+                                   - merge
+    <BLOCK_SIZE>.............. Block size (only needed if only one file)
+                               Available in:
+                                   - base
+                                   - in
+                                   - merge
+* Usage in local machine:
+
+    ./run_local.sh
+
+     - Example: ./run_local.sh
+
+* Usage in supercomputer:
+
+    ./launch.sh
+
+    - Example: ./launch.sh
 
 == Build ==
 No build is required
