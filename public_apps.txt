@@ -20,11 +20,10 @@ python/notebooks/mandelbrot
 python/notebooks/matmul
 python/notebooks/pca
 python/notebooks/qr
-python/notebooks/README
+python/notebooks/README.md
 python/notebooks/simple
-python/notebooks/tutorial
 python/notebooks/wordcount
-python/README
+python/README.md
 java/blast
 java/geneDetection
 java/hmmer
