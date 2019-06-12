@@ -227,7 +227,7 @@ def joinMatrix(A):
 
 def splitMatrix(A, MSIZE):
     splittedMatrix = []
-    bSize = len(A) / MSIZE
+    bSize = int(len(A) / MSIZE)
     for i in range(MSIZE):
         splittedMatrix.append([])
         for j in range(MSIZE):
