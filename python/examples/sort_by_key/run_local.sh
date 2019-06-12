@@ -24,9 +24,9 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run.sh tracing datasetPath
+#       ./run_local.sh <TRACING> <DATASET_PATH>
 #
 # Example:
-#       # Run the generator consider the output path for running
-#       ./run.sh false /path/to/dataset/
+#       generator/./generate_dataset.sh 102400 102400 10 102400 90 4 5 $(pwd)/dataset.txt False
+#       ./run_local.sh false $(pwd)/dataset.txt
 #
