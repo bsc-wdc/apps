@@ -21,7 +21,6 @@ This folder contains PyCOMPSs applications for Jupyter-notebook:
 * pca............................ Principal Component Analysis
 * qr............................. QR factorization
 * simple......................... Simple application
-* tutorial....................... Tutorial notebooks (syntax and handson)
 * wordcount...................... Wordcount
 ```
 

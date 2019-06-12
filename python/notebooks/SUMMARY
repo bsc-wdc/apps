@@ -13,7 +13,6 @@
 - pca: Principal component analysis
 - qr: QR factorization
 - simple: Simple application
-- tutorial: Tutorial notebooks
 - wordcount: Count the words appearances
 
 ==========
