@@ -22,6 +22,7 @@ class Function(object):
 
     from decimal import Decimal
     from pycompss.api.task import task
+    from pycompss.api.parameter import IN
 
     def __init__(self, f, prec, alpha=-1):
         self.alpha = alpha
@@ -30,7 +31,7 @@ class Function(object):
         self.n = 0
         self.prec = prec
 
-    @task(returns=Decimal, isModifier=False)
+    @task(returns=Decimal, target_direction=IN)
     def eval(self, x, append=True):
         from decimal import getcontext
         getcontext().prec = self.prec

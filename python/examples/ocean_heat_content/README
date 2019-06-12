@@ -1,0 +1,34 @@
+This is the Readme for:
+Ocean Heat Content (ohc)
+
+[Name]: Ocean Heat Content
+[Access Level]: private
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Ocean Heat Content is a tool that analyses the heat variations in the surface
+of the sea.
+Uses Numba to improve the performance of the analysis, and it is also able
+to exploit the usage of GPUs.
+
+== Versions ==
+* - per_layer: base paralelized considering each layer computation as a task.
+* - all_layers: simpler version that considers the computation of all task
+                of each input file within a task.
+
+== Execution instructions ==
+Usage:
+per_layer/oceanheatcontent.py <DATASET_FOLDER> <MESH_FILE> <REGIONS_FILE> <OUTPUT_FOLDER>
+all_layers/oceanheatcontent.py <DATASET_FOLDER> <MESH_FILE> <REGIONS_FILE> <OUTPUT_FOLDER> <ONLY_GPU>
+
+where:
+                 * - DATASET_FOLDER: Input dataset path.
+                 * - MESH_FILE: Mesh file path.
+                 * - REGIONS_FILE: Regions file path.
+                 * - OUTPUT_FOLDER: Ouput folder where to store the results.
+                 * - ONLY_GPU: Use only GPUs (True | False). If false, uses only CPUs.
+
+== Build ==
+No build is required

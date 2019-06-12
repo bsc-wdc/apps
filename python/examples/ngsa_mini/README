@@ -3,7 +3,7 @@ NGSA-mini (PyCOMPSS version)
 
 [Name]: NGSA-mini
 [Contact Person]: support-compss@bsc.es
-[Access Level]: public
+[Access Level]: private
 [License Agreement]: Apache2
 [Platform]: COMPSs
 
@@ -34,4 +34,3 @@ runcompss --pythonpath=/home/compss/apps/ngsa-mini-py/bin /home/compss/apps/ngsa
 
 == Build ==
 No build is required
-

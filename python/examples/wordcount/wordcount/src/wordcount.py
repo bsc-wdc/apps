@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
+#  Copyright 2002-2019 Barcelona Supercomputing Center (www.bsc.es)
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ def merge_reduce(f, data):
     :return: result of reduce the data to a single value
     """
     from collections import deque
-    q = deque(range(len(data)))
+    q = deque(list(range(len(data))))
     while len(q):
         x = q.popleft()
         if len(q):

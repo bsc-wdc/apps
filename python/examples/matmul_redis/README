@@ -1,0 +1,54 @@
+This is the Readme for:
+Matrix Multiplication with Redis
+
+[Name]: matmul_redis
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Matrix multiplication using persistent storage (Redis).
+
+
+== Execution instructions ==
+
+* Usage in local machine:
+
+    ./run_local.sh <TRACING> -b <NUM_BLOCKS> -e <NUM_ELEMENTS>
+
+    - Where:
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <NUM_BLOCKS>............ Number of blocks
+        <NUM_ELEMENTS>.......... Number of elements
+
+     - Other available options:
+         --check_result......... Compare distributed product with sequential result
+         --seed <SEED>.......... Define a seed
+
+     - Example: ./run_local.sh false -b 4 -e 4
+
+     - If the execution is expected to be done without Redis, use the same parameters
+       using the run_local_less.sh script.
+
+* Usage in supercomputer:
+
+    ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <TRACING> -b <NUM_BLOCKS> -e <NUM_ELEMENTS>
+
+    - Where:
+        <JOB_DEPENDENCY>........ Job dependency (run after the given jobid - None if not needed)
+        <NUM_NODES>............. Number of nodes for the reservation
+        <EXECUTION_TIME>........ Walltime
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <NUM_BLOCKS>............ Number of blocks
+        <NUM_ELEMENTS>.......... Number of elements
+
+     - Other available options:
+         --check_result......... Compare distributed product with sequential result
+         --seed <SEED>.......... Define a seed
+
+    - Example: ./launch.sh None 2 10 false -b 16 -e 128
+
+== Build ==
+No build is required

@@ -12,6 +12,8 @@
   # Leave application args on $@
   shift 1
 
+  export LC_ALL="en_US.UTF-8"
+
   # Enqueue the application
   runcompss \
     --tracing=$tracing \
@@ -24,9 +26,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run_local.sh tracing models_dir numModels 
+#       ./run_local.sh <TRACING> <BASE_PATH> <NUM_MODELS>
 #
 # Example:
 #       ./run_local.sh false . 2
 #
-

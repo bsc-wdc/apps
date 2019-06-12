@@ -11,9 +11,19 @@
 
   # Set common arguments
   tracing=false
-  
+
   # Set arguments
   appArgs="${dataset} True"
 
   # Execute specific version launch
   ${scriptDir}/wordcount/run_local.sh $tracing $appArgs
+
+
+  ######################################################
+  # APPLICATION EXECUTION EXAMPLE
+  # Call:
+  #       ./run_local.sh
+  #
+  # Example:
+  #       ./run_local.sh
+  #

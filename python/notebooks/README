@@ -14,8 +14,8 @@ This folder contains PyCOMPSs applications for Jupyter-notebook:
 
 * cholesky....................... Cholesky decomposition/factorization
 * kmeans......................... KMeans clustering
-* kmeans_storage................. KMeans clustering with persistent storage
-* linearRegression............... Linear regression algorithm
+    |.............................KMeans Clustering with Redis
+* linear_regression.............. Linear regression algorithm
 * mandelbrot..................... Mandelbrot generator
 * matmul......................... Matrix multiplication
 * pca............................ Principal Component Analysis
@@ -34,7 +34,6 @@ Look for the application.ipynb to be executed
 
 
 == Notes ==
-After the execution of any application it is necessary to restart the python kernel from jupyter-notebook. 
+After the execution of any application it is necessary to restart the python kernel from jupyter-notebook.
 
-A clean.sh script to remove unnecessary files after execution is provided in this folder. 
-
+A clean.sh script to remove unnecessary files after execution is provided in this folder.

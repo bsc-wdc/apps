@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
+#  Copyright 2002-2019 Barcelona Supercomputing Center (www.bsc.es)
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ def chunks(l, n, balanced=False):
 
 def partition_by(self, num_partitions, hash):
     if not hash:
-        return chunks(self, len(self) / num_partitions, True)
+        return chunks(self, int(len(self) / num_partitions), True)
     else:
         partitions = [[] for n in range(num_partitions)]
         for s in self:

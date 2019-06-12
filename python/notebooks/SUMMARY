@@ -1,0 +1,23 @@
+
+=== Notebooks ===
+
+=========
+* PUBLIC:
+=========
+
+- cholesky: Cholesky factorization
+- kmeans: Kmeans clustering (includes base and redis versions)
+- linear_regression: Linear regression
+- mandelbrot: Mandelbrot Fractal
+- matmul: Matrix multiplication
+- pca: Principal component analysis
+- qr: QR factorization
+- simple: Simple application
+- tutorial: Tutorial notebooks
+- wordcount: Count the words appearances
+
+==========
+* PRIVATE:
+==========
+
+- modelfactors: Paraver traces analysis

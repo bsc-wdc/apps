@@ -24,10 +24,9 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run_local.sh tracing numInd sizeInd target cycles
+#       ./run_local.sh <TRACING> <NUM_IND> <SIZE_IND> <TARGET> <CYCLES>
 #
 # Example:
 #       ./run_local.sh false 10 10 20 10
 
 #
-

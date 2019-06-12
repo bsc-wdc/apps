@@ -25,7 +25,7 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run_local.sh datasetPath multipleFiles
+#       ./run_local.sh <TRACING> <DATASET_PATH> <MULTIPLE_FILES>
 #
 # Example:
 #       # Create a dataset before running it

@@ -24,9 +24,9 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run_local.sh tracing file numFrag numRange
+#       ./run_local.sh <TRACING> <FILE> <NUM_FRAGMENTS> <NUM_RANGE>
 #
 # Example:
-#       # Run the generator consider the output path for running
-#       ./run_local.sh false /path/to/dataset/dataset.txt 5 600
+#       generator/./generate_dataset.sh 102400 200000 $(pwd)/dataset.txt
+#       ./run_local.sh false $(pwd)/dataset.txt 5 600
 #

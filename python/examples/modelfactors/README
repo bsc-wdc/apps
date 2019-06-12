@@ -1,0 +1,45 @@
+This is the Readme for:
+Model Factors
+
+[Name]: modelfactors
+[Contact Person]: support-compss@bsc.es
+[Access Level]: Private
+[License Agreement]: Private
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Model Factors
+
+
+== Execution instructions ==
+
+* Usage in local machine:
+
+    ./run_local.sh <TRACING> <TRACES_PATH> --cfgs=<CFGS_PATH> --out=<OUTPUT_PATH> -d
+
+    - Where:
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <TRACES_PATH>........... Traces absolute path
+        <CFGS_PATH>............. Configuration cfgs path
+        <OUTPUT_PATH>........... Path where to store the result
+
+     - Example: ./run_local.sh false /path/to/traces/* --cfgs=/path/to/modelfactors/cfgs/ --out=/path/to/output -d
+
+* Usage in supercomputer:
+
+    ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <TRACES_PATH> --cfgs=<CFGS_PATH> --out=<OUTPUT_PATH> -d
+
+    - Where:
+        <JOB_DEPENDENCY>........ Job dependency (run after the given jobid - None if not needed)
+        <NUM_NODES>............. Number of nodes for the reservation
+        <EXECUTION_TIME>........ Walltime
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <TRACES_PATH>........... Traces absolute path
+        <CFGS_PATH>............. Configuration cfgs path
+        <OUTPUT_PATH>........... Path where to store the result
+
+    - Example: ./launch.sh None 2 10 true /path/to/traces/* --cfgs=/path/to/modelfactors/cfgs/ --out=/path/to/output -d
+
+== Build ==
+No build is required

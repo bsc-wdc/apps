@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
+#  Copyright 2002-2019 Barcelona Supercomputing Center (www.bsc.es)
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 #
 
 # -*- coding: utf-8 -*-
-#from base.src.tasks import *
-from base.src.tasks import *
+
+from tasks import *
 import sys
 
 range_min = 0
@@ -82,10 +82,10 @@ def terasort(num_fragments, num_entries, num_buckets, seed):
     #             assert(kv[0] >= ranges[i][0] and kv[0] < ranges[i][1])
 
     result = dict()
-    for key, value in buckets.items():
+    for key, value in list(buckets.items()):
         result[key] = combine_and_sort_bucket_elements(*tuple(value))
 
-    for key, value in result.items():
+    for key, value in list(result.items()):
         result[key] = compss_wait_on(value)
 
 

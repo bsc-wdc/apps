@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
+#  Copyright 2002-2019 Barcelona Supercomputing Center (www.bsc.es)
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -114,7 +114,7 @@ def sort(nums_file, fragments, num_range):
         num_range = int(len(nums) / fragments)
         print("Using num_range: %s" % num_range)
 
-    nums_per_node = len(nums) / fragments
+    nums_per_node = int(len(nums) / fragments)
     partial_result = {}
     result = []
 
