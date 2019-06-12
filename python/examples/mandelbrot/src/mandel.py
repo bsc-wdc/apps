@@ -52,9 +52,9 @@ def mandelbrot(X, Y, Z, points):
     # Plot Result
     import matplotlib.pyplot as plt
     Z = array(Z)
-    # plt.imshow(Z, cmap='spectral')
+    # plt.imshow(Z, cmap='plasma')
     # plt.show()
-    plt.imsave('Mandelbrot.png', Z, cmap='spectral')
+    plt.imsave('Mandelbrot.png', Z, cmap='plasma')
 
 
 if __name__ == "__main__":
