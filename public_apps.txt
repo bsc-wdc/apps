@@ -3,10 +3,8 @@ python/examples/cholesky
 python/examples/fft
 python/examples/gauss_quadrature
 python/examples/genetic_algorithm
-python/examples/kmeans_redis
 python/examples/linear_regression
 python/examples/mandelbrot
-python/examples/matmul_redis
 python/examples/max_norm
 python/examples/mnum
 python/examples/neurons
