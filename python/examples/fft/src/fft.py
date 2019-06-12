@@ -43,8 +43,8 @@ def fft(a):
         lout = []
         ln = len(lin)
 
-        for k in range(ln / 2):
-            lout.append(reduce(lin[k], lin[k + ln / 2], w))
+        for k in range(int(ln / 2)):
+            lout.append(reduce(lin[k], lin[k + int(ln / 2)], w))
 
         lin = lout
 
@@ -56,31 +56,16 @@ def reduce(even, odd, w):
     x = np.concatenate((even, odd))
     n = len(x)
 
-    for k in range(n / 2):
+    for k in range(int(n / 2)):
         e = x[k]
-        o = x[k + n / 2]
+        o = x[k + int(n / 2)]
         wk = w[n - 1, k]
 
         x[k] = e + wk * o
-        x[k + n / 2] = e - wk * o
+        x[k + int(n / 2)] = e - wk * o
 
     return x
 
-
-def base(even, odd, w):
-    n = len(even) + len(odd)
-    x = np.zeros(n, dtype=complex)
-    e = 0
-    o = 0
-
-    for k in range(n):
-        for m in range(n/2):
-            e += even[m] * w[2 * m, k]
-            o += odd[m] * w[2 * m, k]
-
-        x[k] = e + np.exp(-2 * np.pi * 1j * k / n) * o
-
-    return x
 
 if __name__ == "__main__":
     arr_length = int(sys.argv[1])
