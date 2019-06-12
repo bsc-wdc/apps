@@ -9,10 +9,8 @@
 - fft: Fast fourier transform
 - gauss_quadrature: Numerical integration
 - genetic_algorithm: Genetic algorithm
-- kmeans_redis: Kmeans using Redis
 - linear_regression: Linear regression
 - mandelbrot: Mandelbrot Fractal
-- matmul_redis: Matrix multiplication using Redis
 - max_norm: Find point with maximum norm
 - mnum: Root finding numerical methods with high precision
 - neurons: Neuron
@@ -26,9 +24,11 @@
 * PRIVATE:
 ==========
 
-- cnn: Convolutional neural network
-- gaia: Gaia
-- modelfactors: Paraver traces analysis
-- ngsa_mini: NGS Anallyzer-Mini for PyCOMPSs
-- nmmb: Earth dust simulator (currently known as NMMB-MONARCH)
-- ocean_heat_content: Ocean heat simulator
+- cnn: Convolutional neural network (PRIVATE - NOT WORKING)
+- gaia: Gaia (PUBLIC OR PRIVATE? - MISSING SCRIPTS AND README)
+- kmeans_redis: Kmeans using Redis (PUBLIC - ONLY WORKS WITHOUT REDIS)
+- matmul_redis: Matrix multiplication using Redis (PUBLIC - ONLY WORKS WITHOUT REDIS)
+- modelfactors: Paraver traces analysis (PRIVATE - NOT WORKING)
+- ngsa_mini: NGS Anallyzer-Mini for PyCOMPSs (PRIVATE)
+- nmmb: Earth dust simulator (currently known as NMMB-MONARCH) (PRIVATE - NORD3)
+- ocean_heat_content: Ocean heat simulator (PRIVATE)
