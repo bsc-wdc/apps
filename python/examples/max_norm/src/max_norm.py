@@ -29,7 +29,7 @@ def maxFinal(a, b):
 
 def mergeReduce(function, data):
     from collections import deque
-    q = deque(range(0, len(data)))
+    q = deque(list(range(0, len(data))))
     while len(q):
         x = q.popleft()
         if len(q):
