@@ -82,7 +82,7 @@ def merge_reduce(f, data):
     :return: result of reduce the data to a single value
     """
     from collections import deque
-    q = deque(range(len(data)))
+    q = deque(list(range(len(data))))
     while len(q):
         x = q.popleft()
         if len(q):

@@ -10,6 +10,8 @@
 
   # Clean python compiled files
   find . -type f -name '*.pyc' -delete
+  find . -type f -name '*.pyo' -delete
+  find . -type d -name '__pycache__' -delete
 
   # Clean trace files
   find . -type f -name '*tar.gz' -delete
