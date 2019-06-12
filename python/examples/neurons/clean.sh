@@ -17,4 +17,4 @@
   find . -type f -name '*tar.gz' -delete
 
   # clean results
-  find . -type f -name '*.dat' -delete
+  find . -type f -name 'result_*.dat' -delete

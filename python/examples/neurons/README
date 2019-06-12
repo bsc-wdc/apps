@@ -11,6 +11,8 @@ Neuron application
 == Description ==
 Neuron application
 
+NOTE: spikes.dat provided is serialized with Python 2. So if you want to run
+      with Python 3, it must be converted.
 
 == Execution instructions ==
 

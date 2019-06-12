@@ -18,7 +18,6 @@
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
     --lang=python \
-    --debug \
     $execFile $@
 
 
