@@ -11,17 +11,32 @@ Terasort
 == Description ==
 Terasort
 
-== Versions ==
-* - base: base version
-* - 2_base_oo: object oriented implementation of the base version
-
 == Execution instructions ==
-Usage:
-terasort.py <numFragments> <numEntries>
 
-where:
-                 * - numFragments: number of fragments
-                 * - numEntries: number of (k,v) pairs within each fragment
-                 
+* Usage in local machine:
+
+    ./run_local.sh tracing <NUM_FRAGMENTS> <NUM_ENTRIES>
+
+    - Where:
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <NUM_FRAGMENTS>......... Number of fragments
+        <NUM_ENTRIES>........... number of (k,v) pairs within each fragment
+
+     - Example: ./run_local.sh false 10 100
+
+* Usage in supercomputer:
+
+    ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <NUM_FRAGMENTS> <NUM_ENTRIES>
+
+    - Where:
+        <JOB_DEPENDENCY>........ Job dependency (run after the given jobid - None if not needed)
+        <NUM_NODES>............. Number of nodes for the reservation
+        <EXECUTION_TIME>........ Walltime
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <NUM_FRAGMENTS>......... Number of fragments
+        <NUM_ENTRIES>........... number of (k,v) pairs within each fragment
+
+    - Example: ./launch.sh None 2 5 false 10 100
+
 == Build ==
 No build is required

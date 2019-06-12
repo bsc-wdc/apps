@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-#  Copyright 2002-2018 Barcelona Supercomputing Center (www.bsc.es)
+#  Copyright 2002-2019 Barcelona Supercomputing Center (www.bsc.es)
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 #
 
 # -*- coding: utf-8 -*-
-#from base.src.tasks import *
-from base.src.tasks import *
+
+from tasks import *
 import sys
 
 range_min = 0

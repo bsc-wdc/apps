@@ -24,8 +24,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run.sh tracing numFragments numEntries
+#       ./run_local.sh tracing <NUM_FRAGMENTS> <NUM_ENTRIES>
 #
 # Example:
-#       ./launch.sh false 10 100
+#       ./run_local.sh false 10 100
 #
