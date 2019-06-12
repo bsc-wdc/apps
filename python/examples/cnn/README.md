@@ -1,7 +1,7 @@
 This is the Readme for:
 convolutional NN
 
-[Name]: nn
+[Name]: cnn
 [Contact Person]: support-compss@bsc.es
 [Access Level]: private
 [License Agreement]: Apache2
