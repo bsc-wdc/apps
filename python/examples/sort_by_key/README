@@ -11,29 +11,36 @@ sortByKey
 == Description ==
 sortByKey
 
-== Versions ==
-* - base: base version
-* - 2_hash: base version with hashed partitioning
-* - 3_files: Sort N files (with pickled content)
-* - 4_sortNumpy: Sort N files (with pickled content) with numpy using mergesort algorithm. Also alternatives for N times.
-* - 5_sortTotal: Sort N files (with pickled content) with merge_reduce of the whole result.
-* - 6_sortByKey: Final version with automatic dataset generation and from files (with pickled content).
- 
-== Execution instructions ==                                                                                        
-Usage (6_sortByKey):
+NOTE: Dataset generator for python 2.x (for python 3.x requires pickling in binary).
 
-sort.py <numKeys> <uniqueKeys> <keyLenght> <uniqueValues> <valueLenght> <numFragments> <randomSeed> <fromFiles> <path>
-                                                                                                                    
-where:                                                                                                              
-                 * - numKeys: Number of keys
-                 * - uniqueKeys: Number of unique keys
-                 * - keyLenght: Length of the keys (bytes)
-                 * - uniqueValues: Number of unique values
-                 * - valueLenght: Length of the values (bytes)
-                 * - numFragments: Number of fragments
-                 * - randomSeed: Random seed
-                 * - fromFiles: Boolean from files dataset (If true, ignores the previous parameters)
-                 * - path: Dataset path
+== Execution instructions ==
+
+* Usage in local machine:
+
+    ./run_local.sh <TRACING> <DATASET_PATH>
+
+    - Where:
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <DATASET_PATH>.......... Dataset path
+
+     - Example:
+             generator/./generate_dataset.sh 102400 102400 10 102400 90 4 5 $(pwd)/dataset.txt False
+             ./run_local.sh false $(pwd)/dataset.txt
+
+* Usage in supercomputer:
+
+    ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <DATASET_PATH>
+
+    - Where:
+        <JOB_DEPENDENCY>........ Job dependency (run after the given jobid - None if not needed)
+        <NUM_NODES>............. Number of nodes for the reservation
+        <EXECUTION_TIME>........ Walltime
+        <TRACING>............... Enable or disable tracing ( true | false )
+        <DATASET_PATH>.......... Dataset path
+
+    - Example:
+            generator/./generate_dataset.sh 102400 102400 10 102400 90 4 5 $(pwd)/dataset.txt False
+            ./launch.sh None 2 5 false $(pwd)/dataset.txt
 
 == Build ==
 No build is required
