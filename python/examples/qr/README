@@ -57,7 +57,7 @@ https://www.wolframalpha.com/input/?i=(sum+from+i+%3D+1+to+M+(sum+from+j+%3D+i+%
         <MKL_NUM_THREADS>....... Number of MKL threads
         <VERIFY_RESULT>......... Verify the result ( True | False )
 
-    - Example: ./launch.sh None 2 10 true 1 4 512 False
+    - Example: ./launch.sh None 2 10 true 1 4 512 1 False
 
 == Build ==
 No build is required

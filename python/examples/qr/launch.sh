@@ -37,5 +37,5 @@
 #       ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <COMPUTING_UNITS> <MSIZE> <BSIZE> <MKL_NUM_THREADS> <VERIFY_RESULT>
 #
 # Example:
-#       ./launch.sh None 2 10 true 1 4 512 False
+#       ./launch.sh None 2 10 true 1 4 512 1 False
 #

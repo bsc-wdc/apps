@@ -11,6 +11,7 @@ sortByKey
 == Description ==
 sortByKey
 
+NOTE: Dataset generator for python 2.x (for python 3.x requires pickling in binary).
 
 == Execution instructions ==
 
@@ -37,7 +38,9 @@ sortByKey
         <TRACING>............... Enable or disable tracing ( true | false )
         <DATASET_PATH>.......... Dataset path
 
-    - Example: ./launch.sh None 2 5 false /path/to/dataset/
+    - Example:
+            generator/./generate_dataset.sh 102400 102400 10 102400 90 4 5 $(pwd)/dataset.txt False
+            ./launch.sh None 2 5 false $(pwd)/dataset.txt
 
 == Build ==
 No build is required

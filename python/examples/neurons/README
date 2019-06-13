@@ -25,7 +25,7 @@ NOTE: spikes.dat provided is serialized with Python 2. So if you want to run
         <NUM_FRAGMENTS>......... Number of fragments
         <DATASET_PATH>.......... Dataset path
 
-     - Example: ./run_local.sh false 1024 $(pwd)/data/spikes.dat
+     - Example:  ./run_local.sh false 10 $(pwd)/data/spikes.dat
 
 * Usage in supercomputer:
 
