@@ -25,7 +25,8 @@
 #
 
 maxlag = 200
-#num_surrs = 600
-num_surrs = 1000
-#num_surrs = 20 
+# num_surrs = 20 
+num_surrs = 200
+# num_surrs = 600
+# num_surrs = 1000
 
