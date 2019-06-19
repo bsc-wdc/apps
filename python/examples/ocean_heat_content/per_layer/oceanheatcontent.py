@@ -1,3 +1,4 @@
+import sys
 import os
 import numpy as np
 import warnings
@@ -18,7 +19,7 @@ from pycompss.api.api import compss_barrier
 DATASET_FOLDER = ""
 MESH_FILE = ""
 REGIONS_FILE = ""
-RESULTS_FOLDER = ""
+OUTPUT_FOLDER = ""
 
 
 def main():
@@ -240,10 +241,10 @@ def save_data(layers, basins, ohc, name):
             ohc_1D.append(iris.cube.Cube(ohc[i][1][j][:],
                           long_name='{0}'.format(basin)))
         iris.save(ohc_1D,
-                  RESULTS_FOLDER + name + '_ohc_1D_{0}_numba_vec.nc'
+                  OUTPUT_FOLDER + name + '_ohc_1D_{0}_numba_vec.nc'
                   .format(layer), zlib=True)
     iris.save(ohc_cube,
-              RESULTS_FOLDER + name + '_ohc_pycompss.nc', zlib=True)
+              OUTPUT_FOLDER + name + '_ohc_pycompss.nc', zlib=True)
 
 
 @cuda.jit()
