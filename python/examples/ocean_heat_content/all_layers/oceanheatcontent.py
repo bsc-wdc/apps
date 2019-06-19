@@ -174,7 +174,7 @@ def compute_OHC(layers, weights, thetao, area, only_gpu):
     all_ohc = []
     for layer in range(len(layers)):
         if only_gpu:
-            all_ohc.append(compute_ohc_cpu_gpu(layer, thetao, weights, area))
+            all_ohc.append(compute_ohc_gpu(layer, thetao, weights, area))
         else:
             all_ohc.append(compute_ohc_cpu(layer, thetao, weights, area))
     return all_ohc
