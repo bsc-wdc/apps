@@ -39,7 +39,7 @@ def main():
         if file.endswith(".nc"):
             thetao = load_thetao(os.path.join(DATASET_FOLDER, file))
             all_ohc = compute_OHC(multiple_layers, weights, thetao, area)
-            save_data(multiple_layers, basin_name, all_ohc, file)
+            save_data(multiple_layers, basin_name, all_ohc, file, OUTPUT_FOLDER)
     compss_barrier()
     seconds_total = datetime.datetime.now() - start
     print('Total elapsed time: {0}'.format(seconds_total))
@@ -228,7 +228,7 @@ def compute_ohc_gpu(layer, thetao, weights, area):
 
 
 @task(ohc=COLLECTION_IN)
-def save_data(layers, basins, ohc, name):
+def save_data(layers, basins, ohc, name, output_folder):
     import iris
     ohc_cube = []
     for i, layer in enumerate(layers):
@@ -241,10 +241,10 @@ def save_data(layers, basins, ohc, name):
             ohc_1D.append(iris.cube.Cube(ohc[i][1][j][:],
                           long_name='{0}'.format(basin)))
         iris.save(ohc_1D,
-                  OUTPUT_FOLDER + name + '_ohc_1D_{0}_numba_vec.nc'
+                  output_folder + name + '_ohc_1D_{0}_numba_vec.nc'
                   .format(layer), zlib=True)
     iris.save(ohc_cube,
-              OUTPUT_FOLDER + name + '_ohc_pycompss.nc', zlib=True)
+              output_folder + name + '_ohc_pycompss.nc', zlib=True)
 
 
 @cuda.jit()
