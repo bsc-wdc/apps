@@ -1,3 +1,4 @@
+import sys
 import os
 import numpy as np
 import warnings
@@ -15,28 +16,28 @@ from pycompss.api.implement import implement
 from pycompss.api.api import compss_wait_on
 from pycompss.api.api import compss_barrier
 
-DATASET_FOLDER = ""
-MESH_FILE = ""
-REGIONS_FILE = ""
-RESULTS_FOLDER = ""
-ONLY_GPU = False
-
 
 def main():
+    dataset_folder = sys.argv[1]
+    mesh_file = sys.argv[2]
+    regions_file = sys.argv[3]
+    output_folder = sys.argv[4]
+    only_gpu = True if sys.argv[5] == 'True' else False
+
     start = datetime.datetime.now()
     multiple_layers = ((0, 200), (200, 700), (700, 2000), (0, 100),
                        (100, 200), (200, 300), (300, 400),
                        (400, 500), (500, 1000))
-    mask, e3t, depth = load_mesh(MESH_FILE)
-    weights = compute_weights(multiple_layers, mask, e3t, depth)
-    basin_name, basins = load_basins(REGIONS_FILE)
-    e1t, e2t = load_areas(MESH_FILE)
+    mask, e3t, depth = load_mesh(mesh_file)
+    weights = compute_weights(multiple_layers, mask, e3t, depth, only_gpu)
+    basin_name, basins = load_basins(regions_file)
+    e1t, e2t = load_areas(mesh_file)
     area = compute_areas_basin(e1t, e2t, basins)
-    for file in os.listdir(DATASET_FOLDER):
+    for file in os.listdir(dataset_folder):
         if file.endswith(".nc"):
-            thetao = load_thetao(os.path.join(DATASET_FOLDER, file))
-            all_ohc = compute_OHC(multiple_layers, weights, thetao, area)
-            save_data(multiple_layers, basin_name, all_ohc, file)
+            thetao = load_thetao(os.path.join(dataset_folder, file))
+            all_ohc = compute_OHC(multiple_layers, weights, thetao, area, only_gpu)
+            save_data(multiple_layers, basin_name, all_ohc, file, output_folder)
     compss_barrier()
     seconds_total = datetime.datetime.now() - start
     print('Total elapsed time: {0}'.format(seconds_total))
@@ -52,10 +53,10 @@ def load_mesh(mesh_file):
 
 
 @task(returns=1)
-def compute_weights(layers, mask, e3t, depth):
+def compute_weights(layers, mask, e3t, depth, only_gpu):
     weights = []
     for min_depth, max_depth in layers:
-        if ONLY_GPU:
+        if only_gpu:
             weights.append(calculate_weight_numba_cuda_version(min_depth,
                                                                max_depth,
                                                                e3t,
@@ -169,11 +170,11 @@ def load_thetao(data_file):
 
 
 @task(returns=1)
-def compute_OHC(layers, weights, thetao, area):
+def compute_OHC(layers, weights, thetao, area, only_gpu):
     all_ohc = []
     for layer in range(len(layers)):
-        if ONLY_GPU:
-            all_ohc.append(compute_ohc_cpu_gpu(layer, thetao, weights, area))
+        if only_gpu:
+            all_ohc.append(compute_ohc_gpu(layer, thetao, weights, area))
         else:
             all_ohc.append(compute_ohc_cpu(layer, thetao, weights, area))
     return all_ohc
@@ -225,7 +226,7 @@ def compute_ohc_gpu(layer, thetao, weights, area):
 
 
 @task()
-def save_data(layers, basins, ohc, name):
+def save_data(layers, basins, ohc, name, output_folder):
     import iris
     ohc_cube = []
     for i, layer in enumerate(layers):
@@ -238,10 +239,10 @@ def save_data(layers, basins, ohc, name):
             ohc_1D.append(iris.cube.Cube(ohc[i][1][j][:],
                           long_name='{0}'.format(basin)))
         iris.save(ohc_1D,
-                  RESULTS_FOLDER + name + '_ohc_1D_{0}_numba_vec.nc'
+                  output_folder + name + '_ohc_1D_{0}_numba_vec.nc'
                   .format(layer), zlib=True)
     iris.save(ohc_cube,
-              RESULTS_FOLDER + name + '_ohc_pycompss.nc', zlib=True)
+              output_folder + name + '_ohc_pycompss.nc', zlib=True)
 
 
 @cuda.jit()
@@ -302,9 +303,4 @@ if __name__ == '__main__':
                 "<OUTPUT_FOLDER> <ONLY_GPU>"
         print(usage)
     else:
-        DATASET_FOLDER = sys.argv[1]
-        MESH_FILE = sys.argv[2]
-        REGIONS_FILE = sys.argv[3]
-        OUTPUT_FOLDER = sys.argv[4]
-        ONLY_GPU = True if sys.argv[5] == 'True' else False
         main()

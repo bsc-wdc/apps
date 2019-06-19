@@ -1,3 +1,4 @@
+import sys
 import os
 import numpy as np
 import warnings
@@ -15,30 +16,30 @@ from pycompss.api.implement import implement
 from pycompss.api.api import compss_wait_on
 from pycompss.api.api import compss_barrier
 
-DATASET_FOLDER = ""
-MESH_FILE = ""
-REGIONS_FILE = ""
-RESULTS_FOLDER = ""
-
 
 def main():
+    dataset_folder = sys.argv[1]
+    mesh_file = sys.argv[2]
+    regions_file = sys.argv[3]
+    output_folder = sys.argv[4]
+
     start = datetime.datetime.now()
     multiple_layers = ((0, 200), (200, 700), (700, 2000), (0, 100),
                        (100, 200), (200, 300), (300, 400),
                        (400, 500), (500, 1000))
-    mask, e3t, depth = load_mesh(MESH_FILE)
+    mask, e3t, depth = load_mesh(mesh_file)
     weights = compute_weights(multiple_layers, mask, e3t, depth)
-    basin_name, basins = load_basins(REGIONS_FILE)
-    e1t, e2t = load_areas(MESH_FILE)
+    basin_name, basins = load_basins(regions_file)
+    e1t, e2t = load_areas(mesh_file)
     basins = compss_wait_on(basins)
     area = []
     for basin in basins:
         area.append(compute_area_basin(e1t, e2t, basins[basin]))
-    for file in os.listdir(DATASET_FOLDER):
+    for file in os.listdir(dataset_folder):
         if file.endswith(".nc"):
-            thetao = load_thetao(os.path.join(DATASET_FOLDER, file))
+            thetao = load_thetao(os.path.join(dataset_folder, file))
             all_ohc = compute_OHC(multiple_layers, weights, thetao, area)
-            save_data(multiple_layers, basin_name, all_ohc, file)
+            save_data(multiple_layers, basin_name, all_ohc, file, output_folder)
     compss_barrier()
     seconds_total = datetime.datetime.now() - start
     print('Total elapsed time: {0}'.format(seconds_total))
@@ -227,7 +228,7 @@ def compute_ohc_gpu(layer, thetao, weights, area):
 
 
 @task(ohc=COLLECTION_IN)
-def save_data(layers, basins, ohc, name):
+def save_data(layers, basins, ohc, name, output_folder):
     import iris
     ohc_cube = []
     for i, layer in enumerate(layers):
@@ -240,10 +241,10 @@ def save_data(layers, basins, ohc, name):
             ohc_1D.append(iris.cube.Cube(ohc[i][1][j][:],
                           long_name='{0}'.format(basin)))
         iris.save(ohc_1D,
-                  RESULTS_FOLDER + name + '_ohc_1D_{0}_numba_vec.nc'
+                  output_folder + name + '_ohc_1D_{0}_numba_vec.nc'
                   .format(layer), zlib=True)
     iris.save(ohc_cube,
-              RESULTS_FOLDER + name + '_ohc_pycompss.nc', zlib=True)
+              output_folder + name + '_ohc_pycompss.nc', zlib=True)
 
 
 @cuda.jit()
@@ -303,8 +304,4 @@ if __name__ == '__main__':
                 "<DATASET_FOLDER> <MESH_FILE> <REGIONS_FILE> <OUTPUT_FOLDER>"
         print(usage)
     else:
-        DATASET_FOLDER = sys.argv[1]
-        MESH_FILE = sys.argv[2]
-        REGIONS_FILE = sys.argv[3]
-        OUTPUT_FOLDER = sys.argv[4]
         main()
