@@ -16,28 +16,28 @@ from pycompss.api.implement import implement
 from pycompss.api.api import compss_wait_on
 from pycompss.api.api import compss_barrier
 
-DATASET_FOLDER = ""
-MESH_FILE = ""
-REGIONS_FILE = ""
-OUTPUT_FOLDER = ""
-ONLY_GPU = False
-
 
 def main():
+    dataset_folder = sys.argv[1]
+    mesh_file = sys.argv[2]
+    regions_file = sys.argv[3]
+    output_folder = sys.argv[4]
+    only_gpu = True if sys.argv[5] == 'True' else False
+
     start = datetime.datetime.now()
     multiple_layers = ((0, 200), (200, 700), (700, 2000), (0, 100),
                        (100, 200), (200, 300), (300, 400),
                        (400, 500), (500, 1000))
-    mask, e3t, depth = load_mesh(MESH_FILE)
-    weights = compute_weights(multiple_layers, mask, e3t, depth, ONLY_GPU)
-    basin_name, basins = load_basins(REGIONS_FILE)
-    e1t, e2t = load_areas(MESH_FILE)
+    mask, e3t, depth = load_mesh(mesh_file)
+    weights = compute_weights(multiple_layers, mask, e3t, depth, only_gpu)
+    basin_name, basins = load_basins(regions_file)
+    e1t, e2t = load_areas(mesh_file)
     area = compute_areas_basin(e1t, e2t, basins)
-    for file in os.listdir(DATASET_FOLDER):
+    for file in os.listdir(dataset_folder):
         if file.endswith(".nc"):
-            thetao = load_thetao(os.path.join(DATASET_FOLDER, file))
-            all_ohc = compute_OHC(multiple_layers, weights, thetao, area, ONLY_GPU)
-            save_data(multiple_layers, basin_name, all_ohc, file, OUTPUT_FOLDER)
+            thetao = load_thetao(os.path.join(dataset_folder, file))
+            all_ohc = compute_OHC(multiple_layers, weights, thetao, area, only_gpu)
+            save_data(multiple_layers, basin_name, all_ohc, file, output_folder)
     compss_barrier()
     seconds_total = datetime.datetime.now() - start
     print('Total elapsed time: {0}'.format(seconds_total))
@@ -303,9 +303,4 @@ if __name__ == '__main__':
                 "<OUTPUT_FOLDER> <ONLY_GPU>"
         print(usage)
     else:
-        DATASET_FOLDER = sys.argv[1]
-        MESH_FILE = sys.argv[2]
-        REGIONS_FILE = sys.argv[3]
-        OUTPUT_FOLDER = sys.argv[4]
-        ONLY_GPU = True if sys.argv[5] == 'True' else False
         main()
