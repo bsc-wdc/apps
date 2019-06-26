@@ -1,9 +1,6 @@
 
 === Applications ===
 
-=========
-* PUBLIC:
-=========
 
 - cholesky: Cholesky factorization
 - fft: Fast fourier transform
@@ -19,15 +16,8 @@
 - sort_by_key: Sort by key
 - terasort: Terasort
 - wordcount: Count the words appearances
-
-==========
-* PRIVATE:
-==========
-
-- cnn: Convolutional neural network (PRIVATE - NOT WORKING)
-- gaia: Gaia (PUBLIC OR PRIVATE? - MISSING SCRIPTS AND README)
-- kmeans_redis: Kmeans using Redis (PUBLIC - ONLY WORKS WITHOUT REDIS)
-- matmul_redis: Matrix multiplication using Redis (PUBLIC - ONLY WORKS WITHOUT REDIS)
-- modelfactors: Paraver traces analysis (PRIVATE - NOT WORKING)
-- ngsa_mini: NGS Anallyzer-Mini for PyCOMPSs (PRIVATE)
-- nmmb: Earth dust simulator (currently known as NMMB-MONARCH) (PRIVATE - NORD3)
+- cnn: Convolutional neural network 
+- kmeans_redis: Kmeans using Redis (ONLY WORKS WITHOUT REDIS)
+- matmul_redis: Matrix multiplication using Redis (ONLY WORKS WITHOUT REDIS)
+- modelfactors: Paraver traces analysis 
+- ngsa_mini: NGS Anallyzer-Mini for PyCOMPSs 
