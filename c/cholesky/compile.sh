@@ -1,0 +1,3 @@
+#!/bin/bash
+
+compss_build_app --LDFLAGS="-L/apps/PM/ompss/git/lib -L/apps/INTEL/2017.4/mkl/lib/intel64 -lm -lmkl_intel_lp64 -lmkl_core -lmkl_sequential" --CFLAGS="-g -ggdb -Wall -DLASs_WITH_MKL -I/apps/INTEL/2017.4/mkl/include -I/home/bsc19/bsc19007/TFG/lass/include" --CPPFLAGS="-g -ggdb -Wall -DLASs_WITH_MKL -I/apps/INTEL/2017.4/mkl/include -I/home/bsc19/bsc19007/TFG/lass/include" --mercurium_flags="-g -ggdb -k --debug -L/apps/PM/ompss/git/lib -L/apps/INTEL/2017.4/mkl/lib/intel64 -lm -lmkl_intel_lp64 -lmkl_core -lmkl_sequential -lnanos6 -L/home/bsc19/bsc19007/TFG/lass/test/lib -llass" --with_ompss-2=/apps/PM/ompss/git --ompss-2 cholesky 
