@@ -1,0 +1,27 @@
+include lass.h;
+
+interface cholesky 
+{
+
+    void generate_block(inout double[N*N] A, in int N, in int D);
+
+    int ddss_dpotrf(in enum DDSS_UPLO UPLO, in int N, inout double[N*LDA] A, in int LDA);
+
+    int ddss_dtrsm( in enum DDSS_SIDE SIDE, in enum DDSS_UPLO UPLO, 
+		             in enum DDSS_TRANS TRANS_A, in enum DDSS_DIAG DIAG, 
+            		 in int M, in int N,
+                     in double ALPHA, in double[N*N] A, in int LDA,
+                     inout double[M*N] B, in int LDB);
+    
+    int ddss_dgemm( in enum DDSS_TRANS TRANS_A, in enum DDSS_TRANS TRANS_B,
+	                 in int M, in int N, in int K,
+                     in double ALPHA, in    double[M*K] A, in int LDA,
+                     in double[K*N] B, in int LDB,
+                     in double BETA,  inout double[M*N] C, in int LDC );
+
+    int ddss_dsyrk( in enum DDSS_UPLO UPLO, in enum DDSS_TRANS TRANS,
+                     in int N, in int K,
+                     in double ALPHA, in    double[N*K] A, in int LDA,
+                     in double BETA,  inout double[N*N] C, in int LDC );
+
+};
