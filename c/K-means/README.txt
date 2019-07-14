@@ -8,6 +8,7 @@ The same is applied for OmpSs-2 version, if you want more information use the fl
 
 Run:
 
+To run the CPU version, use the queue_cpu script, for the GPU the queue_gpu. Consider the machine where you are going to run the application and modify them correctly.
 
 Generating data:
 

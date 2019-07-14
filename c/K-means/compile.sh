@@ -3,6 +3,36 @@
 CBA_FLAGS=
 CBA=compss_build_app
 
+usage(){
+    show_opts
+    exit 0
+}
+
+show_opts() {
+    cat <<EOT
+        Options:
+
+            -h                  Show help options.
+
+            --help              Show help options.
+
+            --ompss             Compile with OmpSs.
+
+            --with_ompss        Set the path to the OmpSs version
+                                the user wants to use.
+
+            --ompss-2           Compile with OmpSs-2.
+
+            --with_ompss-2      Set the path to the OmpSs-2 version
+                                the user wants to use.
+
+            --cuda              Compile with Cuda.
+
+            --with_cuda         Set the path to the Cuda version
+                                the user wants to use.
+EOT
+}
+
 display_error() {
   local error_msg=$1
   local exitCode=$2
