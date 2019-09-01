@@ -7,7 +7,7 @@
     <groupId>es.bsc.compss.apps</groupId>
     <artifactId>compss-apps-all</artifactId>
     <packaging>pom</packaging>
-    <version>2.5.rc1908</version>
+    <version>2.5.rc1909</version>
 
     <!-- PROJECT INFORMATION -->
     <name>COMP Superscalar Apps all</name>
@@ -28,7 +28,7 @@
     <!-- PROPERTIES -->
     <properties>
         <!-- COMPSs version -->
-	<compss.version>2.5.rc1908</compss.version>
+	<compss.version>2.5.rc1909</compss.version>
 
         <!-- JUNIT Test -->
         <junit.version>4.12</junit.version>
