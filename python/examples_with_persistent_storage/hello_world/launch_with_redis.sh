@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
   export COMPSS_PYTHON_VERSION=3-ML
-  module load COMPSs/2.6.rc2001
+  module load COMPSs/2.6.3
   module load ruby
 
   export PATH=$(pwd)/../redis/:$PATH

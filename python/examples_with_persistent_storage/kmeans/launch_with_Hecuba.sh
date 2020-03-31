@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
   export COMPSS_PYTHON_VERSION=2  # still no support for python3 in MN4
-  module load COMPSs/2.6.rc2001
+  module load COMPSs/2.6.3
   module load hecuba/0.1.1
 
   # Retrieve script arguments
