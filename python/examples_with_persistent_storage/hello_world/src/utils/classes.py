@@ -1,9 +1,13 @@
 try:
-    # dataClay and Hecuba
+    # dataClay
     from storage.api import StorageObject
 except:
-    # Redis
-    from storage.storage_object import StorageObject
+    try:
+        # Hecuba
+        from hecuba import StorageObj as StorageObject
+    except:
+        # Redis
+        from storage.storage_object import StorageObject
 
 try:
     from dataclay import dclayMethod

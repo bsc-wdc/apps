@@ -1,10 +1,17 @@
 #!/bin/bash -e
 
-  export COMPSS_PYTHON_VERSION=3-ML
+  export COMPSS_PYTHON_VERSION=2
   module load COMPSs/2.6.3
   module load ruby
+  # export PATH=/home/bsc19/bsc19234/STORAGE/examples_with_persistent_storage/redis:$PATH
 
-  export PATH=$(pwd)/../redis/:$PATH
+  #module use /apps/modules/modulefiles/tools/COMPSs/.custom
+  #module load Redis
+
+  # export PATH=$(pwd)/../redis/:$PATH
+  export PATH=/apps/COMPSs/Storage/Redis/bin/:$PATH
+  export PYTHONPATH=/apps/COMPSs/Storage/Redis/lib/python2.7/site-packages
+  # export GEM_PATH=/apps/COMPSs/Storage/Redis/gem/ruby/2.4.0/gems
 
   # Storage-related paths
   # Change these paths if you want to use other storage implementations

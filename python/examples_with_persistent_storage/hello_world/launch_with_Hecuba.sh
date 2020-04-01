@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-  export COMPSS_PYTHON_VERSION=2  # still no support for python3 in MN4
-  module load COMPSs/2.6.3
-  module load hecuba/0.1.1
+  export COMPSS_PYTHON_VERSION=3
+  module load COMPSs/2.6
+  module load hecuba/0.1.3
 
   # Retrieve script arguments
   job_dependency=${1:-None}
@@ -59,16 +59,18 @@
     --log_level="${log_level}" \
     "${qos_flag}" \
     \
-    --classpath=$HECUBA_JAR:${APP_CLASSPATH}:${CLASSPATH} \
-    --classpath=/home/bsc31/bsc31906/hecuba-src/storageLtf/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
+    --classpath=$HECUBA_ROOT/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
     --pythonpath=${APP_PYTHONPATH}:${PYTHONPATH} \
     --storage_props=$(pwd)/hecuba_confs/storage_props.cfg \
-    --storage_home=$COMPSS_STORAGE_HOME \
-    --prolog=$(pwd)/hecuba_confs/register.sh \
+    --storage_home=$HECUBA_ROOT/ \
     \
     --lang=python \
     \
     "$exec_file" $@
+
+# --prolog=$(pwd)/hecuba_confs/register.sh \
+# --classpath=/home/bsc31/bsc31906/hecuba-src/storageLtf/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
+
 
 # Enqueue tests example:
 # ./launch_with_Hecuba.sh None 2 5 false $(pwd)/src/hello_world.py
