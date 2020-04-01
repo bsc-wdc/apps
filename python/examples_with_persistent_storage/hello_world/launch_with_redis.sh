@@ -1,17 +1,26 @@
 #!/bin/bash -e
 
-  export COMPSS_PYTHON_VERSION=2
-  module load COMPSs/2.6.3
+  # THIS MUST BE INCLUDED INTO .bashrc
+  echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINE IS IN YOUR .bashrc"
+  echo "export PATH=/apps/COMPSs/Storage/Redis/bin:\$PATH"
+  read -p "Continue? (y|n) " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  then
+      [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+  fi
+
+  export COMPSS_PYTHON_VERSION=3-ML
+  # module load COMPSs/2.6.3
+  module use /apps/modules/modulefiles/tools/COMPSs/.custom
+  module load TrunkJCB
+
   module load ruby
-  # export PATH=/home/bsc19/bsc19234/STORAGE/examples_with_persistent_storage/redis:$PATH
+  export PATH=/apps/COMPSs/Storage/Redis/bin:$PATH
 
-  #module use /apps/modules/modulefiles/tools/COMPSs/.custom
-  #module load Redis
-
-  # export PATH=$(pwd)/../redis/:$PATH
-  export PATH=/apps/COMPSs/Storage/Redis/bin/:$PATH
-  export PYTHONPATH=/apps/COMPSs/Storage/Redis/lib/python2.7/site-packages
-  # export GEM_PATH=/apps/COMPSs/Storage/Redis/gem/ruby/2.4.0/gems
+  # Not working - requires to be included into .bashrc?
+  # module use /apps/modules/modulefiles/tools/COMPSs/.custom
+  # module load Redis
 
   # Storage-related paths
   # Change these paths if you want to use other storage implementations

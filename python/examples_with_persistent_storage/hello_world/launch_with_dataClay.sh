@@ -4,7 +4,7 @@
   echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
   echo "ml gcc/8.1.0"
   echo "export COMPSS_PYTHON_VERSION=3"
-  echo "module load COMPSs/2.6"
+  echo "module load COMPSs/2.6.3"
   echo "ml mkl/2018.1"
   echo "ml impi/2018.1"
   echo "ml opencv/4.1.2"
