@@ -1,4 +1,3 @@
-import sys
 from pycompss.api.task import task
 from pycompss.api.api import compss_wait_on
 from utils.classes import hello

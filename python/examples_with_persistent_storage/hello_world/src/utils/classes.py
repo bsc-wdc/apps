@@ -4,7 +4,7 @@ try:
 except:
     try:
         # Hecuba
-        from hecuba import StorageObj as StorageObject
+        from hecuba.storageobj import StorageObj as StorageObject
     except:
         # Redis
         from storage.storage_object import StorageObject
@@ -14,6 +14,7 @@ try:
 except ImportError:
     def dclayMethod(*args, **kwargs):
         return lambda f: f
+
 
 class hello(StorageObject):
     """
