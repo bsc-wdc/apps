@@ -58,7 +58,7 @@
   shift 5
 
   # Those are evaluated at submit time, not at start time...
-  COMPSS_VERSION=`ml whatis COMPSs 2>&1 >/dev/null | awk '{print $1 ; exit}'`
+  COMPSS_VERSION=`module load whatis COMPSs 2>&1 >/dev/null | awk '{print $1 ; exit}'`
 
   # Enqueue job
   enqueue_compss \

@@ -1,8 +1,33 @@
 #!/bin/bash -e
 
-  export COMPSS_PYTHON_VERSION=3
-  module load COMPSs/2.6
-  module load hecuba/0.1.3
+  # THIS MUST BE INCLUDED INTO .bashrc
+  echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
+  echo "module load gcc/8.1.0"
+  echo "export COMPSS_PYTHON_VERSION=3-ML"
+  echo "module load COMPSs/2.6.3"
+  echo "module load mkl/2018.1"
+  echo "module load impi/2018.1"
+  echo "module load opencv/4.1.2"
+  echo "module load python/3.6.4_ML"
+  echo "module load hecuba/0.1.3_ML"
+
+  read -p "Continue? (y|n) " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  then
+      [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+  fi
+
+  module load gcc/8.1.0
+  export COMPSS_PYTHON_VERSION=3-ML
+  # module load COMPSs/2.6
+  module use /apps/modules/modulefiles/tools/COMPSs/.custom
+  module load TrunkJCB
+  module load mkl/2018.1
+  module load impi/2018.1
+  module load opencv/4.1.2
+  module load python/3.6.4_ML
+  module load hecuba/0.1.3_ML
 
   # Retrieve script arguments
   job_dependency=${1:-None}
@@ -35,8 +60,8 @@
   shift 5
 
   # Those are evaluated at submit time, not at start time...
-  COMPSS_VERSION=`ml whatis COMPSs 2>&1 >/dev/null | awk '{print $1 ; exit}'`
-  HECUBA_VERSION=`ml whatis HECUBA 2>&1 >/dev/null | awk '{print $1 ; exit}'`
+  COMPSS_VERSION=`module load whatis COMPSs 2>&1 >/dev/null | awk '{print $1 ; exit}'`
+  HECUBA_VERSION=`module load whatis HECUBA 2>&1 >/dev/null | awk '{print $1 ; exit}'`
 
   # Enqueue job
   enqueue_compss \
@@ -59,17 +84,17 @@
     --log_level="${log_level}" \
     "${qos_flag}" \
     \
-    --classpath=$HECUBA_ROOT/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
+    --classpath=/apps/HECUBA/0.1.3/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
     --pythonpath=${APP_PYTHONPATH}:${PYTHONPATH} \
     --storage_props=$(pwd)/hecuba_confs/storage_props.cfg \
-    --storage_home=$HECUBA_ROOT/ \
+    --storage_home=/apps/HECUBA/0.1.3/ \
     \
     --lang=python \
     \
     "$exec_file" $@
 
-# --prolog=$(pwd)/hecuba_confs/register.sh \
-# --classpath=/home/bsc31/bsc31906/hecuba-src/storageLtf/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
+# --classpath=$HECUBA_ROOT/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
+# --storage_home=$HECUBA_ROOT/ \
 
 
 # Enqueue tests example:
