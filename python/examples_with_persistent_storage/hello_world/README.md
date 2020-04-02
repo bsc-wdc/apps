@@ -36,7 +36,7 @@ The following commands submit the execution *without a job dependency*,
 requesting *2 nodes*, with *5 minutes* walltime and with *tracing and graph
 generation disabled*.
 
-> Please, check the **requirements** before using the following commands.
+> Please, check the **[REQUIREMENTS](../README.md)** before using the following commands.
 
 * Launch with dataClay:
 ```bash
@@ -58,3 +58,7 @@ And also, contains a script to run the ```hello_world.py``` application
 ```bash
 ./run_with_redis.sh
 ```
+
+## Issues
+
+If any issue is found, please contact <support-compss@bsc.es>

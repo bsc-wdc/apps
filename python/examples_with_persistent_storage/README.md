@@ -95,3 +95,7 @@ Please, **take care with the versions**.
  python -m pip install 'redis==3.0.1' 'redis-py-cluster==2.0.0' --user
  python3 -m pip install 'redis==3.0.1' 'redis-py-cluster==2.0.0' --user
 ```
+
+## Issues
+
+If any issue is found, please contact <support-compss@bsc.es>
