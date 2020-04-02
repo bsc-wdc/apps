@@ -1,10 +1,14 @@
 try:
-    # dataClay and Hecuba
+    # dataClay
     from storage.api import StorageObject
 except:
-    # Redis
-    from storage.storage_object import StorageObject
-
+    try:
+        # Hecuba
+        from hecuba.storageobj import StorageObj as StorageObject
+    except:
+        # Redis
+        from storage.storage_object import StorageObject
+        
 try:
     from pycompss.api.task import task
     from pycompss.api.parameter import IN, INOUT, CONCURRENT
