@@ -72,17 +72,14 @@
     --log_level="${log_level}" \
     "${qos_flag}" \
     \
-    --classpath=/apps/HECUBA/0.1.3/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
-    --pythonpath=${APP_PYTHONPATH}:${PYTHONPATH} \
-    --storage_props=$(pwd)/hecuba_confs/storage_props.cfg \
-    --storage_home=/apps/HECUBA/0.1.3/ \
+    --classpath=$HECUBA_ROOT/compss/ITF/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
+   --pythonpath=${APP_PYTHONPATH}:${PYTHONPATH} \
+   --storage_props=$(pwd)/hecuba_confs/storage_props.cfg \
+   --storage_home=$HECUBA_ROOT/compss/ \
     \
     --lang=python \
     \
     "$exec_file" $@
-
-# --classpath=$HECUBA_ROOT/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
-# --storage_home=$HECUBA_ROOT/ \
 
 
 # Enqueue tests example:

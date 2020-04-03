@@ -45,7 +45,7 @@ centers.
 ./launch_with_redis.sh None 2 5 false $(pwd)/src/kmeans.py 1024 8 2 4
 ```
 
-And also, contains a script to run the ```hello_world.py``` application
+And also, contains a script to run the ```kmeans.py``` application
 <ins>locally</ins> with **Redis** to perform the kmeans clustering of *1024*
 points divided into *8* fragments, each point of *2* dimensions and looking
 for *4* centers:
