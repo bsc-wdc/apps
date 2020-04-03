@@ -20,6 +20,17 @@ python
   |    |    |- README              Brief description of the application
   |    |- ...
   |
+  |- examples_with_persistent_storage
+  |    |- app_1
+  |    |    |- src                 Application source code
+  |    |    |- run_with_redis.sh   Execution example for local automatic process with Redis
+  |    |    |- launch_with_redis.sh     Execution example for supercomputer automatic process with Redis
+  |    |    |- launch_with_dataClay.sh  Execution example for supercomputer automatic process with dataClay
+  |    |    |- launch_with_Hecuba.sh    Execution example for supercomputer automatic process with Hecuba
+  |    |    |- clean.sh            Cleans the folder
+  |    |    |- README              Brief description of the application
+  |    |- ...
+  |
   |- notebooks
        |- app_1
        |    |- app_1.ipynb
