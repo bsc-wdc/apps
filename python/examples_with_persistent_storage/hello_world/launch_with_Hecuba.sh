@@ -13,7 +13,6 @@
       [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
   fi
 
-  # module load gcc/8.1.0
   export COMPSS_PYTHON_VERSION=3-ML
   module load COMPSs/2.6.3
   module load hecuba/0.1.3_ML
