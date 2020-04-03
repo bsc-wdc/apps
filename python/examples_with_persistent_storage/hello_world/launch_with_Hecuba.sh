@@ -2,13 +2,8 @@
 
   # THIS MUST BE INCLUDED INTO .bashrc
   echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
-  echo "module load gcc/8.1.0"
   echo "export COMPSS_PYTHON_VERSION=3-ML"
   echo "module load COMPSs/2.6.3"
-  echo "module load mkl/2018.1"
-  echo "module load impi/2018.1"
-  echo "module load opencv/4.1.2"
-  echo "module load python/3.6.4_ML"
   echo "module load hecuba/0.1.3_ML"
 
   read -p "Continue? (y|n) " -n 1 -r
@@ -18,15 +13,9 @@
       [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
   fi
 
-  module load gcc/8.1.0
+  # module load gcc/8.1.0
   export COMPSS_PYTHON_VERSION=3-ML
-  # module load COMPSs/2.6
-  module use /apps/modules/modulefiles/tools/COMPSs/.custom
-  module load TrunkJCB
-  module load mkl/2018.1
-  module load impi/2018.1
-  module load opencv/4.1.2
-  module load python/3.6.4_ML
+  module load COMPSs/2.6.3
   module load hecuba/0.1.3_ML
 
   # Retrieve script arguments
@@ -84,17 +73,19 @@
     --log_level="${log_level}" \
     "${qos_flag}" \
     \
-    --classpath=/apps/HECUBA/0.1.3/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
+    --classpath=$HECUBA_ROOT/compss/ITF/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
     --pythonpath=${APP_PYTHONPATH}:${PYTHONPATH} \
     --storage_props=$(pwd)/hecuba_confs/storage_props.cfg \
-    --storage_home=/apps/HECUBA/0.1.3/ \
+    --storage_home=$HECUBA_ROOT/compss/ \
     \
     --lang=python \
     \
     "$exec_file" $@
 
+# --classpath=/apps/HECUBA/0.1.3/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
 # --classpath=$HECUBA_ROOT/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
 # --storage_home=$HECUBA_ROOT/ \
+# --storage_home=/apps/HECUBA/0.1.3/ \
 
 
 # Enqueue tests example:

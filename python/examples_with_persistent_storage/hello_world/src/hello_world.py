@@ -5,7 +5,7 @@ from utils.classes import hello
 @task(returns=1)
 def create_greeting(message):
     hi = hello(message)
-    hi.make_persistent()
+    hi.make_persistent("greet")
     return hi
 
 @task(returns=1)
