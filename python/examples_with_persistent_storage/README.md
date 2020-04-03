@@ -96,6 +96,34 @@ Please, **take care with the versions**.
  python3 -m pip install 'redis==3.0.1' 'redis-py-cluster==2.0.0' --user
 ```
 
+<!--
+## TBD If updating Redis to v5:
+
+COMPSs relies on the usage of ```redis-trib.rb``` script.
+
+> WARNING: redis-trib.rb is not longer available since v5!
+We should use redis-cli instead.
+
+All commands and features belonging to redis-trib.rb have been moved to ```redis-cli```.
+In order to use them you should call ```redis-cli``` with the ```--cluster```
+option followed by the subcommand name, arguments and options.
+
+Use the following syntax:
+```bash
+redis-cli --cluster SUBCOMMAND [ARGUMENTS] [OPTIONS]
+```
+
+Example:
+```bash
+redis-cli --cluster create 10.1.20.60:6379 10.1.20.61:6379 10.1.20.60:6380 --cluster-replicas 0
+```
+
+To get help about all subcommands, type:
+```bash
+redis-cli --cluster help
+```
+-->
+
 ## Issues
 
 If any issue is found, please contact <support-compss@bsc.es>
