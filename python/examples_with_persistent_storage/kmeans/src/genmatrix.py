@@ -139,7 +139,7 @@ def parse_arguments():
     return parser.parse_args()
 
 
-@task(returns=1)
+#@task(returns=1)
 def generate_fragment(points, dim, mode, seed, use_storage):
     """
     Generate a random fragment of the specified number of points using the
@@ -152,9 +152,6 @@ def generate_fragment(points, dim, mode, seed, use_storage):
     :param use_storage: Boolean use storage
     :return: Dataset fragment
     """
-    # from model.block import Block as PSCO
-    # ret = PSCO('frag' + str(seed))  # If we are using an snapshot thats enough
-    # return ret
     import numpy as np
 
     # Random generation distributions
@@ -180,16 +177,13 @@ def generate_fragment(points, dim, mode, seed, use_storage):
         mat /= mx
     # Create a PSCO and persist it in our storage.
     if use_storage:
-        from model.block import Block as PSCO
+        from block import Block as PSCO
     else:
-        from model.fake_block import PSCO
+        from fake_psco import PSCO
     # Adapting this part to Hecuba
     if use_storage:
-        # ret = PSCO('frag' + str(seed))  # The seed is different for each fragment, so I use it as id)
-        # ret.mat = mat                   # Overwrite the object content with the generated matrix
-        ret = PSCO()  # The seed is different for each fragment, so I use it as id)
+        ret = PSCO('frag' + str(seed))  # The seed is different for each fragment, so I use it as id)
         ret.mat = mat                   # Overwrite the object content with the generated matrix
-        ret.make_persistent('frag' + str(seed))
     else:
         ret = PSCO(mat)
     return ret
@@ -231,9 +225,9 @@ def main(seed, numpoints, dimensions, centres, fragments, mode, iterations, epsi
           generate_fragment(r - l, dimensions, mode, seed + l, use_storage)
         )
 
-    compss_barrier()
-    #import sys
-    #sys.exit(0)
+    #compss_barrier()
+    import sys
+    sys.exit(0)
 
     initialization_time = time.time()
 

@@ -1,4 +1,4 @@
-# Kmeans Application
+# Object Oriented Kmeans Application
 
 This application presents the Kmeans clustering algorithm parallelized with
 PyCOMPSs and using persistent storage backend to deal with the points fragments.
@@ -9,14 +9,13 @@ This application is composed of two main files:
 src
   |- model
   |    |- __init__.py
-  |    |- block.py
-  |    |- fake_block.py
+  |    |- fragment.py
   |
   |- kmeans.py
 ```
 
 The ```src/kmeans.py``` file contains the main of the Kmeans algorithm, while the
-```src/model/block.py``` contains the declaration of the fragment class with
+```src/model/fragment.py``` contains the declaration of the fragment class with
 its necessary methods for the clustering. These methods are declared as tasks
 for PyCOMPSs.
 
@@ -34,16 +33,16 @@ centers.
 
 * Launch with dataClay:
 ```bash
-./launch_with_dataClay.sh None 2 5 false $(pwd)/src/kmeans.py -n 1024 -f 8 -d 2 -c 4
+./launch_with_dataClay.sh None 2 5 false $(pwd)/src/kmeans.py 1024 8 2 4
 ```
 
 * Launch with Hecuba:
 ```bash
-./launch_with_Hecuba.sh None 2 5 false $(pwd)/src/kmeans.py -n 1024 -f 8 -d 2 -c 4
+./launch_with_Hecuba.sh None 2 5 false $(pwd)/src/kmeans.py 1024 8 2 4
 ```
 * Launch with Redis:
 ```bash
-./launch_with_redis.sh None 2 5 false $(pwd)/src/kmeans.py -n 1024 -f 8 -d 2 -c 4
+./launch_with_redis.sh None 2 5 false $(pwd)/src/kmeans.py 1024 8 2 4
 ```
 
 And also, contains a script to run the ```kmeans.py``` application
@@ -53,22 +52,6 @@ for *4* centers:
 
 ```bash
 ./run_with_redis.sh
-```
-
-## Available options
-
-```
--n <NUM_POINTS>........ Number of points
- -d <DIMENSIONS>........ Number of dimensions
- -c <CENTRES>........... Number of centres
- -f <FRAGMENTS>......... Number of fragments
- -s <SEED>.............. Define a seed
- -m <MODE>.............. Distribution of points ( uniform | normal )
- -i <ITERATIONS>........ Maximum number of iterations
- -e <EPSILON>........... Epsilon value. Convergence value.
- -l <NORM>.............. Norm for vectors ( l1 | l2 )
- --plot_result.......... Plot the resulting clustering (only for 2D)
- --use_storage.......... Use the available storage backend
 ```
 
 ## Issues

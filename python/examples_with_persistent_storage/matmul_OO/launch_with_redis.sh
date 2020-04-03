@@ -32,7 +32,7 @@
   num_nodes=${2:-2}
   execution_time=${3:-5}
   tracing=${4:-false}
-  exec_file=${5:-$(pwd)/src/kmeans.py}
+  exec_file=${5:-$(pwd)/src/matmul.py}
 
   # Define script variables
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -62,7 +62,7 @@
 
   # Enqueue job
   enqueue_compss \
-    --job_name=kmeans_PyCOMPSs_redis \
+    --job_name=matmul_PyCOMPSs_redis \
     --job_dependency="${job_dependency}" \
     --exec_time="${execution_time}" \
     --num_nodes="${num_nodes}" \
@@ -88,10 +88,10 @@
     \
     --lang=python \
     \
-    "$exec_file" $@ --use_storage
+    "$exec_file" $@
 
 # Enqueue tests example:
-# ./launch_with_redis.sh None 2 5 false $(pwd)/src/kmeans.py -n 1024 -f 8 -d 2 -c 4
+# ./launch_with_redis.sh None 2 5 false $(pwd)/src/matmul.py -b 4 -e 4 --check_result
 
 # OUTPUTS:
 # - compss-XX.out : Job output file

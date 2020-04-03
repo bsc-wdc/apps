@@ -1,4 +1,4 @@
-# Matrix Multiplication Application
+# Object Oriented Matrix Multiplication Application
 
 This application presents the Matrix multiplication algorithm parallelized with
 PyCOMPSs and using persistent storage backend to deal with the points fragments.
@@ -10,7 +10,6 @@ src
   |- classes
   |    |- __init__.py
   |    |- block.py
-  |    |- fake_block.py
   |
   |- matmul.py
 ```
@@ -51,16 +50,6 @@ matrices of 4 blocks with 4 elements per block, checking the result.:
 
 ```bash
 ./run_with_redis.sh
-```
-
-## Available options
-
-```
--b <NUM_BLOCKS>......... Number of blocks
- -e <NUM_ELEMENTS>...... Number of elements
- --check_result......... Compare distributed product with sequential result
- --seed <SEED>.......... Define a seed
- --use_storage.......... Use the available storage backend
 ```
 
 ## Issues

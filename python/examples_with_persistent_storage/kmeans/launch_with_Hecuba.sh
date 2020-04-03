@@ -14,7 +14,9 @@
   fi
 
   export COMPSS_PYTHON_VERSION=3-ML
-  module load COMPSs/2.6.3
+  # module load COMPSs/2.6.3
+  module use /apps/modules/modulefiles/tools/COMPSs/.custom
+  module load TrunkJCB
   module load hecuba/0.1.3_ML
 
   # Retrieve script arguments
@@ -72,21 +74,18 @@
     --log_level="${log_level}" \
     "${qos_flag}" \
     \
-    --classpath=/apps/HECUBA/0.1.3/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
+     --classpath=$HECUBA_ROOT/compss/ITF/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
     --pythonpath=${APP_PYTHONPATH}:${PYTHONPATH} \
     --storage_props=$(pwd)/hecuba_confs/storage_props.cfg \
-    --storage_home=/apps/HECUBA/0.1.3/ \
+    --storage_home=$HECUBA_ROOT/compss/ \
     \
     --lang=python \
     \
-    "$exec_file" $@
-
-# --classpath=$HECUBA_ROOT/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
-# --storage_home=$HECUBA_ROOT/ \
+    "$exec_file" $@ --use_storage
 
 
 # Enqueue tests example:
-# ./launch_with_Hecuba.sh None 2 5 false $(pwd)/src/kmeans.py 1024 8 2 4
+# ./launch_with_Hecuba.sh None 2 5 false $(pwd)/src/kmeans.py -n 1024 -f 8 -d 2 -c 4
 
 # OUTPUTS:
 # - compss-XX.out : Job output file

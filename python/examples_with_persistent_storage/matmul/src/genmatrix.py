@@ -1,9 +1,13 @@
-import numpy as np
+"""
+A matrix multiplication implementation with (optionally) PSCOs
+author: Sergio Rodriguez Guasch < sergio rodriguez at bsc dot es >
+"""
 from pycompss.api.task import task
 from pycompss.api.parameter import *
+from pycompss.api.constraint import constraint
 
-
-@task(returns=1)
+#@constraint(ComputingUnits="${ComputingUnits}")
+#@task(returns=1)
 def generate_block(size, num_blocks, seed=0, psco=False, use_storage=True, set_to_zero=False, p_name=''):
     """
     Generate a square block of given size.
@@ -15,10 +19,9 @@ def generate_block(size, num_blocks, seed=0, psco=False, use_storage=True, set_t
     :param set_to_zero:<Boolean> Set block to zeros
     :return: Block (with storage) or np.matrix (otherwise)
     """
+    import numpy as np
     np.random.seed(seed)
-    b = np.matrix(
-        np.random.random((size, size)) if not set_to_zero else np.zeros((size, size))
-    )
+    b = np.matrix(np.random.random((size, size)) if not set_to_zero else np.zeros((size, size)))
     # Normalize matrix to ensure more numerical precision
     if not set_to_zero:
         b /= np.sum(b) * float(num_blocks)
@@ -28,7 +31,7 @@ def generate_block(size, num_blocks, seed=0, psco=False, use_storage=True, set_t
         else:
             from classes.fake_block import Block
         ret = Block()
-        ret.block = b  # Hecuba assignment since does not support __init__
+        ret.block = b  # Hecuba assignment
         if use_storage:
             ret.make_persistent(p_name)
     else:
@@ -46,6 +49,9 @@ def multiply(A, B, C):
     :return: None
     """
     import numpy as np
+    #print "GREP ME PLEASE"
+    #print np.__version__
+    #print np.__file__
     C += np.dot(A.block, B.block)
     # C += A.block * B.block  # will not work (multiply element by element)
     # C += A * B  # This would work if __mult__ was supported.
@@ -71,7 +77,8 @@ def dot(A, B, C, set_barrier=False):
         from pycompss.api.api import compss_barrier
         compss_barrier()
 
-
+# 28 as computing units worked fine
+@constraint(ComputingUnits="${ComputingUnits}")
 @task()
 def persist_result(b, p_name=''):
     """
@@ -81,7 +88,8 @@ def persist_result(b, p_name=''):
     """
     from classes.block import Block
     bl = Block()
-    bl.block = b  # Hecuba assignment since does not support __init__
+    bl.block = b  # Hecuba assignment
+    print "YYY " + p_name
     bl.make_persistent(p_name)
 
 
@@ -113,26 +121,28 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
             for ix, l in enumerate([A, B]):
                 l[-1].append(generate_block(elems_per_block, num_blocks, seed=seed + bid, psco=True, use_storage=use_storage, p_name=matrix_name[ix] + str(i) + 'g' + str(j)))
                 bid += 1
-            C[-1].append(generate_block(elems_per_block, num_blocks, psco=False, set_to_zero=True, use_storage=use_storage, p_name=''))
+            #C[-1].append(generate_block(elems_per_block, num_blocks, psco=False, set_to_zero=True, use_storage=use_storage, p_name=''))
     compss_barrier()
-    initialization_time = time.time()
 
+    initialization_time = time.time()
+    '''
     # Do matrix multiplication
     dot(A, B, C, False)
 
     # Persist the result in a distributed manner (i.e: exploit data locality & avoid memory flooding)
     for i in range(num_blocks):
         for j in range(num_blocks):
-            # if use_storage:
-            #     persist_result(C[i][j], 'C' + str(i) + 'g' + str(j))
+            if use_storage:
+                persist_result(C[i][j], 'C' + str(i) + 'g' + str(j))
             # If we are not going to check the result, we can safely delete the Cij intermediate matrices
             if not check_result:
                 from pycompss.api.api import compss_delete_object
-                compss_delete_object(C[i][j])
+                #compss_delete_object(C[i][j])
 
     compss_barrier()
+    '''
     multiplication_time = time.time()
-
+ 
     # Check if we get the same result if multiplying sequentially (no tasks)
     # Note that this implies having the whole A and B matrices in the master,
     # so it is advisable to set --check_result only with small matrices
@@ -144,6 +154,12 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
             for j in range(num_blocks):
                 A[i][j] = compss_wait_on(A[i][j])
                 B[i][j] = compss_wait_on(B[i][j])
+                #print "ELOY WAS HERE"
+                #print 'Aij' + str(i) + str(j) + ":"
+                #print A[i][j].block
+                #print 'Bij' + str(i) + str(j) + ":"
+                #print B[i][j].block
+                
         for i in range(num_blocks):
             for j in range(num_blocks):
                 Cij = compss_wait_on(C[i][j])
@@ -152,11 +168,16 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
                 import numpy as np
                 for k in range(num_blocks):
                     Dij += np.dot(A[i][k].block, B[k][j].block)
+                #print "ELOY WAS HERE"
+                #print 'Cij' + str(i) + str(j) + ":"
+                #print Cij
+                #print 'Dij' + str(i) + str(j) + ":"
+                #print Dij
                 if not np.allclose(Cij, Dij):
                     print('Block %d-%d gives different products!' % (i, j))
                     return
         print('Distributed and sequential results coincide!')
-
+        
 
     print("-----------------------------------------")
     print("-------------- RESULTS ------------------")

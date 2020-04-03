@@ -2,11 +2,11 @@
 /usr/sbin/redis-server --daemonize yes
 
 runcompss \
-  -dg \
+  -d \
   --python_interpreter=python3 \
   --storage_impl=redis \
   --storage_conf=$(pwd)/redis_confs/storage_conf.cfg \
-  src/matmul.py -b 4 -e 4 --check_result --use_storage
+  src/kmeans.py 1024 8 2 4
 
 # End the storage standalone backend
 pkill redis
