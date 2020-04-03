@@ -1,8 +1,21 @@
 #!/bin/bash -e
 
-  export COMPSS_PYTHON_VERSION=2  # still no support for python3 in MN4
+  # THIS MUST BE INCLUDED INTO .bashrc
+  echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
+  echo "export COMPSS_PYTHON_VERSION=3-ML"
+  echo "module load COMPSs/2.6.3"
+  echo "module load hecuba/0.1.3_ML"
+
+  read -p "Continue? (y|n) " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  then
+      [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+  fi
+
+  export COMPSS_PYTHON_VERSION=3-ML
   module load COMPSs/2.6.3
-  module load hecuba/0.1.1
+  module load hecuba/0.1.3_ML
 
   # Retrieve script arguments
   job_dependency=${1:-None}
@@ -59,15 +72,15 @@
     --log_level="${log_level}" \
     "${qos_flag}" \
     \
-    --classpath=$HECUBA_JAR:$HECUBA_DEPENDENCY_LIBS/*:${APP_CLASSPATH}:${CLASSPATH} \
+    --classpath=$HECUBA_ROOT/compss/ITF/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
     --pythonpath=${APP_PYTHONPATH}:${PYTHONPATH} \
     --storage_props=$(pwd)/hecuba_confs/storage_props.cfg \
-    --storage_home=$COMPSS_STORAGE_HOME \
-    --prolog=$(pwd)/hecuba_confs/register.sh \
+    --storage_home=$HECUBA_ROOT/compss/ \
     \
     --lang=python \
     \
     "$exec_file" $@
+
 
 # Enqueue tests example:
 # ./launch_with_Hecuba.sh None 2 5 false $(pwd)/src/matmul.py -b 4 -e 4 --check_result

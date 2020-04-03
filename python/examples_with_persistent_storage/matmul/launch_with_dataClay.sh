@@ -1,8 +1,31 @@
 #!/bin/bash -e
 
+  # THIS MUST BE INCLUDED INTO .bashrc
+  echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
+  echo "module load gcc/8.1.0"
+  echo "export COMPSS_PYTHON_VERSION=3-ML"
+  echo "module load COMPSs/2.6.3"
+  echo "module load mkl/2018.1"
+  echo "module load impi/2018.1"
+  echo "module load opencv/4.1.2"
+  echo "module load python/3.6.4_ML"
+  echo "module load DATACLAY/2.0rc"
+
+  read -p "Continue? (y|n) " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  then
+      [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+  fi
+
+  module load gcc/8.1.0
   export COMPSS_PYTHON_VERSION=3-ML
   module load COMPSs/2.6.3
-  module load DATACLAY/2.0rc   # remember to add this module load to .bashrc!
+  module load mkl/2018.1
+  module load impi/2018.1
+  module load opencv/4.1.2
+  module load python/3.6.4_ML
+  module load DATACLAY/2.0rc
 
   # Retrieve script arguments
   job_dependency=${1:-None}
