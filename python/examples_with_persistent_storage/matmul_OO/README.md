@@ -1,4 +1,4 @@
-# Matrix Multiplication Application
+# Object Oriented Matrix Multiplication Application
 
 This application presents the Matrix multiplication algorithm parallelized with
 PyCOMPSs and using persistent storage backend to deal with the points fragments.

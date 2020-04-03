@@ -1,4 +1,4 @@
-# Kmeans Application
+# Object Oriented Kmeans Application
 
 This application presents the Kmeans clustering algorithm parallelized with
 PyCOMPSs and using persistent storage backend to deal with the points fragments.
