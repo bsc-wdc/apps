@@ -22,7 +22,7 @@ following lines to your ```.bashrc```:
 ```bash
 module load gcc/8.1.0
  export COMPSS_PYTHON_VERSION=3-ML
- module load COMPSs/2.6
+ module load COMPSs/2.6.3
  module load mkl/2018.1
  module load impi/2018.1
  module load opencv/4.1.2
@@ -36,13 +36,8 @@ In order to use PyCOMPSs with Hecuba in MN4, it is necessary to add the
 following lines to your ```.bashrc```:
 
 ```bash
-module load gcc/8.1.0
  export COMPSS_PYTHON_VERSION=3-ML
- module load COMPSs/2.6
- module load mkl/2018.1
- module load impi/2018.1
- module load opencv/4.1.2
- module load python/3.6.4_ML
+ module load COMPSs/2.6.3
  module load hecuba/0.1.3_ML
 ```
 
