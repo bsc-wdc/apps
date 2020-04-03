@@ -1,8 +1,3 @@
-"""
-A PSCO based implementation of the Wordcount algorithm.
-Tested with the official COMPSs-Redis implementation.
-2018
-"""
 import os
 from pycompss.api.task import task
 from pycompss.api.parameter import *
@@ -12,7 +7,8 @@ from classes.block import Words
 
 @task(returns=Words, file=FILE_IN, priority=True)
 def populate_psco(file_path):
-    """ Perform a wordcount of a file.
+    """
+    Perform a wordcount of a file.
     :param file_path: Absolute path of the file to process.
     :return: dictionary with the appearance of each word.
     """
@@ -25,7 +21,12 @@ def populate_psco(file_path):
 
 
 @task(returns=dict, priority=True)
-def wordcount_psco(block):
+def wordcount(block):
+    """
+    Wordcount over a psco block object.
+    :param block: Block with text to perform word counting.
+    :return: dictionary with the words and the number of appearances.
+    """
     data = block.get_text().split()
     result = defaultdict(int)
     for word in data:
@@ -35,7 +36,8 @@ def wordcount_psco(block):
 
 @task(returns=dict)
 def reduce(dic1, dic2):
-    """ Reduce dictionaries a and b.
+    """
+    Reduce dictionaries a and b.
     :param a: dictionary.
     :param b: dictionary.
     :return: dictionary result of merging a and b.
@@ -46,9 +48,10 @@ def reduce(dic1, dic2):
 
 
 def merge_reduce(f, data):
-    """ Apply function cumulatively to the items of data,
-        from left to right in binary tree structure, so as to
-        reduce the data to a single value.
+    """
+    Apply function cumulatively to the items of data,
+    from left to right in binary tree structure, so as to
+    reduce the data to a single value.
     :param f: function to apply to reduce data
     :param data: List of items to be reduced
     :return: result of reduce the data to a single value
@@ -68,13 +71,14 @@ def merge_reduce(f, data):
 def wordcount_pscos(pscos):
     """
     A Wordcount from pscos list algorithm.
-    Given a set of pscos, the algorithm checks the number of appearances of each word.
+    Given a set of pscos, the algorithm checks the number of appearances of
+    each word.
     :param pscos: List of pscos
     :return: Final word count
     """
     partial_result = []
     for psco in pscos:
-        partial_result.append(wordcount_psco(psco))
+        partial_result.append(wordcount(psco))
     result = merge_reduce(reduce, partial_result)
     return result
 
@@ -86,7 +90,8 @@ def parse_arguments():
     :return: Parsed arguments
     """
     import argparse
-    parser = argparse.ArgumentParser(description='A COMPSs-Redis Wordcount implementation.')
+    parser = argparse.ArgumentParser(
+                      description='A COMPSs-Redis Wordcount implementation.')
     parser.add_argument('-d', '--dataset_path', type=str,
                         help='Dataset path')
     return parser.parse_args()
@@ -94,7 +99,8 @@ def parse_arguments():
 
 def main(dataset_path):
     """
-    This will be executed if called as main script. Look @ wordcount for the Wordcount function.
+    This will be executed if called as main script. Look @ wordcount for the
+    Wordcount function.
     This code is used for experimental purposes.
     :param dataset_path: Dataset path
     :return: None

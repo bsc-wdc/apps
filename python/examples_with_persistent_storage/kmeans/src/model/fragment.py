@@ -8,7 +8,8 @@ except:
     except:
         # Redis
         from storage.storage_object import StorageObject
-        
+
+
 try:
     from pycompss.api.task import task
     from pycompss.api.parameter import IN, INOUT, CONCURRENT
@@ -40,13 +41,15 @@ class Fragment(StorageObject):
     @dclayMethod(centres='numpy.matrix', norm='anything', return_='anything')
     def cluster_and_partial_sums(self, centres, norm):
         """
-        Given self (fragment == set of points), declare a CxD matrix A and, for each point p:
-        1) Compute the nearest centre c of p
-        2) Add p / num_points_in_fragment to A[index(c)]
-        3) Set label[index(p)] = c
+        Given self (fragment == set of points), declare a CxD matrix A and,
+        for each point p:
+           1) Compute the nearest centre c of p
+           2) Add p / num_points_in_fragment to A[index(c)]
+           3) Set label[index(p)] = c
         :param centres: Centers
         :param norm: Norm for normalization
-        :return: Sum of points for each center, qty of associations for each center, and label for each point
+        :return: Sum of points for each center, qty of associations for each
+                 center, and label for each point
         """
         mat = self.points
         ret = np.matrix(np.zeros(centres.shape))
@@ -71,7 +74,7 @@ class Fragment(StorageObject):
             ret[label_i] += point
         return (ret, associates, labels)
 
-    @task() #target_direction=CONCURRENT)  # INOUT
+    @task()  # target_direction=CONCURRENT)  # INOUT
     @dclayMethod(num_points='int', dim='int', mode='str', seed='int')
     def generate_points(self, num_points, dim, mode, seed):
         """

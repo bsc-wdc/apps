@@ -1,11 +1,7 @@
-"""
-A matrix multiplication implementation with (optionally) PSCOs
-author: Sergio Rodriguez Guasch < sergio rodriguez at bsc dot es >
-"""
 from pycompss.api.task import task
 from pycompss.api.parameter import *
-
 from classes.block import Block
+
 
 @task(returns=1)
 def generate_block(size, num_blocks, seed=0, psco=False, set_to_zero=False):
@@ -164,8 +160,10 @@ def main(num_blocks, elems_per_block, check_result, seed):
     print("-----------------------------------------")
     print("-------------- RESULTS ------------------")
     print("-----------------------------------------")
-    print("Initialization time: %f" % (initialization_time - start_time))
-    print("Multiplication time: %f" % (multiplication_time - initialization_time))
+    print("Initialization time: %f" % (initialization_time -
+                                       start_time))
+    print("Multiplication time: %f" % (multiplication_time -
+                                       initialization_time))
     print("Total time: %f" % (multiplication_time - start_time))
     print("-----------------------------------------")
 
@@ -177,7 +175,8 @@ def parse_args():
     :return: Parsed arguments.
     """
     import argparse
-    parser = argparse.ArgumentParser(description='A COMPSs-PSCO blocked matmul implementation')
+    parser = argparse.ArgumentParser(
+                      description='COMPSs-PSCO blocked matmul implementation')
     parser.add_argument('-b', '--num_blocks', type=int, default=1,
                         help='Number of blocks (N in NxN)'
                         )

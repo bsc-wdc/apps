@@ -23,13 +23,15 @@ MODE = 'uniform'
 SEED = 42
 ITERATIONS = 5
 
+
 #############################################
 #############################################
 
 def mergeReduce(function, data):
-    """ Apply function cumulatively to the items of data,
-        from left to right in binary tree structure, so as to
-        reduce the data to a single value.
+    """
+    Apply function cumulatively to the items of data,
+    from left to right in binary tree structure, so as to
+    reduce the data to a single value.
     :param function: function to apply to reduce data
     :param data: List of items to be reduced
     :return: result of reduce the data to a single value
@@ -64,7 +66,8 @@ def reduceCentersTask(a, b):
     return (a_sum, a_associates, a_labels)
 
 
-def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20, seed=0., epsilon=1e-9, norm='l2'):
+def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
+                seed=0., epsilon=1e-9, norm='l2'):
     """
     A fragment-based K-Means algorithm.
     Given a set of fragments (which can be either PSCOs or future objects that
@@ -103,7 +106,8 @@ def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20, seed=0., e
             # For each fragment compute, for each point, the nearest centre.
             # Return the mean sum of the coordinates assigned to each centre.
             # Note that mean = mean ( sum of sub-means )
-            partial_result = frag.cluster_and_partial_sums(centres, norms[norm])
+            partial_result = frag.cluster_and_partial_sums(centres,
+                                                           norms[norm])
             partial_results.append(partial_result)
 
         # Aggregate results
