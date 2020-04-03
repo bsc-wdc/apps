@@ -2,7 +2,7 @@
 EXECUTION_DIR=~/.COMPSs/$SLURM_JOB_ID/storage
 export DATACLAYCLIENTCONFIG=$EXECUTION_DIR/cfgfiles/client.properties
 STUBS_PATH=$EXECUTION_DIR/stubs
-APP_PATH=/gpfs/home/bsc19/bsc19234/STORAGE/GENERIC/wordcount/src
+APP_PATH=/gpfs/home/bsc19/bsc19234/STORAGE/examples_with_persistent_storage/wordcount/src
 DATASET=hpc_dataset
 USERNAME=bsc_user
 PASSWORD=bsc_user

@@ -1,23 +1,32 @@
 """
-A File based implementation of the Wordcount algorithm.
-
-
+A PSCO based implementation of the Wordcount algorithm.
+Tested with the official COMPSs-Redis implementation.
+2018
 """
 import os
 from pycompss.api.task import task
 from pycompss.api.parameter import *
 from collections import defaultdict
+from classes.block import Words
 
 
-@task(returns=dict, file=FILE_IN, priority=True)
-def wordcount(file_path):
+@task(returns=Words, file=FILE_IN, priority=True)
+def populate_psco(file_path):
     """ Perform a wordcount of a file.
     :param file_path: Absolute path of the file to process.
     :return: dictionary with the appearance of each word.
     """
     fp = open(file_path)
-    data = fp.read().split()
+    data = fp.read()
     fp.close()
+    psco = Words(text=data)
+    psco.make_persistent()
+    return psco
+
+
+@task(returns=dict, priority=True)
+def wordcount_psco(block):
+    data = block.get_text().split()
     result = defaultdict(int)
     for word in data:
         result[word] += 1
@@ -56,17 +65,16 @@ def merge_reduce(f, data):
             return data[x]
 
 
-def wordcount_files(dataset_path):
+def wordcount_pscos(pscos):
     """
-    A Wordcount from files algorithm.
-    Given a set of files on the dataset_path, the algorithm checks the number of
-    appearances of each word.
-    :param dataset_path: Datset path
+    A Wordcount from pscos list algorithm.
+    Given a set of pscos, the algorithm checks the number of appearances of each word.
+    :param pscos: List of pscos
     :return: Final word count
     """
     partial_result = []
-    for fileName in os.listdir(dataset_path):
-        partial_result.append(wordcount(os.path.join(dataset_path, fileName)))
+    for psco in pscos:
+        partial_result.append(wordcount_psco(psco))
     result = merge_reduce(reduce, partial_result)
     return result
 
@@ -96,12 +104,15 @@ def main(dataset_path):
 
     start_time = time.time()
 
-    # The files already exist in disk
+    # We populate the storage with the file contents.
+    pscos = []
+    for fileName in os.listdir(dataset_path):
+        pscos.append(populate_psco(os.path.join(dataset_path, fileName)))
 
     population_time = time.time()
 
     # Run Wordcount
-    result = wordcount_files(dataset_path=dataset_path)
+    result = wordcount_pscos(pscos)
 
     result = compss_wait_on(result)
     wordcount_time = time.time()
