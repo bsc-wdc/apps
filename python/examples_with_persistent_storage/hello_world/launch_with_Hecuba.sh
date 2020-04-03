@@ -81,11 +81,6 @@
     \
     "$exec_file" $@
 
-# --classpath=/apps/HECUBA/0.1.3/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
-# --classpath=$HECUBA_ROOT/storage_home/StorageItf-1.0-jar-with-dependencies.jar:${APP_CLASSPATH}:${CLASSPATH} \
-# --storage_home=$HECUBA_ROOT/ \
-# --storage_home=/apps/HECUBA/0.1.3/ \
-
 
 # Enqueue tests example:
 # ./launch_with_Hecuba.sh None 2 5 false $(pwd)/src/hello_world.py
