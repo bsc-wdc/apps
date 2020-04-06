@@ -1,6 +1,12 @@
-from pycompss.api.task import task
-from pycompss.api.parameter import *
+from __future__ import print_function
+
+import time
 import numpy as np
+
+from pycompss.api.task import task
+from pycompss.api.parameter import INOUT
+from pycompss.api.api import compss_wait_on
+from pycompss.api.api import compss_barrier
 
 
 @task(returns=1, labels=INOUT)
@@ -40,14 +46,15 @@ def cluster_and_partial_sums(fragment, labels, centres, norm):
     return ret
 
 
-def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20, seed=0., epsilon=1e-9, norm='l2'):
+def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
+                seed=0., epsilon=1e-9, norm='l2'):
     """
     A fragment-based K-Means algorithm.
-    Given a set of fragments (which can be either PSCOs or future objects that
-    point to PSCOs), the desired number of clusters and the maximum number of
-    iterations, compute the optimal centres and the index of the centre
-    for each point.
-    PSCO.mat must be a NxD float np.matrix, where D = dimensions
+    Given a set of fragments (which can be either Fragments or future objects
+    that point to Fragments), the desired number of clusters and the maximum
+    number of iterations, compute the optimal centres and the index of the
+    centre for each point.
+    Fragment.mat must be a NxD float np.matrix, where D = dimensions
     :param fragments: Number of fragments
     :param dimensions: Number of dimensions
     :param num_centres: Number of centers
@@ -74,16 +81,18 @@ def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20, seed=0., e
     # Leave it empty at the beginning, update it inside the task. Avoid
     # having a linear amount of stuff in master's memory unnecessarily
     labels = [[] for _ in range(len(fragments))]
-    # Note: this implementation treats the centres as files, never as PSCOs.
+    # Note: this implementation treats the centres as files, never as Fragments
     for it in range(iterations):
         partial_results = []
         for (i, frag) in enumerate(fragments):
             # For each fragment compute, for each point, the nearest centre.
             # Return the mean sum of the coordinates assigned to each centre.
             # Note that mean = mean ( sum of sub-means )
-            partial_result = cluster_and_partial_sums(frag, labels[i], centres, norms[norm])
+            partial_result = cluster_and_partial_sums(frag, labels[i],
+                                                      centres, norms[norm])
             partial_results.append(partial_result)
-        # Bring the partial sums to the master, compute new centres when syncing
+        # Bring the partial sums to the master and
+        # compute new centres when syncing
         new_centres = np.matrix(np.zeros(centres.shape))
         from pycompss.api.api import compss_wait_on
         for partial in partial_results:
@@ -112,7 +121,7 @@ def parse_arguments():
     :return: Parsed arguments
     """
     import argparse
-    parser = argparse.ArgumentParser(description='A COMPSs-Redis Kmeans implementation.')
+    parser = argparse.ArgumentParser(description='KMeans Clustering.')
     parser.add_argument('-s', '--seed', type=int, default=0,
                         help='Pseudo-random seed. Default = 0')
     parser.add_argument('-n', '--numpoints', type=int, default=100,
@@ -122,18 +131,22 @@ def parse_arguments():
     parser.add_argument('-c', '--centres', type=int, default=5,
                         help='Number of centres. Default = 2')
     parser.add_argument('-f', '--fragments', type=int, default=10,
-                        help='Number of fragments. Default = 10. Condition: fragments < points')
+                        help='Number of fragments.' +
+                             ' Default = 10. Condition: fragments < points')
     parser.add_argument('-m', '--mode', type=str, default='uniform',
                         choices=['uniform', 'normal'],
                         help='Distribution of points. Default = uniform')
     parser.add_argument('-i', '--iterations', type=int, default=20,
                         help='Maximum number of iterations')
     parser.add_argument('-e', '--epsilon', type=float, default=1e-9,
-                        help='Epsilon. Kmeans will stop when |old - new| < epsilon.')
-    parser.add_argument('-l', '--lnorm', type=str, default='l2', choices=['l1', 'l2'],
+                        help='Epsilon. Kmeans will stop when:' +
+                             ' |old - new| < epsilon.')
+    parser.add_argument('-l', '--lnorm', type=str,
+                        default='l2', choices=['l1', 'l2'],
                         help='Norm for vectors')
     parser.add_argument('--plot_result', action='store_true',
-                        help='Plot the resulting clustering (only works if dim = 2).')
+                        help='Plot the resulting clustering' +
+                             ' (only works if dim = 2).')
     parser.add_argument('--use_storage', action='store_true',
                         help='Use storage?')
     return parser.parse_args()
@@ -152,9 +165,10 @@ def generate_fragment(points, dim, mode, seed, use_storage):
     :param use_storage: Boolean use storage
     :return: Dataset fragment
     """
-    # from model.block import Block as PSCO
-    # ret = PSCO('frag' + str(seed))  # If we are using an snapshot thats enough
-    # return ret
+    # from model.fragment import Fragment
+    # ret = Fragment('frag' + str(seed))
+    # return ret  # If we are using an snapshot thats enough
+
     import numpy as np
 
     # Random generation distributions
@@ -178,26 +192,26 @@ def generate_fragment(points, dim, mode, seed, use_storage):
     mx = np.max(mat)
     if mx > 0.0:
         mat /= mx
-    # Create a PSCO and persist it in our storage.
+
+    # Create a Fragment and persist it in our storage.
     if use_storage:
-        from model.block import Block as PSCO
-    else:
-        from model.fake_block import PSCO
-    # Adapting this part to Hecuba
-    if use_storage:
-        # ret = PSCO('frag' + str(seed))  # The seed is different for each fragment, so I use it as id)
-        # ret.mat = mat                   # Overwrite the object content with the generated matrix
-        ret = PSCO()  # The seed is different for each fragment, so I use it as id)
-        ret.mat = mat                   # Overwrite the object content with the generated matrix
+        from model.fragment import Fragment
+        ret = Fragment()
+        ret.mat = mat  # Overwrite the object content with the generated matrix
+        # The seed is different for each fragment, so I use it as id)
         ret.make_persistent('frag' + str(seed))
     else:
-        ret = PSCO(mat)
+        from model.fake_fragment import Fragment
+        ret = Fragment()
+        ret.mat = mat
     return ret
 
 
-def main(seed, numpoints, dimensions, centres, fragments, mode, iterations, epsilon, lnorm, plot_result, use_storage):
+def main(seed, numpoints, dimensions, centres, fragments, mode, iterations,
+         epsilon, lnorm, plot_result, use_storage):
     """
-    This will be executed if called as main script. Look @ kmeans_frag for the KMeans function.
+    This will be executed if called as main script. Look at the kmeans_frag
+    for the KMeans function.
     This code is used for experimental purposes.
     I.e it generates random data from some parameters that determine the size,
     dimensionality and etc and returns the elapsed time.
@@ -223,17 +237,17 @@ def main(seed, numpoints, dimensions, centres, fragments, mode, iterations, epsi
     fragment_list = []
     # Prevent infinite loops in case of not-so-smart users
     points_per_fragment = max(1, numpoints // fragments)
+
     for l in range(0, numpoints, points_per_fragment):
         # Note that the seed is different for each fragment.
         # This is done to avoid having repeated data.
         r = min(numpoints, l + points_per_fragment)
+
         fragment_list.append(
           generate_fragment(r - l, dimensions, mode, seed + l, use_storage)
         )
 
     compss_barrier()
-    #import sys
-    #sys.exit(0)
 
     initialization_time = time.time()
 
@@ -255,6 +269,7 @@ def main(seed, numpoints, dimensions, centres, fragments, mode, iterations, epsi
     print("Initialization time: %f" % (initialization_time - start_time))
     print("Kmeans time: %f" % (kmeans_time - initialization_time))
     print("Total time: %f" % (kmeans_time - start_time))
+    print("Centres: " + str(centres))
     print("-----------------------------------------")
 
     # Plot results if possible
