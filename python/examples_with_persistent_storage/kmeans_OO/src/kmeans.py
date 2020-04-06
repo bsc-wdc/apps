@@ -224,7 +224,7 @@ def main(seed, numpoints, dimensions, num_centres, fragments, mode, iterations,
     # Generate the data
     fragment_list = []
     # Prevent infinite loops in case of not-so-smart users
-    points_per_fragment = numpoints // fragments
+    points_per_fragment = max(1, numpoints // fragments)
 
     for l in range(0, numpoints, points_per_fragment):
         # Note that the seed is different for each fragment.
