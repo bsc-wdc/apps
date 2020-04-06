@@ -297,7 +297,6 @@ def main(seed, numpoints, dimensions, num_centres, fragments, mode, iterations,
         )
 
     compss_barrier()
-
     print("Generation/Load done")
     initialization_time = time.time()
     print("Starting kmeans")
