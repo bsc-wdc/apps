@@ -10,14 +10,14 @@ This application is composed of two main files:
 src
   |- model
   |    |- __init__.py
-  |    |- block.py
-  |    |- fake_block.py
+  |    |- fragment.py
+  |    |- fake_fragment.py
   |
   |- kmeans.py
 ```
 
 The ```src/kmeans.py``` file contains the main of the Kmeans algorithm, while
-the ```src/model/block.py``` contains the declaration of the fragment class
+the ```src/model/fragment.py``` contains the declaration of the Fragment class
 with its necessary methods for the clustering. These methods are declared as
 tasks for PyCOMPSs.
 
