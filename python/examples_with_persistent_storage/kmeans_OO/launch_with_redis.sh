@@ -62,7 +62,7 @@
 
   # Enqueue job
   enqueue_compss \
-    --job_name=kmeans_PyCOMPSs_redis \
+    --job_name=kmeansOO_PyCOMPSs_redis \
     --job_dependency="${job_dependency}" \
     --exec_time="${execution_time}" \
     --num_nodes="${num_nodes}" \

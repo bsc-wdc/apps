@@ -55,7 +55,7 @@
 
   # Enqueue job
   enqueue_compss \
-    --job_name=helloworld_PyCOMPSs_Hecuba \
+    --job_name=KmeansOO_PyCOMPSs_Hecuba \
     --job_dependency="${job_dependency}" \
     --exec_time="${execution_time}" \
     --num_nodes="${num_nodes}" \
