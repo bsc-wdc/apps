@@ -14,7 +14,9 @@
   fi
 
   export COMPSS_PYTHON_VERSION=3-ML
-  module load COMPSs/2.6.3
+  # module load COMPSs/2.6.3
+  module use /apps/modules/modulefiles/tools/COMPSs/.custom
+  module load TrunkJCB
   module load hecuba/0.1.3_ML
 
   # Retrieve script arguments
