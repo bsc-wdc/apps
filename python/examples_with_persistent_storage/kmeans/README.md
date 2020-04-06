@@ -1,7 +1,8 @@
 # Kmeans Application
 
 This application presents the Kmeans clustering algorithm parallelized with
-PyCOMPSs and using persistent storage backend to deal with the points fragments.
+PyCOMPSs and using persistent storage backend to deal with the points
+fragments.
 
 This application is composed of two main files:
 
@@ -9,16 +10,16 @@ This application is composed of two main files:
 src
   |- model
   |    |- __init__.py
-  |    |- block.py
-  |    |- fake_block.py
+  |    |- fragment.py
+  |    |- fake_fragment.py
   |
   |- kmeans.py
 ```
 
-The ```src/kmeans.py``` file contains the main of the Kmeans algorithm, while the
-```src/model/block.py``` contains the declaration of the fragment class with
-its necessary methods for the clustering. These methods are declared as tasks
-for PyCOMPSs.
+The ```src/kmeans.py``` file contains the main of the Kmeans algorithm, while
+the ```src/model/fragment.py``` contains the declaration of the Fragment class
+with its necessary methods for the clustering. These methods are declared as
+tasks for PyCOMPSs.
 
 In addition, this application also contains a set of scripts to submit the
 ```kmeans.py``` application within the <ins>MN4 supercomputer</ins>
@@ -30,7 +31,8 @@ generation disabled* to perform the kmeans clustering of *1024* points
 divided into *8* fragments, each point of *2* dimensions and looking for *4*
 centers.
 
-> Please, check the **[REQUIREMENTS](../README.md)** before using the following commands.
+> Please, check the **[REQUIREMENTS](../README.md)** before using the following
+commands.
 
 * Launch with dataClay:
 ```bash
@@ -55,6 +57,12 @@ for *4* centers:
 ./run_with_redis.sh
 ```
 
+Furthermore, it can also be executed without persistent storage backend with
+the same parameters:
+```bash
+./run.sh
+```
+
 ## Available options
 
 ```
@@ -63,11 +71,16 @@ for *4* centers:
  -c <CENTRES>........... Number of centres
  -f <FRAGMENTS>......... Number of fragments
  -s <SEED>.............. Define a seed
+                         (Default: 0)
  -m <MODE>.............. Distribution of points ( uniform | normal )
+                         (Default: uniform)
  -i <ITERATIONS>........ Maximum number of iterations
+                         (Default: 20)
  -e <EPSILON>........... Epsilon value. Convergence value.
+                         (Deftault: 1e-9)
  -l <NORM>.............. Norm for vectors ( l1 | l2 )
- --plot_result.......... Plot the resulting clustering (only for 2D)
+                         (Default: l2)
+ --plot_result.......... Plot the resulting clustering (only for 2 Dimensions)
  --use_storage.......... Use the available storage backend
 ```
 

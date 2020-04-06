@@ -10,7 +10,7 @@ except:
         from storage.storage_object import StorageObject
 
 
-class Block(StorageObject):
+class Fragment(StorageObject):
     """
     @ClassField mat numpy.ndarray
     """
