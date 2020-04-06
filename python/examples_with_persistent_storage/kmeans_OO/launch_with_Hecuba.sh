@@ -79,11 +79,11 @@
     \
     --lang=python \
     \
-    "$exec_file" $@
+    "$exec_file" $@ --use_storage
 
 
 # Enqueue tests example:
-# ./launch_with_Hecuba.sh None 2 5 false $(pwd)/src/kmeans.py 1024 8 2 4
+# ./launch_with_Hecuba.sh None 2 5 false $(pwd)/src/kmeans.py -n 1024 -f 8 -d 2 -c 4
 
 # OUTPUTS:
 # - compss-XX.out : Job output file

@@ -1,31 +1,12 @@
 from __future__ import print_function
 
 import time
-import sys
 import numpy as np
 
 from pycompss.api.task import task
 from pycompss.api.api import compss_wait_on
 from pycompss.api.api import compss_barrier
 
-from model.fragment import Fragment
-
-
-#############################################
-# Constants / experiment values:
-#############################################
-
-# NUMPOINTS = 40000
-# FRAGMENTS = 100
-# DIMENSIONS = 20
-# CENTERS = 20
-MODE = 'uniform'
-SEED = 42
-ITERATIONS = 5
-
-
-#############################################
-#############################################
 
 def mergeReduce(function, data):
     """
@@ -49,7 +30,7 @@ def mergeReduce(function, data):
 
 
 @task(returns=tuple, priority=True)
-def reduceCentersTask(a, b):
+def reducecentresTask(a, b):
     """
     Reduce method to sum the result of two partial_sum methods
     :param a: partial_sum matrix containing the sum and the cardinal
@@ -77,12 +58,12 @@ def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
     PSCO.mat must be a NxD float np.matrix, where D = dimensions
     :param fragments: Number of fragments
     :param dimensions: Number of dimensions
-    :param num_centres: Number of centers
+    :param num_centres: Number of centres
     :param iterations: Maximum number of iterations
     :param seed: Random seed
     :param epsilon: Epsilon (convergence distance)
     :param norm: Norm
-    :return: Final centers and labels
+    :return: Final centres and labels
     """
     # Choose the norm among the available ones
     norms = {
@@ -111,7 +92,7 @@ def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
             partial_results.append(partial_result)
 
         # Aggregate results
-        agg_result = mergeReduce(reduceCentersTask, partial_results)
+        agg_result = mergeReduce(reducecentresTask, partial_results)
         new_centres, associates, labels = compss_wait_on(agg_result)
         # Normalize
         new_centres /= associates.reshape(len(associates), 1)
@@ -125,29 +106,134 @@ def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
     return centres, labels
 
 
-def main():
-    NUMPOINTS = int(sys.argv[1])
-    FRAGMENTS = int(sys.argv[2])
-    DIMENSIONS = int(sys.argv[3])
-    CENTERS = int(sys.argv[4])
+def parse_arguments():
+    """
+    Parse command line arguments. Make the program generate
+    a help message in case of wrong usage.
+    :return: Parsed arguments
+    """
+    import argparse
+    parser = argparse.ArgumentParser(description='KMeans Clustering.')
+    parser.add_argument('-s', '--seed', type=int, default=0,
+                        help='Pseudo-random seed. Default = 0')
+    parser.add_argument('-n', '--numpoints', type=int, default=100,
+                        help='Number of points. Default = 100')
+    parser.add_argument('-d', '--dimensions', type=int, default=2,
+                        help='Number of dimensions. Default = 2')
+    parser.add_argument('-c', '--num_centres', type=int, default=5,
+                        help='Number of centres. Default = 2')
+    parser.add_argument('-f', '--fragments', type=int, default=10,
+                        help='Number of fragments.' +
+                             ' Default = 10. Condition: fragments < points')
+    parser.add_argument('-m', '--mode', type=str, default='uniform',
+                        choices=['uniform', 'normal'],
+                        help='Distribution of points. Default = uniform')
+    parser.add_argument('-i', '--iterations', type=int, default=20,
+                        help='Maximum number of iterations')
+    parser.add_argument('-e', '--epsilon', type=float, default=1e-9,
+                        help='Epsilon. Kmeans will stop when:' +
+                             ' |old - new| < epsilon.')
+    parser.add_argument('-l', '--lnorm', type=str,
+                        default='l2', choices=['l1', 'l2'],
+                        help='Norm for vectors')
+    parser.add_argument('--plot_result', action='store_true',
+                        help='Plot the resulting clustering' +
+                             ' (only works if dim = 2).')
+    parser.add_argument('--use_storage', action='store_true',
+                        help='Use storage?')
+    return parser.parse_args()
 
+
+def generate_fragment(points, dim, mode, seed, use_storage):
+    """
+    Generate a random fragment of the specified number of points using the
+    specified mode and the specified seed. Note that the generation is
+    distributed (the master will never see the actual points).
+    :param points: Number of points
+    :param dim: Number of dimensions
+    :param mode: Dataset generation mode
+    :param seed: Random seed
+    :param use_storage: Boolean use storage
+    :return: Dataset fragment
+    """
+    # Create a Fragment and persist it in our storage.
+    if use_storage:
+        from model.fragment import Fragment
+        fragment = Fragment()
+        # Make persistent before since it is populated in the task
+        fragment.make_persistent()
+        fragment.generate_points(points, dim, mode, seed)
+    else:
+        from model.fake_fragment import Fragment
+        fragment = Fragment()
+        fragment.generate_points(points, dim, mode, seed)
+    return fragment
+
+
+def plot_result(fragment_list, centres):
+    """
+    Generate an image showing the points (whose colour determined the cluster
+    they belong to) and the centers.
+    :param fragment_list: List of fragments
+    :param centres: Centres
+    :return: None
+    """
+    import matplotlib.pyplot as plt
+    plt.figure('Clustering')
+
+    def color_wheel(i):
+        l = ['red', 'purple', 'blue', 'cyan', 'green']
+        return l[i % len(l)]
+
+    idx = 0
+    for frag in fragment_list:
+        frag = compss_wait_on(frag)
+        for (i, p) in enumerate(frag.mat):
+            col = color_wheel(labels[idx])
+            plt.scatter(p[0, 0], p[0, 1], color=col)
+            idx += 1
+    for centre in centres:
+        plt.scatter(centre[0, 0], centre[0, 1], color='black')
+    import uuid
+    plt.savefig('%s.png' % str(uuid.uuid4()))
+
+
+def main(seed, numpoints, dimensions, num_centres, fragments, mode, iterations,
+         epsilon, lnorm, plot_result, use_storage):
+    """
+    This will be executed if called as main script. Look at the kmeans_frag
+    for the KMeans function.
+    This code is used for experimental purposes.
+    I.e it generates random data from some parameters that determine the size,
+    dimensionality and etc and returns the elapsed time.
+    :param seed: Random seed
+    :param numpoints: Number of points
+    :param dimensions: Number of dimensions
+    :param num_centres: Number of centres
+    :param fragments: Number of fragments
+    :param mode: Dataset generation mode
+    :param iterations: Number of iterations
+    :param epsilon: Epsilon (convergence distance)
+    :param lnorm: Norm to use
+    :param plot_result: Boolean to plot result
+    :param use_storage: Boolean to use storage
+    :return: None
+    """
     start_time = time.time()
 
     # Generate the data
     fragment_list = []
     # Prevent infinite loops in case of not-so-smart users
-    points_per_fragment = NUMPOINTS // FRAGMENTS
+    points_per_fragment = numpoints // fragments
 
-    for i, l in enumerate(range(0, NUMPOINTS, points_per_fragment)):
+    for l in range(0, numpoints, points_per_fragment):
         # Note that the seed is different for each fragment.
         # This is done to avoid having repeated data.
-        r = min(NUMPOINTS, l + points_per_fragment)
+        r = min(numpoints, l + points_per_fragment)
 
-        fragment = Fragment()
-        fragment.make_persistent()
-        fragment.generate_points(r - l, DIMENSIONS, MODE, SEED + l)
-
-        fragment_list.append(fragment)
+        fragment_list.append(
+            generate_fragment(r - l, dimensions, mode, seed + l, use_storage)
+        )
 
     compss_barrier()
     print("Generation/Load done")
@@ -155,29 +241,32 @@ def main():
     print("Starting kmeans")
 
     # Run kmeans
-    num_centers = CENTERS
     centres, labels = kmeans_frag(fragments=fragment_list,
-                                  dimensions=DIMENSIONS,
-                                  num_centres=num_centers,
-                                  iterations=ITERATIONS,
-                                  seed=SEED)
+                                  dimensions=dimensions,
+                                  num_centres=num_centres,
+                                  iterations=iterations,
+                                  seed=seed,
+                                  epsilon=epsilon,
+                                  norm=lnorm)
     compss_barrier()
     print("Ending kmeans")
-
     kmeans_time = time.time()
 
-    print("Second round of kmeans")
+    # Run again kmeans (system cache will be filled)
+    print("Second kmeans")
     centres, labels = kmeans_frag(fragments=fragment_list,
-                                  dimensions=DIMENSIONS,
-                                  num_centres=num_centers,
-                                  iterations=ITERATIONS,
-                                  seed=SEED)
+                                  dimensions=dimensions,
+                                  num_centres=num_centres,
+                                  iterations=iterations,
+                                  seed=seed,
+                                  epsilon=epsilon,
+                                  norm=lnorm)
     compss_barrier()
-    print("Ending kmeans")
+    print("Ending second kmeans")
     kmeans_2nd = time.time()
 
     print("-----------------------------------------")
-    print("----- RESULTS (PyCOMPSs + Storage) ------")
+    print("-------------- RESULTS ------------------")
     print("-----------------------------------------")
     print("Initialization time: %f" % (initialization_time - start_time))
     print("Kmeans time: %f" % (kmeans_time - initialization_time))
@@ -189,6 +278,11 @@ def main():
     print(centres)
     print("-----------------------------------------")
 
+    # Plot results if possible
+    if dimensions == 2 and plot_result:
+        plot_result(fragment_list, centres)
+
 
 if __name__ == "__main__":
-    main()
+    options = parse_arguments()
+    main(**vars(options))
