@@ -3,7 +3,7 @@
   # THIS MUST BE INCLUDED INTO .bashrc
   echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
   echo "export COMPSS_PYTHON_VERSION=3-ML"
-  echo "module load COMPSs/2.6.3"
+  echo "module load COMPSs/Trunk"
   echo "module load hecuba/0.1.3_ML"
 
   read -p "Continue? (y|n) " -n 1 -r
@@ -14,7 +14,7 @@
   fi
 
   export COMPSS_PYTHON_VERSION=3-ML
-  module load COMPSs/2.6.3
+  module load COMPSs/Trunk
   module load hecuba/0.1.3_ML
 
   # Retrieve script arguments
@@ -53,7 +53,7 @@
 
   # Enqueue job
   enqueue_compss \
-    --job_name=helloworld_PyCOMPSs_Hecuba \
+    --job_name=kmeansOO_PyCOMPSs_Hecuba \
     --job_dependency="${job_dependency}" \
     --exec_time="${execution_time}" \
     --num_nodes="${num_nodes}" \

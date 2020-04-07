@@ -11,9 +11,7 @@
   fi
 
   export COMPSS_PYTHON_VERSION=3-ML
-  # module load COMPSs/2.6.3
-  module use /apps/modules/modulefiles/tools/COMPSs/.custom
-  module load TrunkJCB
+  module load COMPSs/Trunk
 
   module load ruby
   export PATH=/apps/COMPSs/Storage/Redis/bin:$PATH
@@ -32,7 +30,7 @@
   num_nodes=${2:-2}
   execution_time=${3:-5}
   tracing=${4:-false}
-  exec_file=${5:-$(pwd)/src/wordcount_storage.py}
+  exec_file=${5:-$(pwd)/src/wordcount.py}
 
   # Define script variables
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -62,7 +60,7 @@
 
   # Enqueue job
   enqueue_compss \
-    --job_name=matmul_PyCOMPSs_redis \
+    --job_name=wordcount_PyCOMPSs_redis \
     --job_dependency="${job_dependency}" \
     --exec_time="${execution_time}" \
     --num_nodes="${num_nodes}" \
