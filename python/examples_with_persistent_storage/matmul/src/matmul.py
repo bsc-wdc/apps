@@ -39,7 +39,7 @@ def generate_block(size, num_blocks, seed=0, use_storage=False,
 @task(C=INOUT)
 def multiply(A, B, C):
     """
-    Multiplies two blocks and accumulates the result in an INOUT matrix
+    Multiplies two Blocks and accumulates the result in an INOUT Block
     :param A: Block A
     :param B: Block B
     :param C: Result Block
