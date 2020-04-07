@@ -30,7 +30,7 @@ def generate_block(size, num_blocks, seed=0, use_storage=False,
     if use_storage:
         from classes.block import Block
         ret = Block()
-        ret.block = b  # Hecuba assignment since does not support __init__
+        ret.block = b
         ret.make_persistent()
     else:
         from classes.fake_block import Block
@@ -49,8 +49,6 @@ def multiply(A, B, C):
     :return: None
     """
     C.block += np.dot(A.block, B.block)
-    # C.block += A.block * B.block  # will not work (mult. element by element)
-    # C.block += A * B  # This would work if __mult__ was supported.
 
 
 def dot(A, B, C):
