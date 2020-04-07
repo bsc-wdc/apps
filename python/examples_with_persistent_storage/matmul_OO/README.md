@@ -52,6 +52,12 @@ matrices of 4 blocks with 4 elements per block, checking the result.:
 ./run_with_redis.sh
 ```
 
+Furthermore, it can also be executed without persistent storage backend with
+the same parameters:
+```bash
+./run.sh
+```
+
 ## Issues
 
 If any issue is found, please contact <support-compss@bsc.es>
