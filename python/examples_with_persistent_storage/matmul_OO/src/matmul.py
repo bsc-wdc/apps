@@ -44,9 +44,7 @@ def multiply(A, B, C):
     :param C: Result Block
     :return: None
     """
-    # C.block += np.dot(A.block, B.block)
-    # C.block += A.block * B.block  # will not work (mult. element by element)
-    C += A * B  # This works if __mult__ is supported.
+    C += A * B  # This works thanks to __mult__ and __iadd__
 
 
 def dot(A, B, C):

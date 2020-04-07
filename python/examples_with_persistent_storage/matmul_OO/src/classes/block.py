@@ -59,7 +59,7 @@ class Block(StorageObject):
 
     @dclayMethod(other='classes.block.Block', return_='classes.block.Block')
     def __mul__(self, other):
-        return Block(self.block * other.block)
+        return Block(np.dot(self.block, other.block))
 
     @dclayMethod(other='classes.block.Block', return_='classes.block.Block')
     def __iadd__(self, other):

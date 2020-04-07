@@ -29,7 +29,7 @@ class Block(object):
         self.block = b
 
     def __mul__(self, other):
-        return Block(self.block * other.block)
+        return Block(np.dot(self.block * other.block))
 
     def __iadd__(self, other):
         self.block += other.block
