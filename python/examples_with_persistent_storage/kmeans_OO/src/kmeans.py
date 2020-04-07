@@ -55,7 +55,7 @@ def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
     point to PSCOs), the desired number of clusters and the maximum number of
     iterations, compute the optimal centres and the index of the centre
     for each point.
-    PSCO.mat must be a NxD float np.matrix, where D = dimensions
+    PSCO.mat must be a NxD float np.ndarray, where D = dimensions
     :param fragments: Number of fragments
     :param dimensions: Number of dimensions
     :param num_centres: Number of centres
@@ -74,7 +74,7 @@ def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
     np.random.seed(seed)
     # Centres is usually a very small matrix, so it is affordable to have it in
     # the master.
-    centres = np.matrix(
+    centres = np.asarray(
         [np.random.random(dimensions) for _ in range(num_centres)]
     )
 

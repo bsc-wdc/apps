@@ -14,12 +14,3 @@ class Block(StorageObject):
     """
     @ClassField block numpy.ndarray
     """
-
-    # # Unsupported with Hecuba
-    # def __init__(self, block):
-    #     super(Block, self).__init__()
-    #     self.block = block
-
-    # # Unsupported with Hecuba
-    # def __mul__(self, other):
-    #     return self.block * other.block

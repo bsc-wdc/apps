@@ -29,7 +29,7 @@ class Fragment(object):
         }
         r = rand[mode]
         np.random.seed(seed)
-        mat = np.matrix(
+        mat = np.asarray(
             [r(dim) for __ in range(num_points)]
         )
         # Normalize all points between 0 and 1
@@ -54,7 +54,7 @@ class Fragment(object):
                  center, and label for each point
         """
         mat = self.points
-        ret = np.matrix(np.zeros(centres.shape))
+        ret = np.zeros(centres.shape)
         n = mat.shape[0]
         c = centres.shape[0]
         labels = list()
