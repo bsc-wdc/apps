@@ -63,7 +63,7 @@
 
   # Enqueue job
   enqueue_compss \
-    --job_name=matmul_PyCOMPSs_dataClay \
+    --job_name=matmulOO_PyCOMPSs_dataClay \
     --job_dependency="${job_dependency}" \
     --exec_time="${execution_time}" \
     --num_nodes="${num_nodes}" \

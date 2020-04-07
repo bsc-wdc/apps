@@ -32,7 +32,7 @@
   num_nodes=${2:-2}
   execution_time=${3:-5}
   tracing=${4:-false}
-  exec_file=${5:-$(pwd)/src/wordcount_storage.py}
+  exec_file=${5:-$(pwd)/src/wordcount.py}
 
   # Define script variables
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -63,7 +63,7 @@
 
   # Enqueue job
   enqueue_compss \
-    --job_name=matmul_PyCOMPSs_dataClay \
+    --job_name=wordcount_PyCOMPSs_dataClay \
     --job_dependency="${job_dependency}" \
     --exec_time="${execution_time}" \
     --num_nodes="${num_nodes}" \

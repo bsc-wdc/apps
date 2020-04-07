@@ -3,7 +3,7 @@
   # THIS MUST BE INCLUDED INTO .bashrc
   echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
   echo "export COMPSS_PYTHON_VERSION=3-ML"
-  echo "module load COMPSs/2.6.3"
+  echo "module load COMPSs/Trunk"
   echo "module load hecuba/0.1.3_ML"
 
   read -p "Continue? (y|n) " -n 1 -r
@@ -22,7 +22,7 @@
   num_nodes=${2:-2}
   execution_time=${3:-5}
   tracing=${4:-false}
-  exec_file=${5:-$(pwd)/src/wordcount_storage.py}
+  exec_file=${5:-$(pwd)/src/wordcount.py}
 
   # Define script variables
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -53,7 +53,7 @@
 
   # Enqueue job
   enqueue_compss \
-    --job_name=matmul_PyCOMPSs_Hecuba \
+    --job_name=wordcount_PyCOMPSs_Hecuba \
     --job_dependency="${job_dependency}" \
     --exec_time="${execution_time}" \
     --num_nodes="${num_nodes}" \
