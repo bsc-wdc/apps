@@ -1,33 +1,42 @@
 import os
+import time
+from collections import defaultdict
+
 from pycompss.api.task import task
 from pycompss.api.parameter import *
-from collections import defaultdict
-from classes.block import Words
+from pycompss.api.api import compss_wait_on
 
 
-@task(returns=Words, file=FILE_IN, priority=True)
-def populate_psco(file_path):
+@task(returns=1, file=FILE_IN, priority=True)
+def populate_block(file_path, use_storage):
     """
     Perform a wordcount of a file.
     :param file_path: Absolute path of the file to process.
+    :param use_storage: Use a persistent object.
     :return: dictionary with the appearance of each word.
     """
+    if use_storage:
+        from classes.block import Words
+    else:
+        from classes.fake_block import Words
     fp = open(file_path)
     data = fp.read()
     fp.close()
-    psco = Words(text=data)
-    psco.make_persistent()
+    psco = Words()
+    psco.text = data
+    if use_storage:
+        psco.make_persistent(os.path.basename(file_path))
     return psco
 
 
-@task(returns=dict, priority=True)
+@task(returns=defaultdict, priority=True)
 def wordcount(block):
     """
-    Wordcount over a psco block object.
+    Wordcount over a Words object.
     :param block: Block with text to perform word counting.
     :return: dictionary with the words and the number of appearances.
     """
-    data = block.get_text().split()
+    data = block.text.split()
     result = defaultdict(int)
     for word in data:
         result[word] += 1
@@ -68,17 +77,17 @@ def merge_reduce(f, data):
             return data[x]
 
 
-def wordcount_pscos(pscos):
+def word_count(blocks):
     """
-    A Wordcount from pscos list algorithm.
-    Given a set of pscos, the algorithm checks the number of appearances of
-    each word.
-    :param pscos: List of pscos
+    A Wordcount from Words list algorithm.
+    Given a set of Words blocks, the algorithm checks the number of appearances
+    of each word.
+    :param blocks: List of blocks
     :return: Final word count
     """
     partial_result = []
-    for psco in pscos:
-        partial_result.append(wordcount(psco))
+    for b in blocks:
+        partial_result.append(wordcount(b))
     result = merge_reduce(reduce, partial_result)
     return result
 
@@ -91,13 +100,15 @@ def parse_arguments():
     """
     import argparse
     parser = argparse.ArgumentParser(
-                      description='A COMPSs-Redis Wordcount implementation.')
+                      description='Wordcount application.')
     parser.add_argument('-d', '--dataset_path', type=str,
                         help='Dataset path')
+    parser.add_argument('--use_storage', action='store_true',
+                        help='Use storage?')
     return parser.parse_args()
 
 
-def main(dataset_path):
+def main(dataset_path, use_storage):
     """
     This will be executed if called as main script. Look @ wordcount for the
     Wordcount function.
@@ -105,20 +116,18 @@ def main(dataset_path):
     :param dataset_path: Dataset path
     :return: None
     """
-    from pycompss.api.api import compss_wait_on
-    import time
-
     start_time = time.time()
 
     # We populate the storage with the file contents.
-    pscos = []
+    blocks = []
     for fileName in os.listdir(dataset_path):
-        pscos.append(populate_psco(os.path.join(dataset_path, fileName)))
+        blocks.append(populate_block(os.path.join(dataset_path, fileName),
+                                     use_storage))
 
     population_time = time.time()
 
     # Run Wordcount
-    result = wordcount_pscos(pscos)
+    result = word_count(blocks)
 
     result = compss_wait_on(result)
     wordcount_time = time.time()

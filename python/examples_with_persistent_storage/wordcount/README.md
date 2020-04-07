@@ -18,10 +18,11 @@ dataset
   |- ...
 ```
 
-The ```src/wordcount.py``` file contains the main of the Wordcount algorithm, while the
-```src/classes/block.py``` contains the declaration of the Words class with
-its necessary methods for text addition and retrieval. The ```dataset```
-folder contains a set of 4 testing text files to perform the wordcount.
+The ```src/wordcount.py``` file contains the main of the Wordcount algorithm,
+while the ```src/classes/block.py``` contains the declaration of the Words
+class with its necessary methods for text addition and retrieval. The
+```dataset``` folder contains a set of 4 testing text files to perform the
+wordcount.
 
 In addition, this application also contains a set of scripts to submit the
 ```wordcount.py``` application within the <ins>MN4 supercomputer</ins>
@@ -54,6 +55,12 @@ And also, contains a script to run the ```wordcount.py``` application
 
 ```bash
 ./run_with_redis.sh
+```
+
+Furthermore, it can also be executed without persistent storage backend with
+the same parameters:
+```bash
+./run.sh
 ```
 
 ## Issues
