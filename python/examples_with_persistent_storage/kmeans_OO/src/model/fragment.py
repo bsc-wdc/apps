@@ -12,10 +12,10 @@ except:
 
 try:
     from pycompss.api.task import task
-    from pycompss.api.parameter import IN, INOUT, CONCURRENT
+    from pycompss.api.parameter import INOUT
 except ImportError:
     # Required since the pycompss module is not ready during the registry
-    from dataclay.contrib.dummy_pycompss import task, INOUT, IN, CONCURRENT
+    from dataclay.contrib.dummy_pycompss import task, INOUT
 
 try:
     from dataclay import dclayMethod
@@ -28,7 +28,7 @@ import numpy as np
 
 class Fragment(StorageObject):
     """
-    @ClassField points numpy.matrix
+    @ClassField points numpy.ndarray
 
     @dclayImport numpy as np
     """
@@ -57,7 +57,7 @@ class Fragment(StorageObject):
         }
         r = rand[mode]
         np.random.seed(seed)
-        mat = np.matrix(
+        mat = np.asarray(
             [r(dim) for __ in range(num_points)]
         )
         # Normalize all points between 0 and 1
@@ -83,7 +83,7 @@ class Fragment(StorageObject):
                  center, and label for each point
         """
         mat = self.points
-        ret = np.matrix(np.zeros(centres.shape))
+        ret = np.zeros(centres.shape)
         n = mat.shape[0]
         c = centres.shape[0]
         labels = list()
