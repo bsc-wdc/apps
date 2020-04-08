@@ -80,9 +80,9 @@ def main(dataset_path, use_storage):
     :return: None
     """
     if use_storage:
-        from classes.block import Words
+        from storage_model.block import Words
     else:
-        from classes.fake_block import Words
+        from model.block import Words
 
     start_time = time.time()
 
