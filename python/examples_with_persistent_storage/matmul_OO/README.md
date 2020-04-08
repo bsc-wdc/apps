@@ -58,6 +58,16 @@ the same parameters:
 ./run.sh
 ```
 
+## Available options
+
+```
+-b <NUM_BLOCKS>......... Number of blocks
+ -e <NUM_ELEMENTS>...... Number of elements
+ --check_result......... Compare distributed product with sequential result
+ --seed <SEED>.......... Define a seed
+ --use_storage.......... Use the available storage backend
+```
+
 ## Issues
 
 If any issue is found, please contact <support-compss@bsc.es>
