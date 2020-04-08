@@ -11,9 +11,9 @@ def create_greeting(message, use_storage):
     :return: The populated persistent object.
     """
     if use_storage:
-        from utils.classes import hello
+        from storage_model.classes import hello
     else:
-        from utils.fake_classes import hello
+        from model.classes import hello
     hi = hello()
     hi.message = message
     if use_storage:
