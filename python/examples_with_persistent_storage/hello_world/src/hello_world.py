@@ -1,18 +1,23 @@
 from pycompss.api.task import task
 from pycompss.api.api import compss_wait_on
-from utils.classes import hello
 
 
 @task(returns=1)
-def create_greeting(message):
+def create_greeting(message, use_storage):
     """
     Instantiates a persistent object and populates it with the received
     message.
     :param message: String with the information to store in the psco.
     :return: The populated persistent object.
     """
-    hi = hello(message)
-    hi.make_persistent("greet")
+    if use_storage:
+        from utils.classes import hello
+    else:
+        from utils.fake_classes import hello
+    hi = hello()
+    hi.message = message
+    if use_storage:
+        hi.make_persistent("greet")
     return hi
 
 
@@ -23,7 +28,7 @@ def greet(greetings):
     :param greetings: Persistent object.
     :return: String with the psco content.
     """
-    content = greetings.get()
+    content = greetings.message
     return content
 
 
@@ -38,9 +43,22 @@ def check_greeting(content, message):
     return content == message
 
 
-def main():
+def parse_arguments():
+    """
+    Parse command line arguments. Make the program generate
+    a help message in case of wrong usage.
+    :return: Parsed arguments
+    """
+    import argparse
+    parser = argparse.ArgumentParser(description='Hello world.')
+    parser.add_argument('--use_storage', action='store_true',
+                        help='Use storage?')
+    return parser.parse_args()
+
+
+def main(use_storage):
     message = "Hello world"
-    greeting = create_greeting(message)
+    greeting = create_greeting(message, use_storage)
     content = greet(greeting)
     result = check_greeting(content, message)
     result_wrong = check_greeting(content, message + "!!!")
@@ -54,5 +72,6 @@ def main():
         raise Exception(msg)
 
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    options = parse_arguments()
+    main(**vars(options))

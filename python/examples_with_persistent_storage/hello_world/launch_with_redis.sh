@@ -86,7 +86,7 @@
     \
     --lang=python \
     \
-    "$exec_file" $@
+    "$exec_file" $@ --use_storage
 
 # Enqueue tests example:
 # ./launch_with_redis.sh None 2 5 false $(pwd)/src/hello_world.py

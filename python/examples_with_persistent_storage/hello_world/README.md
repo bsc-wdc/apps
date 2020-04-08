@@ -59,6 +59,12 @@ And also, contains a script to run the ```hello_world.py``` application
 ./run_with_redis.sh
 ```
 
+Furthermore, it can also be executed without persistent storage backend with
+the same parameters:
+```bash
+./run.sh
+```
+
 ## Issues
 
 If any issue is found, please contact <support-compss@bsc.es>

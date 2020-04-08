@@ -79,7 +79,7 @@
     \
     --lang=python \
     \
-    "$exec_file" $@
+    "$exec_file" $@ --use_storage
 
 
 # Enqueue tests example:
