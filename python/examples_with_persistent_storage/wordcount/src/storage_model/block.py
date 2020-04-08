@@ -14,3 +14,4 @@ class Words(StorageObject):
     """
     @ClassField text str
     """
+    pass
