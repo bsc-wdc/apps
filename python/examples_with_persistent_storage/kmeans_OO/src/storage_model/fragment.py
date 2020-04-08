@@ -1,20 +1,44 @@
 try:
+    # dataClay
+    from storage.api import StorageObject
+except:
+    try:
+        # Hecuba
+        from hecuba.storageobj import StorageObj as StorageObject
+    except:
+        # Redis
+        from storage.storage_object import StorageObject
+
+
+try:
     from pycompss.api.task import task
     from pycompss.api.parameter import IN, INOUT
 except ImportError:
     # Required since the pycompss module is not ready during the registry
     from dataclay.contrib.dummy_pycompss import task, IN, INOUT
 
+try:
+    from dataclay import dclayMethod
+except ImportError:
+    def dclayMethod(*args, **kwargs):
+        return lambda f: f
+
 import numpy as np
 
 
-class Fragment(object):
+class Fragment(StorageObject):
+    """
+    @ClassField points numpy.ndarray
 
+    @dclayImport numpy as np
+    """
+    @dclayMethod()
     def __init__(self):
         super(Fragment, self).__init__()
         self.points = None
 
     @task(target_direction=INOUT)
+    @dclayMethod(num_points='int', dim='int', mode='str', seed='int')
     def generate_points(self, num_points, dim, mode, seed):
         """
         Generate a random fragment of the specified number of points using the
@@ -45,6 +69,7 @@ class Fragment(object):
         self.points = mat
 
     @task(returns=tuple, target_direction=IN)
+    @dclayMethod(centres='numpy.matrix', norm='anything', return_='anything')
     def cluster_and_partial_sums(self, centres, norm):
         """
         Given self (fragment == set of points), declare a CxD matrix A and,
