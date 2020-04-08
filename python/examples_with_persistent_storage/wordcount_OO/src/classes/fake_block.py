@@ -1,7 +1,11 @@
-from collections import defaultdict
+try:
+    from pycompss.api.task import task
+    from pycompss.api.parameter import FILE_IN
+except ImportError:
+    # Required since the pycompss module is not ready during the registry
+    from dataclay.contrib.dummy_pycompss import task, FILE_IN
 
-from pycompss.api.task import task
-from pycompss.api.parameter import FILE_IN
+from collections import defaultdict
 
 
 class Words(object):
