@@ -36,9 +36,9 @@ def generate_block(size, num_blocks, seed=0, use_storage=False,
 
 
 @task(C=INOUT)
-def multiply(A, B, C):
+def fused_multiply_add(A, B, C):
     """
-    Multiplies two Blocks and accumulates the result in an INOUT Block
+    Multiplies two Blocks and accumulates the result in an INOUT Block (FMA).
     :param A: Block A
     :param B: Block B
     :param C: Result Block
@@ -62,7 +62,7 @@ def dot(A, B, C):
     for i in range(n):
         for j in range(m):
             for k in range(n):
-                multiply(A[i][k], B[k][j], C[i][j])
+                fused_multiply_add(A[i][k], B[k][j], C[i][j])
 
 
 @task()

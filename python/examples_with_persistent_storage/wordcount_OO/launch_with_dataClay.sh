@@ -1,8 +1,16 @@
 #!/bin/bash -e
 
   # THIS MUST BE INCLUDED INTO .bashrc
-  echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINE IS IN YOUR .bashrc"
-  echo "export PATH=/apps/COMPSs/Storage/Redis/bin:\$PATH"
+  echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
+  echo "module load gcc/8.1.0"
+  echo "export COMPSS_PYTHON_VERSION=3-ML"
+  echo "module load COMPSs/2.6.3"
+  echo "module load mkl/2018.1"
+  echo "module load impi/2018.1"
+  echo "module load opencv/4.1.2"
+  echo "module load python/3.6.4_ML"
+  echo "module load DATACLAY/2.0rc"
+
   read -p "Continue? (y|n) " -n 1 -r
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]
@@ -10,20 +18,14 @@
       [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
   fi
 
+  module load gcc/8.1.0
   export COMPSS_PYTHON_VERSION=3-ML
-  module load COMPSs/Trunk
-
-  module load ruby
-  export PATH=/apps/COMPSs/Storage/Redis/bin:$PATH
-
-  # Not working - requires to be included into .bashrc?
-  # module use /apps/modules/modulefiles/tools/COMPSs/.custom
-  # module load Redis
-
-  # Storage-related paths
-  # Change these paths if you want to use other storage implementations
-  STORAGE_HOME=${COMPSS_HOME}/Tools/storage/redis
-  STORAGE_CLASSPATH=${STORAGE_HOME}/compss-redisPSCO.jar
+  module load COMPSs/2.6.3
+  module load mkl/2018.1
+  module load impi/2018.1
+  module load opencv/4.1.2
+  module load python/3.6.4_ML
+  module load DATACLAY/2.0rc
 
   # Retrieve script arguments
   job_dependency=${1:-None}
@@ -57,10 +59,11 @@
 
   # Those are evaluated at submit time, not at start time...
   COMPSS_VERSION=`ml whatis COMPSs 2>&1 >/dev/null | awk '{print $1 ; exit}'`
+  DATACLAY_VERSION=`ml whatis DATACLAY 2>&1 >/dev/null | awk '{print $1 ; exit}'`
 
   # Enqueue job
   enqueue_compss \
-    --job_name=wordcount_PyCOMPSs_redis \
+    --job_name=wordcountOO_PyCOMPSs_dataClay \
     --job_dependency="${job_dependency}" \
     --exec_time="${execution_time}" \
     --num_nodes="${num_nodes}" \
@@ -79,17 +82,18 @@
     --log_level="${log_level}" \
     "${qos_flag}" \
     \
-    --classpath=${APP_CLASSPATH}:${STORAGE_CLASSPATH}:${CLASSPATH} \
-    --pythonpath=${APP_PYTHONPATH}:${STORAGE_HOME}/python:${PYTHONPATH} \
-    --storage_props=$(pwd)/redis_confs/storage_props.cfg \
-    --storage_home=${STORAGE_HOME}/ \
+    --classpath=$DATACLAY_JAR:$DATACLAY_DEPENDENCY_LIBS/*:${APP_CLASSPATH}:${CLASSPATH} \
+    --pythonpath=${APP_PYTHONPATH}:${PYTHONPATH} \
+    --storage_props=$(pwd)/dataClay_confs/storage_props.cfg \
+    --storage_home=$COMPSS_STORAGE_HOME \
+    --prolog=$(pwd)/dataClay_confs/register.sh \
     \
     --lang=python \
     \
     "$exec_file" $@ --use_storage
 
 # Enqueue tests example:
-# ./launch_with_redis.sh None 2 5 false $(pwd)/src/wordcount.py -d $(pwd)/dataset
+# ./launch_with_dataClay.sh None 2 5 false $(pwd)/src/wordcount.py -d $(pwd)/dataset
 
 # OUTPUTS:
 # - compss-XX.out : Job output file

@@ -1,46 +1,10 @@
 import os
 import time
-from collections import defaultdict
+# from collections import defaultdict
 
 from pycompss.api.task import task
 from pycompss.api.parameter import *
 from pycompss.api.api import compss_wait_on
-
-
-@task(returns=1, file=FILE_IN, priority=True)
-def populate_block(file_path, use_storage):
-    """
-    Perform a wordcount of a file.
-    :param file_path: Absolute path of the file to process.
-    :param use_storage: Use a persistent object.
-    :return: dictionary with the appearance of each word.
-    """
-    if use_storage:
-        from classes.block import Words
-    else:
-        from classes.fake_block import Words
-    fp = open(file_path)
-    data = fp.read()
-    fp.close()
-    psco = Words()
-    psco.text = data
-    if use_storage:
-        psco.make_persistent(os.path.basename(file_path))
-    return psco
-
-
-@task(returns=defaultdict, priority=True)
-def wordcount(block):
-    """
-    Wordcount over a Words object.
-    :param block: Block with text to perform word counting.
-    :return: dictionary with the words and the number of appearances.
-    """
-    data = block.text.split()
-    result = defaultdict(int)
-    for word in data:
-        result[word] += 1
-    return result
 
 
 @task(returns=dict)
@@ -87,7 +51,7 @@ def word_count(blocks):
     """
     partial_result = []
     for b in blocks:
-        partial_result.append(wordcount(b))
+        partial_result.append(b.wordcount())
     result = merge_reduce(reduce, partial_result)
     return result
 
@@ -100,7 +64,7 @@ def parse_arguments():
     """
     import argparse
     parser = argparse.ArgumentParser(
-                      description='Wordcount application.')
+                      description='Object Oriented Wordcount application.')
     parser.add_argument('-d', '--dataset_path', type=str,
                         help='Dataset path')
     parser.add_argument('--use_storage', action='store_true',
@@ -116,14 +80,22 @@ def main(dataset_path, use_storage):
     :param dataset_path: Dataset path
     :return: None
     """
+    if use_storage:
+        from classes.block import Words
+    else:
+        from classes.fake_block import Words
+
     start_time = time.time()
 
     # We populate the storage with the file contents.
     blocks = []
     for fileName in os.listdir(dataset_path):
         file_path = os.path.join(dataset_path, fileName)
-        blocks.append(populate_block(file_path,
-                                     use_storage))
+        b = Words()
+        if use_storage:
+            b.make_persistent()
+        b.populate_block(file_path)
+        blocks.append(b)
 
     population_time = time.time()
 

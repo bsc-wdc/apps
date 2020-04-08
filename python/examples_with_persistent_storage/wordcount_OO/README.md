@@ -1,4 +1,4 @@
-# Wordcount Application
+# Object Oriented Wordcount Application
 
 This application presents the wordcount algorithm parallelized with
 PyCOMPSs and using persistent storage backend to deal with multiple blocks

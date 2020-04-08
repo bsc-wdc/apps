@@ -1,0 +1,2 @@
+class Words(object):
+    pass
