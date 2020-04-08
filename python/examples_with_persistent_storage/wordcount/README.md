@@ -11,6 +11,7 @@ src
   |- classes
   |    |- __init__.py
   |    |- block.py
+  |    |- fake_block.py
   |
   |- wordcount.py
 
@@ -61,6 +62,13 @@ Furthermore, it can also be executed without persistent storage backend with
 the same parameters:
 ```bash
 ./run.sh
+```
+
+## Available options
+
+```
+-d <DATASET_PATH>....... Path where the dataset files are
+ --use_storage.......... Use the available storage backend
 ```
 
 ## Issues
