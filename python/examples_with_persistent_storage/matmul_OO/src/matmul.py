@@ -20,14 +20,14 @@ def generate_block(size, num_blocks, seed=0, use_storage=False,
     :return: Block (persisted if use_storage)
     """
     if use_storage:
-        from classes.block import Block
+        from storage_model.block import Block
         ret = Block()
         ret.make_persistent(psco_name)
         ret.generate_block(size,
                            num_blocks,
                            seed=seed)
     else:
-        from classes.fake_block import Block
+        from model.block import Block
         ret = Block()
         ret.generate_block(size,
                            num_blocks,
@@ -73,7 +73,7 @@ def persist_result(b, psco_name=''):
     :param psco_name: Persistent object name
     :return: None
     """
-    from classes.block import Block
+    from storage_model.block import Block
     bl = Block(b)
     bl.make_persistent(psco_name)
 

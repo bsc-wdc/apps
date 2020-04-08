@@ -7,7 +7,10 @@ This application is composed of two main files:
 
 ```
 src
-  |- classes
+  |- model
+  |    |- __init__.py
+  |    |- block.py
+  |- storage_model
   |    |- __init__.py
   |    |- block.py
   |
@@ -15,9 +18,10 @@ src
 ```
 
 The ```src/matmul.py``` file contains the main of the Matrix Multiplication
-algorithm, while the ```src/classes/block.py``` contains the declaration of
+algorithm, while the ```src/model/block.py``` contains the declaration of
 the Block class with its necessary methods for block multiplication and
-addition.
+addition and the ```src/storage_model/block.py``` contains the declaration
+of the Block class for the persistent storage framework.
 
 In addition, this application also contains a set of scripts to submit the
 ```matmul.py``` application within the <ins>MN4 supercomputer</ins>
