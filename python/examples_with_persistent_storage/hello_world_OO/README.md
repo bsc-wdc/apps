@@ -1,4 +1,4 @@
-# Hello world Application
+# Hello world Object Oriented Application
 
 This application presents the basic usage of persistent storage with PyCOMPSs.
 

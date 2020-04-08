@@ -14,8 +14,7 @@ def create_greeting(message, use_storage):
         from utils.classes import hello
     else:
         from utils.fake_classes import hello
-    hi = hello()
-    hi.message = message
+    hi = hello(message)
     if use_storage:
         hi.make_persistent("greet")
     return hi
@@ -28,7 +27,7 @@ def greet(greetings):
     :param greetings: Persistent object.
     :return: String with the psco content.
     """
-    content = greetings.message
+    content = greetings.get()
     return content
 
 
