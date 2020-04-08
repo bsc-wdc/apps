@@ -1,2 +1,0 @@
-class Fragment(object):
-    pass

@@ -11,14 +11,18 @@ src
   |- model
   |    |- __init__.py
   |    |- fragment.py
-  |    |- fake_fragment.py
+  |- storage_model
+  |    |- __init__.py
+  |    |- fragment.py
   |
   |- kmeans.py
 ```
 
 The ```src/kmeans.py``` file contains the main of the Kmeans algorithm, while
 the ```src/model/fragment.py``` contains the declaration of the Fragment class
-with its necessary methods for the clustering. These methods are declared as
+with its necessary methods for the clustering, and the
+```src/storage_model/fragment.py``` contains the declaration of the Fragment
+considering persistent storage. Their methods are declared as
 tasks for PyCOMPSs.
 
 In addition, this application also contains a set of scripts to submit the
