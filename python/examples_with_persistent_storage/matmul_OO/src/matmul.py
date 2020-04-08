@@ -127,7 +127,8 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
         # locality & avoid memory flooding)
         for i in range(num_blocks):
             for j in range(num_blocks):
-                persist_result(C[i][j])
+                psco_name = 'C_' + str(i) + '_' + str(j)
+                persist_result(C[i][j], psco_name)
                 # If we are not going to check the result, we can safely delete
                 # the Cij intermediate matrices
                 if not check_result:
