@@ -14,3 +14,4 @@ class Block(StorageObject):
     """
     @ClassField block numpy.ndarray
     """
+    pass
