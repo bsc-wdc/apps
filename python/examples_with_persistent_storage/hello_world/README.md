@@ -9,7 +9,10 @@ This application is composed of two main files:
 
 ```
 src
-  |- utils
+  |- model
+  |    |- __init__.py
+  |    |- classes.py
+  |- storage_model
   |    |- __init__.py
   |    |- classes.py
   |
@@ -26,7 +29,8 @@ object method.
 3. **check_greeting**: Compares the initial message and the persistent object
 content.
 
-And the persistent object declaration can be found in the ```src/utils/classes.py```.
+And the persistent object declaration can be found in the
+```src/storage_model/classes.py```.
 
 In addition, this application also contains a set of scripts to submit the
 ```hello_world.py``` application within the <ins>MN4 supercomputer</ins>

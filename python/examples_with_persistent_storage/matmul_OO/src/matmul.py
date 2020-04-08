@@ -20,14 +20,14 @@ def generate_block(size, num_blocks, seed=0, use_storage=False,
     :return: Block (persisted if use_storage)
     """
     if use_storage:
-        from classes.block import Block
+        from storage_model.block import Block
         ret = Block()
         ret.make_persistent(psco_name)
         ret.generate_block(size,
                            num_blocks,
                            seed=seed)
     else:
-        from classes.fake_block import Block
+        from model.block import Block
         ret = Block()
         ret.generate_block(size,
                            num_blocks,
@@ -73,7 +73,7 @@ def persist_result(b, psco_name=''):
     :param psco_name: Persistent object name
     :return: None
     """
-    from classes.block import Block
+    from storage_model.block import Block
     bl = Block(b)
     bl.make_persistent(psco_name)
 
@@ -127,7 +127,8 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
         # locality & avoid memory flooding)
         for i in range(num_blocks):
             for j in range(num_blocks):
-                persist_result(C[i][j])
+                psco_name = 'C_' + str(i) + '_' + str(j)
+                persist_result(C[i][j], psco_name)
                 # If we are not going to check the result, we can safely delete
                 # the Cij intermediate matrices
                 if not check_result:

@@ -197,7 +197,7 @@ def generate_fragment(points, dim, mode, seed, use_storage):
     :param use_storage: Boolean use storage
     :return: Dataset fragment
     """
-    # from model.fragment import Fragment
+    # from storage_model.fragment import Fragment
     # ret = Fragment('frag' + str(seed))
     # return ret  # If we are using an snapshot thats enough
 
@@ -219,13 +219,13 @@ def generate_fragment(points, dim, mode, seed, use_storage):
 
     # Create a Fragment and persist it in our storage.
     if use_storage:
-        from model.fragment import Fragment
+        from storage_model.fragment import Fragment
         ret = Fragment()
         ret.mat = mat  # Overwrite the object content with the generated matrix
         # The seed is different for each fragment, so I use it as id)
         ret.make_persistent('frag' + str(seed))
     else:
-        from model.fake_fragment import Fragment
+        from model.fragment import Fragment
         ret = Fragment()
         ret.mat = mat
     return ret

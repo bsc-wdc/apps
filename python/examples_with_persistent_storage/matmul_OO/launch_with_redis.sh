@@ -86,7 +86,7 @@
     \
     --lang=python \
     \
-    "$exec_file" $@
+    "$exec_file" $@ --use_storage
 
 # Enqueue tests example:
 # ./launch_with_redis.sh None 2 5 false $(pwd)/src/matmul.py -b 4 -e 4 --check_result

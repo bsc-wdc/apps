@@ -10,7 +10,8 @@ except:
         from storage.storage_object import StorageObject
 
 
-class Block(StorageObject):
+class Words(StorageObject):
     """
-    @ClassField block numpy.ndarray
+    @ClassField text str
     """
+    pass

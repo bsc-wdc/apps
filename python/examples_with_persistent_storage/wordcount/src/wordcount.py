@@ -16,9 +16,9 @@ def populate_block(file_path, use_storage):
     :return: dictionary with the appearance of each word.
     """
     if use_storage:
-        from classes.block import Words
+        from storage_model.block import Words
     else:
-        from classes.fake_block import Words
+        from model.block import Words
     fp = open(file_path)
     data = fp.read()
     fp.close()

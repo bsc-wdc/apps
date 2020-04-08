@@ -1,6 +1,5 @@
 import os
 import time
-# from collections import defaultdict
 
 from pycompss.api.task import task
 from pycompss.api.parameter import *
@@ -81,9 +80,9 @@ def main(dataset_path, use_storage):
     :return: None
     """
     if use_storage:
-        from classes.block import Words
+        from storage_model.block import Words
     else:
-        from classes.fake_block import Words
+        from model.block import Words
 
     start_time = time.time()
 

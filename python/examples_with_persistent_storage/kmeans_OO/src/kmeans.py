@@ -158,13 +158,13 @@ def generate_fragment(points, dim, mode, seed, use_storage):
     """
     # Create a Fragment and persist it in our storage.
     if use_storage:
-        from model.fragment import Fragment
+        from storage_model.fragment import Fragment
         fragment = Fragment()
         # Make persistent before since it is populated in the task
         fragment.make_persistent()
         fragment.generate_points(points, dim, mode, seed)
     else:
-        from model.fake_fragment import Fragment
+        from model.fragment import Fragment
         fragment = Fragment()
         fragment.generate_points(points, dim, mode, seed)
     return fragment
