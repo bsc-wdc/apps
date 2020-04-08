@@ -12,10 +12,10 @@ except:
 
 try:
     from pycompss.api.task import task
-    from pycompss.api.parameter import INOUT
+    from pycompss.api.parameter import IN, INOUT
 except ImportError:
     # Required since the pycompss module is not ready during the registry
-    from dataclay.contrib.dummy_pycompss import task, INOUT
+    from dataclay.contrib.dummy_pycompss import task, IN, INOUT
 
 try:
     from dataclay import dclayMethod

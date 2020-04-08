@@ -1,5 +1,5 @@
 from pycompss.api.task import task
-from pycompss.api.parameter import IN, INOUT, CONCURRENT
+from pycompss.api.parameter import IN, INOUT
 
 import numpy as np
 
