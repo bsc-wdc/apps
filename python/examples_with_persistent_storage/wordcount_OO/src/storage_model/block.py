@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 try:
     # dataClay
     from storage.api import StorageObject
@@ -43,7 +41,7 @@ class Words(StorageObject):
     def set_text(self, text):
         self.text = text
 
-    @task(returns=1, file=FILE_IN, priority=True)
+    @task(file=FILE_IN, priority=True)
     @dclayMethod(file_path='str')
     def populate_block(self, file_path):
         """
@@ -56,7 +54,7 @@ class Words(StorageObject):
         fp.close()
         self.set_text(data)
 
-    @task(returns=defaultdict, priority=True)
+    @task(returns=1, priority=True)
     @dclayMethod(return_='anything')
     def wordcount(self):
         """
@@ -64,6 +62,7 @@ class Words(StorageObject):
         :param block: Block with text to perform word counting.
         :return: dictionary with the words and the number of appearances.
         """
+        from collections import defaultdict
         data = self.get_text().split()
         result = defaultdict(int)
         for word in data:
