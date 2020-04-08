@@ -1,6 +1,5 @@
 import os
 import time
-# from collections import defaultdict
 
 from pycompss.api.task import task
 from pycompss.api.parameter import *
