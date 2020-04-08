@@ -121,7 +121,8 @@ def main(dataset_path, use_storage):
     # We populate the storage with the file contents.
     blocks = []
     for fileName in os.listdir(dataset_path):
-        blocks.append(populate_block(os.path.join(dataset_path, fileName),
+        file_path = os.path.join(dataset_path, fileName)
+        blocks.append(populate_block(file_path,
                                      use_storage))
 
     population_time = time.time()
