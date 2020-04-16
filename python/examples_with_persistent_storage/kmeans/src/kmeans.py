@@ -9,7 +9,7 @@ from sklearn.metrics import pairwise_distances
 from sklearn.metrics.pairwise import paired_distances
 
 
-@task(returns=np.array)
+@task(returns=np.ndarray)
 def partial_sum(block, centres):
     partials = np.zeros((centres.shape[0], 2), dtype=object)
     arr = block.mat
@@ -29,13 +29,11 @@ def merge(*data):
     return accum
 
 
-def converged(old_centres, centres, epsilon, iteration, max_iter, norm):
+def converged(old_centres, centres, epsilon, iteration, max_iter):
     if old_centres is None:
         return False
-    # dist = np.sum(paired_distances(centres, old_centres))
-    # return dist < epsilon **2 or iteration >= max_iter
-    dist = np.linalg.norm(old_centres - centres, norm)
-    return dist < epsilon or iteration >= max_iter
+    dist = np.sum(paired_distances(centres, old_centres))
+    return dist < epsilon **2 or iteration >= max_iter
 
 
 def recompute_centres(partials, old_centres, arity):
@@ -52,7 +50,7 @@ def recompute_centres(partials, old_centres, arity):
 
 
 def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
-                seed=0., epsilon=1e-9, arity=50, norm='l2'):
+                seed=0., epsilon=1e-9, arity=50):
     """
     A fragment-based K-Means algorithm.
     Given a set of fragments (which can be either PSCOs or future objects that
@@ -67,15 +65,8 @@ def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
     :param seed: Random seed
     :param epsilon: Epsilon (convergence distance)
     :param arity: Arity
-    :param norm: Norm
-    :return: Final centres and labels
+    :return: Final centres
     """
-    # Choose the norm among the available ones
-    norms = {
-        'l1': 1,
-        'l2': 2,
-    }
-    norm = norms[norm]
     # Set the random seed
     np.random.seed(seed)
     # Centres is usually a very small matrix, so it is affordable to have it in
@@ -86,7 +77,7 @@ def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
     # Note: this implementation treats the centres as files, never as PSCOs.
     old_centres = None
     iteration = 0
-    while not converged(old_centres, centres, epsilon, iteration, iterations, norm):
+    while not converged(old_centres, centres, epsilon, iteration, iterations):
         print("Doing iteration #%d/%d" % (iteration + 1, iterations))
         old_centres = centres.copy()
         partials = []
@@ -125,9 +116,6 @@ def parse_arguments():
     parser.add_argument('-e', '--epsilon', type=float, default=1e-9,
                         help='Epsilon. Kmeans will stop when:' +
                              ' |old - new| < epsilon.')
-    parser.add_argument('-l', '--lnorm', type=str,
-                        default='l2', choices=['l1', 'l2'],
-                        help='Norm for vectors')
     parser.add_argument('-a', '--arity', type=int, default=50,
                         help='Arity of the reduction carried out during \
                         the computation of the new centroids')
@@ -184,7 +172,7 @@ def generate_fragment(points, dim, mode, seed, use_storage):
 
 
 def main(seed, numpoints, dimensions, num_centres, fragments, mode, iterations,
-         epsilon, lnorm, arity, use_storage):
+         epsilon, arity, use_storage):
     """
     This will be executed if called as main script. Look at the kmeans_frag
     for the KMeans function.
@@ -199,7 +187,6 @@ def main(seed, numpoints, dimensions, num_centres, fragments, mode, iterations,
     :param mode: Dataset generation mode
     :param iterations: Number of iterations
     :param epsilon: Epsilon (convergence distance)
-    :param lnorm: Norm to use
     :param arity: Arity
     :param use_storage: Boolean to use storage
     :return: None
@@ -232,8 +219,7 @@ def main(seed, numpoints, dimensions, num_centres, fragments, mode, iterations,
                           iterations=iterations,
                           seed=seed,
                           epsilon=epsilon,
-                          arity=arity,
-                          norm=lnorm)
+                          arity=arity)
     compss_barrier()
     print("Ending kmeans")
     kmeans_time = time.time()
@@ -246,8 +232,7 @@ def main(seed, numpoints, dimensions, num_centres, fragments, mode, iterations,
                           iterations=iterations,
                           seed=seed,
                           epsilon=epsilon,
-                          arity=arity,
-                          norm=lnorm)
+                          arity=arity)
     compss_barrier()
     print("Ending second kmeans")
     kmeans_2nd = time.time()

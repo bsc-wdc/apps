@@ -82,8 +82,6 @@ the same parameters:
                          (Default: 20)
  -e <EPSILON>........... Epsilon value. Convergence value.
                          (Deftault: 1e-9)
- -l <NORM>.............. Norm for vectors ( l1 | l2 )
-                         (Default: l2)
  -a <ARITY>............. Arity
                          (Default: 50)
  --use_storage.......... Use the available storage backend
