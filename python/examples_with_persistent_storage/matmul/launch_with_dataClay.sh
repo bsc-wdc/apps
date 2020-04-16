@@ -4,7 +4,9 @@
   echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
   echo "module load gcc/8.1.0"
   echo "export COMPSS_PYTHON_VERSION=3-ML"
-  echo "module load COMPSs/2.6.3"
+  echo "module use /apps/modules/modulefiles/tools/COMPSs/.custom"
+  echo "module load TrunkJCB"
+  # echo "module load COMPSs/2.6.3"
   echo "module load mkl/2018.1"
   echo "module load impi/2018.1"
   echo "module load opencv/4.1.2"
@@ -20,7 +22,9 @@
 
   module load gcc/8.1.0
   export COMPSS_PYTHON_VERSION=3-ML
-  module load COMPSs/2.6.3
+  module use /apps/modules/modulefiles/tools/COMPSs/.custom
+  module load TrunkJCB
+  # module load COMPSs/2.6.3
   module load mkl/2018.1
   module load impi/2018.1
   module load opencv/4.1.2

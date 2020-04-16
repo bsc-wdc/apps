@@ -3,7 +3,9 @@
   # THIS MUST BE INCLUDED INTO .bashrc
   echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
   echo "export COMPSS_PYTHON_VERSION=3-ML"
-  echo "module load COMPSs/Trunk"
+  echo "module use /apps/modules/modulefiles/tools/COMPSs/.custom"
+  echo "module load TrunkJCB"
+  # echo "module load COMPSs/Trunk"
   echo "module load hecuba/0.1.3_ML"
 
   read -p "Continue? (y|n) " -n 1 -r
@@ -14,7 +16,9 @@
   fi
 
   export COMPSS_PYTHON_VERSION=3-ML
-  module load COMPSs/2.6.3
+  module use /apps/modules/modulefiles/tools/COMPSs/.custom
+  module load TrunkJCB
+  # module load COMPSs/Trunk
   module load hecuba/0.1.3_ML
 
   # Retrieve script arguments
