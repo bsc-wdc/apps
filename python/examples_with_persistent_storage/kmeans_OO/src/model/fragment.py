@@ -2,6 +2,7 @@ from pycompss.api.task import task
 from pycompss.api.parameter import IN, INOUT
 
 import numpy as np
+from sklearn.metrics import pairwise_distances
 
 
 class Fragment(object):
@@ -40,38 +41,14 @@ class Fragment(object):
 
         self.points = mat
 
-    @task(returns=tuple, target_direction=IN)
-    def cluster_and_partial_sums(self, centres, norm):
-        """
-        Given self (fragment == set of points), declare a CxD matrix A and,
-        for each point p:
-           1) Compute the nearest centre c of p
-           2) Add p / num_points_in_fragment to A[index(c)]
-           3) Set label[index(p)] = c
-        :param centres: Centers
-        :param norm: Norm for normalization
-        :return: Sum of points for each center, qty of associations for each
-                 center, and label for each point
-        """
-        mat = self.points
-        ret = np.zeros(centres.shape)
-        n = mat.shape[0]
-        c = centres.shape[0]
-        labels = list()
 
-        # Compute the big stuff
-        associates = np.zeros(c, dtype=int)
-        # Get the labels for each point
-        for point in mat:
-            distances = np.zeros(c)
-            for (j, centre) in enumerate(centres):
-                distances[j] = np.linalg.norm(point - centre, norm)
-
-            ass = np.argmin(distances)
-            labels.append(ass)
-            associates[ass] += 1
-
-        # Add each point to its associate centre
-        for (label_i, point) in zip(labels, mat):
-            ret[label_i] += point
-        return (ret, associates, labels)
+    @task(returns=np.ndarray, target_direction=IN)
+    def partial_sum(self, centres):
+        partials = np.zeros((centres.shape[0], 2), dtype=object)
+        arr = self.points
+        close_centres = pairwise_distances(arr, centres).argmin(axis=1)
+        for center_idx, _ in enumerate(centres):
+            indices = np.argwhere(close_centres == center_idx).flatten()
+            partials[center_idx][0] = np.sum(arr[indices], axis=0)
+            partials[center_idx][1] = indices.shape[0]
+        return partials
