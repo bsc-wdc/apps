@@ -41,7 +41,6 @@ class Fragment(object):
 
         self.points = mat
 
-
     @task(returns=np.ndarray, target_direction=IN)
     def partial_sum(self, centres):
         partials = np.zeros((centres.shape[0], 2), dtype=object)

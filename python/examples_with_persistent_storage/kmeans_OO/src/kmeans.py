@@ -7,6 +7,7 @@ from pycompss.api.api import compss_barrier
 
 from sklearn.metrics.pairwise import paired_distances
 
+
 @task(returns=dict)
 def merge(*data):
     accum = data[0].copy()
@@ -19,7 +20,7 @@ def converged(old_centres, centres, epsilon, iteration, max_iter):
     if old_centres is None:
         return False
     dist = np.sum(paired_distances(centres, old_centres))
-    return dist < epsilon **2 or iteration >= max_iter
+    return dist < epsilon ** 2 or iteration >= max_iter
 
 
 def recompute_centres(partials, old_centres, arity):

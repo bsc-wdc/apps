@@ -10,9 +10,9 @@ from sklearn.metrics.pairwise import paired_distances
 
 
 @task(returns=np.ndarray)
-def partial_sum(block, centres):
+def partial_sum(fragment, centres):
     partials = np.zeros((centres.shape[0], 2), dtype=object)
-    arr = block.mat
+    arr = fragment.mat
     close_centres = pairwise_distances(arr, centres).argmin(axis=1)
     for center_idx, _ in enumerate(centres):
         indices = np.argwhere(close_centres == center_idx).flatten()
@@ -33,7 +33,7 @@ def converged(old_centres, centres, epsilon, iteration, max_iter):
     if old_centres is None:
         return False
     dist = np.sum(paired_distances(centres, old_centres))
-    return dist < epsilon **2 or iteration >= max_iter
+    return dist < epsilon ** 2 or iteration >= max_iter
 
 
 def recompute_centres(partials, old_centres, arity):
