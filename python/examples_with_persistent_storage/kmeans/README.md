@@ -70,7 +70,7 @@ the same parameters:
 ## Available options
 
 ```
--n <NUM_POINTS>........ Number of points
+ -n <NUM_POINTS>........ Number of points
  -d <DIMENSIONS>........ Number of dimensions
  -c <CENTRES>........... Number of centres
  -f <FRAGMENTS>......... Number of fragments
@@ -84,7 +84,8 @@ the same parameters:
                          (Deftault: 1e-9)
  -l <NORM>.............. Norm for vectors ( l1 | l2 )
                          (Default: l2)
- --plot_result.......... Plot the resulting clustering (only for 2 Dimensions)
+ -a <ARITY>............. Arity
+                         (Default: 50)
  --use_storage.......... Use the available storage backend
 ```
 

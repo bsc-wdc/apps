@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import time
 import numpy as np
 
@@ -7,86 +5,54 @@ from pycompss.api.task import task
 from pycompss.api.api import compss_wait_on
 from pycompss.api.api import compss_barrier
 
-
-def mergeReduce(function, data):
-    """
-    Apply function cumulatively to the items of data,
-    from left to right in binary tree structure, so as to
-    reduce the data to a single value.
-    :param function: function to apply to reduce data
-    :param data: List of items to be reduced
-    :return: result of reduce the data to a single value
-    """
-    from collections import deque
-    q = deque(list(range(len(data))))
-    while len(q):
-        x = q.popleft()
-        if len(q):
-            y = q.popleft()
-            data[x] = function(data[x], data[y])
-            q.append(x)
-        else:
-            return data[x]
+from sklearn.metrics import pairwise_distances
+from sklearn.metrics.pairwise import paired_distances
 
 
-@task(returns=tuple, priority=True)
-def reducecentresTask(a, b):
-    """
-    Reduce method to sum the result of two partial_sum methods
-    :param a: partial_sum matrix containing the sum and the cardinal
-    :param b: partial_sum matrix containing the sum and the cardinal
-    :return: the sum a + b
-    """
-    a_sum, a_associates, a_labels = a
-    b_sum, b_associates, b_labels = b
-
-    a_sum += b_sum
-    a_associates += b_associates
-    a_labels.extend(b_labels)
-
-    return (a_sum, a_associates, a_labels)
+@task(returns=np.array)
+def partial_sum(block, centres):
+    partials = np.zeros((centres.shape[0], 2), dtype=object)
+    arr = block.mat
+    close_centres = pairwise_distances(arr, centres).argmin(axis=1)
+    for center_idx, _ in enumerate(centres):
+        indices = np.argwhere(close_centres == center_idx).flatten()
+        partials[center_idx][0] = np.sum(arr[indices], axis=0)
+        partials[center_idx][1] = indices.shape[0]
+    return partials
 
 
-@task(returns=tuple)
-def cluster_and_partial_sums(fragment, labels, centres, norm):
-    """
-    Given self (fragment == set of points), declare a CxD matrix A and,
-    for each point p:
-       1) Compute the nearest centre c of p
-       2) Add p / num_points_in_fragment to A[index(c)]
-       3) Set label[index(p)] = c
-    :param centres: Centers
-    :param norm: Norm for normalization
-    :return: Sum of points for each center, qty of associations for each
-             center, and label for each point
-    """
-    mat = fragment.mat
-    ret = np.zeros(centres.shape)
-    n = mat.shape[0]
-    c = centres.shape[0]
-    labels = list()
+@task(returns=dict)
+def merge(*data):
+    accum = data[0].copy()
+    for d in data[1:]:
+        accum += d
+    return accum
 
-    # Compute the big stuff
-    associates = np.zeros(c, dtype=int)
-    # Get the labels for each point
-    for point in mat:
-        distances = np.zeros(c)
-        for (j, centre) in enumerate(centres):
-            distances[j] = np.linalg.norm(point - centre, norm)
 
-        ass = np.argmin(distances)
-        labels.append(ass)
-        associates[ass] += 1
+def converged(old_centres, centres, epsilon, iteration, max_iter, norm):
+    if old_centres is None:
+        return False
+    # dist = np.sum(paired_distances(centres, old_centres))
+    # return dist < epsilon **2 or iteration >= max_iter
+    dist = np.linalg.norm(old_centres - centres, norm)
+    return dist < epsilon or iteration >= max_iter
 
-    # Add each point to its associate centre
-    for (label_i, point) in zip(labels, mat):
-        ret[label_i] += point
 
-    return (ret, associates, labels)
+def recompute_centres(partials, old_centres, arity):
+    centres = old_centres.copy()
+    while len(partials) > 1:
+        partials_subset = partials[:arity]
+        partials = partials[arity:]
+        partials.append(merge(*partials_subset))
+    partials = compss_wait_on(partials)
+    for idx, sum_ in enumerate(partials[0]):
+        if sum_[1] != 0:
+            centres[idx] = sum_[0] / sum_[1]
+    return centres
 
 
 def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
-                seed=0., epsilon=1e-9, norm='l2'):
+                seed=0., epsilon=1e-9, arity=50, norm='l2'):
     """
     A fragment-based K-Means algorithm.
     Given a set of fragments (which can be either PSCOs or future objects that
@@ -100,6 +66,7 @@ def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
     :param iterations: Maximum number of iterations
     :param seed: Random seed
     :param epsilon: Epsilon (convergence distance)
+    :param arity: Arity
     :param norm: Norm
     :return: Final centres and labels
     """
@@ -108,6 +75,7 @@ def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
         'l1': 1,
         'l2': 2,
     }
+    norm = norms[norm]
     # Set the random seed
     np.random.seed(seed)
     # Centres is usually a very small matrix, so it is affordable to have it in
@@ -115,35 +83,19 @@ def kmeans_frag(fragments, dimensions, num_centres=10, iterations=20,
     centres = np.asarray(
         [np.random.random(dimensions) for _ in range(num_centres)]
     )
-    # Make a list of labels, treat it as INOUT
-    # Leave it empty at the beginning, update it inside the task. Avoid
-    # having a linear amount of stuff in master's memory unnecessarily
-    labels = [[] for _ in range(len(fragments))]
     # Note: this implementation treats the centres as files, never as PSCOs.
-    for it in range(iterations):
-        print("Doing iteration #%d/%d" % (it + 1, iterations))
-        partial_results = []
-        for (i, frag) in enumerate(fragments):
-            # For each fragment compute, for each point, the nearest centre.
-            # Return the mean sum of the coordinates assigned to each centre.
-            # Note that mean = mean ( sum of sub-means )
-            partial_result = cluster_and_partial_sums(frag, labels[i],
-                                                      centres, norms[norm])
-            partial_results.append(partial_result)
-
-        # Aggregate results
-        agg_result = mergeReduce(reducecentresTask, partial_results)
-        new_centres, associates, labels = compss_wait_on(agg_result)
-        # Normalize
-        new_centres /= associates.reshape(len(associates), 1)
-
-        if np.linalg.norm(centres - new_centres, norms[norm]) < epsilon:
-            # Convergence criterion is met
-            break
-        # Convergence criterion is not met, update centres
-        centres = new_centres
-
-    return centres, labels
+    old_centres = None
+    iteration = 0
+    while not converged(old_centres, centres, epsilon, iteration, iterations, norm):
+        print("Doing iteration #%d/%d" % (iteration + 1, iterations))
+        old_centres = centres.copy()
+        partials = []
+        for frag in fragments:
+            partial = partial_sum(frag, old_centres)
+            partials.append(partial)
+        centres = recompute_centres(partials, old_centres, arity)
+        iteration += 1
+    return centres
 
 
 def parse_arguments():
@@ -176,9 +128,9 @@ def parse_arguments():
     parser.add_argument('-l', '--lnorm', type=str,
                         default='l2', choices=['l1', 'l2'],
                         help='Norm for vectors')
-    parser.add_argument('--plot_result', action='store_true',
-                        help='Plot the resulting clustering' +
-                             ' (only works if dim = 2).')
+    parser.add_argument('-a', '--arity', type=int, default=50,
+                        help='Arity of the reduction carried out during \
+                        the computation of the new centroids')
     parser.add_argument('--use_storage', action='store_true',
                         help='Use storage?')
     return parser.parse_args()
@@ -231,36 +183,8 @@ def generate_fragment(points, dim, mode, seed, use_storage):
     return ret
 
 
-def plot_result(fragment_list, centres):
-    """
-    Generate an image showing the points (whose colour determined the cluster
-    they belong to) and the centers.
-    :param fragment_list: List of fragments
-    :param centres: Centres
-    :return: None
-    """
-    import matplotlib.pyplot as plt
-    plt.figure('Clustering')
-
-    def color_wheel(i):
-        l = ['red', 'purple', 'blue', 'cyan', 'green']
-        return l[i % len(l)]
-
-    idx = 0
-    for frag in fragment_list:
-        frag = compss_wait_on(frag)
-        for (i, p) in enumerate(frag.mat):
-            col = color_wheel(labels[idx])
-            plt.scatter(p[0, 0], p[0, 1], color=col)
-            idx += 1
-    for centre in centres:
-        plt.scatter(centre[0, 0], centre[0, 1], color='black')
-    import uuid
-    plt.savefig('%s.png' % str(uuid.uuid4()))
-
-
 def main(seed, numpoints, dimensions, num_centres, fragments, mode, iterations,
-         epsilon, lnorm, plot_result, use_storage):
+         epsilon, lnorm, arity, use_storage):
     """
     This will be executed if called as main script. Look at the kmeans_frag
     for the KMeans function.
@@ -276,7 +200,7 @@ def main(seed, numpoints, dimensions, num_centres, fragments, mode, iterations,
     :param iterations: Number of iterations
     :param epsilon: Epsilon (convergence distance)
     :param lnorm: Norm to use
-    :param plot_result: Boolean to plot result
+    :param arity: Arity
     :param use_storage: Boolean to use storage
     :return: None
     """
@@ -302,26 +226,28 @@ def main(seed, numpoints, dimensions, num_centres, fragments, mode, iterations,
     print("Starting kmeans")
 
     # Run kmeans
-    centres, labels = kmeans_frag(fragments=fragment_list,
-                                  dimensions=dimensions,
-                                  num_centres=num_centres,
-                                  iterations=iterations,
-                                  seed=seed,
-                                  epsilon=epsilon,
-                                  norm=lnorm)
+    centres = kmeans_frag(fragments=fragment_list,
+                          dimensions=dimensions,
+                          num_centres=num_centres,
+                          iterations=iterations,
+                          seed=seed,
+                          epsilon=epsilon,
+                          arity=arity,
+                          norm=lnorm)
     compss_barrier()
     print("Ending kmeans")
     kmeans_time = time.time()
 
     # Run again kmeans (system cache will be filled)
     print("Second kmeans")
-    centres, labels = kmeans_frag(fragments=fragment_list,
-                                  dimensions=dimensions,
-                                  num_centres=num_centres,
-                                  iterations=iterations,
-                                  seed=seed,
-                                  epsilon=epsilon,
-                                  norm=lnorm)
+    centres = kmeans_frag(fragments=fragment_list,
+                          dimensions=dimensions,
+                          num_centres=num_centres,
+                          iterations=iterations,
+                          seed=seed,
+                          epsilon=epsilon,
+                          arity=arity,
+                          norm=lnorm)
     compss_barrier()
     print("Ending second kmeans")
     kmeans_2nd = time.time()
@@ -338,10 +264,6 @@ def main(seed, numpoints, dimensions, num_centres, fragments, mode, iterations,
     print("CENTRES:")
     print(centres)
     print("-----------------------------------------")
-
-    # Plot results if possible
-    if dimensions == 2 and plot_result:
-        plot_result(fragment_list, centres)
 
 
 if __name__ == "__main__":
