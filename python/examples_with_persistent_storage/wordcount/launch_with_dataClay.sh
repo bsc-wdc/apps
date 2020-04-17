@@ -13,12 +13,12 @@
   echo "module load python/3.6.4_ML"
   echo "module load DATACLAY/2.0rc"
 
-  read -p "Continue? (y|n) " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]
-  then
-      [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-  fi
+  # read -p "Continue? (y|n) " -n 1 -r
+  # echo
+  # if [[ ! $REPLY =~ ^[Yy]$ ]]
+  # then
+  #     [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+  # fi
 
   module load gcc/8.1.0
   export COMPSS_PYTHON_VERSION=3-ML

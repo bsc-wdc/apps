@@ -8,12 +8,12 @@
   # echo "module load COMPSs/Trunk"
   echo "module load hecuba/0.1.3_ML"
 
-  read -p "Continue? (y|n) " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]
-  then
-      [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-  fi
+  # read -p "Continue? (y|n) " -n 1 -r
+  # echo
+  # if [[ ! $REPLY =~ ^[Yy]$ ]]
+  # then
+  #     [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+  # fi
 
   export COMPSS_PYTHON_VERSION=3-ML
   module use /apps/modules/modulefiles/tools/COMPSs/.custom
