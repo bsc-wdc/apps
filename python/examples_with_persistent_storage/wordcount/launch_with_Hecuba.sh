@@ -37,7 +37,7 @@
   # Define application variables
   graph=$tracing
   log_level="debug"
-  qos_flag="--qos=off"
+  qos_flag="--qos=debug"
   workers_flag=""
   constraints=""
 
