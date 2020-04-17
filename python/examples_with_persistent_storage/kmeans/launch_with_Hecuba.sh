@@ -64,10 +64,11 @@
     \
     --cpus_per_node="${CPUS_PER_NODE}" \
     --worker_in_master_cpus="${WORKER_IN_MASTER}" \
+    --scheduler=es.bsc.compss.scheduler.fifodatanew.FIFODataScheduler \
     \
     "${workers_flag}" \
     \
-    --worker_working_dir=scratch \
+    --worker_working_dir=/gpfs/scratch/bsc19/bsc19234/ \
     \
     --constraints=${constraints} \
     --tracing="${tracing}" \
