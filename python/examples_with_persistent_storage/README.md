@@ -56,7 +56,7 @@ packages in your ```$HOME``` folder with the following commands:
  # Log into your MN4 account and do the following commands
  module load ruby
  gem install -l redis-3.3.0.gem --user-install
- module load python/3.6.4_ML
+ module load gcc/8.1.0 impi/2018.1 mkl/2018.1 opencv/4.1.2 python/3.6.4_ML
  pip install hiredis-1.0.1.tar.gz --user --no-index
  pip install redis-3.0.1.tar.gz --user --no-index
  pip install redis-py-cluster-2.0.0.tar.gz --user --no-index
