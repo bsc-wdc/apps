@@ -46,15 +46,15 @@
   log_level="off"
   qos_flag="--qos=debug"
   workers_flag=""
-  constraints=""
+  constraints="highmem"
 
   # Create workers sandbox
   # mkdir -p "${WORK_DIR}/COMPSs_Sandbox"
   # --master_working_dir="${WORK_DIR}" \
   # --worker_working_dir="${WORK_DIR}/COMPSs_Sandbox" \
 
-  CPUS_PER_NODE=48
-  WORKER_IN_MASTER=24
+  CPUS_PER_NODE=44
+  WORKER_IN_MASTER=0
 
   shift 5
 
@@ -94,6 +94,7 @@
 
 # Enqueue tests example:
 # ./launch_with_redis.sh None 2 5 false $(pwd)/src/kmeans.py -n 1024 -f 8 -d 2 -c 4
+# ./launch_with_redis.sh None 3 60 true $(pwd)/src/kmeans.py -n 249999360 -f 1536 -d 100 -c 500 -i 5
 
 # OUTPUTS:
 # - compss-XX.out : Job output file
