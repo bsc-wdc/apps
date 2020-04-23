@@ -191,6 +191,13 @@ def main(seed, numpoints, dimensions, num_centres, fragments, mode, iterations,
     :param use_storage: Boolean to use storage
     :return: None
     """
+    if use_storage:
+        import storage.api
+        from storage_model.fragment import Fragment
+        ret = Fragment()
+        ret.make_persistent('init')
+        time.sleep(10)
+        
     start_time = time.time()
 
     # Generate the data
