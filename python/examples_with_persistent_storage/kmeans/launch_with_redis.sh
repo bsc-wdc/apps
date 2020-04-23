@@ -94,6 +94,7 @@
 
 # Enqueue tests example:
 # ./launch_with_redis.sh None 2 5 false $(pwd)/src/kmeans.py -n 1024 -f 8 -d 2 -c 4
+# ./launch_with_redis.sh None 3 60 true $(pwd)/src/kmeans.py -n 249999360 -f 1536 -d 100 -c 500 -i 5
 
 # OUTPUTS:
 # - compss-XX.out : Job output file
