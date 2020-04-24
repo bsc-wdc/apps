@@ -1,6 +1,10 @@
 # COMPSs applications folder
 
+<<<<<<< HEAD
 This folder contains example applications developed for [py]COMPSs .
+=======
+This folder contains example applications developed for [py]COMPSs.
+>>>>>>> Fixed typos in main README.md.
 
 Its purpose is to share the applications among the COMPSs users community to ease
 the implementation of new applications and share them with the rest of users.
@@ -53,10 +57,10 @@ apps
 
 ```
 
+
 ## Datasets
 
-The datasets for the applications can be downloaded at:
-
+The datasets for the applications are on the Capella VM (*bsccs1000.int.bsc.es*). You can access them through SSH or via browser using the link: http://compss.bsc.es/repo/datasets.
 
 
 ## Warnings and MN instructions
