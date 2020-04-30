@@ -47,7 +47,7 @@
   # --worker_working_dir="${WORK_DIR}/COMPSs_Sandbox" \
 
   CPUS_PER_NODE=48
-  WORKER_IN_MASTER=24
+  WORKER_IN_MASTER=0
 
   shift 5
 
