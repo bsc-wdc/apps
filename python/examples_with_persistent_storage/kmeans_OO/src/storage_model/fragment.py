@@ -7,10 +7,10 @@ except:
 
 try:
     from pycompss.api.task import task
-    from pycompss.api.parameter import IN, INOUT
+    from pycompss.api.parameter import IN
 except ImportError:
     # Required since the pycompss module is not ready during the registry
-    from dataclay.contrib.dummy_pycompss import task, IN, INOUT
+    from dataclay.contrib.dummy_pycompss import task, IN
 
 try:
     from dataclay import dclayMethod
@@ -34,7 +34,6 @@ class Fragment(StorageObject):
         super(Fragment, self).__init__()
         self.points = None
 
-    @task(target_direction=INOUT)
     @dclayMethod(num_points='int', dim='int', mode='str', seed='int')
     def generate_points(self, num_points, dim, mode, seed):
         """

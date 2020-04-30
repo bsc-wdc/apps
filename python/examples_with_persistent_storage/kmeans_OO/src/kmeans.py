@@ -111,6 +111,9 @@ def parse_arguments():
     return parser.parse_args()
 
 
+from storage_model.fragment import Fragment  # this will have to be removed
+
+@task(returns=Fragment)
 def generate_fragment(points, dim, mode, seed, use_storage):
     """
     Generate a random fragment of the specified number of points using the
