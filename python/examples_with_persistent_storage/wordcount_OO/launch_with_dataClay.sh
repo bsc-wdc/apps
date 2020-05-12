@@ -1,25 +1,5 @@
 #!/bin/bash -e
 
-  # THIS MUST BE INCLUDED INTO .bashrc
-  echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
-  echo "module load gcc/8.1.0"
-  echo "export COMPSS_PYTHON_VERSION=3-ML"
-  echo "module use /apps/modules/modulefiles/tools/COMPSs/.custom"
-  echo "module load TrunkJCB"
-  # echo "module load COMPSs/2.6.3"
-  echo "module load mkl/2018.1"
-  echo "module load impi/2018.1"
-  echo "module load opencv/4.1.2"
-  echo "module load python/3.6.4_ML"
-  echo "module load DATACLAY/2.0rc"
-
-  # read -p "Continue? (y|n) " -n 1 -r
-  # echo
-  # if [[ ! $REPLY =~ ^[Yy]$ ]]
-  # then
-  #     [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-  # fi
-
   module load gcc/8.1.0
   export COMPSS_PYTHON_VERSION=3-ML
   module use /apps/modules/modulefiles/tools/COMPSs/.custom
@@ -37,6 +17,24 @@
   execution_time=${3:-5}
   tracing=${4:-false}
   exec_file=${5:-$(pwd)/src/wordcount.py}
+
+  # Freeze storage_props into a temporal 
+  # (allow submission of multiple executions with varying parameters)
+  STORAGE_PROPS=`mktemp -p ~`
+  cp $(pwd)/dataClay_confs/storage_props.cfg "${STORAGE_PROPS}"
+
+  if [[ ! ${tracing} == "false" ]]
+  then
+    extra_tracing_flags="\
+      --jvm_workers_opts=\"-javaagent:/apps/DATACLAY/dependencies/aspectjweaver.jar\" \
+      --jvm_master_opts=\"-javaagent:/apps/DATACLAY/dependencies/aspectjweaver.jar\" \
+"
+
+    echo "Adding DATACLAYSRV_START_CMD to storage properties file"
+    echo "\${STORAGE_PROPS}=${STORAGE_PROPS}"
+    echo "" >> ${STORAGE_PROPS}
+    echo "DATACLAYSRV_START_CMD=\"--tracing\"" >> ${STORAGE_PROPS}
+  fi
 
   # Define script variables
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -87,18 +85,20 @@
     --log_level="${log_level}" \
     "${qos_flag}" \
     \
-    --classpath=$DATACLAY_JAR:$DATACLAY_DEPENDENCY_LIBS/*:${APP_CLASSPATH}:${CLASSPATH} \
-    --pythonpath=${APP_PYTHONPATH}:${PYTHONPATH} \
-    --storage_props=$(pwd)/dataClay_confs/storage_props.cfg \
+    --classpath=${DATACLAY_JAR} \
+    --pythonpath=${APP_PYTHONPATH}:${PYCLAY_PATH}:${PYTHONPATH} \
+    --storage_props=${STORAGE_PROPS} \
     --storage_home=$COMPSS_STORAGE_HOME \
-    --prolog=$(pwd)/dataClay_confs/register.sh \
+    --prolog="$DATACLAY_HOME/bin/dataclayprepare,$(pwd)/src/storage_model/,$(pwd)/src/,storage_model,python" \
+    \
+    ${extra_tracing_flags} \
     \
     --lang=python \
     \
     "$exec_file" $@ --use_storage
 
 # Enqueue tests example:
-# ./launch_with_dataClay.sh None 2 5 false $(pwd)/src/wordcount.py -d $(pwd)/dataset
+# ./launch_with_dataClay.sh None 2 10 false $(pwd)/src/wordcount.py -d $(pwd)/dataset
 
 # OUTPUTS:
 # - compss-XX.out : Job output file
