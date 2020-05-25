@@ -69,6 +69,7 @@
 
 # Enqueue tests example:
 # ./launch_without_storage.sh None 2 5 false $(pwd)/src/matmul.py -b 4 -e 4 --check_result
+# ./launch_without_storage.sh None 2 60 true $(pwd)/src/matmul.py -b 16 -e 4096
 
 # OUTPUTS:
 # - compss-XX.out : Job output file
