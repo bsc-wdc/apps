@@ -14,8 +14,8 @@ import java.util.Random;
  */
 public class KMeansDataSet {
 
-    private static final int cookie = 0x2badfdc0;
-    private static final int version = 1;
+    private static final int COOKIE = 0x2badfdc0;
+    private static final int VERSION = 1;
 
     public final int numPoints;
     public final int numDimensions;
@@ -25,10 +25,10 @@ public class KMeansDataSet {
 
     public KMeansDataSet(int np, int nd, float[][] pts, float[] cluster) {
         assert np * nd == pts.length;
-        numPoints = np;
-        numDimensions = nd;
-        points = pts;
-        currentCluster = cluster;
+        this.numPoints = np;
+        this.numDimensions = nd;
+        this.points = pts;
+        this.currentCluster = cluster;
     }
 
     /*
@@ -36,7 +36,7 @@ public class KMeansDataSet {
      */
 
     public final int getPointOffset(int point) {
-        return point * numDimensions;
+        return point * this.numDimensions;
     }
 
     /**
@@ -63,8 +63,8 @@ public class KMeansDataSet {
             Random rand = new Random(seed);
             File outputFile = new File(fileName);
             DataOutputStream out = new DataOutputStream(new FileOutputStream(outputFile));
-            out.writeInt(cookie);
-            out.writeInt(version);
+            out.writeInt(COOKIE);
+            out.writeInt(VERSION);
             out.writeInt(numPoints);
             out.writeInt(numDimensions);
             int numFloats = numPoints * numDimensions;
