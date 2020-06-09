@@ -20,6 +20,7 @@ public class Main {
     private static final Client client = ClientBuilder.newClient(config);
     private static final WebTarget target = client.target("http://" + MASTER + ":" + MASTER_PORT);
 
+
     public static void main(String[] args) throws Exception {
         String className = "randomforest.RandomForest";
         String methodName = "generateRandomModel";
@@ -27,39 +28,26 @@ public class Main {
         StartApplicationRequest sar = new StartApplicationRequest();
         sar.setClassName(className);
         sar.setMethodName(methodName);
-        sar.setCeiClass(className+"Itf");
-        /*
-        String numSamples = "20";
-        String numFeatures = "10";
-        String numClasses = "7";
-        String numInformative = "4";
-            String numRedundant = "2";
-        String numRepeated = "1";
-        String numClustersPerClass = "2";
-        String shuffle = "true";
-        String randomSeed = "0";
-        String numEstimators = "20";
-         */
+        sar.setCeiClass(className + "Itf");
 
         String numSamples = 30_000 + "";
         String numFeatures = 40 + "";
-        String numClasses = 200 + "";
-        String numInformative = 20 + "";
-        String numRedundant = 2 + "";
-        String numRepeated = 1 + "";
-        String numClustersPerClass = 2 + "";
-        String shuffle = true + "";
-        String randomSeed = "0";
-        String numEstimators = "12";
+        // String numClasses = 200 + "";
+        // String numInformative = 20 + "";
+        // String numRedundant = 2 + "";
+        // String numRepeated = 1 + "";
+        // String numClustersPerClass = 2 + "";
+        // String shuffle = true + "";
+        // String randomSeed = "0";
+        // String numEstimators = "12";
+
         sar.addParameter(numSamples);
         sar.addParameter(numFeatures);
-        //sar.addParameter(new String[]{numSamples, numFeatures, numClasses, numInformative, numRedundant, numRepeated, numClustersPerClass, shuffle, randomSeed, numEstimators});
+        // sar.addParameter(new String[]{numSamples, numFeatures, numClasses, numInformative, numRedundant, numRepeated,
+        // numClustersPerClass, shuffle, randomSeed, numEstimators});
         Debugger.debugAsXML(sar);
         WebTarget wt = target.path("/COMPSs/startApplication/");
-        Response response = wt
-                .request(MediaType.APPLICATION_JSON)
-                .put(Entity.xml(sar), Response.class
-                );
+        Response response = wt.request(MediaType.APPLICATION_JSON).put(Entity.xml(sar), Response.class);
 
         System.out.println(response.getStatusInfo().getStatusCode());
         if (response.getStatusInfo().getStatusCode() != 200) {

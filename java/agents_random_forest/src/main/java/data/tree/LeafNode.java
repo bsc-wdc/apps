@@ -10,31 +10,31 @@ import java.util.LinkedList;
 
 public class LeafNode extends Node implements Externalizable {
 
-    LinkedList<Pair> frequency;
+    private LinkedList<Pair> frequency;
 
 
     public LeafNode() {
-        frequency = new LinkedList<>();
+        this.frequency = new LinkedList<>();
     }
 
     public LeafNode(int[] probability) {
-        frequency = new LinkedList<>();
+        this.frequency = new LinkedList<>();
         for (int i = 0; i < probability.length; i++) {
             if (probability[i] != 0) {
-                frequency.add(new Pair(i, probability[i]));
+                this.frequency.add(new Pair(i, probability[i]));
             }
         }
     }
 
     @Override
     public void print(String firstPrefix, String nextPrefix) {
-        System.out.println(firstPrefix + frequency);
+        System.out.println(firstPrefix + this.frequency);
     }
 
     @Override
     public void writeExternal(ObjectOutput oo) throws IOException {
-        oo.writeInt(frequency.size());
-        for (Pair p : frequency) {
+        oo.writeInt(this.frequency.size());
+        for (Pair p : this.frequency) {
             oo.writeInt(p.classId);
             oo.writeInt(p.count);
         }
@@ -47,7 +47,7 @@ public class LeafNode extends Node implements Externalizable {
             Pair p = new Pair();
             p.classId = oi.readInt();
             p.count = oi.readInt();
-            frequency.add(p);
+            this.frequency.add(p);
         }
     }
 
@@ -72,20 +72,3 @@ public class LeafNode extends Node implements Externalizable {
         }
     }
 }
-/*
- * public class LeafNode extends Node implements Externalizable {
- * 
- * int[] probability;
- * 
- * public LeafNode() { }
- * 
- * public LeafNode(int[] probability) { this.probability = probability; }
- * 
- * @Override public void print(String firstPrefix, String nextPrefix) { System.out.println(firstPrefix +
- * Arrays.toString(probability)); }
- * 
- * @Override public void writeExternal(ObjectOutput oo) throws IOException { oo.writeObject(probability); }
- * 
- * @Override public void readExternal(ObjectInput oi) throws IOException, ClassNotFoundException { probability = (int[])
- * oi.readObject(); } }
- */

@@ -26,19 +26,19 @@ public class FitConfig {
     }
 
     public int getNumEstimators() {
-        return numEstimators;
+        return this.numEstimators;
     }
 
     public Long getRandomSeed() {
-        return randomSeed;
+        return this.randomSeed;
     }
 
     public void print() {
         System.out.println("Applying random forest with parameters:");
-        System.out.println("\t* numEstimators: " + numEstimators);
-        System.out.println("\t* number of candidate features: " + numCandidateFeat);
-        System.out.println("\t* maxDepth: " + maxDepth);
-        System.out.println("\t* distrDepth: " + distrDepth);
-        System.out.println("\t* randomState: " + randomSeed);
+        System.out.println("\t* numEstimators: " + this.numEstimators);
+        System.out.println("\t* number of candidate features: " + this.numCandidateFeat);
+        System.out.println("\t* maxDepth: " + this.maxDepth);
+        System.out.println("\t* distrDepth: " + this.distrDepth);
+        System.out.println("\t* randomState: " + this.randomSeed);
     }
 }

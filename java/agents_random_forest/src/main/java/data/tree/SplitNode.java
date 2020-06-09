@@ -9,14 +9,14 @@ import java.io.ObjectOutput;
 
 public class SplitNode extends Node implements Externalizable {
 
-    int splitFeature;
-    double splitValue;
-    Tree lowerChild;
-    Tree upperChild;
+    private int splitFeature;
+    private double splitValue;
+    private Tree lowerChild;
+    private Tree upperChild;
 
 
     public SplitNode() {
-
+        // Only for externalisation
     }
 
     public SplitNode(int splitFeature, double splitValue, Tree lowerChild, Tree upperChild) {
@@ -28,11 +28,11 @@ public class SplitNode extends Node implements Externalizable {
 
     @Override
     public void print(String firstPrefix, String nextPrefix) {
-        if (lowerChild != null) {
-            String value = ((double) ((int) (splitValue * 10_000)) / 10_000) + "";
-            System.out.println(firstPrefix + splitFeature + "(" + value + ")");
-            lowerChild.print(nextPrefix + "     ├── ", nextPrefix + "     │   ");
-            upperChild.print(nextPrefix + "     └── ", nextPrefix + "         ");
+        if (this.lowerChild != null) {
+            String value = ((double) ((int) (this.splitValue * 10_000)) / 10_000) + "";
+            System.out.println(firstPrefix + this.splitFeature + "(" + value + ")");
+            this.lowerChild.print(nextPrefix + "     ├── ", nextPrefix + "     │   ");
+            this.upperChild.print(nextPrefix + "     └── ", nextPrefix + "         ");
         } else {
             System.out.println(firstPrefix);
         }
@@ -41,18 +41,18 @@ public class SplitNode extends Node implements Externalizable {
 
     @Override
     public void writeExternal(ObjectOutput oo) throws IOException {
-        oo.writeInt(splitFeature);
-        oo.writeDouble(splitValue);
-        oo.writeObject(lowerChild);
-        oo.writeObject(upperChild);
+        oo.writeInt(this.splitFeature);
+        oo.writeDouble(this.splitValue);
+        oo.writeObject(this.lowerChild);
+        oo.writeObject(this.upperChild);
     }
 
     @Override
     public void readExternal(ObjectInput oi) throws IOException, ClassNotFoundException {
-        splitFeature = oi.readInt();
-        splitValue = oi.readDouble();
-        lowerChild = (Tree) oi.readObject();
-        upperChild = (Tree) oi.readObject();
+        this.splitFeature = oi.readInt();
+        this.splitValue = oi.readDouble();
+        this.lowerChild = (Tree) oi.readObject();
+        this.upperChild = (Tree) oi.readObject();
     }
 
 }

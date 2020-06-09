@@ -13,12 +13,15 @@ import java.util.Random;
 
 public class IntegerDataSet implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     private int numSamples;
     private int numFeatures;
     private int[] values;
 
     private int[] maxValue;
     private int[] minValue;
+
 
     public IntegerDataSet() {
         this(0, 0);
@@ -31,24 +34,24 @@ public class IntegerDataSet implements Serializable {
         this.maxValue = new int[numFeatures];
         this.minValue = new int[numFeatures];
         for (int i = 0; i < numFeatures; i++) {
-            maxValue[i] = Integer.MIN_VALUE;
-            minValue[i] = Integer.MAX_VALUE;
+            this.maxValue[i] = Integer.MIN_VALUE;
+            this.minValue[i] = Integer.MAX_VALUE;
         }
     }
 
     public void populateFromList(ArrayList<Integer> list) {
         int sampleId = 0;
         for (int val : list) {
-            if (sampleId >= numSamples) {
+            if (sampleId >= this.numSamples) {
                 break;
             }
 
-            values[sampleId] = val;
-            if (minValue[0] > val) {
-                minValue[0] = val;
+            this.values[sampleId] = val;
+            if (this.minValue[0] > val) {
+                this.minValue[0] = val;
             }
-            if (maxValue[0] < val) {
-                maxValue[0] = val;
+            if (this.maxValue[0] < val) {
+                this.maxValue[0] = val;
             }
             sampleId++;
         }
@@ -57,16 +60,16 @@ public class IntegerDataSet implements Serializable {
     public void populateFromList(LinkedList<Integer> list) {
         int sampleId = 0;
         for (int val : list) {
-            if (sampleId >= numSamples) {
+            if (sampleId >= this.numSamples) {
                 break;
             }
 
-            values[sampleId] = val;
-            if (minValue[0] > val) {
-                minValue[0] = val;
+            this.values[sampleId] = val;
+            if (this.minValue[0] > val) {
+                this.minValue[0] = val;
             }
-            if (maxValue[0] < val) {
-                maxValue[0] = val;
+            if (this.maxValue[0] < val) {
+                this.maxValue[0] = val;
             }
             sampleId++;
         }
@@ -76,14 +79,14 @@ public class IntegerDataSet implements Serializable {
         try (BufferedReader reader = new BufferedReader(new FileReader("/tmp/classes"))) {
             int sampleId = 0;
             String line;
-            while (sampleId < numSamples && ((line = reader.readLine()) != null)) {
+            while (sampleId < this.numSamples && ((line = reader.readLine()) != null)) {
                 int value = new Integer(line);
-                values[sampleId] = value;
-                if (minValue[0] > value) {
-                    minValue[0] = value;
+                this.values[sampleId] = value;
+                if (this.minValue[0] > value) {
+                    this.minValue[0] = value;
                 }
-                if (maxValue[0] < value) {
-                    maxValue[0] = value;
+                if (this.maxValue[0] < value) {
+                    this.maxValue[0] = value;
                 }
                 sampleId++;
             }
@@ -103,15 +106,15 @@ public class IntegerDataSet implements Serializable {
         r.setSeed(randomSeed);
 
         int valueOffset = 0;
-        while (valueOffset < values.length) {
+        while (valueOffset < this.values.length) {
             for (int featureId = 0; featureId < this.numFeatures; featureId++) {
                 int value = (int) (r.nextDouble() * (double) boundariesRange[featureId]) + baseRange[featureId];
-                values[valueOffset] = value;
-                if (minValue[featureId] > value) {
-                    minValue[featureId] = value;
+                this.values[valueOffset] = value;
+                if (this.minValue[featureId] > value) {
+                    this.minValue[featureId] = value;
                 }
-                if (maxValue[featureId] < value) {
-                    maxValue[featureId] = value;
+                if (this.maxValue[featureId] < value) {
+                    this.maxValue[featureId] = value;
                 }
                 valueOffset++;
             }
@@ -121,9 +124,9 @@ public class IntegerDataSet implements Serializable {
     public void print() {
         System.out.println("-------------------------------------------");
         int valueOffset = 0;
-        while (valueOffset < values.length) {
+        while (valueOffset < this.values.length) {
             for (int featureId = 0; featureId < this.numFeatures; featureId++) {
-                System.out.print(values[valueOffset++]);
+                System.out.print(this.values[valueOffset++]);
             }
             System.out.println();
         }
@@ -140,11 +143,11 @@ public class IntegerDataSet implements Serializable {
     }
 
     public int[] getValues() {
-        return values;
+        return this.values;
     }
 
     public int getValue(int sampleId, int featureIdx) {
-        return values[sampleId * this.numFeatures + featureIdx];
+        return this.values[sampleId * this.numFeatures + featureIdx];
     }
 
     public int getNumSamples() {

@@ -11,9 +11,12 @@ import java.util.Random;
 
 public class DoubleDataSet implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private int numSamples;
     private int numFeatures;
     private double[] values;
+
 
     public DoubleDataSet(int numSamples, int numFeatures) {
         this.numSamples = numSamples;
@@ -38,7 +41,7 @@ public class DoubleDataSet implements Serializable {
                     case '\n':
                         featureId = 0;
                         sampleId++;
-                        if (sampleId >= numSamples) {
+                        if (sampleId >= this.numSamples) {
                             keepReading = false;
                         }
 
@@ -49,8 +52,8 @@ public class DoubleDataSet implements Serializable {
                         char[] number = new char[23];
                         reader.read(number);
                         double featureVal = new Double(new String(number)) * mod;
-                        if (featureId < numFeatures) {
-                            values[featureOffset] = featureVal;
+                        if (featureId < this.numFeatures) {
+                            this.values[featureOffset] = featureVal;
                             featureOffset++;
                         }
                         mod = 1;
@@ -84,10 +87,10 @@ public class DoubleDataSet implements Serializable {
         r.setSeed(randomSeed);
 
         int valueOffset = 0;
-        while (valueOffset < values.length) {
+        while (valueOffset < this.values.length) {
             for (int featureId = 0; featureId < this.numFeatures; featureId++) {
                 double value = r.nextDouble() * boundariesRange[featureId] + baseRange[featureId];
-                values[valueOffset] = value;
+                this.values[valueOffset] = value;
                 valueOffset++;
             }
         }
@@ -96,9 +99,9 @@ public class DoubleDataSet implements Serializable {
 
     public void print() {
         int valueOffset = 0;
-        while (valueOffset < values.length) {
+        while (valueOffset < this.values.length) {
             for (int featureId = 0; featureId < this.numFeatures; featureId++) {
-                System.out.print(values[valueOffset++] + "\t");
+                System.out.print(this.values[valueOffset++] + "\t");
             }
             System.out.println();
         }
@@ -106,7 +109,7 @@ public class DoubleDataSet implements Serializable {
     }
 
     public double getValue(int sampleId, int featureIdx) {
-        return values[sampleId * this.numFeatures + featureIdx];
+        return this.values[sampleId * this.numFeatures + featureIdx];
     }
 
     public int getNumSamples() {

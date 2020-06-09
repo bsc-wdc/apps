@@ -16,9 +16,10 @@ public class DatasetGenerator {
     private static final String MASTER = "127.0.0.1";
     private static final int MASTER_PORT = 46101;
 
-    private static final ClientConfig config = new ClientConfig();
-    private static final Client client = ClientBuilder.newClient(config);
-    private static final WebTarget target = client.target("http://" + MASTER + ":" + MASTER_PORT);
+    private static final ClientConfig CONFIG = new ClientConfig();
+    private static final Client CLIENT = ClientBuilder.newClient(CONFIG);
+    private static final WebTarget TARGET = CLIENT.target("http://" + MASTER + ":" + MASTER_PORT);
+
 
     public static void main(String[] args) throws Exception {
         String className = "randomforest.RandomForest";
@@ -48,11 +49,8 @@ public class DatasetGenerator {
         sar.addParameter(shuffle);
         sar.addParameter(randomSeed);
 
-        WebTarget wt = target.path("/COMPSs/startApplication/");
-        Response response = wt
-                .request(MediaType.APPLICATION_JSON)
-                .put(Entity.xml(sar), Response.class
-                );
+        WebTarget wt = TARGET.path("/COMPSs/startApplication/");
+        Response response = wt.request(MediaType.APPLICATION_JSON).put(Entity.xml(sar), Response.class);
 
         System.out.println(response.getStatusInfo().getStatusCode());
         if (response.getStatusInfo().getStatusCode() != 200) {

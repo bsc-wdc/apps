@@ -1,18 +1,18 @@
 
 package randomforest.config;
 
-
 public class FeaturesNumFilter {
 
     public static enum Config {
         NONE, SQRT, THIRD
     }
 
+
     /**
      * Computes the number of features to consider when looking for the best split.
      *
      * @param numFeatures dataset's number of features
-     * @param config      configuration filter
+     * @param config configuration filter
      * @return number of features
      */
     public static int resolveNumCandidateFeatures(int numFeatures, Config config) {

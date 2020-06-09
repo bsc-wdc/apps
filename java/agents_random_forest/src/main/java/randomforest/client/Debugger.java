@@ -10,6 +10,7 @@ public class Debugger {
 
     private static final boolean DEBUG = true;
 
+
     public static void out(String tag, String message) {
         System.out.println("[" + tag.toUpperCase() + "] " + message);
     }

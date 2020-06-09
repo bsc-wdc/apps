@@ -19,18 +19,20 @@ public class Tree implements Externalizable {
 
     private Node root;
 
+
     public Tree() {
+        // Only for externalisation
     }
 
-    public static Tree trainTreeWithDataset(DoubleDataSet samples, IntegerDataSet classification, IntegerDataSet selection,
-            TreeFitConfig config, long seed) {
+    public static Tree trainTreeWithDataset(DoubleDataSet samples, IntegerDataSet classification,
+        IntegerDataSet selection, TreeFitConfig config, long seed) {
         Tree tree = new Tree();
         final LinkedList<Object[]> treeTraversal = new LinkedList<>();
         final Random random = new Random();
         random.setSeed(seed);
-        treeTraversal.add(new Object[]{tree,
+        treeTraversal.add(new Object[] { tree,
             selection,
-            0});
+            0 });
 
         while (!treeTraversal.isEmpty()) {
             Object[] iterationVals = treeTraversal.pop();
@@ -51,12 +53,12 @@ public class Tree implements Externalizable {
 
                 currentTree.setSplitRoot(featureId, splitValue, lowerChild, upperChild);
 
-                treeTraversal.add(new Object[]{lowerChild,
+                treeTraversal.add(new Object[] { lowerChild,
                     lowerSelection,
-                    depth + 1});
-                treeTraversal.add(new Object[]{upperChild,
+                    depth + 1 });
+                treeTraversal.add(new Object[] { upperChild,
                     upperSelection,
-                    depth + 1});
+                    depth + 1 });
 
             } else {
                 int[] totalClasses = (int[]) splitResult[4];
@@ -71,7 +73,7 @@ public class Tree implements Externalizable {
     }
 
     private static Object[] splitNode(DoubleDataSet samples, IntegerDataSet classification, IntegerDataSet selection,
-            TreeFitConfig config, long seed) {
+        TreeFitConfig config, long seed) {
         final Random r = new Random();
         r.setSeed(seed);
         LinkedList<Integer> untriedFeatureIdxs = new LinkedList<>();
@@ -88,8 +90,8 @@ public class Tree implements Externalizable {
 
         while (untriedFeatureIdxs.size() > 0) {
             long iterationRandomSeed = r.nextLong();
-            int[] featureIdxSelection
-                    = popRandomFeatures(untriedFeatureIdxs, config.getNumCandidateFeatures(), iterationRandomSeed);
+            int[] featureIdxSelection =
+                popRandomFeatures(untriedFeatureIdxs, config.getNumCandidateFeatures(), iterationRandomSeed);
 
             double bestScore = Double.MAX_VALUE;
             bestIndex = -1;
@@ -110,22 +112,22 @@ public class Tree implements Externalizable {
             }
             if (bestIndex >= 0) {
                 // Get groups
-                return new Object[]{bestIndex,
+                return new Object[] { bestIndex,
                     bestValue,
                     lowerChild,
                     upperChild,
-                    totalClassesCount};
+                    totalClassesCount };
             }
         }
-        return new Object[]{null,
+        return new Object[] { null,
             null,
             null,
             null,
-            totalClassesCount};
+            totalClassesCount };
     }
 
     private static int[] popRandomFeatures(LinkedList<Integer> untriedFeatureIdxs, int numCandidateFeatures,
-            long seed) {
+        long seed) {
         Random random = new Random();
         random.setSeed(seed);
         int maxPositions = Math.min(numCandidateFeatures, untriedFeatureIdxs.size());
@@ -139,18 +141,18 @@ public class Tree implements Externalizable {
     }
 
     private static Object[] testSplit(DoubleDataSet samples, IntegerDataSet classification, IntegerDataSet selection,
-            int featureIdx) {
+        int featureIdx) {
         int totalNumSamples = selection.getNumSamples();
         if (totalNumSamples == 0) {
-            return new Object[]{null,
+            return new Object[] { null,
                 null,
                 null,
                 null,
-                new int[0]};
+                new int[0] };
         }
 
         // Sort the selection according to the feature (featureIdx) value
-        TreeSet<ValuedPair> sortedSelection = new TreeSet(new Comparator<ValuedPair>() {
+        TreeSet<ValuedPair> sortedSelection = new TreeSet<>(new Comparator<ValuedPair>() {
 
             @Override
             public int compare(ValuedPair t, ValuedPair t1) {
@@ -185,8 +187,8 @@ public class Tree implements Externalizable {
         for (ValuedPair vp : sortedSelection) {
             if (!Objects.equals(lastValue, vp.value) && lastClassId != vp.classId) {
                 double cutValue = (lastValue + vp.value) / 2;
-                double score
-                        = evaluateSplitDifference(partialSamples, totalNumSamples, partialClassesCount, totalClassesCount);
+                double score =
+                    evaluateSplitDifference(partialSamples, totalNumSamples, partialClassesCount, totalClassesCount);
 
                 if (score < bestScore) {
                     bestScore = score;
@@ -204,26 +206,26 @@ public class Tree implements Externalizable {
         }
 
         if (bestScore == Double.MAX_VALUE) {
-            return new Object[]{null,
+            return new Object[] { null,
                 null,
                 null,
                 null,
-                totalClassesCount};
+                totalClassesCount };
         }
         // Generate corresponding subSelections
         IntegerDataSet underSelection = new IntegerDataSet(underThreshold.size(), 1);
         IntegerDataSet upperSelection = new IntegerDataSet(upperThreshold.size(), 1);
         upperSelection.populateFromList(upperThreshold);
         underSelection.populateFromList(underThreshold);
-        return new Object[]{bestValue,
+        return new Object[] { bestValue,
             bestScore,
             underSelection,
             upperSelection,
-            totalClassesCount};
+            totalClassesCount };
     }
 
     private static double evaluateSplitDifference(int partialPosition, int totalSize, int[] partialClassesCount,
-            int[] totalClassesCount) {
+        int[] totalClassesCount) {
         double aboveScore = 0;
         double underScore = 0;
         for (int classIdx = 0; classIdx < totalClassesCount.length; classIdx++) {
@@ -241,6 +243,7 @@ public class Tree implements Externalizable {
         final Double value;
         final int classId;
 
+
         public ValuedPair(int id, double value, int classId) {
             this.id = id;
             this.value = value;
@@ -249,21 +252,22 @@ public class Tree implements Externalizable {
 
         @Override
         public String toString() {
-            return id + "(" + value + " -> " + classId + ")";
+            return this.id + "(" + this.value + " -> " + this.classId + ")";
         }
     }
 
+
     private void setSplitRoot(int featureId, double splitValue, Tree lowerChild, Tree upperChild) {
-        root = new SplitNode(featureId, splitValue, lowerChild, upperChild);
+        this.root = new SplitNode(featureId, splitValue, lowerChild, upperChild);
     }
 
     private void setJointRoot(int[] frequency) {
-        root = new LeafNode(frequency);
+        this.root = new LeafNode(frequency);
     }
 
     public void print(String firstPrefix, String nextPrefix) {
-        if (root != null) {
-            root.print(firstPrefix, nextPrefix);
+        if (this.root != null) {
+            this.root.print(firstPrefix, nextPrefix);
         } else {
             System.out.println(firstPrefix);
         }
@@ -271,12 +275,12 @@ public class Tree implements Externalizable {
 
     @Override
     public void writeExternal(ObjectOutput oo) throws IOException {
-        oo.writeObject(root);
+        oo.writeObject(this.root);
     }
 
     @Override
     public void readExternal(ObjectInput oi) throws IOException, ClassNotFoundException {
-        root = (Node) oi.readObject();
+        this.root = (Node) oi.readObject();
     }
 
 }

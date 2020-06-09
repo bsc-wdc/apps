@@ -14,28 +14,29 @@ import java.util.Random;
 import randomforest.config.FeaturesNumFilter;
 
 
-/**
- *
- */
 public class RandomForest {
-    
+
     public static IntegerDataSet randomSelection(int lowerBoundary, int upperBoundary, int numElements,
-            long randomSeed) {
+        long randomSeed) {
+
         IntegerDataSet ds = new IntegerDataSet(numElements, 1);
-        ds.populateRandom(new Integer[][]{{lowerBoundary,
-            upperBoundary}}, randomSeed);
+        ds.populateRandom(new Integer[][] { { lowerBoundary,
+            upperBoundary } }, randomSeed);
         return ds;
     }
 
-    public static RandomForestDataSet createDataSet(int numSamples, int numFeatures, int numClasses, int numInformative, int numRedundant,
-            int numClustersPerClass, int numRepeated, boolean shuffle, Long randomSeed) throws IOException, InterruptedException {
+    public static RandomForestDataSet createDataSet(int numSamples, int numFeatures, int numClasses, int numInformative,
+        int numRedundant, int numClustersPerClass, int numRepeated, boolean shuffle, Long randomSeed)
+        throws IOException, InterruptedException {
+
         DataSetConfig datasetConfig;
-        datasetConfig = new DataSetConfig(numSamples, numFeatures, numClasses, numInformative, numRedundant, numClustersPerClass, numRepeated, shuffle, randomSeed);
+        datasetConfig = new DataSetConfig(numSamples, numFeatures, numClasses, numInformative, numRedundant,
+            numClustersPerClass, numRepeated, shuffle, randomSeed);
         return createDataSet(datasetConfig);
     }
 
     public static RandomForestDataSet createDataSet(DataSetConfig datasetConfig)
-            throws IOException, InterruptedException {
+        throws IOException, InterruptedException {
 
         int numSamples = datasetConfig.getNumSamples();
         int numFeatures = datasetConfig.getNumFeatures();
@@ -50,9 +51,9 @@ public class RandomForest {
     /**
      * Trains the random forest classifier.
      *
-     * @param samples        Dataset with n samples of m features each
+     * @param samples Dataset with n samples of m features each
      * @param classification Dataset of n values of the corresponding class
-     * @param config         Configuration to fit the RandomForest model
+     * @param config Configuration to fit the RandomForest model
      */
     public static Tree[] fit(DoubleDataSet samples, IntegerDataSet classification, FitConfig config) {
         Tree[] trees = new Tree[config.getNumEstimators()];
@@ -68,8 +69,8 @@ public class RandomForest {
         for (int estimatorId = 0; estimatorId < config.getNumEstimators(); estimatorId++) {
             long randomSeed = rd.nextLong();
             IntegerDataSet sampleSelection = randomSelection(0, numSamples, numSamples, randomSeed);
-            trees[estimatorId]
-                    = Tree.trainTreeWithDataset(samples, classification, sampleSelection, treeFitConfig, randomSeed);
+            trees[estimatorId] =
+                Tree.trainTreeWithDataset(samples, classification, sampleSelection, treeFitConfig, randomSeed);
             COMPSs.deregisterObject(sampleSelection);
         }
         for (int estimatorId = 0; estimatorId < config.getNumEstimators(); estimatorId++) {
@@ -81,23 +82,24 @@ public class RandomForest {
     /**
      * Returns the mean accuracy on the given test data.
      *
-     * @param features       array of n samples with m features each
+     * @param features array of n samples with m features each
      * @param classification array of n values with the corresponding class
      */
     public void score(Object[] features, Object[] classification) {
     }
 
     public static void generateRandomModelWithTest(String[] args) throws Exception {
-        String[] argsTest= new String[args.length];
+        String[] argsTest = new String[args.length];
         System.arraycopy(args, 0, argsTest, 0, args.length);
-        argsTest[args.length-2]=argsTest[args.length-1];
-        
+        argsTest[args.length - 2] = argsTest[args.length - 1];
+
         generateRandomModel(argsTest);
         generateRandomModel(args);
         generateRandomModel(args);
         generateRandomModel(args);
         generateRandomModel(args);
     }
+
     public static void generateRandomModel(String[] args) throws Exception {
         System.out.println(Arrays.toString(args));
         // Data set generation parameters
@@ -135,7 +137,7 @@ public class RandomForest {
         DataSetConfig datasetConfig;
 
         datasetConfig = new DataSetConfig(numSamples, numFeatures, numClasses, numInformative, numRedundant,
-                numClustersPerClass, numRepeated, shuffle, randomState);
+            numClustersPerClass, numRepeated, shuffle, randomState);
 
         FitConfig rfConfig;
         rfConfig = new FitConfig(numEstimators, distrDepth, numCandidateFeat, maxDepth, randomState);
@@ -150,25 +152,27 @@ public class RandomForest {
         Tree[] tree = fit(dataset.getSamples(), dataset.getClasses(), rfConfig);
         COMPSs.barrier();
         long endTime = System.currentTimeMillis();
+        System.out.println("Training tree at " + tree.hashCode());
         System.out.println("Training completed at " + endTime);
         System.out.println("Training length: " + (endTime - startTime));
         COMPSs.deregisterObject(dataset);
-        
+
     }
 
     public static void main(String[] args) throws Exception {
-        String numSamples = 30_000 + "";
-        String numFeatures = 40 + "";
-        String numClasses = 200 + "";
-        String numInformative = 20 + "";
-        String numRedundant = 2 + "";
-        String numRepeated = 1 + "";
-        String numClustersPerClass = 2 + "";
-        String shuffle = true + "";
-        String randomSeed = "0";
-        String numEstimators = "1";
+        // String numSamples = 30_000 + "";
+        // String numFeatures = 40 + "";
+        // String numClasses = 200 + "";
+        // String numInformative = 20 + "";
+        // String numRedundant = 2 + "";
+        // String numRepeated = 1 + "";
+        // String numClustersPerClass = 2 + "";
+        // String shuffle = true + "";
+        // String randomSeed = "0";
+        // String numEstimators = "1";
+        // generateRandomModel(new String[]{numSamples, numFeatures, numClasses, numInformative, numRedundant,
+        // numRepeated, numClustersPerClass, shuffle, randomSeed, numEstimators});
 
-        //generateRandomModel(new String[]{numSamples, numFeatures, numClasses, numInformative, numRedundant, numRepeated, numClustersPerClass, shuffle, randomSeed, numEstimators});
         generateRandomModelWithTest(args);
     }
 }

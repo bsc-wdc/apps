@@ -45,66 +45,66 @@ public class DataSetConfig implements Externalizable {
     }
 
     public int getNumSamples() {
-        return numSamples;
+        return this.numSamples;
     }
 
     public int getNumFeatures() {
-        return numFeatures;
+        return this.numFeatures;
     }
 
     public Long getRandomSeed() {
-        return randomSeed;
+        return this.randomSeed;
 
     }
 
     public int getNumClasses() {
-        return numClasses;
+        return this.numClasses;
     }
 
     public int getNumInformative() {
-        return numInformative;
+        return this.numInformative;
     }
 
     public int getNumRedundant() {
-        return numRedundant;
+        return this.numRedundant;
     }
 
     public int getNumClustersPerClass() {
-        return numClustersPerClass;
+        return this.numClustersPerClass;
     }
 
     public int getNumRepeated() {
-        return numRepeated;
+        return this.numRepeated;
     }
 
     public boolean isShuffle() {
-        return shuffle;
+        return this.shuffle;
     }
 
     @Override
     public void writeExternal(ObjectOutput oo) throws IOException {
-        oo.writeInt(numSamples);
-        oo.writeInt(numFeatures);
-        oo.writeInt(numClasses);
-        oo.writeInt(numInformative);
-        oo.writeInt(numRedundant);
-        oo.writeInt(numClustersPerClass);
-        oo.writeInt(numRepeated);
-        oo.writeBoolean(shuffle);
-        oo.writeObject(randomSeed);
+        oo.writeInt(this.numSamples);
+        oo.writeInt(this.numFeatures);
+        oo.writeInt(this.numClasses);
+        oo.writeInt(this.numInformative);
+        oo.writeInt(this.numRedundant);
+        oo.writeInt(this.numClustersPerClass);
+        oo.writeInt(this.numRepeated);
+        oo.writeBoolean(this.shuffle);
+        oo.writeObject(this.randomSeed);
     }
 
     @Override
     public void readExternal(ObjectInput oi) throws IOException, ClassNotFoundException {
-        numClasses = oi.readInt();
-        numSamples = oi.readInt();
-        numFeatures = oi.readInt();
-        numInformative = oi.readInt();
-        numRedundant = oi.readInt();
-        numClustersPerClass = oi.readInt();
-        numRepeated = oi.readInt();
-        shuffle = oi.readBoolean();
-        randomSeed = (Long) oi.readObject();
+        this.numClasses = oi.readInt();
+        this.numSamples = oi.readInt();
+        this.numFeatures = oi.readInt();
+        this.numInformative = oi.readInt();
+        this.numRedundant = oi.readInt();
+        this.numClustersPerClass = oi.readInt();
+        this.numRepeated = oi.readInt();
+        this.shuffle = oi.readBoolean();
+        this.randomSeed = (Long) oi.readObject();
     }
 
 }

@@ -22,6 +22,7 @@ public class RandomForestDataSet {
     private DoubleDataSet samples;
     private IntegerDataSet classes;
 
+
     public RandomForestDataSet(int numSamples, int numFeatures) {
         this.numSamples = numSamples;
         this.numFeatures = numFeatures;
@@ -37,17 +38,17 @@ public class RandomForestDataSet {
             randomSeed = new Random().nextLong();
         }
         String pythonProgram = "from sklearn.datasets import make_classification \n" + "import numpy as np \n"
-                + "samples, classes = make_classification(" + "n_samples=" + config.getNumSamples() + ", " + "n_features="
-                + config.getNumFeatures() + ", " + "n_classes=" + config.getNumClasses() + ", " + "n_informative="
-                + config.getNumInformative() + ", " + "n_redundant=" + config.getNumRedundant() + ", " + "n_repeated="
-                + config.getNumRepeated() + ", " + "n_clusters_per_class=" + config.getNumClustersPerClass() + ", "
-                + "shuffle=" + (config.isShuffle() ? "True" : "False") + ", " + "random_state=" + randomSeed + ")\n"
-                + "with open('/tmp/samples', 'wb') as f:\n" + "    np.savetxt(fname=f, X=samples, fmt='%+.17e') \n"
-                + "with open('/tmp/classes', 'wb') as f:\n" + "    np.savetxt(fname=f, X=classes.astype(int), fmt='%i')";
+            + "samples, classes = make_classification(" + "n_samples=" + config.getNumSamples() + ", " + "n_features="
+            + config.getNumFeatures() + ", " + "n_classes=" + config.getNumClasses() + ", " + "n_informative="
+            + config.getNumInformative() + ", " + "n_redundant=" + config.getNumRedundant() + ", " + "n_repeated="
+            + config.getNumRepeated() + ", " + "n_clusters_per_class=" + config.getNumClustersPerClass() + ", "
+            + "shuffle=" + (config.isShuffle() ? "True" : "False") + ", " + "random_state=" + randomSeed + ")\n"
+            + "with open('/tmp/samples', 'wb') as f:\n" + "    np.savetxt(fname=f, X=samples, fmt='%+.17e') \n"
+            + "with open('/tmp/classes', 'wb') as f:\n" + "    np.savetxt(fname=f, X=classes.astype(int), fmt='%i')";
 
-        final Process p = Runtime.getRuntime().exec(new String[]{"python",
+        final Process p = Runtime.getRuntime().exec(new String[] { "python",
             "-c",
-            pythonProgram});
+            pythonProgram });
         p.getOutputStream().close();
         p.waitFor();
         p.getInputStream().close();
@@ -64,18 +65,18 @@ public class RandomForestDataSet {
     }
 
     public int getNumSamples() {
-        return numSamples;
+        return this.numSamples;
     }
 
     public int getNumFeatures() {
-        return numFeatures;
+        return this.numFeatures;
     }
 
     public IntegerDataSet getClasses() {
-        return classes;
+        return this.classes;
     }
 
     public DoubleDataSet getSamples() {
-        return samples;
+        return this.samples;
     }
 }
