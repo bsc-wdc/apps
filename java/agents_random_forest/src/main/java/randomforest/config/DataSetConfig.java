@@ -1,4 +1,3 @@
-
 package randomforest.config;
 
 import java.io.Externalizable;
@@ -27,6 +26,7 @@ public class DataSetConfig implements Externalizable {
 
     public DataSetConfig(int numSamples, int numFeatures, int numClasses, int numInformative, int numRedundant,
         int numClustersPerClass, int numRepeated, boolean shuffle, Long randomSeed) {
+        
         this.numSamples = numSamples;
         this.numFeatures = numFeatures;
         this.numClasses = numClasses;

@@ -1,4 +1,3 @@
-
 package randomforest.config;
 
 public class FeaturesNumFilter {

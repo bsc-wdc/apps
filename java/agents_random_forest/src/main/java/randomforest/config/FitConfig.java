@@ -1,4 +1,3 @@
-
 package randomforest.config;
 
 import data.tree.TreeFitConfig;

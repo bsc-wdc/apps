@@ -1,20 +1,21 @@
-
 package randomforest.client;
 
 import es.bsc.compss.agent.rest.types.messages.StartApplicationRequest;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import org.glassfish.jersey.client.ClientConfig;
 
 
 public class DatasetGenerator {
 
     private static final String MASTER = "127.0.0.1";
-    private static final int MASTER_PORT = 46101;
+    private static final int MASTER_PORT = 46_101;
 
     private static final ClientConfig CONFIG = new ClientConfig();
     private static final Client CLIENT = ClientBuilder.newClient(CONFIG);

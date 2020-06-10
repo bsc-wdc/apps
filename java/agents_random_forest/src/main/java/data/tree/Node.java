@@ -1,4 +1,3 @@
-
 package data.tree;
 
 public abstract class Node {

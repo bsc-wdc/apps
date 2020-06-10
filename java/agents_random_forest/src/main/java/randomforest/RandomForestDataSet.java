@@ -1,13 +1,14 @@
-
 package randomforest;
 
-import randomforest.config.DataSetConfig;
 import data.dataset.DoubleDataSet;
 import data.dataset.IntegerDataSet;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
+
+import randomforest.config.DataSetConfig;
 
 
 /**

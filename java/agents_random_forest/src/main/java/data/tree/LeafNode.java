@@ -1,4 +1,3 @@
-
 package data.tree;
 
 import java.io.Externalizable;
@@ -54,8 +53,8 @@ public class LeafNode extends Node implements Externalizable {
 
     private class Pair {
 
-        int classId;
-        int count;
+        private int classId;
+        private int count;
 
 
         public Pair() {

@@ -1,8 +1,8 @@
-
 package data.tree;
 
 import data.dataset.DoubleDataSet;
 import data.dataset.IntegerDataSet;
+
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -62,13 +62,10 @@ public class Tree implements Externalizable {
 
             } else {
                 int[] totalClasses = (int[]) splitResult[4];
-
                 currentTree.setJointRoot(totalClasses);
             }
-            // } else {
-
-            // }
         }
+
         return tree;
     }
 

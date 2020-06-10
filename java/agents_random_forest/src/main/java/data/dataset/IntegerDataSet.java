@@ -1,4 +1,3 @@
-
 package data.dataset;
 
 import java.io.BufferedReader;
@@ -14,7 +13,7 @@ import java.util.Random;
 public class IntegerDataSet implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private int numSamples;
     private int numFeatures;
     private int[] values;
