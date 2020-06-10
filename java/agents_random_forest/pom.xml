@@ -38,7 +38,7 @@
         
         
         <!-- Dependencies versions -->
-        <compss.version>2.5.rc1908</compss.version>
+        <compss.version>2.6.rc2006</compss.version>
         <jersey.version>2.7</jersey.version>
         <jetty.version>9.2.3.v20140905</jetty.version>
     </properties>
