@@ -20,7 +20,7 @@ public interface RandomForestItf {
         @Parameter(direction = Direction.IN) long randomSeed
     );
 
-    @Method(declaringClass = "data.tree.Tree")
+    @Method(declaringClass = "data.tree.TreeTrainer")
     Tree trainTreeWithDataset(
         @Parameter(direction = Direction.IN) DoubleDataSet samples,
         @Parameter(direction = Direction.IN) IntegerDataSet classification,

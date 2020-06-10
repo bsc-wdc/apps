@@ -4,6 +4,7 @@ import data.dataset.DoubleDataSet;
 import data.tree.TreeFitConfig;
 import data.dataset.IntegerDataSet;
 import data.tree.Tree;
+import data.tree.TreeTrainer;
 
 import es.bsc.compss.api.COMPSs;
 
@@ -93,7 +94,7 @@ public class RandomForest {
             long randomSeed = rd.nextLong();
             IntegerDataSet sampleSelection = randomSelection(0, numSamples, numSamples, randomSeed);
             trees[estimatorId] =
-                Tree.trainTreeWithDataset(samples, classification, sampleSelection, treeFitConfig, randomSeed);
+                TreeTrainer.trainTreeWithDataset(samples, classification, sampleSelection, treeFitConfig, randomSeed);
             COMPSs.deregisterObject(sampleSelection);
         }
         for (int estimatorId = 0; estimatorId < config.getNumEstimators(); estimatorId++) {
@@ -247,7 +248,7 @@ public class RandomForest {
         final int numEstimators = (args.length >= 10) ? Integer.parseInt(args[9]) : DEFAULT_NUM_ESTIMATORS;
         final int numModels = (args.length >= 11) ? Integer.parseInt(args[10]) : DEFAULT_NUM_MODELS;
 
-        generateRandomModelWithTest(numSamples, numFeatures, numClasses, numInformative, numRedundant, numRepeated,
-            numClustersPerClass, shuffle, randomState, numEstimators, numModels);
+        generateRandomModel(numSamples, numFeatures, numClasses, numInformative, numRedundant, numRepeated,
+            numClustersPerClass, shuffle, randomState, numEstimators);
     }
 }
