@@ -2,13 +2,14 @@ package data.tree;
 
 import data.dataset.DoubleDataSet;
 import data.dataset.IntegerDataSet;
+import data.utils.ComparatorValuedPair;
+import data.utils.ValuedPair;
 
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Random;
@@ -149,17 +150,7 @@ public class Tree implements Externalizable {
         }
 
         // Sort the selection according to the feature (featureIdx) value
-        TreeSet<ValuedPair> sortedSelection = new TreeSet<>(new Comparator<ValuedPair>() {
-
-            @Override
-            public int compare(ValuedPair t, ValuedPair t1) {
-                int d = Double.compare(t.value, t1.value);
-                if (d == 0) {
-                    d = -1;
-                }
-                return d;
-            }
-        });
+        TreeSet<ValuedPair> sortedSelection = new TreeSet<>(new ComparatorValuedPair());
 
         int numClasses = classification.getMaxValuePerFeature(0) + 1;
         int[] totalClassesCount = new int[numClasses];
@@ -171,8 +162,8 @@ public class Tree implements Externalizable {
         }
 
         double bestValue = -Double.MAX_VALUE;
-        Double lastValue = sortedSelection.first().value;
-        int lastClassId = sortedSelection.first().classId;
+        Double lastValue = sortedSelection.first().getValue();
+        int lastClassId = sortedSelection.first().getClassId();
         int partialSamples = 0;
         int[] partialClassesCount = new int[numClasses];
         double bestScore = Double.MAX_VALUE;
@@ -182,8 +173,8 @@ public class Tree implements Externalizable {
 
         // Evaluating score for all values of the partition
         for (ValuedPair vp : sortedSelection) {
-            if (!Objects.equals(lastValue, vp.value) && lastClassId != vp.classId) {
-                double cutValue = (lastValue + vp.value) / 2;
+            if (!Objects.equals(lastValue, vp.getValue()) && lastClassId != vp.getClassId()) {
+                double cutValue = (lastValue + vp.getValue()) / 2;
                 double score =
                     evaluateSplitDifference(partialSamples, totalNumSamples, partialClassesCount, totalClassesCount);
 
@@ -195,11 +186,11 @@ public class Tree implements Externalizable {
                 }
             }
 
-            partialClassesCount[vp.classId]++;
+            partialClassesCount[vp.getClassId()]++;
             partialSamples++;
-            lastValue = vp.value;
-            lastClassId = vp.classId;
-            upperThreshold.add(vp.id);
+            lastValue = vp.getValue();
+            lastClassId = vp.getClassId();
+            upperThreshold.add(vp.getId());
         }
 
         if (bestScore == Double.MAX_VALUE) {
@@ -232,27 +223,6 @@ public class Tree implements Externalizable {
         }
         return -(aboveScore / (double) partialPosition + underScore / (double) (totalSize - partialPosition));
     }
-
-
-    private static final class ValuedPair {
-
-        final int id;
-        final Double value;
-        final int classId;
-
-
-        public ValuedPair(int id, double value, int classId) {
-            this.id = id;
-            this.value = value;
-            this.classId = classId;
-        }
-
-        @Override
-        public String toString() {
-            return this.id + "(" + this.value + " -> " + this.classId + ")";
-        }
-    }
-
 
     private void setSplitRoot(int featureId, double splitValue, Tree lowerChild, Tree upperChild) {
         this.root = new SplitNode(featureId, splitValue, lowerChild, upperChild);

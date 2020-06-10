@@ -6,6 +6,8 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.LinkedList;
 
+import data.utils.Pair;
+
 
 public class LeafNode extends Node implements Externalizable {
 
@@ -34,8 +36,8 @@ public class LeafNode extends Node implements Externalizable {
     public void writeExternal(ObjectOutput oo) throws IOException {
         oo.writeInt(this.frequency.size());
         for (Pair p : this.frequency) {
-            oo.writeInt(p.classId);
-            oo.writeInt(p.count);
+            oo.writeInt(p.getClassId());
+            oo.writeInt(p.getCount());
         }
     }
 
@@ -44,30 +46,10 @@ public class LeafNode extends Node implements Externalizable {
         int count = oi.readInt();
         for (int i = 0; i < count; i++) {
             Pair p = new Pair();
-            p.classId = oi.readInt();
-            p.count = oi.readInt();
+            p.setClassId(oi.readInt());
+            p.setCount(oi.readInt());
             this.frequency.add(p);
         }
     }
 
-
-    private class Pair {
-
-        private int classId;
-        private int count;
-
-
-        public Pair() {
-        }
-
-        public Pair(int classId, int count) {
-            this.classId = classId;
-            this.count = count;
-        }
-
-        @Override
-        public String toString() {
-            return "<" + classId + "->" + count + ">";
-        }
-    }
 }

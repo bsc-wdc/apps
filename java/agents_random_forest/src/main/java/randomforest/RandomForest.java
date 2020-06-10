@@ -235,17 +235,17 @@ public class RandomForest {
      * @param args System arguments.
      */
     public static void main(String[] args) {
-        int numSamples = (args.length >= 1) ? Integer.parseInt(args[0]) : DEFAULT_NUM_SAMPLES;
-        int numFeatures = (args.length >= 2) ? Integer.parseInt(args[1]) : DEFAULT_NUM_FEATURES;
-        int numClasses = (args.length >= 3) ? Integer.parseInt(args[2]) : DEFAULT_NUM_CLASSES;
-        int numInformative = (args.length >= 4) ? Integer.parseInt(args[3]) : DEFAULT_NUM_INFORMATIVE;
-        int numRedundant = (args.length >= 5) ? Integer.parseInt(args[4]) : DEFAULT_NUM_REDUNDANT;
-        int numRepeated = (args.length >= 6) ? Integer.parseInt(args[5]) : DEFAULT_NUM_REPEATED;
-        int numClustersPerClass = (args.length >= 7) ? Integer.parseInt(args[6]) : DEFAULT_NUM_CLUSTERS_PER_CLASS;
-        boolean shuffle = (args.length >= 8) ? Boolean.parseBoolean(args[7]) : DEFAULT_SHUFFLE;
-        long randomState = (args.length >= 9) ? Long.parseLong(args[8]) : DEFAULT_RANDOM_STATE;
-        int numEstimators = (args.length >= 10) ? Integer.parseInt(args[9]) : DEFAULT_NUM_ESTIMATORS;
-        int numModels = (args.length >= 11) ? Integer.parseInt(args[10]) : DEFAULT_NUM_MODELS;
+        final int numSamples = (args.length >= 1) ? Integer.parseInt(args[0]) : DEFAULT_NUM_SAMPLES;
+        final int numFeatures = (args.length >= 2) ? Integer.parseInt(args[1]) : DEFAULT_NUM_FEATURES;
+        final int numClasses = (args.length >= 3) ? Integer.parseInt(args[2]) : DEFAULT_NUM_CLASSES;
+        final int numInformative = (args.length >= 4) ? Integer.parseInt(args[3]) : DEFAULT_NUM_INFORMATIVE;
+        final int numRedundant = (args.length >= 5) ? Integer.parseInt(args[4]) : DEFAULT_NUM_REDUNDANT;
+        final int numRepeated = (args.length >= 6) ? Integer.parseInt(args[5]) : DEFAULT_NUM_REPEATED;
+        final int numClustersPerClass = (args.length >= 7) ? Integer.parseInt(args[6]) : DEFAULT_NUM_CLUSTERS_PER_CLASS;
+        final boolean shuffle = (args.length >= 8) ? Boolean.parseBoolean(args[7]) : DEFAULT_SHUFFLE;
+        final long randomState = (args.length >= 9) ? Long.parseLong(args[8]) : DEFAULT_RANDOM_STATE;
+        final int numEstimators = (args.length >= 10) ? Integer.parseInt(args[9]) : DEFAULT_NUM_ESTIMATORS;
+        final int numModels = (args.length >= 11) ? Integer.parseInt(args[10]) : DEFAULT_NUM_MODELS;
 
         generateRandomModelWithTest(numSamples, numFeatures, numClasses, numInformative, numRedundant, numRepeated,
             numClustersPerClass, shuffle, randomState, numEstimators, numModels);
