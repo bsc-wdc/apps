@@ -38,7 +38,7 @@
         
         
         <!-- Dependencies versions -->
-        <compss.version>2.6.rc2004</compss.version>
+        <compss.version>2.6.rc2006</compss.version>
     </properties>
     
     <!-- REPOSITORIES -->
