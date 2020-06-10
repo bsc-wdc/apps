@@ -23,6 +23,14 @@ public class KMeansDataSet {
     public final float[] currentCluster;
 
 
+    /**
+     * Initialises the KMeans Dataset.
+     * 
+     * @param np Number of points.
+     * @param nd Number of dimensions.
+     * @param pts Points.
+     * @param cluster Clusters.
+     */
     public KMeansDataSet(int np, int nd, float[][] pts, float[] cluster) {
         assert np * nd == pts.length;
         this.numPoints = np;
@@ -31,10 +39,12 @@ public class KMeansDataSet {
         this.currentCluster = cluster;
     }
 
-    /*
-     * public final float getFloat(int point, int dim) { return points[point*numDimensions + dim]; }
+    /**
+     * Returns the point offset.
+     * 
+     * @param point Point to evaluate.
+     * @return Offset of the given point.
      */
-
     public final int getPointOffset(int point) {
         return point * this.numDimensions;
     }
@@ -50,19 +60,17 @@ public class KMeansDataSet {
     }
 
     /**
-     * Generate a set of random points and write them to a data file
+     * Generate a set of random points and write them to a data file.
      * 
-     * @param fileName the name of the file to create
-     * @param numPoints the number of points to write to the file
-     * @param numDimensions the number of dimensions each point should have
+     * @param fileName the name of the file to create.
+     * @param numPoints the number of points to write to the file.
+     * @param numDimensions the number of dimensions each point should have.
      * @param seed a random number seed to generate the points.
-     * @return <code>true</code> on success, <code>false</code> on failure
+     * @return <code>true</code> on success, <code>false</code> on failure.
      */
     public static boolean generateRandomPointsToFile(String fileName, int numPoints, int numDimensions, int seed) {
-        try {
+        try (DataOutputStream out = new DataOutputStream(new FileOutputStream(new File(fileName)))) {
             Random rand = new Random(seed);
-            File outputFile = new File(fileName);
-            DataOutputStream out = new DataOutputStream(new FileOutputStream(outputFile));
             out.writeInt(COOKIE);
             out.writeInt(VERSION);
             out.writeInt(numPoints);
@@ -71,12 +79,11 @@ public class KMeansDataSet {
             for (int i = 0; i < numFloats; i++) {
                 out.writeFloat(rand.nextFloat());
             }
-            out.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to open file for writing " + fileName);
+            System.err.println("Unable to open file for writing " + fileName);
             return false;
         } catch (IOException e) {
-            System.out.println("Error writing data to " + fileName);
+            System.err.println("Error writing data to " + fileName);
             e.printStackTrace();
             return false;
         }
