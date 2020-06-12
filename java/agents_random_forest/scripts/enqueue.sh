@@ -2,6 +2,10 @@
 
   # Define script constants
   SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+  # Script params
+  log_level=${1:-"debug"}
+  job_dep=${2:-"None"}
   
   # Load modules
   module purge
@@ -17,38 +21,37 @@
   # SCHEDULER="es.bsc.compss.scheduler.multiobjective.MOScheduler"
   num_workers=2
   num_nodes=$(( num_workers + 1 ))
+  exec_time=30
 
   # Application configuration
-  num_estimators=3840
-  num_test_estimators=$(( num_workers * 48 * 2))
-  length=$(( 60 + 4 * (( (num_estimators * 8) / (num_workers * 48 - 1) )) ))
-  length=$(( (length / 60) + 1 ))
-  # length=20
+  num_estimators=480
+  num_models=5
   app_exec="randomforest.RandomForest"
 
   # Create output directory
-  mkdir -p "${SCRIPT_DIR}/../output"
+  mkdir -p "${SCRIPT_DIR}/../../output"
 
   # Run job
   enqueue_compss \
-    --qos=debug \
+    --job_dependency="${job_dep}" \
     --num_nodes="${num_nodes}" \
-    --exec_time="${length}" \
+    --exec_time="${exec_time}" \
     \
     --cpus_per_nodes=48 \
     --node_memory=50000 \
     --worker_in_master_cpus=1 \
     \
-    --master_working_dir="${SCRIPT_DIR}"/../output/ \
-    --worker_working_dir= \
-    --base_log_dir="${SCRIPT_DIR}"/../output \
+    --master_working_dir="${SCRIPT_DIR}"/../../output/ \
+    --worker_working_dir=/gpfs/scratch/bsc19/bsc19533 \
+    --base_log_dir="${SCRIPT_DIR}"/../../output \
     --classpath="${SCRIPT_DIR}"/../target/random_forest.jar \
     \
-    --log_level=debug \
+    --log_level="${log_level}" \
     --jvm_workers_opts="-Dcompss.worker.removeWD=false" \
     \
     --agents=plain \
     --method_name="main" \
     --array \
-    "${app_exec}" 30000 40 200 20 2 1 2 "true" 0 "${num_estimators}" "${num_test_estimators}"
+    "${app_exec}" 30000 40 200 20 2 1 2 "true" 0 "${num_estimators}" "${num_models}"
 
+ # --qos=debug --tracing=true --graph=true --summary
