@@ -8,7 +8,7 @@ fi
 MASTER_IP=$1
 MASTER_REST_PORT=$2
 
-echo "Requesting kmeans execution on ${MASTER_IP} through port ${MASTER_REST_PORT}"
+echo "Requesting Random Forest execution on ${MASTER_IP} through port ${MASTER_REST_PORT}"
 compss_agent_call_operation \
     --master_node="${MASTER_IP}" \
     --master_port="${MASTER_REST_PORT}" \
