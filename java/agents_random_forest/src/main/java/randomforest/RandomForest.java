@@ -30,8 +30,8 @@ public class RandomForest {
     public static final int DEFAULT_NUM_CLUSTERS_PER_CLASS = 2;
     public static final boolean DEFAULT_SHUFFLE = true;
     public static final long DEFAULT_RANDOM_STATE = 0L;
-    public static final int DEFAULT_NUM_ESTIMATORS = 1;
-    public static final int DEFAULT_NUM_MODELS = 4;
+    public static final int DEFAULT_NUM_ESTIMATORS = 480;
+    public static final int DEFAULT_NUM_MODELS = 5;
 
 
     // Task
@@ -210,13 +210,6 @@ public class RandomForest {
         int numRedundant, int numRepeated, int numClustersPerClass, boolean shuffle, long randomState,
         int numEstimators, int numModels) {
 
-        // Run test model
-        if (DEBUG) {
-            System.out.println("Run test model");
-        }
-        generateRandomModel(numSamples, numFeatures, numClasses, numInformative, numRedundant, numRepeated,
-            numClustersPerClass, shuffle, (long) numEstimators, numEstimators);
-
         // Run models
         if (DEBUG) {
             System.out.println("Run models");
@@ -248,7 +241,7 @@ public class RandomForest {
         final int numEstimators = (args.length >= 10) ? Integer.parseInt(args[9]) : DEFAULT_NUM_ESTIMATORS;
         final int numModels = (args.length >= 11) ? Integer.parseInt(args[10]) : DEFAULT_NUM_MODELS;
 
-        generateRandomModel(numSamples, numFeatures, numClasses, numInformative, numRedundant, numRepeated,
-            numClustersPerClass, shuffle, randomState, numEstimators);
+        generateRandomModelWithTest(numSamples, numFeatures, numClasses, numInformative, numRedundant, numRepeated,
+            numClustersPerClass, shuffle, randomState, numEstimators, numModels);
     }
 }
