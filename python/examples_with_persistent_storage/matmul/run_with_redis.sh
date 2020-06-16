@@ -4,6 +4,7 @@
 runcompss \
   -dg \
   --python_interpreter=python3 \
+  --pythonpath=$(pwd)/src \
   --storage_impl=redis \
   --storage_conf=$(pwd)/redis_confs/storage_conf.cfg \
   src/matmul.py -b 4 -e 4 --check_result --use_storage
