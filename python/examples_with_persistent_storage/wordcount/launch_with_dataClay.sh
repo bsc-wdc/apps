@@ -74,7 +74,7 @@
     \
     --cpus_per_node="${CPUS_PER_NODE}" \
     --worker_in_master_cpus="${WORKER_IN_MASTER}" \
-    --scheduler=es.bsc.compss.scheduler.loadbalancing.LoadBalancingScheduler \
+    --scheduler=es.bsc.compss.scheduler.fifodata.FIFODataScheduler \
     \
     "${workers_flag}" \
     \
