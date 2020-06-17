@@ -11,7 +11,6 @@ class Fragment(object):
         super(Fragment, self).__init__()
         self.points = None
 
-    @task(target_direction=INOUT)
     def generate_points(self, num_points, dim, mode, seed):
         """
         Generate a random fragment of the specified number of points using the

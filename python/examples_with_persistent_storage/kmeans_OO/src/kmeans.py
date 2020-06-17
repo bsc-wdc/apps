@@ -29,7 +29,8 @@ def recompute_centres(partials, old_centres, arity):
         partials_subset = partials[:arity]
         partials = partials[arity:]
         partials.append(merge(*partials_subset))
-    partials = compss_wait_on(partials)
+    for i in range(len(partials)):
+        partials[i] = compss_wait_on(partials[i])
     for idx, sum_ in enumerate(partials[0]):
         if sum_[1] != 0:
             centres[idx] = sum_[0] / sum_[1]
@@ -130,9 +131,8 @@ def generate_fragment(points, dim, mode, seed, use_storage):
     if use_storage:
         from storage_model.fragment import Fragment
         fragment = Fragment()
-        # Make persistent before since it is populated in the task
-        fragment.make_persistent()
         fragment.generate_points(points, dim, mode, seed)
+        fragment.make_persistent()
     else:
         from model.fragment import Fragment
         fragment = Fragment()
