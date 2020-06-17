@@ -49,7 +49,7 @@
   log_level="off"
   qos_flag="--qos=debug"
   workers_flag=""
-  constraints=""
+  constraints="highmem"
 
   # Create workers sandbox
   # mkdir -p "${WORK_DIR}/COMPSs_Sandbox"
