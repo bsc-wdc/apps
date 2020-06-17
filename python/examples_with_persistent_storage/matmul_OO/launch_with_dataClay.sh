@@ -8,8 +8,7 @@
   module load mkl/2018.1
   module load impi/2018.1
   module load opencv/4.1.2
-  module load python/3.6.4_ML
-  module load DATACLAY/2.0rc
+  module load DATACLAY/2.4.dev
 
   # Retrieve script arguments
   job_dependency=${1:-None}
