@@ -1,6 +1,3 @@
-from pycompss.api.task import task
-from pycompss.api.parameter import INOUT
-
 import numpy as np
 
 
@@ -27,9 +24,12 @@ class Block(object):
             b = np.zeros((size, size))
         self.block = b
 
-    def __mul__(self, other):
-        return Block(np.dot(self.block, other.block))
+    def fused_multiply_add(self, a, b):
+        """Accumulate a product.
 
-    def __iadd__(self, other):
-        self.block += other.block
-        return self
+        This FMA operation multiplies the two operands (parameters a and b) and
+        accumulates its result onto self.
+
+        Note that the multiplication is the matrix multiplication (aka np.dot)
+        """
+        self.block += np.dot(a.block, b.block)
