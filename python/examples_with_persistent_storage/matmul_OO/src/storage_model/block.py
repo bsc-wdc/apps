@@ -33,7 +33,6 @@ class Block(StorageObject):
         super(Block, self).__init__()
         self.block = block
 
-    @task(target_direction=INOUT)
     @dclayMethod(size='int', num_blocks='int', seed='int', set_to_zero='bool')
     def generate_block(self, size, num_blocks, seed=0, set_to_zero=False):
         """
@@ -53,11 +52,11 @@ class Block(StorageObject):
             b = np.zeros((size, size))
         self.block = b
 
-    @dclayMethod(other='classes.block.Block', return_='classes.block.Block')
+    @dclayMethod(other='storage_model.block.Block', return_='storage_model.block.Block')
     def __mul__(self, other):
         return Block(np.dot(self.block, other.block))
 
-    @dclayMethod(other='classes.block.Block', return_='classes.block.Block')
+    @dclayMethod(other='storage_model.block.Block', return_='storage_model.block.Block')
     def __iadd__(self, other):
         self.block += other.block
         return self

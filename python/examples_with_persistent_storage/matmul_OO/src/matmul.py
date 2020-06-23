@@ -7,6 +7,7 @@ from pycompss.api.api import compss_wait_on
 from pycompss.api.api import compss_delete_object
 
 
+@task(returns=1)
 def generate_block(size, num_blocks, seed=0, use_storage=False,
                    set_to_zero=False, psco_name=''):
     """
@@ -22,10 +23,11 @@ def generate_block(size, num_blocks, seed=0, use_storage=False,
     if use_storage:
         from storage_model.block import Block
         ret = Block()
-        ret.make_persistent(psco_name)
+        ret.make_persistent(psco_name)  # here better for dataClay
         ret.generate_block(size,
                            num_blocks,
                            seed=seed)
+        # ret.make_persistent(psco_name)  # here is a need for redis
     else:
         from model.block import Block
         ret = Block()

@@ -9,7 +9,6 @@ class Block(object):
     def __init__(self, block=None):
         self.block = block
 
-    @task(target_direction=INOUT)
     def generate_block(self, size, num_blocks, seed=0, set_to_zero=False):
         """
         Generate a square block of given size.
