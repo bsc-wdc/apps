@@ -26,6 +26,7 @@ def generate_block(size, num_blocks, seed=0, use_storage=False,
         ret.make_persistent(psco_name)  # here better for dataClay
         ret.generate_block(size,
                            num_blocks,
+                           set_to_zero=set_to_zero,
                            seed=seed)
         # ret.make_persistent(psco_name)  # here is a need for redis
     else:
@@ -33,7 +34,8 @@ def generate_block(size, num_blocks, seed=0, use_storage=False,
         ret = Block()
         ret.generate_block(size,
                            num_blocks,
-                           set_to_zero=True)
+                           set_to_zero=set_to_zero,
+                           seed=seed)
     return ret
 
 
@@ -61,12 +63,14 @@ def dot(A, B, C):
     """
     n, m = len(A), len(B[0])
     # as many rows as A, as many columns as B
-    for i in range(n):
-        for k in range(n):
+    for k in range(n):
+        for i in range(n):
             for j in range(m):
                 # We want to exploit the concurrentness of C[i][j]
                 # but avoid it becoming a choke point. That's why we 
-                # don't iterate [i, j, k] but [i, k, j] instead.
+                # don't iterate [i, j, k] but [k, i, j] instead.
+                # From another POV, it means a natural iteraton of A
+                # (instead of the natural iteration of C if following [i,j,k])
                 fused_multiply_add(A[i][k], B[k][j], C[i][j])
 
 
@@ -139,27 +143,32 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
     # checked manually
     if check_result:
         print("Checking result")
+        A_copy = list()
+        B_copy = list()
+        C_copy = list()
         for i in range(num_blocks):
+            a_l = list()
+            b_l = list()
+            c_l = list()
+            A_copy.append(a_l)
+            B_copy.append(b_l)
+            C_copy.append(c_l)
             for j in range(num_blocks):
-                A[i][j] = compss_wait_on(A[i][j])
-                B[i][j] = compss_wait_on(B[i][j])
-        for i in range(num_blocks):
-            for j in range(num_blocks):
-                Cij_obj = compss_wait_on(C[i][j])
-                Cij = Cij_obj.block
-                Dij_obj = generate_block(elems_per_block,
-                                     num_blocks,
-                                     use_storage=False,
-                                     set_to_zero=True)
-                Dij_obj = compss_wait_on(Dij_obj)
-                Dij = Dij_obj.block
-                import numpy as np
-                for k in range(num_blocks):
-                    Dij += np.dot(A[i][k].block, B[k][j].block)
-                if not np.allclose(Cij, Dij):
-                    print('Block %d-%d gives different products!' % (i, j))
-                    return
-        print('Distributed and sequential results coincide!')
+                a_l.append(compss_wait_on(A[i][j]).block)
+                b_l.append(compss_wait_on(B[i][j]).block)
+                c_l.append(compss_wait_on(C[i][j]).block)
+        
+        A_copy = np.block(A_copy)
+        B_copy = np.block(B_copy)
+        C_copy = np.block(C_copy)
+
+        if not np.allclose(C_copy, np.dot(A_copy, B_copy)):
+            print('!!!!!!!!!!!!!!!!!')
+            print('!!! The matrix multiplication seems bogus, np.allclose returned false')
+            print('!!!!!!!!!!!!!!!!!')
+            # Not returning, as the results may be relevant for postmortem
+        else:
+            print('* The check_result has been successful *')
 
     print("-----------------------------------------")
     print("-------------- RESULTS ------------------")
