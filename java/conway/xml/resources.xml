@@ -2,7 +2,7 @@
 <ResourcesList>
     <ComputeNode Name="localhost">
         <Processor Name="MainProcessor">
-            <ComputingUnits>4</ComputingUnits>
+            <ComputingUnits>2</ComputingUnits>
         </Processor>
         <Adaptors>
             <Adaptor Name="es.bsc.compss.nio.master.NIOAdaptor">
