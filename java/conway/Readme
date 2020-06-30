@@ -1,0 +1,34 @@
+Tis is the Readme for:
+Simple
+
+[Name]: Simple
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Simple is an application that takes one value and increases it by one unit. The purpose of this application is to show how tasks are managed by COMPSs.
+
+== Execution instructions ==
+Usage:
+runcompss simple.Simple <initValue>
+
+where:
+		 * - initValue: Initial value for counter
+
+== Execution Example ==
+runcompss simple.Simple 1
+
+
+== Build ==
+=== Option 1: Native java ===
+cd ~/tutorial_apps/java/simple/; javac src/main/java/simple/*.java
+cd src/main/java/; jar cf simple.jar simple/
+cd ../../../; mv src/main/java/simple.jar jar/
+
+=== Option 2: Maven ===
+cd ~/tutorial_apps/java/simple/
+mvn clean package
+
