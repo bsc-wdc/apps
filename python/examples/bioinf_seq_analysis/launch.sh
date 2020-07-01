@@ -20,6 +20,8 @@
      --exec_time=$executionTime \
      --master_working_dir=. \
      --worker_working_dir=gpfs \
+     --classpath=$appClasspath \
+     --pythonpath=$appPythonpath \
      --tracing=$tracing \
      --lang=python \
      $execFile $@
