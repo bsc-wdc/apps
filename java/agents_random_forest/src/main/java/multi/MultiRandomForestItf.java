@@ -4,8 +4,10 @@ import data.dataset.DoubleDataSet;
 import data.dataset.IntegerDataSet;
 import data.tree.Tree;
 import data.tree.TreeFitConfig;
-
+import es.bsc.compss.types.annotations.Constants;
+import es.bsc.compss.types.annotations.Constraints;
 import es.bsc.compss.types.annotations.Parameter;
+import es.bsc.compss.types.annotations.SchedulerHints;
 import es.bsc.compss.types.annotations.parameter.Direction;
 import es.bsc.compss.types.annotations.task.Method;
 
@@ -29,6 +31,8 @@ public interface MultiRandomForestItf {
         @Parameter(direction = Direction.IN) long seed
     );
     
+    @SchedulerHints(isDistributed = Constants.IS_DISTRIBUTED_TASK)
+    @Constraints(computingUnits = "1")
     @Method(declaringClass = "randomforest.RandomForest")
     void generateRandomModelWithTest(
         @Parameter() int numSamples, 
