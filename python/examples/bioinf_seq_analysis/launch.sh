@@ -31,4 +31,4 @@
 #       ./launch.sh <NUM_NODES> <EXECUTION_TIME> <TRACING>
 #
 # Example:
-#       ./launch.sh None 2 10 false
+#       ./launch.sh 2 10 false

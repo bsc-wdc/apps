@@ -1,12 +1,12 @@
 #!/bin/python
 from os.path import join
 
-BASE_DIR="/home/hshazly/dev/0_cu/bioinf_workspace/"
+BASE_DIR="/path/to/base/dir"
 
 
 TOOLS_DIR=join(BASE_DIR, "tools")
 IN_DIR=join(BASE_DIR, "data/in")
-OUT_DIR=join("/home/hshazly/dev/0_cu/bioinf_borrar/data", "out")
+OUT_DIR=join(BASE_DIR, "data/out")
 META_DIR=join(BASE_DIR, "data/meta")
 
 

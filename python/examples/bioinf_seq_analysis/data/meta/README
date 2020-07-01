@@ -1,1 +1,6 @@
-This directoy should contain all the files required for the analysis tools: reference genomes, known sites, dbSNP, etc..
+This directoy should contain all the files required for the analysis tools
+
+Examples:
+- Reference genomes
+- Known sites 
+- dbSNP, etc..
