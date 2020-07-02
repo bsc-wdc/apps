@@ -1,14 +1,19 @@
 # COMPSs applications folder
 
-This folder contains example applications developed for [py]COMPSs . 
+This folder contains example applications developed for [py]COMPSs .
 
 Its purpose is to share the applications among the COMPSs users community to ease
 the implementation of new applications and share them with the rest of users.
 
+## Datasets
+
+The datasets for the applications can be downloaded at:
+
+* http://compss.bsc.es/repo/datasets
 
 ## Datasets
 
-The datasets for the applications can be downloaded using the following link: 
+The datasets for the applications can be downloaded using the following link:
 
 * http://compss.bsc.es/repo/datasets
 
@@ -21,7 +26,7 @@ You can find out more at:
 * https://dislib.bsc.es/en/stable/
 
 
-## Application's Folder Structure 
+## Application's Folder Structure
 
 Application are grouped by language.  
 For instance, the matmul application that has version for PyCOMPSs, COMPSs with files,
@@ -29,7 +34,7 @@ COMPSs using objects and COMPSs with byte arrays and has the following tree dire
 
 ```
 apps
-  |- python 
+  |- python
   |    |- app_1
   |    |    |- src                 Application source code
   |    |    |- dist                Application binary or jar
@@ -37,37 +42,35 @@ apps
   |    |    |- lib                 External libraries needed by the application
   |    |    |- run_local.sh        Execution example for local automatic process
   |    |    |- launch.sh           Execution example for supercomputer automatic process
-  |    |    |- clean.sh            Cleans the folder 
+  |    |    |- clean.sh            Cleans the folder
   |    |    |- README              Brief description of the application
   |- java
   |    |- app_1
   |    |    | ...
   |- c
   |    |- ...
-  |- datasets				Small datasets for examples 
+  |- datasets				Small datasets for examples
 
 ```
 
 ## Datasets
 
-The datasets for the applications can be downloaded at: 
+The datasets for the applications can be downloaded at:
 
-* http://compss.bsc.es/repo/datasets.
 
 
 ## Warnings and MN instructions
 
 **REMINDER**: For each language there **must** be **one** launch.sh and **one** clean.sh script
           that executes the **stable** (base) version of that language. This script is used by
-          the automatic benchmarking process. 
+          the automatic benchmarking process.
 
 **REMINDER**: For each version directory there **must** be a launcher script, a src directory with
 the source code of that version, and a dist folder with the application binary or jar.
 
 
 **WARNING**: Addtional binaries commonly used by all versions **must** be placed in the
-         application's root folder. 
+         application's root folder.
 
 **WARNING**: Additional input data used by all versions **must** be placed in a new folder
          inside the COMPSs_DATASETS with the **same** application name.
-
