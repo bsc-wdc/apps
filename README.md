@@ -48,6 +48,12 @@ apps
 
 ```
 
+## Datasets
+
+The datasets for the applications can be downloaded at: 
+
+* http://compss.bsc.es/repo/datasets.
+
 
 ## Warnings and MN instructions
 
