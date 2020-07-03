@@ -16,8 +16,8 @@ META_DIR=join(BASE_DIR, "data/meta")
 
 PICARD=join(TOOLS_DIR, "picard.jar")
 BWA=join(TOOLS_DIR, "bwa/bwa")
-SAMTOOLS=(TOOLS_DIR, "samtools-1.10/samtools")
-GATK=(TOOLS_DIR, "gatk-4.1.8.0/gatk")
+SAMTOOLS=join(TOOLS_DIR, "samtools-1.10/samtools")
+GATK=join(TOOLS_DIR, "gatk-4.1.8.0/gatk")
 
 
 ####################################################
