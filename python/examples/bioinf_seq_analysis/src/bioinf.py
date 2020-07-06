@@ -52,5 +52,3 @@ def gatk_best_practices_pipeline():
 if __name__ == "__main__":
    gatk_best_practices_pipeline()
 
-
-#enqueue_compss --qos=debug --num_nodes=2 --constraints=highmem --exec_time=30 --jvm_workers_opts="-Dcompss.worker.removeWD=false" --jvm_master_opts="-Dcompss.worker.removeWD=false" --worker_working_dir=/gpfs/scratch/bsc19/bsc19004/workspace/io_sched/bioinf/ --worker_in_master_cpus=0 --base_log_dir=/gpfs/scratch/bsc19/bsc19004/workspace/io_sched/bioinf/ -t -d -g bioinf.py
