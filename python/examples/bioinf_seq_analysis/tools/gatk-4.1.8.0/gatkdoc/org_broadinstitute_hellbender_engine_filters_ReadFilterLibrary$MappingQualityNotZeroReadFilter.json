@@ -1,9 +1,0 @@
-{
-  "summary": "Filter out reads with mapping quality equal to zero",
-  "arguments": [],
-  "description": "Filter out reads with mapping quality equal to zero.",
-  "name": "MappingQualityNotZeroReadFilter",
-  "group": "Read Filters",
-  "beta": false,
-  "experimental": false
-}

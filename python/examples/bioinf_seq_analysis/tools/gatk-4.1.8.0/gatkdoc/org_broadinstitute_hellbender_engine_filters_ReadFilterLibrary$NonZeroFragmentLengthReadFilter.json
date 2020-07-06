@@ -1,9 +1,0 @@
-{
-  "summary": "Filter out reads with fragment length different from zero",
-  "arguments": [],
-  "description": "Filter out reads with fragment length (insert size) different from zero.",
-  "name": "NonZeroFragmentLengthReadFilter",
-  "group": "Read Filters",
-  "beta": false,
-  "experimental": false
-}
