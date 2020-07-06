@@ -15,7 +15,6 @@ def gatk_best_practices_pipeline():
         print ("Started processing: ", ubam)
           		
         ### Data Cleanup and preparation
-        ### data cleanup
         ubam = sort(ubam, sample_number)
         usam = revertSAM(ubam, sample_number)
         fastq = convertSAMtoFASTQ(usam, sample_number)
@@ -26,7 +25,7 @@ def gatk_best_practices_pipeline():
         sorted_bam = sort(mapped_bam, sample_number)
         merged_bam = mergeBamAlignment(sorted_bam, usam, sample_number)
 
-        # mark duplicates: markDuplicates + sortsam
+        # mark duplicates: markDuplicates
         marked_bam, dup_metrics = markDuplicates(merged_bam, sample_number)  
     
         # splitNCigarReads
@@ -36,14 +35,13 @@ def gatk_best_practices_pipeline():
         # base recalibration: base recalibrator, apply recalibration, analyzeCovariates 
         recal_data = recalibrateBase(output_rg, sample_number)
         recalibrated_bam = applyBQSR(output_rg, recal_data, sample_number)
-        recal_data_plot = analyzeCovariates(recal_data, sample_number)
+        #recal_data_plot = analyzeCovariates(recal_data, sample_number)
     
         
         ### variant discovery
-        # variant calling: haplotype caller, mergeVCFs
+        # variant calling: haplotype caller
         vcf = haploCaller(recalibrated_bam, sample_number)
     
-        # barrier + mergeVCF 
         # variant filtering: variant filteration
         filtered_vcf = filterVCF(vcf, sample_number)
     
