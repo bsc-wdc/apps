@@ -1,8 +1,8 @@
 #!/bin/python
 
 from subprocess import Popen, PIPE
-from os import mkdir, listdir
-from os.path import isfile, join, exists
+from os import listdir
+from os.path import isfile, join
 
 from config import *
 
@@ -11,13 +11,6 @@ def read():
 
     return samples
 
-def checkDirs():
-    for dir in IN_DIR, META_DIR, TOOLS_DIR:
-        if not exists(dir):
-           raise Exception(dir + " does not exist!")
-
-    if not exists(OUT_DIR):
-       mkdir(OUT_DIR)
 
 def runCMD(cmd, outputfile=None):
     stdoutHandle = PIPE

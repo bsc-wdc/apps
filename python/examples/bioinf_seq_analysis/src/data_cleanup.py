@@ -9,10 +9,9 @@ import os
 from utils import runCMD
 from config import *
 
-SAMPLE_NUM = 0
  
 @task(returns=str)
-def revertSAM(ubam):
+def revertSAM(ubam, SAMPLE_NUM):
     output_path = os.path.join(OUT_DIR, "reverted.bam_{0}".format(SAMPLE_NUM))
     input_arg = "I={0}".format(ubam)
     output_arg = "O={0}".format(output_path)
@@ -23,7 +22,7 @@ def revertSAM(ubam):
     return output_path
 
 @task(returns=str)
-def convertSAMtoFASTQ(usam):
+def convertSAMtoFASTQ(usam, SAMPLE_NUM):
     output_path = os.path.join(OUT_DIR, "sample.fastq_{0}".format(SAMPLE_NUM))
     input_arg = "I={0}".format(usam)
     output_arg = "FASTQ={0}".format(output_path)
@@ -34,7 +33,7 @@ def convertSAMtoFASTQ(usam):
     return output_path
 
 @task(returns=str)
-def bwa_map(fastq):
+def bwa_map(fastq, SAMPLE_NUM):
     output_path = os.path.join(OUT_DIR, "mapped.sam_{0}".format(SAMPLE_NUM))
     cmd = [BWA, "mem", REF, fastq]
 
@@ -45,7 +44,7 @@ def bwa_map(fastq):
     return output_path
 
 @task(returns=str)
-def convertSAMtoBAM(sam):
+def convertSAMtoBAM(sam, SAMPLE_NUM):
     output_path = os.path.join(OUT_DIR, "mapped.bam_{0}".format(SAMPLE_NUM))
     
     cmd = [SAMTOOLS, "view", "-bhS", sam]
@@ -57,7 +56,7 @@ def convertSAMtoBAM(sam):
     return output_path
 
 @task(returns=str)
-def sort(bam):
+def sort(bam, SAMPLE_NUM):
     output_path = os.path.join(OUT_DIR, "sorted.bam_{0}".format(SAMPLE_NUM))
     output_arg = "O={0}".format(output_path)
     input_arg = "I={0}".format(bam)
@@ -69,7 +68,7 @@ def sort(bam):
     return output_path
 
 @task(returns=str)
-def mergeBamAlignment(mapped_bam, unmapped_sam):
+def mergeBamAlignment(mapped_bam, unmapped_sam, SAMPLE_NUM):
     output_path = os.path.join(OUT_DIR, "merged.bam_{0}".format(SAMPLE_NUM))
     output_arg = "O={0}".format(output_path)
     input_arg1 = "ALIGNED={0}".format(mapped_bam)
@@ -83,7 +82,7 @@ def mergeBamAlignment(mapped_bam, unmapped_sam):
     return output_path
 
 @task(returns=2)
-def markDuplicates(mapped_bam):
+def markDuplicates(mapped_bam, SAMPLE_NUM):
     output_path1 = os.path.join(OUT_DIR, "marked_duplicates.bam_{0}".format(SAMPLE_NUM))
     output_arg = "O={0}".format(output_path1)
     output_path2 = os.path.join(OUT_DIR, "marked_dup_metrics")
@@ -97,7 +96,7 @@ def markDuplicates(mapped_bam):
     return output_path1, output_path2
 
 @task(returns=str)
-def splitNCigarReads(bam):
+def splitNCigarReads(bam, SAMPLE_NUM):
     output_path = os.path.join(OUT_DIR, "splitted.bam_{0}".format(SAMPLE_NUM))
     cmd = [GATK, "SplitNCigarReads", "-R", REF, "-I", bam, "-O", output_path]
 
@@ -106,7 +105,7 @@ def splitNCigarReads(bam):
     return output_path
 
 @task(returns=str)
-def addOrReplaceReadGroups(bam):
+def addOrReplaceReadGroups(bam, SAMPLE_NUM):
     output_path = os.path.join(OUT_DIR, "output_rg.bam_{0}".format(SAMPLE_NUM))
     output_arg = "O={0}".format(output_path)
     input_arg = "I={0}".format(bam)
@@ -120,6 +119,8 @@ def addOrReplaceReadGroups(bam):
 
     stdout = runCMD(cmd)
 
+    indexBAM(output_rg)
+
     return output_path
 
 @task()
@@ -129,7 +130,7 @@ def indexBAM(bam):
     stdout = runCMD(cmd)
 
 @task(returns=str)
-def recalibrateBase(bam):
+def recalibrateBase(bam, SAMPLE_NUM):
     output_path = os.path.join(OUT_DIR, "recal_data.table_{0}".format(SAMPLE_NUM))
     known_sites1 = DBSNP
   
@@ -140,7 +141,7 @@ def recalibrateBase(bam):
     return output_path
 
 @task(returns=str)
-def applyBQSR(bam, recal_data):
+def applyBQSR(bam, recal_data, SAMPLE_NUM):
     output_path = os.path.join(OUT_DIR, "recalibrated.bam_{0}".format(SAMPLE_NUM))
     cmd = [GATK, "ApplyBQSR", "-R", REF, "-I", bam, "--add-output-sam-program-record", "--use-original-qualities", "-O", output_path, "--bqsr-recal-file", recal_data]
 
@@ -149,46 +150,10 @@ def applyBQSR(bam, recal_data):
     return output_path
 
 @task(returns=str)
-def analyzeCovariates(recal_data):
+def analyzeCovariates(recal_data, SAMPLE_NUM):
     output_path = os.path.join(OUT_DIR, "AnalyzeCovariates.pdf_{0}".format(SAMPLE_NUM))
     cmd = [GATK, "AnalyzeCovariates", "-bqsr", recal_data, "-plots", output_path]
 
     stdout = runCMD(cmd)
 
     return output_path
-
-
-def clean_and_prepare(ubam, sample_number=0):
-    global SAMPLE_NUM
-    SAMPLE_NUM = sample_number
-
-    ### data cleanup
-    ubam = sort(ubam)
-    usam = revertSAM(ubam)
-    fastq = convertSAMtoFASTQ(usam)
-    
-    # map to reference: bwa, convert sam to bam, mergeBAMAlignment
-    mapped_sam = bwa_map(fastq)  
-    mapped_bam = convertSAMtoBAM(mapped_sam)
-    sorted_bam = sort(mapped_bam)
-    merged_bam = mergeBamAlignment(sorted_bam, usam)
-
-    # mark duplicates: markDuplicates + sortsam
-    marked_bam, dup_metrics = markDuplicates(merged_bam)  
-    
-    # splitNCigarReads
-    splitted_bam = splitNCigarReads(marked_bam)
-    output_rg = addOrReplaceReadGroups(splitted_bam)
-    indexBAM(output_rg)
-    
-    compss_barrier()
-    
-    # base recalibration: base recalibrator, apply recalibration, analyzeCovariates 
-    recal_data = recalibrateBase(output_rg)
-    recalibrated_bam = applyBQSR(output_rg, recal_data)
-    # NOTE: To execute analyzeCovariants, you should add Rscript directory
-    # to your env $PATH and install required R dependencies
-    #recal_data_plot = analyzeCovariates(recal_data)
-    recal_data_plot = ""
-    
-    return recalibrated_bam, recal_data_plot
