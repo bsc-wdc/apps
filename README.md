@@ -6,6 +6,12 @@ Its purpose is to share the applications among the COMPSs users community to eas
 the implementation of new applications and share them with the rest of users.
 
 
+## Datasets
+
+The datasets for the applications can be downloaded using the following link: 
+
+* http://compss.bsc.es/repo/datasets
+* 
 
 ## The Distributed Computing Library (python only)
 
@@ -14,7 +20,6 @@ The Distributed Computing Library (dislib) provides distributed algorithms ready
 You can find out more at:
 
 * https://dislib.bsc.es/en/stable/
-
 
 
 ## Application's Folder Structure 
@@ -43,9 +48,6 @@ apps
   |- datasets				Small datasets for examples 
 
 ```
-## Datasets
-
-The datasets for the applications are on the Capella VM (bsccs1000.int.bsc.es). You can access them through SSH or via browser using the link: http://http://compss.bsc.es/repo/datasets.
 
 
 ## Warnings and MN instructions
