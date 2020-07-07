@@ -1,25 +1,22 @@
 GCC=g++
-MCC=mcxx
+
 #CFLAGS=-std=c++11 -DDEBUG_BINDING -g -I. -I/opt/COMPSs/Bindings/c/include -I/opt/COMPSs/Bindings/bindings-common/include
 CFLAGS=-std=c++11 -g -I.
-# -I/opt/COMPSs/Bindings/c/include -I/opt/COMPSs/Bindings/bindings-common/include
-
-CFILES=Block.cc Matrix.cc
-C_OBJ=Block.o Matrix.o
+CFILES=aux_func.cc
+C_OBJ=aux_func.o
 
 
 all: clean compile_master compile_worker deploy
 
 compile_master:
 	@echo "Building application for master..."
-	$(GCC) -DCOMPSS_MASTER $(CFLAGS) -c $(CFILES)
+	$(GCC) $(CFLAGS) -c $(CFILES)
 	ar rvs libmaster.a $(C_OBJ)
 	ranlib libmaster.a
 
 compile_worker:
 	@echo "Building application for workers..."
-	$(MCC) --ompss -DCOMPSS_WORKER $(CFLAGS) -c Block.cc
-	$(MCC) --ompss -DCOMPSS_WORKER $(CFLAGS) -c Matrix.cc 
+	$(GCC) $(CFLAGS) -c $(CFILES)
 	ar rvs libworker.a $(C_OBJ)
 	ranlib libworker.a
 

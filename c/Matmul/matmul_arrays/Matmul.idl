@@ -1,0 +1,10 @@
+interface Matmul{
+     double[size] init_block(in double val, in int size);
+
+     @Constraints(processors={@Processor(ProcessorType=CPU, ComputingUnits=4)})	
+     void multiply_blocks(in double[M*M] blockA, in double[M*M] blockB, inout double[M*M] blockC, in int M);
+
+     @Constraints(processors={@Processor(ProcessorType=GPU, ComputingUnits=1)});
+     @Implements(multiply_blocks);
+     void multiply_blocks_GPU(in double[M*M] blockA, in double[M*M] blockB, inout double[M*M] blockC, in int M);
+};

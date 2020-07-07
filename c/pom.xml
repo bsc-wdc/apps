@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>es.bsc.compss.apps</groupId>
 		<artifactId>compss-apps-all</artifactId>
-		<version>2.6.rc2001</version>
+		<version>2.7</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -70,5 +70,7 @@
 	<!-- SUB-MODULES -->
 	<modules>
 		<module>increment</module>
+		<module>simple</module>
+		<module>Matmul/matmul_objects</module>
 	</modules>
 </project>
