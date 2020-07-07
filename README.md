@@ -11,7 +11,6 @@ the implementation of new applications and share them with the rest of users.
 The datasets for the applications can be downloaded using the following link: 
 
 * http://compss.bsc.es/repo/datasets
-* 
 
 ## The Distributed Computing Library (python only)
 
