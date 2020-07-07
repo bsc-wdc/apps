@@ -1,13 +1,13 @@
 #!/bin/bash -e
 
 runcompss  \
-        -t \
         -g \
+        -t \
  --summary \
            \
     --classpath=./target/conway.jar \
     --project=./xml/project.xml     \
     --resources=./xml/resources.xml \
                                     \
-    conway.blocks.Conway  2048 2048 4 1024
+    conway.accelerated.Conway  2048 2048 400 512 79
 

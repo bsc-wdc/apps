@@ -1,9 +1,8 @@
-package conway.blocks;
+package conway.accelerated;
 
 import java.io.Serializable;
 
 public class Block implements Serializable {
-
 	// Serializer version code
 	private static final long serialVersionUID = 2L;
 
@@ -50,6 +49,6 @@ public class Block implements Serializable {
 	}
 
 	public int getBSize() {
-		return bSize;
+		return this.bSize;
 	}
 }

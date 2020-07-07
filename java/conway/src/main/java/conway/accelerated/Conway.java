@@ -1,7 +1,7 @@
-package conway.blocks;
+package conway.accelerated;
 
-import conway.blocks.ConwayImpl;
-
+import conway.accelerated.Zone;
+import conway.accelerated.ConwayImpl;
 import es.bsc.compss.api.COMPSs;
 
 public class Conway {
@@ -11,9 +11,10 @@ public class Conway {
 	protected static int WB;
 	protected static int LB;
 	protected static int B_SIZE;
+	protected static int A_FACTOR;
 
 	private static void usage() {
-		System.out.println("    Usage: simple <W, L, ITERATIONS, B_SIZE>");
+		System.out.println("    Usage: simple <W, L, ITERATIONS, B_SIZE, A_FACTOR>");
 	}
 
 	private static Block[][] initialiseBlock() {
@@ -40,7 +41,7 @@ public class Conway {
 	}
 
 	public static void main(String[] args) throws Exception {
-		if (args.length != 4) {
+		if (args.length != 5) {
 			usage();
 			throw new Exception("[ERROR] Incorrect number of parameters");
 		}
@@ -49,9 +50,10 @@ public class Conway {
 		int length = Integer.parseInt(args[1]);
 		int iterations = Integer.parseInt(args[2]);
 		B_SIZE = Integer.parseInt(args[3]);
+		A_FACTOR = Integer.parseInt(args[4]);
 
-		WB = width / B_SIZE;
-		LB = length / B_SIZE;
+		WB = width / Conway.B_SIZE;
+		LB = length / Conway.B_SIZE;
 
 		// Timming
 		final long startTime = System.currentTimeMillis();
@@ -62,16 +64,19 @@ public class Conway {
 
 		System.out.println("Iterating: ");
 
-		for (int t = 0; t < iterations; ++t) {
+		for (int t = 0; t < iterations / (A_FACTOR + 1); ++t) {
 			swap(stateA, stateB);
 
 			// Spawn tasks
 			for (int i = 0; i < WB; ++i) {
 				for (int j = 0; j < LB; ++j) {
 					Zone z = new Zone(stateA, i, j);
-					stateB[i][j] = new Block (ConwayImpl.updateBlock(z));
+					Block res = new Block(B_SIZE);
+					ConwayImpl.updateBlock(z, res, A_FACTOR);
+					stateB[i][j] = res;
 				}
 			}
+			
 
 			COMPSs.barrier();
 			System.out.print(".");

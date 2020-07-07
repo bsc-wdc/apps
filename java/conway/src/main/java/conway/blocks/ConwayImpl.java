@@ -7,10 +7,12 @@ import conway.blocks.Zone;
 public class ConwayImpl {
 
     public static Block updateBlock(Zone z) {
-        Block res = new Block();
+    	int bSize = z.getBSize();
+        Block res = new Block(bSize);
 
-        for (int i = Conway.B_SIZE; i < 2 * Conway.B_SIZE; ++i) {
-            for (int j = Conway.B_SIZE; j < 2 * Conway.B_SIZE; ++j) {
+        for (int i = bSize; i < 2 * bSize; ++i) {
+            for (int j = bSize; j < 2 * bSize; ++j) {
+            	
                 int count = 0;
 
                 for (int off_i = -1; off_i <= 1; ++off_i) {
@@ -23,20 +25,20 @@ public class ConwayImpl {
 
                 if (z.get(i, j) == 1) {
                     if (count == 2 || count == 3) {
-                        res.set(i - Conway.B_SIZE, j - Conway.B_SIZE, 1);
+                        res.set(i - bSize, j - bSize, 1);
                     } else {
-                        res.set(i - Conway.B_SIZE, j - Conway.B_SIZE, 0);
+                        res.set(i - bSize, j - bSize, 0);
                     }
                 } else {
                     if (count == 3) {
-                        res.set(i - Conway.B_SIZE, j - Conway.B_SIZE, 1);
+                        res.set(i - bSize, j - bSize, 1);
                     } else {
-                        res.set(i - Conway.B_SIZE, j - Conway.B_SIZE, 0);
+                        res.set(i - bSize, j - bSize, 0);
                     }
                 }
             }
         }
-
+        
         return res;
     }
 
