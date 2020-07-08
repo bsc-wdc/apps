@@ -1,13 +1,16 @@
 package conway.accelerated;
 
-import conway.accelerated.Zone;
+
 import conway.accelerated.ConwayImpl;
 import es.bsc.compss.api.COMPSs;
 
 public class Conway {
 
 	private static final double MS_TO_S = 1_000.0;
-
+	
+	protected static int width;
+	protected static int length;
+	protected static int iterations;
 	protected static int WB;
 	protected static int LB;
 	protected static int B_SIZE;
@@ -30,14 +33,32 @@ public class Conway {
 	}
 
 	private static void swap(Block[][] stateA, Block[][] stateB) {
-		Block c;
 		for (int i = 0; i < WB; ++i) {
 			for (int j = 0; j < LB; ++j) {
-				c = stateA[i][j];
 				stateA[i][j] = stateB[i][j];
-				stateB[i][j] = c;
+				stateB[i][j] = null;
 			}
 		}
+	}
+	
+	private static void printState (Block[][] ref) {
+		for (int i = 0; i < width; ++i) {
+			for (int j = 0; j < length; ++j) {
+				System.out.print(ref[i/B_SIZE][j/B_SIZE].get(i%B_SIZE, j%B_SIZE));
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+	
+	private static int	sumState (Block[][] ref) {
+		int sum = 0;
+		for (int i = 0; i < width; ++i) {
+			for (int j = 0; j < length; ++j) {
+				sum += ref[i/B_SIZE][j/B_SIZE].get(i%B_SIZE, j%B_SIZE);
+			}
+		}
+		return sum;
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -46,42 +67,65 @@ public class Conway {
 			throw new Exception("[ERROR] Incorrect number of parameters");
 		}
 
-		int width = Integer.parseInt(args[0]);
-		int length = Integer.parseInt(args[1]);
-		int iterations = Integer.parseInt(args[2]);
+		width = Integer.parseInt(args[0]);
+		length = Integer.parseInt(args[1]);
+		iterations = Integer.parseInt(args[2]);
 		B_SIZE = Integer.parseInt(args[3]);
 		A_FACTOR = Integer.parseInt(args[4]);
 
-		WB = width / Conway.B_SIZE;
-		LB = length / Conway.B_SIZE;
-
+		WB = width / B_SIZE;
+		LB = length / B_SIZE;
+		
 		// Timming
 		final long startTime = System.currentTimeMillis();
 
 		// Iteration
 		Block[][] stateA = initialiseBlock();
 		Block[][] stateB = initialiseBlock();
+		
+		System.out.println("Initial Grid:");
+		//printState(stateB);
 
 		System.out.println("Iterating: ");
 
 		for (int t = 0; t < iterations / (A_FACTOR + 1); ++t) {
 			swap(stateA, stateB);
 
-			// Spawn tasks
+			// Spawn tasks (for each block)
 			for (int i = 0; i < WB; ++i) {
 				for (int j = 0; j < LB; ++j) {
-					Zone z = new Zone(stateA, i, j);
-					Block res = new Block(B_SIZE);
-					ConwayImpl.updateBlock(z, res, A_FACTOR);
+					
+					//Obtain input blocks
+					Block[][] supra =  new Block[3][3];
+					
+					for (int off_i = 0; off_i < 3; ++off_i) {
+						for (int off_j = 0; off_j < 3; ++off_j) {
+							int iState = (i + off_i - 1 + Conway.WB) % Conway.WB;
+							int jState = (j + off_j - 1 + Conway.LB) % Conway.LB;
+							supra[off_i][off_j] = stateA[iState][jState];
+						}
+					}
+					
+					//Call Update
+					Block res = ConwayImpl.updateBlock(supra[0][0], supra[0][1], supra[0][2],
+												supra[1][0], supra[1][1], supra[1][2],
+												supra[2][0], supra[2][1], supra[2][2],
+												A_FACTOR);
+					
 					stateB[i][j] = res;
 				}
 			}
 			
-
-			COMPSs.barrier();
-			System.out.print(".");
+			//System.out.println(sumState(stateB));
+			//System.out.print(".");
+			//COMPSs.barrier();
 		}
 		System.out.println();
+		
+		//Print
+		System.out.println("Final Grid:");
+		System.out.println(sumState(stateB));
+		//printState(stateB);
 
 		// Timming
 		final long endTime = System.currentTimeMillis();
