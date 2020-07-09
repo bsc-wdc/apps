@@ -135,5 +135,4 @@ public class Conway {
 		final long endTime = System.currentTimeMillis();
 		System.out.println("Total execution time: " + (endTime - startTime) / MS_TO_S + "s");
 	}
-
 }
