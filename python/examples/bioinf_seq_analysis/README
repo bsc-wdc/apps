@@ -1,0 +1,52 @@
+This is the Readme for:
+Bioinformatics - Variants Analysis application
+
+[Name]: bioinf_seq_analysis
+[Contact Person]: support-compss@bsc.es
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+This application discovers and annotates variants in sample ubam files. 
+
+It is based on GATK Broad Institue best practices:
+https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels-
+
+Before launching the application, make sure you set the paths of the following directoriesin src/config.py:
+IN_DIR=/path/to/input/dir/
+OUT_DIR=/path/to/output/dir/
+META_DIR=/path/to/dir/that/contains/data/necessary/for/sequencing (INDELs and SNPs sites, annotation dbs, etc..)
+REF=/path/to/reference/genome/dir/
+DBSNP=/path/to/varaints/db/dir/
+TOOLS_DIR=/path/to/tools/dir/ 
+
+
+To download data samples, reference genomes or any data related to human resequencing, use GATK resource bundle:
+https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle
+ 
+== Execution instructions ==
+
+* Usage in local machine:
+
+    ./run_local.sh <TRACING>
+
+    - Where:
+        <TRACING>............... Enable or disable tracing ( true | false )
+
+     - Example:  ./run_local.sh false
+
+* Usage in supercomputer:
+
+    ./launch.sh <NUM_NODES> <EXECUTION_TIME> <TRACING>
+
+    - Where:
+        <NUM_NODES>............. Number of nodes for the reservation
+        <EXECUTION_TIME>........ Walltime
+        <TRACING>............... Enable or disable tracing ( true | false )
+
+    - Example: ./launch.sh 2 10 true
+
+== Build ==
+make sure that tools under TOOLS_DIR are correctly built for your system
+

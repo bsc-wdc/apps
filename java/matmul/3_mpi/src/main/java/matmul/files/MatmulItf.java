@@ -29,7 +29,7 @@ public interface MatmulItf {
     
     @MPI(binary = "${MATMUL_BINARY}", 
          mpiRunner = "mpirun", 
-         computingNodes = "${MPI_PROCS}")
+         processes = "${MPI_PROCS}", scaleByCU = true)
     @Constraints(computingUnits = "${CUS}")
     Integer multiplyAccumulativeMPI(
        @Parameter() int bsize, 
