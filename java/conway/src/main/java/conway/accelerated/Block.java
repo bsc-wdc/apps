@@ -47,8 +47,4 @@ public class Block implements Serializable {
 	public int get(int i, int j) {
 		return this.matrix[i][j];
 	}
-
-	public int getBSize() {
-		return this.bSize;
-	}
 }

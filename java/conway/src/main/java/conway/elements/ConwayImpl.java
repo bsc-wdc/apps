@@ -11,10 +11,12 @@ public class ConwayImpl {
         int l = stateA.getl();
 
         for (int off_i = -1; off_i <= 1; ++off_i) {
-            for (int off_j = -1; off_j <= -1; ++off_j) {
-                if (stateA.get((i + off_i + w) % w, (j + off_j + l) % l) == 1) {
-                    ++count;
-                }
+            for (int off_j = -1; off_j <= 1; ++off_j) {
+            	if (off_i != 0 || off_j != 0) {
+	                if (stateA.get((i + off_i + w) % w, (j + off_j + l) % l) == 1) {
+	                    ++count;
+	                }
+            	}
             }
         }
 

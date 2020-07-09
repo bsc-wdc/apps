@@ -18,7 +18,8 @@ public interface ConwayItf {
 			@Parameter(type = Type.OBJECT, direction = Direction.IN) Block b20,
 			@Parameter(type = Type.OBJECT, direction = Direction.IN) Block b21,
 			@Parameter(type = Type.OBJECT, direction = Direction.IN) Block b22,
-			@Parameter(type = Type.INT, direction = Direction.IN) int aFactor
+			@Parameter(type = Type.INT, direction = Direction.IN) int aFactor,
+			@Parameter(type = Type.INT, direction = Direction.IN) int bSize
 	);
 
 }

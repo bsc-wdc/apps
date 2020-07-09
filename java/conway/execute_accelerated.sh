@@ -9,5 +9,4 @@ runcompss  \
     --project=./xml/project.xml     \
     --resources=./xml/resources.xml \
                                     \
-    conway.accelerated.Conway 16 16 4 8 0
-
+    conway.accelerated.Conway 512 512 400 256 79

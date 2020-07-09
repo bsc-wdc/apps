@@ -5,33 +5,38 @@ import conway.accelerated.Block;
 public class ConwayImpl {
 
 	public static Block updateBlock(Block b00, Block b01, Block b02, Block b10, Block b11, Block b12, Block b20,
-			Block b21, Block b22, int aFactor) {
+			Block b21, Block b22, int aFactor, int bSize) {
 
 		// Rebuild zone
-		int bSize = b00.getBSize();
 
 		Block[][] subStateA = new Block[3][3];
 		Block[][] subStateB = new Block[3][3];
+		Block[][] subStateC;
+		
+		//subStateA
+		subStateA = new Block[3][3];
+		for (int off_i = 0; off_i < 3; ++off_i) {
+			for (int off_j = 0; off_j < 3; ++off_j) {
+				subStateA[off_i][off_j] = new Block(bSize);
+			}
+		}
 
 		// subStateB
-		subStateB[0][0] = b00;
-		subStateB[0][1] = b01;
-		subStateB[0][2] = b02;
-		subStateB[1][0] = b10;
-		subStateB[1][1] = b11;
-		subStateB[1][2] = b12;
-		subStateB[2][0] = b20;
-		subStateB[2][1] = b21;
-		subStateB[2][2] = b22;
+		subStateB[0][0] = new Block(b00);
+		subStateB[0][1] = new Block(b01);
+		subStateB[0][2] = new Block(b02);
+		subStateB[1][0] = new Block(b10);
+		subStateB[1][1] = new Block(b11);
+		subStateB[1][2] = new Block(b12);
+		subStateB[2][0] = new Block(b20);
+		subStateB[2][1] = new Block(b21);
+		subStateB[2][2] = new Block(b22);
 		
 		//	iterations 
-		for (int t = aFactor; t >= 0; t--) {
+		for (int t = aFactor; t >= 0; --t) {
+			subStateC = subStateA;
 			subStateA = subStateB;
-			
-			subStateB = new Block[3][3];
-			for (int off_i = 0; off_i < 3; ++off_i)
-				for (int off_j = 0; off_j < 3; ++off_j)
-					subStateB[off_i][off_j] = new Block(bSize);
+			subStateB = subStateC;
 
 			for (int i = bSize - t; i < 2 * bSize + t; ++i) {
 				for (int j = bSize - t; j < 2 * bSize + t; ++j) {

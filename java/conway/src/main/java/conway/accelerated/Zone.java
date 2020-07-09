@@ -1,5 +1,5 @@
 package conway.accelerated;
-
+/*
 import java.io.Serializable;
 
 public class Zone implements Serializable {
@@ -58,3 +58,4 @@ public class Zone implements Serializable {
     	return this.supra[1][1];
     }
 }
+*/

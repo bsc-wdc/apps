@@ -16,10 +16,12 @@ public class ConwayImpl {
                 int count = 0;
 
                 for (int off_i = -1; off_i <= 1; ++off_i) {
-                    for (int off_j = -1; off_j <= -1; ++off_j) {
-                        if (z.get(i + off_i, j + off_j) == 1) {
-                            ++count;
-                        }
+                    for (int off_j = -1; off_j <= 1; ++off_j) {
+                    	if (off_i != 0 || off_j != 0) {
+	                        if (z.get(i + off_i, j + off_j) == 1) {
+	                            ++count;
+	                        }
+                    	}
                     }
                 }
 

@@ -2,7 +2,7 @@ package conway.accelerated;
 
 
 import conway.accelerated.ConwayImpl;
-import es.bsc.compss.api.COMPSs;
+//import es.bsc.compss.api.COMPSs;
 
 public class Conway {
 
@@ -83,10 +83,11 @@ public class Conway {
 		Block[][] stateA = initialiseBlock();
 		Block[][] stateB = initialiseBlock();
 		
-		System.out.println("Initial Grid:");
+		//System.out.println("Initial Grid:");
 		//printState(stateB);
-
-		System.out.println("Iterating: ");
+		System.out.println("Initial sum: " + sumState(stateB));
+		System.out.println("Iterating...");
+		
 
 		for (int t = 0; t < iterations / (A_FACTOR + 1); ++t) {
 			swap(stateA, stateB);
@@ -107,29 +108,31 @@ public class Conway {
 					}
 					
 					//Call Update
-					Block res = ConwayImpl.updateBlock(supra[0][0], supra[0][1], supra[0][2],
+					stateB[i][j] = ConwayImpl.updateBlock(supra[0][0], supra[0][1], supra[0][2],
 												supra[1][0], supra[1][1], supra[1][2],
 												supra[2][0], supra[2][1], supra[2][2],
-												A_FACTOR);
-					
-					stateB[i][j] = res;
+												A_FACTOR, B_SIZE);
 				}
 			}
-			
-			//System.out.println(sumState(stateB));
-			//System.out.print(".");
-			//COMPSs.barrier();
 		}
-		System.out.println();
 		
-		//Print
-		System.out.println("Final Grid:");
-		System.out.println(sumState(stateB));
+		//Results
+		//System.out.println("Final Grid:");
+		
+		for (int i = 0; i < WB; ++i) {
+			for (int j = 0; j < LB; ++j) {
+				System.out.print(stateB[i][j].get(0, 0));
+			}
+			System.out.println();
+		}
+		
+		
 		//printState(stateB);
+		//System.out.println("Final sum: " + sumState(stateB));
+		System.out.println("Iterating...");
 
-		// Timming
+		
 		final long endTime = System.currentTimeMillis();
-		System.out.println("Iterations ended");
 		System.out.println("Total execution time: " + (endTime - startTime) / MS_TO_S + "s");
 	}
 
