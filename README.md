@@ -1,10 +1,6 @@
 # COMPSs applications folder
 
-<<<<<<< HEAD
-This folder contains example applications developed for [py]COMPSs .
-=======
 This folder contains example applications developed for [py]COMPSs.
->>>>>>> Fixed typos in main README.md.
 
 Its purpose is to share the applications among the COMPSs users community to ease
 the implementation of new applications and share them with the rest of users.
