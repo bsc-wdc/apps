@@ -11,7 +11,9 @@
   fi
 
   export COMPSS_PYTHON_VERSION=3-ML
-  module load COMPSs/Trunk
+  module use /apps/modules/modulefiles/tools/COMPSs/.custom
+  module load TrunkJCB
+  # module load COMPSs/Trunk
 
   module load ruby
   export PATH=/apps/COMPSs/Storage/Redis/bin:$PATH
@@ -40,7 +42,7 @@
 
   # Define application variables
   graph=$tracing
-  log_level="debug"
+  log_level="off"
   qos_flag="--qos=debug"
   workers_flag=""
   constraints=""

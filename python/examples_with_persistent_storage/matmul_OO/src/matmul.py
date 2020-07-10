@@ -1,12 +1,13 @@
 import time
 import numpy as np
 from pycompss.api.task import task
-from pycompss.api.parameter import INOUT
+from pycompss.api.parameter import CONCURRENT
 from pycompss.api.api import compss_barrier
 from pycompss.api.api import compss_wait_on
 from pycompss.api.api import compss_delete_object
 
 
+@task(returns=1)
 def generate_block(size, num_blocks, seed=0, use_storage=False,
                    set_to_zero=False, psco_name=''):
     """
@@ -22,20 +23,23 @@ def generate_block(size, num_blocks, seed=0, use_storage=False,
     if use_storage:
         from storage_model.block import Block
         ret = Block()
-        ret.make_persistent(psco_name)
+        ret.make_persistent(psco_name)  # here better for dataClay
         ret.generate_block(size,
                            num_blocks,
+                           set_to_zero=set_to_zero,
                            seed=seed)
+        # ret.make_persistent(psco_name)  # here is a need for redis
     else:
         from model.block import Block
         ret = Block()
         ret.generate_block(size,
                            num_blocks,
-                           set_to_zero=True)
+                           set_to_zero=set_to_zero,
+                           seed=seed)
     return ret
 
 
-@task(C=INOUT)
+@task(C=CONCURRENT)
 def fused_multiply_add(A, B, C):
     """
     Multiplies two Blocks and accumulates the result in an INOUT Block (FMA).
@@ -44,7 +48,7 @@ def fused_multiply_add(A, B, C):
     :param C: Result Block
     :return: None
     """
-    C += A * B  # This works thanks to __mult__ and __iadd__
+    C.fused_multiply_add(A, B)
 
 
 def dot(A, B, C):
@@ -59,9 +63,14 @@ def dot(A, B, C):
     """
     n, m = len(A), len(B[0])
     # as many rows as A, as many columns as B
-    for i in range(n):
-        for j in range(m):
-            for k in range(n):
+    for k in range(n):
+        for i in range(n):
+            for j in range(m):
+                # We want to exploit the concurrentness of C[i][j]
+                # but avoid it becoming a choke point. That's why we 
+                # don't iterate [i, j, k] but [k, i, j] instead.
+                # From another POV, it means a natural iteraton of A
+                # (instead of the natural iteration of C if following [i,j,k])
                 fused_multiply_add(A[i][k], B[k][j], C[i][j])
 
 
@@ -89,6 +98,7 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
     :param use_storage: <Boolean> Use storage
     :return: None
     """
+    print("Starting application")
     start_time = time.time()
 
     # Generate the dataset in a distributed manner
@@ -102,7 +112,7 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
         bid = 0
         for j in range(num_blocks):
             for ix, l in enumerate([A, B]):
-                psco_name = matrix_name[ix] + str(i) + 'g' + str(j)
+                psco_name = "%s%02dg%02d" % (matrix_name[ix], i, j)
                 l[-1].append(generate_block(elems_per_block,
                                             num_blocks,
                                             seed=seed + bid,
@@ -112,8 +122,10 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
             C[-1].append(generate_block(elems_per_block,
                                         num_blocks,
                                         set_to_zero=True,
-                                        use_storage=False))
+                                        use_storage=use_storage,
+                                        psco_name="C%02dg%02d" % (i, j)))
     compss_barrier()
+    print("Data generated; proceeding to do matrix multiplication")
     initialization_time = time.time()
 
     # Do matrix multiplication
@@ -122,21 +134,7 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
     compss_barrier()
     multiplication_time = time.time()
 
-    if use_storage:
-        # Persist the result in a distributed manner (i.e: exploit data
-        # locality & avoid memory flooding)
-        for i in range(num_blocks):
-            for j in range(num_blocks):
-                psco_name = 'C_' + str(i) + '_' + str(j)
-                persist_result(C[i][j], psco_name)
-                # If we are not going to check the result, we can safely delete
-                # the Cij intermediate matrices
-                if not check_result:
-                    compss_delete_object(C[i][j])
-        compss_barrier()
-        persist_c_time = time.time()
-    else:
-        persist_c_time = multiplication_time
+    print("Multiplication finished")
 
     # Check if we get the same result if multiplying sequentially (no tasks)
     # Note that this implies having the whole A and B matrices in the master,
@@ -144,25 +142,33 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
     # Explicit correctness (i.e: an actual dot product is performed) must be
     # checked manually
     if check_result:
+        print("Checking result")
+        A_copy = list()
+        B_copy = list()
+        C_copy = list()
         for i in range(num_blocks):
+            a_l = list()
+            b_l = list()
+            c_l = list()
+            A_copy.append(a_l)
+            B_copy.append(b_l)
+            C_copy.append(c_l)
             for j in range(num_blocks):
-                A[i][j] = compss_wait_on(A[i][j])
-                B[i][j] = compss_wait_on(B[i][j])
-        for i in range(num_blocks):
-            for j in range(num_blocks):
-                Cij = compss_wait_on(C[i][j])
-                Dij = generate_block(elems_per_block,
-                                     num_blocks,
-                                     use_storage=False,
-                                     set_to_zero=True)
-                Dij = compss_wait_on(Dij)
-                import numpy as np
-                for k in range(num_blocks):
-                    Dij += np.dot(A[i][k], B[k][j])
-                if not np.allclose(Cij.block, Dij.block):
-                    print('Block %d-%d gives different products!' % (i, j))
-                    return
-        print('Distributed and sequential results coincide!')
+                a_l.append(compss_wait_on(A[i][j]).block)
+                b_l.append(compss_wait_on(B[i][j]).block)
+                c_l.append(compss_wait_on(C[i][j]).block)
+        
+        A_copy = np.block(A_copy)
+        B_copy = np.block(B_copy)
+        C_copy = np.block(C_copy)
+
+        if not np.allclose(C_copy, np.dot(A_copy, B_copy)):
+            print('!!!!!!!!!!!!!!!!!')
+            print('!!! The matrix multiplication seems bogus, np.allclose returned false')
+            print('!!!!!!!!!!!!!!!!!')
+            # Not returning, as the results may be relevant for postmortem
+        else:
+            print('* The check_result has been successful *')
 
     print("-----------------------------------------")
     print("-------------- RESULTS ------------------")
@@ -171,9 +177,7 @@ def main(num_blocks, elems_per_block, check_result, seed, use_storage):
                                        start_time))
     print("Multiplication time: %f" % (multiplication_time -
                                        initialization_time))
-    print("Persist C time     : %f" % (persist_c_time -
-                                       multiplication_time))
-    print("Total time: %f" % (persist_c_time - start_time))
+    print("Total time: %f" % (multiplication_time - start_time))
     print("-----------------------------------------")
 
 

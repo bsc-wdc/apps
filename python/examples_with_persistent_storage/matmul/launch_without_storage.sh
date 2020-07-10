@@ -1,39 +1,16 @@
 #!/bin/bash -e
 
-  # THIS MUST BE INCLUDED INTO .bashrc
-  echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINE IS IN YOUR .bashrc"
-  echo "export PATH=/apps/COMPSs/Storage/Redis/bin:\$PATH"
-
-  # read -p "Continue? (y|n) " -n 1 -r
-  # echo
-  # if [[ ! $REPLY =~ ^[Yy]$ ]]
-  # then
-  #     [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-  # fi
-
   export COMPSS_PYTHON_VERSION=3-ML
   module use /apps/modules/modulefiles/tools/COMPSs/.custom
   module load TrunkJCB
   # module load COMPSs/Trunk
-
-  module load ruby
-  export PATH=/apps/COMPSs/Storage/Redis/bin:$PATH
-
-  # Not working - requires to be included into .bashrc?
-  # module use /apps/modules/modulefiles/tools/COMPSs/.custom
-  # module load Redis
-
-  # Storage-related paths
-  # Change these paths if you want to use other storage implementations
-  STORAGE_HOME=${COMPSS_HOME}/Tools/storage/redis
-  STORAGE_CLASSPATH=${STORAGE_HOME}/compss-redisPSCO.jar
 
   # Retrieve script arguments
   job_dependency=${1:-None}
   num_nodes=${2:-2}
   execution_time=${3:-5}
   tracing=${4:-false}
-  exec_file=${5:-$(pwd)/src/wordcount.py}
+  exec_file=${5:-$(pwd)/src/matmul.py}
 
   # Define script variables
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -46,7 +23,7 @@
   log_level="off"
   qos_flag="--qos=debug"
   workers_flag=""
-  constraints=""
+  constraints="highmem"
 
   # Create workers sandbox
   # mkdir -p "${WORK_DIR}/COMPSs_Sandbox"
@@ -63,7 +40,7 @@
 
   # Enqueue job
   enqueue_compss \
-    --job_name=wordcountOO_PyCOMPSs_redis \
+    --job_name=matmul_PyCOMPSs \
     --job_dependency="${job_dependency}" \
     --exec_time="${execution_time}" \
     --num_nodes="${num_nodes}" \
@@ -83,17 +60,17 @@
     --log_level="${log_level}" \
     "${qos_flag}" \
     \
-    --classpath=${APP_CLASSPATH}:${STORAGE_CLASSPATH}:${CLASSPATH} \
-    --pythonpath=${APP_PYTHONPATH}:${STORAGE_HOME}/python:${PYTHONPATH} \
-    --storage_props=$(pwd)/redis_confs/storage_props.cfg \
-    --storage_home=${STORAGE_HOME}/ \
+    --classpath=${APP_CLASSPATH}:${CLASSPATH} \
+    --pythonpath=${APP_PYTHONPATH}:${PYTHONPATH} \
     \
     --lang=python \
     \
-    "$exec_file" $@ --use_storage
+    "$exec_file" $@
 
 # Enqueue tests example:
-# ./launch_with_redis.sh None 2 5 false $(pwd)/src/wordcount.py -d $(pwd)/dataset
+# ./launch_without_storage.sh None 2 5 false $(pwd)/src/matmul.py -b 4 -e 4 --check_result
+# ./launch_without_storage.sh None 2 60 true $(pwd)/src/matmul.py -b 16 -e 4096
+
 
 # OUTPUTS:
 # - compss-XX.out : Job output file

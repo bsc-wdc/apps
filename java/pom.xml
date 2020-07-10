@@ -78,6 +78,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>copy-resources</id>
@@ -110,7 +111,7 @@
 
     <!-- SUB-MODULES -->
     <modules>
-	<module>reverseIndex/1_base</module>    
+	<module>reverseIndex/1_base</module>
         <module>blast/1_allone</module>
         <module>blast/2_tree</module>
         <module>blast/3_binary</module>

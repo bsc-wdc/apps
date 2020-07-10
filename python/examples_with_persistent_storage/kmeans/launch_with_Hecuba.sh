@@ -3,19 +3,27 @@
   # THIS MUST BE INCLUDED INTO .bashrc
   echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
   echo "export COMPSS_PYTHON_VERSION=3-ML"
-  echo "module load COMPSs/Trunk"
-  echo "module load hecuba/0.1.3_ML"
+  echo "module use /apps/modules/modulefiles/tools/COMPSs/.custom"
+  echo "module load TrunkJCB"
+  # echo "module load COMPSs/2.7"
+  # echo "module load hecuba/0.1.3_ML"
+  echo "module use /apps/HECUBA/modulefiles/"
+  echo "module load Hecuba/0.1.4_dev"
 
-  read -p "Continue? (y|n) " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]
-  then
-      [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-  fi
+  # read -p "Continue? (y|n) " -n 1 -r
+  # echo
+  # if [[ ! $REPLY =~ ^[Yy]$ ]]
+  # then
+  #     [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+  # fi
 
   export COMPSS_PYTHON_VERSION=3-ML
-  module load COMPSs/Trunk
-  module load hecuba/0.1.3_ML
+  module use /apps/modules/modulefiles/tools/COMPSs/.custom
+  module load TrunkJCB
+  # module load COMPSs/2.7
+  module use /apps/HECUBA/modulefiles/
+  module load Hecuba/0.1.4_dev
+  #module load hecuba/0.1.3_ML
 
   # Retrieve script arguments
   job_dependency=${1:-None}
@@ -32,18 +40,18 @@
 
   # Define application variables
   graph=$tracing
-  log_level="debug"
+  log_level="off"
   qos_flag="--qos=debug"
   workers_flag=""
-  constraints=""
+  constraints=""  # "highmem"
 
   # Create workers sandbox
   # mkdir -p "${WORK_DIR}/COMPSs_Sandbox"
   # --master_working_dir="${WORK_DIR}" \
   # --worker_working_dir="${WORK_DIR}/COMPSs_Sandbox" \
 
-  CPUS_PER_NODE=48
-  WORKER_IN_MASTER=24
+  CPUS_PER_NODE=44
+  WORKER_IN_MASTER=0
 
   shift 5
 
@@ -60,10 +68,11 @@
     \
     --cpus_per_node="${CPUS_PER_NODE}" \
     --worker_in_master_cpus="${WORKER_IN_MASTER}" \
+    --scheduler=es.bsc.compss.scheduler.fifodata.FIFODataScheduler \
     \
     "${workers_flag}" \
     \
-    --worker_working_dir=scratch \
+    --worker_working_dir=/gpfs/scratch/bsc19/bsc19234/ \
     \
     --constraints=${constraints} \
     --tracing="${tracing}" \
@@ -84,6 +93,10 @@
 
 # Enqueue tests example:
 # ./launch_with_Hecuba.sh None 2 5 false $(pwd)/src/kmeans.py -n 1024 -f 8 -d 2 -c 4
+# ./launch_with_Hecuba.sh None 3 60 true $(pwd)/src/kmeans.py -n 249999360 -f 1536 -d 100 -c 500 -i 5
+
+# The one which fails:
+#./launch_with_Hecuba.sh None 2 30 false $(pwd)/src/kmeans.py -n 88000 -f 88 -d 3 -c 4
 
 # OUTPUTS:
 # - compss-XX.out : Job output file

@@ -3,16 +3,19 @@
   # THIS MUST BE INCLUDED INTO .bashrc
   echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINE IS IN YOUR .bashrc"
   echo "export PATH=/apps/COMPSs/Storage/Redis/bin:\$PATH"
-  read -p "Continue? (y|n) " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]
-  then
-      [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-  fi
+
+  # read -p "Continue? (y|n) " -n 1 -r
+  # echo
+  # if [[ ! $REPLY =~ ^[Yy]$ ]]
+  # then
+  #     [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+  # fi
 
   export COMPSS_PYTHON_VERSION=3-ML
-  module load COMPSs/Trunk
-  
+  module use /apps/modules/modulefiles/tools/COMPSs/.custom
+  module load TrunkJCB
+  # module load COMPSs/Trunk
+
   module load ruby
   export PATH=/apps/COMPSs/Storage/Redis/bin:$PATH
 
@@ -40,10 +43,10 @@
 
   # Define application variables
   graph=$tracing
-  log_level="debug"
+  log_level="off"
   qos_flag="--qos=debug"
   workers_flag=""
-  constraints=""
+  constraints="highmem"
 
   # Create workers sandbox
   # mkdir -p "${WORK_DIR}/COMPSs_Sandbox"
@@ -51,7 +54,7 @@
   # --worker_working_dir="${WORK_DIR}/COMPSs_Sandbox" \
 
   CPUS_PER_NODE=48
-  WORKER_IN_MASTER=24
+  WORKER_IN_MASTER=0
 
   shift 5
 
@@ -67,10 +70,11 @@
     \
     --cpus_per_node="${CPUS_PER_NODE}" \
     --worker_in_master_cpus="${WORKER_IN_MASTER}" \
+    --scheduler=es.bsc.compss.scheduler.fifodata.FIFODataScheduler \
     \
     "${workers_flag}" \
     \
-    --worker_working_dir=scratch \
+    --worker_working_dir=/gpfs/scratch/bsc19/bsc19234/ \
     \
     --constraints=${constraints} \
     --tracing="${tracing}" \
@@ -90,6 +94,7 @@
 
 # Enqueue tests example:
 # ./launch_with_redis.sh None 2 5 false $(pwd)/src/kmeans.py -n 1024 -f 8 -d 2 -c 4
+# ./launch_with_redis.sh None 3 60 true $(pwd)/src/kmeans.py -n 249999360 -f 1536 -d 100 -c 500 -i 5
 
 # OUTPUTS:
 # - compss-XX.out : Job output file
