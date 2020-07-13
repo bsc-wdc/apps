@@ -59,7 +59,7 @@ public class Conway {
         Block[][] stateB = new Block[widthNumBlocks][lengthNumBlocks];
 
         // Iterations
-        for (int iter = 0; iter < numIterations; ++iter) {
+        for (int iter = 0; iter < numIterations/(aFactor + 1); ++iter) {
             if (DEBUG) {
                 System.out.println("Running iteration " + iter);
             }
