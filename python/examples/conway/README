@@ -1,0 +1,31 @@
+This is the Readme for:
+Simple
+
+[Name]: Simple
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Simple is an application that takes one value and increases it by one unit.
+The purpose of this application is to show how tasks are managed by COMPSs.
+
+
+== Execution instructions ==
+Usage:
+runcompss --lang=python src/simple.py <initValue>
+
+where:
+		 * - initValue: Initial value for counter
+
+
+== Execution Examples ==
+runcompss --lang=python src/simple.py 1
+runcompss src/simple.py 1
+python -m pycompss src/simple.py 1
+
+
+== Build ==
+No build is required
