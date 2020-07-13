@@ -25,8 +25,8 @@ def updateBlock(b00, b01, b02, b10, b11, b12, b20, b21, b22, aFactor, blockSize)
 
     #subStateB
     subStateB = [[Block(ref = b00), Block(ref = b01), Block(ref = b02)],
-                    [Block(ref = b00), Block(ref = b01), Block(ref = b02)],
-                    [Block(ref = b00), Block(ref = b01), Block(ref = b02)]]
+                    [Block(ref = b10), Block(ref = b11), Block(ref = b12)],
+                    [Block(ref = b20), Block(ref = b21), Block(ref = b22)]]
 
     #iterations
     for t in range(aFactor, -1 , -1):
@@ -45,7 +45,7 @@ def updateBlock(b00, b01, b02, b10, b11, b12, b20, b21, b22, aFactor, blockSize)
                         if off_i != 0 or off_j != 0:
                             p = subStateA[(i + off_i) / blockSize][(j + off_j) / blockSize]
                             if p.get((i + off_i) % blockSize, (j + off_j) % blockSize) == 1:
-                                ++count
+                                count = count + 1
 
                 #Rules
                 p = subStateA[i / blockSize][j / blockSize];

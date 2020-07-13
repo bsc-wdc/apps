@@ -117,6 +117,5 @@ def main_program():
     endTime = time()
     print("Total execution time: {} s".format(endTime-startTime))
 
-
 if __name__ == "__main__":
     main_program()

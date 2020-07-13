@@ -4,4 +4,4 @@ runcompss \
 	--summary \
 	 \
 --lang=python \
-	./conway.py 512 512 400 256 79
+	./conway.py 32 32 40 16 9 
