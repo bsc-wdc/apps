@@ -1,87 +1,118 @@
 package conway.blocks;
 
 import conway.blocks.ConwayImpl;
-
 import es.bsc.compss.api.COMPSs;
+
 
 public class Conway {
 
-	private static final double MS_TO_S = 1_000.0;
+    private static final boolean DEBUG = true;
+    private static final double MS_TO_S = 1_000.0;
 
-	protected static int WB;
-	protected static int LB;
-	protected static int B_SIZE;
 
-	private static void usage() {
-		System.out.println("    Usage: simple <W, L, ITERATIONS, B_SIZE>");
-	}
+    private static void usage() {
+        System.out.println("    Usage: simple <W, L, ITERATIONS, B_SIZE, A_FACTOR>");
+    }
 
-	private static Block[][] initialiseBlock() {
-		Block[][] res = new Block[WB][LB];
+    private static Block[][] initMatrix(int widthNumBlocks, int lengthNumBlocks, int blockSize) {
+        Block[][] res = new Block[widthNumBlocks][lengthNumBlocks];
 
-		for (int i = 0; i < WB; ++i) {
-			for (int j = 0; j < LB; ++j) {
-				res[i][j] = new Block(B_SIZE);
-			}
-		}
+        for (int i = 0; i < widthNumBlocks; ++i) {
+            for (int j = 0; j < lengthNumBlocks; ++j) {
+                res[i][j] = ConwayImpl.initBlock(blockSize);
+            }
+        }
 
-		return res;
-	}
+        return res;
+    }
 
-	private static void swap(Block[][] stateA, Block[][] stateB) {
-		Block c;
-		for (int i = 0; i < WB; ++i) {
-			for (int j = 0; j < LB; ++j) {
-				c = stateA[i][j];
-				stateA[i][j] = stateB[i][j];
-				stateB[i][j] = c;
-			}
-		}
-	}
+    public static void main(String[] args) throws Exception {
+        // Parse application arguments
+        if (args.length != 5) {
+            usage();
+            throw new Exception("[ERROR] Incorrect number of parameters");
+        }
+        final int widthElements = Integer.parseInt(args[0]);
+        final int lengthElements = Integer.parseInt(args[1]);
+        final int numIterations = Integer.parseInt(args[2]);
+        final int blockSize = Integer.parseInt(args[3]);
+        final int aFactor = Integer.parseInt(args[4]);
 
-	public static void main(String[] args) throws Exception {
-		if (args.length != 4) {
-			usage();
-			throw new Exception("[ERROR] Incorrect number of parameters");
-		}
+        final int widthNumBlocks = widthElements / blockSize;
+        final int lengthNumBlocks = lengthElements / blockSize;
 
-		int width = Integer.parseInt(args[0]);
-		int length = Integer.parseInt(args[1]);
-		int iterations = Integer.parseInt(args[2]);
-		B_SIZE = Integer.parseInt(args[3]);
+        if (DEBUG) {
+            System.out.println("Application parameters:");
+            System.out.println("- Elements Width: " + widthElements);
+            System.out.println("- Elements Length: " + lengthElements);
+            System.out.println("- Num. Iterations: " + numIterations);
+            System.out.println("- Block size: " + blockSize);
+            System.out.println("- A factor: " + aFactor);
+        }
 
-		WB = width / B_SIZE;
-		LB = length / B_SIZE;
+        // Timing
+        final long startTime = System.currentTimeMillis();
 
-		// Timming
-		final long startTime = System.currentTimeMillis();
+        // Initialize state
+        Block[][] stateA = initMatrix(widthNumBlocks, lengthNumBlocks, blockSize);
+        // Initialize swap state (only structure, blocks will be copied)
+        Block[][] stateB = new Block[widthNumBlocks][lengthNumBlocks];
 
-		// Iteration
-		Block[][] stateA = initialiseBlock();
-		Block[][] stateB = initialiseBlock();
+        // Iterations
+        for (int iter = 0; iter < numIterations; ++iter) {
+            if (DEBUG) {
+                System.out.println("Running iteration " + iter);
+            }
 
-		System.out.println("Iterating: ");
+            // Swap states
+            if (iter != 0) {
+                if (DEBUG) {
+                    System.out.println("- Swapping starting states...");
+                }
+                for (int i = 0; i < widthNumBlocks; ++i) {
+                    for (int j = 0; j < lengthNumBlocks; ++j) {
+                        stateA[i][j] = stateB[i][j];
+                    }
+                }
+            }
 
-		for (int t = 0; t < iterations; ++t) {
-			swap(stateA, stateB);
+            // Update blocks
+            if (DEBUG) {
+                System.out.println("- Updating block states...");
+            }
+            for (int i = 0; i < widthNumBlocks; ++i) {
+                for (int j = 0; j < lengthNumBlocks; ++j) {
+                    // Obtain input blocks
+                    Block[][] supra = new Block[3][3];
+                    for (int off_i = 0; off_i < 3; ++off_i) {
+                        for (int off_j = 0; off_j < 3; ++off_j) {
+                            int iState = (i + off_i - 1 + widthNumBlocks) % widthNumBlocks;
+                            int jState = (j + off_j - 1 + lengthNumBlocks) % lengthNumBlocks;
+                            supra[off_i][off_j] = stateA[iState][jState];
+                        }
+                    }
 
-			// Spawn tasks
-			for (int i = 0; i < WB; ++i) {
-				for (int j = 0; j < LB; ++j) {
-					Zone z = new Zone(stateA, i, j);
-					stateB[i][j] = new Block (ConwayImpl.updateBlock(z));
-				}
-			}
+                    // Call Update
+                    stateB[i][j] = ConwayImpl.updateBlock(supra[0][0], supra[0][1], supra[0][2], supra[1][0],
+                        supra[1][1], supra[1][2], supra[2][0], supra[2][1], supra[2][2], aFactor, blockSize);
+                }
+            }
+        }
 
-			COMPSs.barrier();
-			System.out.print(".");
-		}
-		System.out.println();
+        // Results
+        if (DEBUG) {
+            System.out.println("Results:");
 
-		// Timming
-		final long endTime = System.currentTimeMillis();
-		System.out.println("Iterations ended");
-		System.out.println("Total execution time: " + (endTime - startTime) / MS_TO_S + "s");
-	}
+            for (int i = 0; i < widthNumBlocks; ++i) {
+                for (int j = 0; j < lengthNumBlocks; ++j) {
+                    System.out.println("Block [" + i + "," + j + "] = " + stateB[i][j]);
+                }
+            }
+        }
 
+        // Timing
+        COMPSs.barrier();
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime) / MS_TO_S + "s");
+    }
 }
