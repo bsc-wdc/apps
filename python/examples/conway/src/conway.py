@@ -82,9 +82,7 @@ def update_block(b00, b01, b02, b10, b11, b12, b20, b21, b22, aFactor, blockSize
             sub_state_a[i].append(Block(blockSize))
 
     # sub_state_b
-    sub_state_b = [[Block(ref=b00), Block(ref=b01), Block(ref=b02)],
-                   [Block(ref=b10), Block(ref=b11), Block(ref=b12)],
-                   [Block(ref=b20), Block(ref=b21), Block(ref=b22)]]
+    sub_state_b = [[b00, b01, b02], [b10, b11, b12], [b20, b21, b22]]
 
     # iterations
     for t in range(aFactor, -1, -1):
