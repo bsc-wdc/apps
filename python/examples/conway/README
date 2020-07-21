@@ -1,0 +1,31 @@
+This is the Readme for:
+Conway
+
+[Name]: Conway
+[Contact Person]: support-compss@bsc.es
+[Access Level]: public
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Conway
+
+== Execution instructions ==
+Usage:
+runcompss --lang=python src/conway.py <W, L, num_iterations, block_size, a_factor>
+
+where:
+		* - W : Width
+        * - L : Length
+        * - num_iterations : Number of iterations
+        * - block_size : Number of elements per block
+        * - a_factor : Number of internal iterations per block operation
+
+== Execution Examples ==
+runcompss --lang=python src/conway.py 16 8 5 4 2
+runcompss src/conway.py 16 8 5 4 2
+python -m pycompss src/conway.py 16 8 5 4 2
+
+== Build ==
+No build is required
