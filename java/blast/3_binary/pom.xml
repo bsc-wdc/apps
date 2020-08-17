@@ -14,7 +14,9 @@
 
     <!-- PROJECT INFORMATION -->
     <name>Blast Binary</name>
-    <description>Blast application implemented with binary annotations for the alignment tasks and a binary-tree reduction</description>
+    <description>Blast application implemented with binary annotations for the alignment tasks and a binary-tree
+        reduction
+    </description>
     <url>http://compss.bsc.es/projects/bar/wiki/application_pages/apps/java/blastBinary</url>
     <inceptionYear>2014</inceptionYear>
     <licenses>

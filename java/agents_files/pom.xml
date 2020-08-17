@@ -19,8 +19,8 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
         </license>
     </licenses>
-    
-    
+
+
     <organization>
         <name>BSC</name>
         <url>http://www.bsc.es</url>
@@ -31,18 +31,18 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        
+
         <!-- Project encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        
-        
+
+
         <!-- Dependencies versions -->
         <compss.version>2.6.rc2006</compss.version>
         <jersey.version>2.7</jersey.version>
         <jetty.version>9.2.3.v20140905</jetty.version>
     </properties>
-    
+
     <!-- REPOSITORIES -->
     <repositories>
         <repository>
@@ -59,7 +59,7 @@
             <url>http://compss.bsc.es/artifactory/libs-release</url>
         </repository>
     </repositories>
-    
+
     <!-- DEPENDENCIES -->
     <dependencies>
         <dependency>
@@ -71,8 +71,8 @@
             <groupId>es.bsc.compss</groupId>
             <artifactId>compss-adaptors-agent-rest-commons</artifactId>
             <version>${compss.version}</version>
-        </dependency> 
-        
+        </dependency>
+
         <!-- REST INTERFACE -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -84,7 +84,7 @@
             <artifactId>jetty-servlet</artifactId>
             <version>${jetty.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
@@ -105,7 +105,7 @@
             <artifactId>jersey-media-moxy</artifactId>
             <version>${jersey.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
