@@ -1,23 +1,20 @@
-
 === Applications ===
 
-
+- bioinf_seq_analysis: ?
 - cholesky: Cholesky factorization
+- cnn: ?
+- conway: Conway Game
 - fft: Fast fourier transform
 - gauss_quadrature: Numerical integration
 - genetic_algorithm: Genetic algorithm
-- linear_regression: Linear regression
 - mandelbrot: Mandelbrot Fractal
 - max_norm: Find point with maximum norm
 - mnum: Root finding numerical methods with high precision
+- modelfactors: ?
+- mpi: MPI example
 - neurons: Neuron
-- qr: QR factorization
+- qr: QR factorisation
 - sort: Parallel sort
 - sort_by_key: Sort by key
 - terasort: Terasort
 - wordcount: Count the words appearances
-- cnn: Convolutional neural network 
-- kmeans_redis: Kmeans using Redis (ONLY WORKS WITHOUT REDIS)
-- matmul_redis: Matrix multiplication using Redis (ONLY WORKS WITHOUT REDIS)
-- modelfactors: Paraver traces analysis 
-- ngsa_mini: NGS Anallyzer-Mini for PyCOMPSs 
