@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- GENERAL INFORMATION -->
@@ -28,20 +28,20 @@
     <!-- PROPERTIES -->
     <properties>
         <!-- COMPSs version -->
-	<compss.version>${project.version}</compss.version>
+        <compss.version>${project.version}</compss.version>
 
         <!-- JUNIT Test -->
         <junit.version>4.12</junit.version>
 
-                <!-- Log4j version -->
-                <log4j.version>2.7</log4j.version>
+        <!-- Log4j version -->
+        <log4j.version>2.7</log4j.version>
 
-                <!-- Apache commons versions -->
-                <apache-commons-configuration.version>1.10</apache-commons-configuration.version>
+        <!-- Apache commons versions -->
+        <apache-commons-configuration.version>1.10</apache-commons-configuration.version>
 
-                <!-- Version maven -->
-                <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
-                <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+        <!-- Version maven -->
+        <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
+        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 
         <!-- Maven Plugins -->
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -111,61 +111,61 @@
                 <version>${compss.version}</version>
             </dependency>
 
-                        <!-- JUNIT -->
-                        <dependency>
-                                <groupId>junit</groupId>
-                                <artifactId>junit</artifactId>
-                                <version>${junit.version}</version>
-                                <scope>test</scope>
-                        </dependency>
+            <!-- JUNIT -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
 
-                    <!-- Log4j -->
-                    <dependency>
-                            <groupId>org.apache.logging.log4j</groupId>
-                            <artifactId>log4j-core</artifactId>
-                            <version>${log4j.version}</version>
-                    </dependency>
+            <!-- Log4j -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
 
-                        <!-- Apache commons -->
-                       <dependency>
-                               <groupId>commons-configuration</groupId>
-                               <artifactId>commons-configuration</artifactId>
-                               <version>${apache-commons-configuration.version}</version>
-                       </dependency>
+            <!-- Apache commons -->
+            <dependency>
+                <groupId>commons-configuration</groupId>
+                <artifactId>commons-configuration</artifactId>
+                <version>${apache-commons-configuration.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
 
-        <!-- BUILD -->
-        <build>
-                <pluginManagement>
-                        <plugins>
-                        <!-- POM VERSION UPDATE -->
-                            <plugin>
-                                    <groupId>org.apache.maven.plugins</groupId>
-                                    <artifactId>maven-release-plugin</artifactId>
-                                    <version>${maven-release-plugin.version}</version>
-                            </plugin>
-                            <plugin>
-                                    <groupId>org.codehaus.mojo</groupId>
-                                    <artifactId>versions-maven-plugin</artifactId>
-                                    <version>${versions-maven-plugin.version}</version>
-                            </plugin>
+    <!-- BUILD -->
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- POM VERSION UPDATE -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>${maven-release-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>${versions-maven-plugin.version}</version>
+                </plugin>
 
                 <!-- MAVEN EXEC:EXEC -->
-                                <plugin>
-                                        <groupId>org.codehaus.mojo</groupId>
-                                        <artifactId>exec-maven-plugin</artifactId>
-                                        <version>${maven-exec-plugin.version}</version>
-                                        <configuration>
-                                                <executable>runcompss</executable>
-                                                <skip>true</skip>
-                                        </configuration>
-				</plugin>
-                        </plugins>
-                </pluginManagement>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${maven-exec-plugin.version}</version>
+                    <configuration>
+                        <executable>runcompss</executable>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
 
-        </build>
+    </build>
 
     <!-- SUB-MODULES -->
     <modules>

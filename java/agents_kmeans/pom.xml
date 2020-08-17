@@ -9,7 +9,7 @@
     <version>1.0</version>
 
     <!-- PROJECT INFORMATION -->
-    <name>Kmeans </name>
+    <name>Kmeans</name>
     <description>K-means application</description>
     <url>http://compss.bsc.es/projects/bar/wiki/kmeans</url>
     <inceptionYear>2014</inceptionYear>
@@ -19,8 +19,7 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
         </license>
     </licenses>
-    
-    
+
     <organization>
         <name>BSC</name>
         <url>http://www.bsc.es</url>
@@ -31,16 +30,16 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        
+
         <!-- Project encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        
-        
+
+
         <!-- Dependencies versions -->
         <compss.version>2.6.rc2006</compss.version>
     </properties>
-    
+
     <!-- REPOSITORIES -->
     <repositories>
         <repository>
@@ -57,7 +56,7 @@
             <url>http://compss.bsc.es/artifactory/libs-release</url>
         </repository>
     </repositories>
-    
+
     <!-- DEPENDENCIES -->
     <dependencies>
         <dependency>

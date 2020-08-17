@@ -1,12 +1,7 @@
+# ========== Project ignores =================
+
 # Ignore maven files
 dependency-reduced-pom.xml
-
-# Ignore JAXB files
-compss/runtime/config/xml/monitor/src/main/
-compss/runtime/config/xml/projects/src/main/java/META-INF/
-compss/runtime/config/xml/projects/src/main/java/es/bsc/compss/types/project/jaxb/
-compss/runtime/config/xml/resources/src/main/java/META-INF/
-compss/runtime/config/xml/resources/src/main/java/es/bsc/compss/types/resources/jaxb/
 
 # Ignore eclipse files
 .classpath
@@ -17,8 +12,13 @@ compss/runtime/config/xml/resources/src/main/java/es/bsc/compss/types/resources/
 .idea/
 *.iml
 
-# ========== Java ignores =================
+# Compiled and auto-generated test files
+c/Matmul/matmul_objects/master/
+c/Matmul/matmul_objects/worker/
+c/Matmul/matmul_objects/xml/project_test.xml
 
+
+# ========== Java ignores =================
 
 # Compiled class file
 *.class
@@ -106,7 +106,9 @@ target/
 *compss*.out
 *compss*.err
 
+
 # ========== C & C++ ignores =================
+
 # Prerequisites
 *.d
 

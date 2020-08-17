@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<!-- GENERAL INFORMATION -->
-	<groupId>es.bsc.compss.apps.c</groupId>
-	<artifactId>compss-apps-c</artifactId>
-	<packaging>pom</packaging>
-	<parent>
-		<groupId>es.bsc.compss.apps</groupId>
-		<artifactId>compss-apps-all</artifactId>
-		<version>2.7</version>
-		<relativePath>..</relativePath>
-	</parent>
+    <!-- GENERAL INFORMATION -->
+    <groupId>es.bsc.compss.apps.c</groupId>
+    <artifactId>compss-apps-c</artifactId>
+    <packaging>pom</packaging>
+    <parent>
+        <groupId>es.bsc.compss.apps</groupId>
+        <artifactId>compss-apps-all</artifactId>
+        <version>2.7</version>
+        <relativePath>..</relativePath>
+    </parent>
 
-	<!-- PROJECT INFORMATION -->
-	<name>COMP Superscalar Apps in C</name>
-	<description>Prepared Applications for COMPSs in C</description>
-	<url>http://compss.bsc.es</url>
-	<inceptionYear>2014</inceptionYear>
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-		</license>
-	</licenses>
-	<organization>
-		<name>BSC</name>
-		<url>http://www.bsc.es</url>
-	</organization>
+    <!-- PROJECT INFORMATION -->
+    <name>COMP Superscalar Apps in C</name>
+    <description>Prepared Applications for COMPSs in C</description>
+    <url>http://compss.bsc.es</url>
+    <inceptionYear>2014</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        </license>
+    </licenses>
+    <organization>
+        <name>BSC</name>
+        <url>http://www.bsc.es</url>
+    </organization>
 
 
-	<!-- PROPERTIES -->
-	<properties>
-	</properties>
+    <!-- PROPERTIES -->
+    <properties>
+    </properties>
 
-	<!-- SOURCE CONTROL MANAGEMENT -->
+    <!-- SOURCE CONTROL MANAGEMENT -->
     <scm>
         <connection>scm:git:http://compss.bsc.es/gitlab/bar/apps.git</connection>
         <developerConnection>scm:git:http://compss.bsc.es/gitlab/bar/apps.git</developerConnection>
@@ -50,27 +50,27 @@
         </repository>
     </distributionManagement>
 
-	<!-- BUILD -->
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<version>${maven-exec-plugin.version}</version>
-					<configuration>
-						<executable>runcompss</executable>
-						<skip>true</skip>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+    <!-- BUILD -->
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${maven-exec-plugin.version}</version>
+                    <configuration>
+                        <executable>runcompss</executable>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
-	<!-- SUB-MODULES -->
-	<modules>
-		<module>increment</module>
-		<module>simple</module>
-		<module>Matmul/matmul_objects</module>
-	</modules>
+    <!-- SUB-MODULES -->
+    <modules>
+        <module>increment</module>
+        <module>simple</module>
+        <module>Matmul/matmul_objects</module>
+    </modules>
 </project>
