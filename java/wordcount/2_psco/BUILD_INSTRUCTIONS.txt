@@ -1,0 +1,88 @@
+---------
+build.xml
+---------
+Ant-based build description for the model and apps to be compiled into "bin" directory.
+
+!!!! It must be updated with COMPSs jar lib path, so that WordcountItf can be included again.
+     (look for FIXME tag in file)
+
+
+-------
+Scripts
+-------
+
+Assuming:
+	1. build.xml has been processed: "ant clean; ant"
+	2. dataClay is ready.
+	3. cfgfiles/client.properties has the proper configuration to communicate with LogicModule node 
+	   (which now they are according to dockerized dataClay versio)
+	4. config.properties are set correctly
+	   (which now they are).
+
+
+[registerModel.sh]
+
+	1. Registers accounts: Registrator and Consumer.
+	2. Registers model classes: 
+		TextCollectionIndex (index of TextCollections)
+		TextCollection (used to refer to texts of a DS node)
+		Text (represents a text file)
+		TextStats (wordcount results)
+	3. Registers model contracts to enable the Consumer to download subs of the model.
+	4. Downloads the stubs.
+
+	5. Registers a dataset for the persistent objects.
+	6. Registers a data contract for the Consumer to access it.
+
+
+[testRemoteGenerator.sh]
+
+	Creates a set of Text persistent objects from a remote path.
+
+	./testRemoteGenerator.sh <remotepath> [-t times_per_file] [-debug]
+
+		remotepath: can be either a directory (all included files are considered) or a single file.
+
+		times_per_file : for each file in remotepath, creates times_per_file Text objects.
+					(i.e. With only one file we we can emulate N files)
+
+		debug: for extra debug messaging in DataService nodes.
+
+
+
+[testWordcount.sh]
+
+	Wordcount wrapper for Wordcount app, the number of times that each text must be counted can be provided (default = 1)
+
+	Wordcount app is prepared for COMPSs (with its corresponding WordcountItf).
+
+	./testWordcount.sh [-t <times_per_text>] [-c <config_properties>] [-wcop <wc_id>] [-rtop <rt_id>]
+
+		times_per_text: how many times each text must be wordcounted
+		config_properties: not needed if executed with COMPSs
+		wcop: wordcount operation to be used (1, 2, or 3. Default 3). !!!!!! IMPORTANT FOR COMPSs
+			1 = Stats precreated and executed as IN parameter
+			2 = Stats precreated and executed as INOUT parameter
+			3 = Stats created from Text.wordcount
+		rtop: reduce operation to be used (1, 2. Default 1).          !!!!!! IMPORTANT FOR COMPSs
+			1 = Stats are merged and returned (IN parameter)
+			2 = Stats are merged but not returned (INOUT parameter)
+		-h : help
+
+
+
+
+[testWordcountAsync.sh]
+
+	Alternative to Wordcount app using StorageItf.executeTask (without COMPSs). 
+
+	./testWordcountAsync.sh [-t <times_per_text>] [-h]
+
+		times_per_text: how many times each text must be wordcounted
+		-h : help
+		
+
+[testCleaner.sh]
+
+	Cleans current Text objects in the dataset.
+
