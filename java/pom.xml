@@ -115,6 +115,7 @@
         <module>blast/1_allone</module>
         <module>blast/2_tree</module>
         <module>blast/3_binary</module>
+        <module>conway</module>
         <module>terasort/1_base</module>
         <!-- <module>geneDetection</module> -->
         <module>hmmer/1_obj</module>
