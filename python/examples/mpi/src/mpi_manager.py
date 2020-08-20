@@ -66,7 +66,7 @@ def mpi_example_with_ev():
      scale_by_cu=True)
 @constraint(computing_units="${MPI_TASK_NUM_CUS}")
 @task(returns=1, stdout=FILE_OUT_STDOUT, stderr=FILE_OUT_STDERR)
-def mpi_example_std():
+def mpi_example_std(stdout, stderr):
     pass
 
 
@@ -156,10 +156,10 @@ def main_usage_examples():
     ev = compss_wait_on(ev)
     print("MPI EXIT VALUE = " + str(ev))
     print("MPI STDOUT:")
-    with open(stdout) as f:
+    with compss_open(stdout) as f:
 	print(f.read())
     print("MPI STDERR:")
-    with open(stderr) as f:
+    with compss_open(stderr) as f:
         print(f.read())
 
     if __debug__:
@@ -194,10 +194,11 @@ def main_complex_example():
 
     # Process data
     compact_data = [None for _ in range(n)]
-    final_data = "final_data"
     for i in range(n):
         compact_data[i] = "compact_" + str(i)
         mpi_compact(compact_data[i], *data[i])
+
+    final_data = "final_data"
     mpi_compact(final_data, *compact_data)
 
     # Synchronise
