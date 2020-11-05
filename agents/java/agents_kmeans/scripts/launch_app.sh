@@ -13,4 +13,4 @@ compss_agent_call_operation \
     --master_node="${MASTER_IP}" \
     --master_port="${MASTER_REST_PORT}" \
     --cei=kmeans.KMeansItf \
-    kmeans.KMeans 30000 40 200 20 2 1 2 true 0
+    kmeans.KMeans 2000 2 1 4 20
