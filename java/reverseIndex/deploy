@@ -1,0 +1,14 @@
+#!/bin/bash -e
+  
+  # Obtain parameter
+  source_base_dir=$1
+  target_base_dir=$2
+  
+  # Copy files
+  app_name="reverse"
+
+  cp "${source_base_dir}"/1_base/target/${app_name}.jar "${target_base_dir}"/${app_name}.jar
+  cp -R "${source_base_dir}"/1_base/lib "${target_base_dir}"
+  cp -R "${source_base_dir}"/1_base/test "${target_base_dir}"
+  cp "${source_base_dir}"/execution "${target_base_dir}"/execution
+  cp "${source_base_dir}"/result "${target_base_dir}"/result

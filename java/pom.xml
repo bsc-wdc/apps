@@ -111,24 +111,17 @@
 
     <!-- SUB-MODULES -->
     <modules>
-        <module>reverseIndex/1_base</module>
-        <module>blast/1_allone</module>
-        <module>blast/2_tree</module>
-        <module>blast/3_binary</module>
+        <module>reverseIndex</module>
+        <module>blast</module>
         <module>conway</module>
-        <module>terasort/1_base</module>
-        <!-- <module>geneDetection</module> -->
-        <module>hmmer/1_obj</module>
-        <module>kmeans/1_apps</module>
-        <!-- <module>kmeans/2_apps_psco</module> -->
-        <module>matmul/1_base</module>
-        <module>matmul/2_apps</module>
-        <module>matmul/3_mpi</module>
-        <module>npb/1_base</module>
-        <module>simple/1_base</module>
-        <module>sparseLU/1_base</module>
-        <module>sortByKey/1_base</module>
-        <module>wordcount/1_base</module>
-        <!-- <module>wordcount/2_psco</module> -->
+        <module>terasort</module>
+        <module>hmmer</module>
+        <module>kmeans</module>
+        <module>matmul</module>
+        <module>npb</module>
+        <module>simple</module>
+        <module>sparseLU</module>
+        <module>sortByKey</module>
+        <module>wordcount</module>
     </modules>
 </project>

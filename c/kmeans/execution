@@ -1,0 +1,81 @@
+#!/bin/bash
+
+  # Obtain parameters
+  COMPSs_exec=$1
+  comm=$2
+  runcompss_opts=$3
+  base_app_dir=$4
+  target_log_folder=$5
+  compss_module=$6
+  queue=$7
+  qos=$8
+  #Execution_envs should be the last parameter because it is a list
+  execution_envs=$9
+  if [ "$queue" != 'none' ]; then
+          runcompss_opts="${runcompss_opts} --queue=${queue}"
+  fi
+  if [ "$qos" != 'none' ]; then
+          runcompss_opts="${runcompss_opts} --qos=${qos}"
+  fi
+
+  # Global variables
+  app_name="kmeans"
+
+  #----------------------------------------------------------------------------------
+  # Load COMPSs module + application modules
+
+  module load ${compss_module}
+  # module load xxx
+  module load ompss
+  #----------------------------------------------------------------------------------
+  # Compiling C app
+  echo
+  echo "*** COMPILING C APPLICATION SIMPLE"
+  cd "${base_app_dir}" || exit 1
+  if [ "$BSC_MACHINE" == "mn4" ] || [ "$BSC_MACHINE" == "nord3" ]; then
+	gpus=0
+  	./compile.sh --ompss ${app_name}
+	ev=$?
+  else 
+	gpus=4
+	./compile.sh --ompss --cuda ${app_name}
+	ev=$?
+  fi
+  if [ $ev -ne 0 ]; then
+     echo "[ERROR] Cannot compile C app. See errors above."
+     exit $ev
+  fi
+  #----------------------------------------------------------------------------------
+  # Run application
+  echo
+  echo "*** RUNNING C APPLICATION SIMPLE"
+  for exec_env in ${execution_envs}; do
+    echo "- Running with Environment: ${exec_env}"
+    output_log="${target_log_folder}/${app_name}_c_${exec_env}.outputlog"
+    error_log="${target_log_folder}/${app_name}_c_${exec_env}.errorlog"
+    specific_log_dir="${target_log_folder}/${app_name}_c_${exec_env}"
+    mkdir -p "${specific_log_dir}"
+    master_working_dir=${target_log_folder}
+    if [ "$exec_env" == 'shared_disk' ]; then
+        worker_working_dir=${specific_log_dir}
+    fi
+    if [ "$exec_env" == 'local_disk' ]; then
+        worker_working_dir="local_disk"
+    fi
+    
+    expectedTime=30
+
+    "${COMPSs_exec}" --exec_time=${expectedTime} \
+     --num_nodes=2 \
+     --comm="$comm" \
+     --debug \
+     --persistent_worker_c=true \
+     --gpus_per_node=${gpus} \
+     --worker_in_master_cpus=12 \
+     --master_working_dir=${master_working_dir} \
+     --worker_working_dir=${worker_working_dir} \
+     --base_log_dir=${target_log_folder} \
+     ${runcompss_opts} \
+     --appdir="${base_app_dir}" \
+     "${base_app_dir}/master/${app_name}" -i /gpfs/projects/bsc19/COMPSs_APPS/c/K-means/generator/N200000_K50_d50_0.txt -n 200000 -f 30 -l 4 -k 50 -d 50 -o > >(tee "${output_log}") 2> >(tee "${error_log}" >&2)
+  done

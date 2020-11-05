@@ -7,9 +7,9 @@
     <packaging>jar</packaging>
     <parent>
         <groupId>es.bsc.compss.apps.java</groupId>
-        <artifactId>compss-apps-java</artifactId>
+        <artifactId>compss-apps-java-simple</artifactId>
         <version>2.7</version>
-        <relativePath>../..</relativePath>
+        <relativePath>..</relativePath>
     </parent>
 
     <!-- PROJECT INFORMATION -->
@@ -87,7 +87,7 @@
                         <argument>1</argument>
                     </arguments>
                     <environmentVariables>
-                        <IT_HOME>/opt/COMPSs/Runtime/</IT_HOME>
+                        <COMPSS_HOME>/opt/COMPSs/Runtime/</COMPSS_HOME>
                     </environmentVariables>
                 </configuration>
             </plugin>

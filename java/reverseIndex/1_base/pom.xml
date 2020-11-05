@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>es.bsc.compss.apps.java</groupId>
-        <artifactId>compss-apps-java</artifactId>
+        <artifactId>compss-apps-java-reverseIndex</artifactId>
         <version>2.7</version>
-        <relativePath>../..</relativePath>
+        <relativePath>..</relativePath>
     </parent>
 
     <artifactId>reverse</artifactId>
@@ -39,30 +39,44 @@
     </dependencies>
 
     <build>
+
         <finalName>${project.artifactId}</finalName>
-        <pluginManagement>
-            <plugins>
+	<plugins>
+		  <plugin>
+			  <artifactId>maven-clean-plugin</artifactId>
+			  <version>3.1.0</version>
+    			  <configuration>
+      				<filesets>
+        				<fileset>
+						<directory>${project.basedir}</directory>
+						<includes>
+							<include>reverse.jar</include>
+							<include>lib</include>
+						</includes>
+						
+					</fileset>
+      				</filesets>
+    		</configuration>
+  		</plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
+		    <artifactId>maven-dependency-plugin</artifactId>
+		    <version>3.1.2</version>
                     <executions>
                         <execution>
-                            <id>copy</id>
-                            <phase>validate</phase>
+                            <id>copy-dependencies</id>
+                            <phase>prepare-package</phase>
                             <goals>
                                 <goal>copy-dependencies</goal>
                             </goals>
                             <configuration>
-                                <outputDirectory>${project.basedir}/lib</outputDirectory>
-                                <silent>true</silent>
+                                <outputDirectory>/${project.basedir}/lib</outputDirectory>
                             </configuration>
                         </execution>
                     </executions>
                 </plugin>
-
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>reverseIndex/1_base/pom.xml</version>
                     <executions>
                         <execution>
                             <id>copy-final-jar</id>
@@ -85,6 +99,5 @@
                     </executions>
                 </plugin>
             </plugins>
-        </pluginManagement>
     </build>
 </project>

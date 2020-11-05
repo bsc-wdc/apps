@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-workingDir=gpfs
+workingDir=shared_disk
 numNodes=2
 execTime=60
 

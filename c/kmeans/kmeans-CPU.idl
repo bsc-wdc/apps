@@ -1,0 +1,12 @@
+interface kmeans{
+
+        @Constraints(ComputingUnits=8);
+        float[size] init_Fragment(in int numCoords, in int numObjs, in int size, in File filename, out int[1] ff);
+        
+        @Constraints(ComputingUnits=8);
+        void compute_newCluster(in int objsFrag, in int numCoords, in int numClusters, in int sizeFrags, in int sizeClusters, in int[1] ff, in float[sizeFrags] frag, in float[sizeClusters] clusters, out float[sizeClusters] newClusters, out int[numClusters] newClustersSize);
+
+       void merge_newCluster(in int numCoords, in int numClusters, in int sizeClusters, inout float[sizeClusters] clusters1, in float[sizeClusters] clusters2, inout int[numClusters] newClustersSize1, in int[numClusters] newClustersSize2);
+
+       void update_Clusters(in int numCoords, in int numClusters, in int sizeClusters, inout float[sizeClusters] clusters1, in float[sizeClusters] clusters2, in int[numClusters] newClustersSize2);
+};

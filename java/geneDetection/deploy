@@ -1,0 +1,10 @@
+#!/bin/bash -e
+  
+  # Obtain parameter
+  source_base_dir=$1
+  target_base_dir=$2
+  
+  # Copy files
+  app_name="geneDetection"
+
+  cp "${source_base_dir}"/skip "${target_base_dir}"/skip

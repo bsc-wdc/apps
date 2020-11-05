@@ -1,0 +1,89 @@
+#!/bin/bash
+
+  # Obtain parameters
+  COMPSs_exec=$1
+  comm=$2
+  runcompss_opts=$3
+  base_app_dir=$4
+  target_log_folder=$5
+  compss_module=$6
+  queue=$7
+  qos=$8
+  #Execution_envs should be the last parameter because it is a list
+  execution_envs=$9
+  if [ "$queue" != 'none' ]; then
+          runcompss_opts="${runcompss_opts} --queue=${queue}"
+  fi
+  if [ "$qos" != 'none' ]; then
+          runcompss_opts="${runcompss_opts} --qos=${qos}"
+  fi
+
+
+  # Global variables
+  app_name="mpi_manager.py"
+
+  #----------------------------------------------------------------------------------
+  # Load COMPSs module + application
+  export COMPSS_PYTHON_VERSION=3-ML
+  module load ${compss_module}
+
+  # module load xxx
+
+  # Export variables for workflow
+  export MPI_TASK_NUM_NODES=2
+  export MPI_TASK_NUM_CUS=48
+  export BIN_DIR="${base_app_dir}"/src
+
+  # Compile MPI
+  (
+    cd "${BIN_DIR}"
+    mpicc -o hello_world.x hello_world.c
+    mpicc -o parameters.x parameters.c
+    mpicc -o complex.x complex.c
+  )
+
+  #----------------------------------------------------------------------------------
+  # Run application
+  echo
+  echo "*** RUNNING PYTHON APPLICATION SIMPLE"
+  for exec_env in ${execution_envs}; do
+    if [ "$exec_env" == 'local_disk' ]; then
+        echo "LOCAL DISK no working with MPI"
+        continue
+    fi
+
+    echo "- Running with Environment: ${exec_env}"
+    output_log="${target_log_folder}/${app_name}_${exec_env}.outputlog"
+    error_log="${target_log_folder}/${app_name}_${exec_env}.errorlog"
+    specific_log_dir="${target_log_folder}/${app_name}_${exec_env}"
+    mkdir -p "${specific_log_dir}"
+
+    #Output dir
+    export OUTPUT_DIR="${specific_log_dir}"/output
+    mkdir -p "${OUTPUT_DIR}"
+
+    master_working_dir=${target_log_folder}
+    if [ "$exec_env" == 'shared_disk' ]; then
+        worker_working_dir=${specific_log_dir}
+    fi
+
+    expectedTime=30
+    # shellcheck disable=SC2086
+    "${COMPSs_exec}" --exec_time=${expectedTime} \
+      --num_nodes=3 \
+      --worker_in_master_cpus=0 \
+      --comm="$comm" \
+      --master_working_dir=${master_working_dir} \
+      --worker_working_dir=${worker_working_dir} \
+      --base_log_dir=${target_log_folder} \
+      --debug \
+      --summary \
+      --tracing \
+      ${runcompss_opts} \
+      --lang=python \
+      --pythonpath="${base_app_dir}"/src \
+      \
+      "${base_app_dir}/src/${app_name}" > >(tee "${output_log}") 2> >(tee "${error_log}" >&2)
+
+
+  done

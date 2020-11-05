@@ -157,7 +157,7 @@ def main_usage_examples():
     print("MPI EXIT VALUE = " + str(ev))
     print("MPI STDOUT:")
     with compss_open(stdout) as f:
-	print(f.read())
+        print(f.read())
     print("MPI STDERR:")
     with compss_open(stderr) as f:
         print(f.read())

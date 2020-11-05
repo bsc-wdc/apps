@@ -71,6 +71,6 @@
     <modules>
         <module>increment</module>
         <module>simple</module>
-        <module>Matmul/matmul_objects</module>
+        <module>matmul/matmul_objects</module>
     </modules>
 </project>

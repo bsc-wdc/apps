@@ -91,13 +91,13 @@ public class ReverseImpl {
 	}
 
 	public static void parseDir(String directory, int begin, int end, String result, boolean debug) {
-
+		System.out.println("Inspecting dir: " + directory);
 		long start = System.currentTimeMillis();
-
+   
 		File dir = new File(directory);
 		int i = begin;
 		File[] files = dir.listFiles();
-
+                System.out.println("Found : " + files.length + " files");
 		System.out.println("List time: " + (System.currentTimeMillis() - start));
 
 		try {
@@ -393,7 +393,7 @@ public class ReverseImpl {
 	}
 
 	private static void mapToFile(Map<String, String> m, String f) throws IOException {
-
+		System.out.println("Writting " + m.size() + " entries to file " + f);
 		FileOutputStream fos = new FileOutputStream(new File(f));
 		BufferedOutputStream bos = new BufferedOutputStream(fos);
 
