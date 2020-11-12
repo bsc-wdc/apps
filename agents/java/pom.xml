@@ -4,19 +4,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- GENERAL INFORMATION -->
-    <groupId>es.bsc.compss.apps.java</groupId>
-    <artifactId>compss-apps-java-blast</artifactId>
+    <groupId>es.bsc.compss.apps</groupId>
+    <artifactId>compss-apps-agents-java</artifactId>
     <packaging>pom</packaging>
     <parent>
-        <groupId>es.bsc.compss.apps.java</groupId>
-        <artifactId>compss-apps-java</artifactId>
+        <groupId>es.bsc.compss.apps</groupId>
+        <artifactId>compss-apps-agents</artifactId>
         <version>2.7</version>
         <relativePath>..</relativePath>
     </parent>
 
 
     <!-- PROJECT INFORMATION -->
-    <name>COMP Superscalar BLAST Applications</name>
+    <name>COMP Superscalar Agents' Java Applications</name>
     <description>COMPSs Framework Applications</description>
     <url>http://www.bsc.es</url>
     <inceptionYear>2013</inceptionYear>
@@ -32,8 +32,9 @@
     </organization>
     <!-- SUB-MODULES -->
     <modules>
-        <module>1_allone</module>
-        <module>2_tree</module>
-        <module>3_binary</module>
+        <module>agents_simple_files</module>
+        <module>agents_files</module>
+        <module>agents_kmeans</module>
+        <module>agents_random_forest</module>
     </modules>
 </project>

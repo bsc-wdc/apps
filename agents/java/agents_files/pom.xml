@@ -5,12 +5,16 @@
     <!-- GENERAL INFORMATION -->
     <artifactId>agents_files</artifactId>
     <packaging>jar</packaging>
-    <groupId>es.bsc.compss.agents.apps</groupId>
-    <version>1.0</version>
+    <parent>
+        <groupId>es.bsc.compss.apps</groupId>
+        <artifactId>compss-apps-agents-java</artifactId>
+        <version>2.7</version>
+        <relativePath>..</relativePath>
+    </parent>
 
     <!-- PROJECT INFORMATION -->
-    <name>Agent Files</name>
-    <description>Agents Files application</description>
+    <name>COMP Superscalar Agents' Java file Test Application</name>
+    <description>Files application</description>
     <url></url>
     <inceptionYear>2014</inceptionYear>
     <licenses>
@@ -20,27 +24,12 @@
         </license>
     </licenses>
 
-
     <organization>
         <name>BSC</name>
         <url>http://www.bsc.es</url>
     </organization>
 
     <properties>
-        <!-- Maven compiler -->
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-
-        <!-- Project encoding -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-
-        <!-- Dependencies versions -->
-        <compss.version>2.6.rc2006</compss.version>
-        <jersey.version>2.7</jersey.version>
-        <jetty.version>9.2.3.v20140905</jetty.version>
     </properties>
 
     <!-- REPOSITORIES -->
@@ -67,50 +56,6 @@
             <artifactId>compss-api</artifactId>
             <version>${compss.version}</version>
         </dependency>
-        <dependency>
-            <groupId>es.bsc.compss</groupId>
-            <artifactId>compss-adaptors-agent-rest-commons</artifactId>
-            <version>${compss.version}</version>
-        </dependency>
-
-        <!-- REST INTERFACE -->
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-servlet-core</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <artifactId>jersey-container-jetty-http</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-moxy</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.5</version>
-        </dependency>
     </dependencies>
 
     <!-- BUILD SETTINGS -->
@@ -125,7 +70,44 @@
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
-
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings 
+                only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.apache.maven.plugins
+                                        </groupId>
+                                        <artifactId>
+                                            maven-dependency-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [2.1,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>
+                                                copy-dependencies
+                                            </goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>

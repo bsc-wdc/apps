@@ -169,7 +169,7 @@
 
     <!-- SUB-MODULES -->
     <modules>
-        <!-- BLOCK 1 -->
+        <module>agents</module>
         <module>c</module>
         <!-- <module>python</module> -->
         <module>java</module>
