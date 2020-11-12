@@ -99,13 +99,13 @@ def update_block(b00, b01, b02, b10, b11, b12, b20, b21, b22, aFactor, blockSize
                 for off_i in range(-1, 2):
                     for off_j in range(-1, 2):
                         if off_i != 0 or off_j != 0:
-                            p = sub_state_a[(i + off_i) / blockSize][(j + off_j) / blockSize]
+                            p = sub_state_a[int((i + off_i) / blockSize)][int((j + off_j) / blockSize)]
                             if p.get((i + off_i) % blockSize, (j + off_j) % blockSize) == 1:
                                 count = count + 1
 
                 # Rules
-                p = sub_state_a[i / blockSize][j / blockSize]
-                q = sub_state_b[i / blockSize][j / blockSize]
+                p = sub_state_a[int(i / blockSize)][int(j / blockSize)]
+                q = sub_state_b[int(i / blockSize)][int(j / blockSize)]
                 mod_i = i % blockSize
                 mod_j = j % blockSize
 
@@ -143,8 +143,8 @@ def main_program():
     block_size = int(sys.argv[4])
     a_factor = int(sys.argv[5])
 
-    width_num_blocks = width_elements / block_size
-    length_num_blocks = length_elements / block_size
+    width_num_blocks = int(width_elements / block_size)
+    length_num_blocks = int(length_elements / block_size)
 
     if DEBUG == 1:
         print("Application parameters:")
@@ -163,7 +163,7 @@ def main_program():
     state_b = init_matrix_void(width_num_blocks, length_num_blocks)
 
     # Iterations
-    for iter in range(0, num_iterations / (a_factor + 1)):
+    for iter in range(0, int(num_iterations / (a_factor + 1))):
         if DEBUG == 1:
             print("Running iteration {}".format(iter))
 

@@ -24,7 +24,7 @@
 
   #----------------------------------------------------------------------------------
   # Load COMPSs module + application
-  export COMPSS_PYTHON_VERSION=3-ML
+  export COMPSS_PYTHON_VERSION=2
   module load ${compss_module}
 
   # module load xxx
@@ -62,7 +62,7 @@
       --tracing \
       ${runcompss_opts} \
       --lang=python \
-      --pythonpath="${base_app_dir}" \
+      --pythonpath="${base_app_dir}/src:${base_app_dir}" \
       \
       "${base_app_dir}/src/${app_name}" 1024 "${base_app_dir}/data/spikes.dat" > >(tee "${output_log}") 2> >(tee "${error_log}" >&2)
 

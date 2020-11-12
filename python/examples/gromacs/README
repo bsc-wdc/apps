@@ -1,0 +1,22 @@
+This is the Readme for:
+Gromacs
+
+[Name]: gromancs including container version 
+[Contact Person]: support-compss@bsc.es
+[License Agreement]: Apache2
+[Platform]: COMPSs
+
+[Body]
+== Description ==
+Gromacs pipeline example including the containers version
+
+== Execution instructions ==
+
+* Usage in local machine:
+
+
+* Usage in supercomputer:
+
+
+== Build ==
+No build is required

@@ -20,14 +20,27 @@
 
 
   # Global variables
-  app_name="gen.py"
+  app_name="lysozyme_in_water_singularityExecution.py"
 
   #----------------------------------------------------------------------------------
   # Load COMPSs module + application
-  export COMPSS_PYTHON_VERSION=2
+  export COMPSS_PYTHON_VERSION=3
   module load ${compss_module}
 
   # module load xxx
+  if [ "$BSC_MACHINE" == "mn4" ]; then
+  	export MDCU=48
+	module load singularity/3.5.2
+  elif [ "$BSC_MACHINE" == "nvidia" ]; then
+	export MDCU=16
+       module load singularity/3.5.2
+  elif [ "$BSC_MACHINE" == "nord3" ]; then
+        export MDCU=24
+	module load SINGULARITY/3.2.0
+  elif [ "$BSC_MACHINE" == "p9" ]; then
+        export MDCU=96
+        module load singularity/3.4.1
+  fi	
 
   #----------------------------------------------------------------------------------
   # Run application
@@ -52,19 +65,18 @@
     # shellcheck disable=SC2086
     "${COMPSs_exec}" --exec_time=${expectedTime} \
       --num_nodes=2 \
-      --worker_in_master_cpus=8 \
+      --worker_in_master_cpus=$MDCU \
       --comm="$comm" \
       --master_working_dir=${master_working_dir} \
       --worker_working_dir=${worker_working_dir} \
       --base_log_dir=${target_log_folder} \
       --debug \
       --summary \
-      --tracing \
       ${runcompss_opts} \
       --lang=python \
-      --pythonpath="${base_app_dir}"/src \
+      --pythonpath="${base_app_dir}/src" \
       \
-      "${base_app_dir}/src/${app_name}" 100 100 200 10 > >(tee "${output_log}") 2> >(tee "${error_log}" >&2)
+      "${base_app_dir}/src/${app_name}"  "${base_app_dir}"/config /gpfs/projects/bsc19/COMPSs_DATASETS/gromacs/2m "${base_app_dir}"/output > >(tee "${output_log}") 2> >(tee "${error_log}" >&2)
 
 
   done

@@ -1,8 +1,8 @@
 #!/bin/python
 from os.path import join
 
-BASE_DIR="/path/to/base/dir"
-
+#BASE_DIR="/path/to/base/dir"
+BASE_DIR="/gpfs/projects/bsc19/COMPSs_DATASETS/bioinf_variant_analysis/"
 
 TOOLS_DIR=join(BASE_DIR, "tools")
 IN_DIR=join(BASE_DIR, "data/in")

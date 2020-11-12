@@ -29,9 +29,6 @@
 
   # module load xxx
 
-  # generate dataset
-  ${base_app_dir}/generator/generate_dataset.sh 102400 102400 10 102400 90 4 5 ${target_log_folder}/dataset.txt False
-
   #----------------------------------------------------------------------------------
   # Run application
   echo

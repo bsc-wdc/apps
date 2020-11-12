@@ -24,7 +24,7 @@
 
   #----------------------------------------------------------------------------------
   # Load COMPSs module + application
-  export COMPSS_PYTHON_VERSION=3-ML
+  export COMPSS_PYTHON_VERSION=2
   module load ${compss_module}
 
   # module load xxx

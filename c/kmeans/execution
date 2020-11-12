@@ -77,5 +77,5 @@
      --base_log_dir=${target_log_folder} \
      ${runcompss_opts} \
      --appdir="${base_app_dir}" \
-     "${base_app_dir}/master/${app_name}" -i /gpfs/projects/bsc19/COMPSs_APPS/c/K-means/generator/N200000_K50_d50_0.txt -n 200000 -f 30 -l 4 -k 50 -d 50 -o > >(tee "${output_log}") 2> >(tee "${error_log}" >&2)
+     "${base_app_dir}/master/${app_name}" -i /gpfs/projects/bsc19/COMPSs_APPS/c/K-means/generator/N200000_K50_d50_0.txt -n 200000 -f 2 -l 4 -k 50 -d 50 -o > >(tee "${output_log}") 2> >(tee "${error_log}" >&2)
   done

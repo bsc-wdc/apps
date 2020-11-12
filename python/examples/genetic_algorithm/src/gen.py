@@ -27,7 +27,7 @@ def getParents(population, target, retain=0.2):
     fitInd = [(p, fitness(p, target)) for p in population]
     sortFitInd = sorted(fitInd, key=lambda i: i[1])
     numRetain = int(len(population)*retain)
-    return [sortFitInd[i][0] for i in xrange(numRetain)]
+    return [sortFitInd[i][0] for i in range(numRetain)]
 
 @task(returns=list)
 def mutate(p):
@@ -44,11 +44,11 @@ def crossover(male, female):
 
 @task(returns=list)
 def individual(size):
-    return [random.randint(0, 100) for _ in xrange(size)]
+    return [random.randint(0, 100) for _ in range(size)]
 
 
 def genPopulation(numIndividuals, size):
-    return [individual(size) for _ in xrange(numIndividuals)]
+    return [individual(size) for _ in range(numIndividuals)]
 
 @task(returns=float)
 def fitness(individual, target):
@@ -57,7 +57,7 @@ def fitness(individual, target):
 
 
 def grade(population, target):
-    values = map(fitness, population, [target for _ in xrange(len(population))])
+    values = map(fitness, population, [target for _ in range(len(population))])
     return sum(values)/float(len(population))
 
 
@@ -95,20 +95,18 @@ if __name__ == "__main__":
     x = int(sys.argv[3]) #200  # target
     lifeCycles = int(sys.argv[4])  #10
 
-    print "----PARAMS: \n N: {} \n size: {} \n x: {} \n lifeCycles: {}\n-----------".format(N, size, x, lifeCycles)
+    print ("----PARAMS: \n N: {} \n size: {} \n x: {} \n lifeCycles: {}\n-----------".format(N, size, x, lifeCycles))
     st = time.time()
     p = genPopulation(N, size)
     et = time.time()
-    print "genPopulation: Elapsed Time {} (s)".format(et-st)
+    print ("genPopulation: Elapsed Time {} (s)".format(et-st))
     #fitnessHistory = [grade(p, x)]
-    for i in xrange(lifeCycles):
+    for i in range(lifeCycles):
         p = evolve(p, x)
         #fitnessHistory.append(grade(p,x))
     else:
         p = compss_wait_on(p)
-        print p
         #fitnessHistory = grade(p,x)
-        print "genAlgorithm: Elapsed Time {} (s)".format(time.time()-et)
+        print ("genAlgorithm: Elapsed Time {} (s)".format(time.time()-et))
         #print "final fitness: {}".format(fitnessHistory)
 
-    #print p

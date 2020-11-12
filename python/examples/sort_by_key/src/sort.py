@@ -37,6 +37,7 @@ def chunks(l, n, balanced=False):
 
 def partition_by(self, num_partitions, hash):
     if not hash:
+        print("Num lines: " + str(len(self)) + ", Num patitions: " + str(num_partitions))
         return chunks(self, int(len(self) / num_partitions), True)
     else:
         partitions = [[] for n in range(num_partitions)]

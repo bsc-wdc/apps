@@ -10,7 +10,6 @@ def gatk_best_practices_pipeline():
     ### raw samples
     ubams = read()
 
-    print ubams
     for sample_number, ubam in enumerate(ubams):
         print ("Started processing: ", ubam)
           		
