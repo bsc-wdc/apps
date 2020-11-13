@@ -30,9 +30,9 @@
         <url>http://www.bsc.es</url>
     </organization>
 
-
     <!-- PROPERTIES -->
     <properties>
+	    <skip.exec.install>${env.SKIP_INSTALL}</skip.exec.install>
     </properties>
 
     <!-- SOURCE CONTROL MANAGEMENT -->
@@ -59,8 +59,8 @@
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>${maven-exec-plugin.version}</version>
                     <configuration>
-                        <executable>runcompss</executable>
-                        <skip>true</skip>
+                        <executable>compss_build_app</executable>
+			<skip>${skip.exec.install}</skip>
                     </configuration>
                 </plugin>
             </plugins>

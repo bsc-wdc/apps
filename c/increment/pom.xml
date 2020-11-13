@@ -94,8 +94,8 @@
                             <workingDirectory>${basedir}/</workingDirectory>
                             <arguments>
                                 <argument>increment</argument>
-                            </arguments>
-                            <skip>false</skip>
+			    </arguments>
+			    <skip>${skip.exec.install}</skip>
                         </configuration>
                     </execution>
                 </executions>

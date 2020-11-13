@@ -97,7 +97,7 @@
                             <arguments>
                                 <argument>Matmul</argument>
                             </arguments>
-                            <skip>false</skip>
+                            <skip>${skip.exec.install}</skip>
                         </configuration>
                     </execution>
                 </executions>
