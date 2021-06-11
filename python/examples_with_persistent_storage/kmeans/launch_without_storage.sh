@@ -1,9 +1,7 @@
 #!/bin/bash -e
 
-  export COMPSS_PYTHON_VERSION=3-ML
-  module use /apps/modules/modulefiles/tools/COMPSs/.custom
-  module load TrunkJCB
-  # module load COMPSs/Trunk
+  export COMPSS_PYTHON_VERSION=3
+  module load 2.9.pr
 
   # Retrieve script arguments
   job_dependency=${1:-None}
@@ -47,11 +45,11 @@
     \
     --cpus_per_node="${CPUS_PER_NODE}" \
     --worker_in_master_cpus="${WORKER_IN_MASTER}" \
-    --scheduler=es.bsc.compss.scheduler.fifodata.FIFODataScheduler \
+    --scheduler=es.bsc.compss.scheduler.fifodatalocation.FIFODataLocationScheduler \
     \
     "${workers_flag}" \
     \
-    --worker_working_dir=/gpfs/scratch/bsc19/bsc19234/ \
+    --worker_working_dir=local_disk \
     \
     --constraints=${constraints} \
     --tracing="${tracing}" \
@@ -69,6 +67,7 @@
 
 # Enqueue tests example:
 # ./launch_without_storage.sh None 2 5 false $(pwd)/src/kmeans.py -n 1024 -f 8 -d 2 -c 4
+# ./launch_without_storage.sh None 2 15 false $(pwd)/src/kmeans.py -n 48000 -f 48 -d 20 -c 4
 # ./launch_without_storage.sh None 3 60 true $(pwd)/src/kmeans.py -n 249999360 -f 1536 -d 100 -c 500 -i 5
 
 

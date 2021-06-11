@@ -11,8 +11,6 @@ from sklearn.metrics.pairwise import paired_distances
 
 @task(returns=np.ndarray)
 def partial_sum(fragment, centres):
-    print("Hecuba needs this print: ",fragment.mat)
-    print("Hecuba needs this print: ", fragment.mat.getID())
     partials = np.zeros((centres.shape[0], 2), dtype=object)
     arr = fragment.mat
     close_centres = pairwise_distances(arr, centres).argmin(axis=1)
@@ -162,7 +160,6 @@ def generate_fragment(points, dim, mode, seed, use_storage):
     # Create a Fragment and persist it in our storage.
     if use_storage:
         from storage_model.fragment import Fragment
-        # import os
         ret = Fragment()
         ret.mat = mat  # Overwrite the object content with the generated matrix
         # The seed is different for each fragment, so I use it as id)
