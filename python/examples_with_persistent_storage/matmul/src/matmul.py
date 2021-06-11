@@ -31,7 +31,7 @@ def generate_block(size, num_blocks, seed=0, use_storage=False,
         from storage_model.block import Block
         ret = Block()
         ret.block = b
-        ret.make_persistent()
+        ret.make_persistent(psco_name)
     else:
         from model.block import Block
         ret = Block()
