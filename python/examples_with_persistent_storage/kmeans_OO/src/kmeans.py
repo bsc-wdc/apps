@@ -1,4 +1,5 @@
 import time
+import os
 import numpy as np
 
 from pycompss.api.task import task
@@ -6,6 +7,11 @@ from pycompss.api.api import compss_wait_on
 from pycompss.api.api import compss_barrier
 
 from sklearn.metrics.pairwise import paired_distances
+
+if "NO_STORAGE" in os.environ and os.environ["NO_STORAGE"] == "true":
+    from model.fragment import Fragment
+else:
+    from storage_model.fragment import Fragment
 
 
 @task(returns=dict)
@@ -111,8 +117,6 @@ def parse_arguments():
                         help='Use storage?')
     return parser.parse_args()
 
-
-from storage_model.fragment import Fragment  # this will have to be removed
 
 @task(returns=Fragment)
 def generate_fragment(points, dim, mode, seed, use_storage):
