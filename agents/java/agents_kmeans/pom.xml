@@ -37,7 +37,7 @@
         <repository>
             <id>central</id>
             <name>Central Repository</name>
-            <url>http://central.maven.org/maven2/</url>
+            <url>https://repo.maven.apache.org/maven2/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -45,7 +45,7 @@
         <repository>
             <id>compss-repo</id>
             <name>BSC Workflows and Distributed Computing group</name>
-            <url>http://compss.bsc.es/artifactory/libs-release</url>
+            <url>https://compss.bsc.es/artifactory/libs-release</url>
         </repository>
     </repositories>
 
