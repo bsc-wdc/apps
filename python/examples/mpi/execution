@@ -31,7 +31,7 @@
 
   # Export variables for workflow
   export MPI_TASK_NUM_NODES=2
-  export MPI_TASK_NUM_CUS=48
+  export MPI_TASK_NUM_CUS=4
   export BIN_DIR="${base_app_dir}"/bin
 
   # Compile MPI
