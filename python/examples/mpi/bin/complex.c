@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     if (myid == 0) {
         // Process parameters: Output file, list of input files
         char* output_file = argv[1];
-        int num_input_files = argc - 1;
+        int num_input_files = argc - 2;
 
         // Process input files
         for (int i = 0; i < num_input_files; ++i) {
