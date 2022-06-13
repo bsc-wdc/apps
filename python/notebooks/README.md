@@ -13,12 +13,14 @@ This folder contains PyCOMPSs applications for Jupyter-notebook:
 
 ```
 * cholesky....................... Cholesky decomposition/factorization
-* kmeans......................... KMeans clustering
-* kmeans..........................KMeans Clustering with Redis
+* kmeans/base.................... KMeans clustering
+* kmeans/redis................... KMeans Clustering with Redis
 * linear_regression.............. Linear regression algorithm
 * mandelbrot..................... Mandelbrot generator
 * matmul......................... Matrix multiplication
+* modelfactors................... Model factors
 * pca............................ Principal Component Analysis
+* pi............................. Pi calculation
 * qr............................. QR factorization
 * simple......................... Simple application
 * wordcount...................... Wordcount
