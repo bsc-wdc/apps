@@ -32,8 +32,8 @@
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <NUM_IND> <SIZE_IND> <TARGET> <CYCLES>
+#       ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <NUM_IND> <SIZE_IND> <TARGET> <CYCLES> <GET_FITNESS>
 #
 # Example:
-#       ./launch.sh None 2 5 false 100 100 200 10
+#       ./launch.sh None 2 5 false 100 100 200 10 True
 #

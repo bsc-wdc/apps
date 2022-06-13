@@ -64,7 +64,7 @@
       --lang=python \
       --pythonpath="${base_app_dir}"/src \
       \
-      "${base_app_dir}/src/${app_name}" 100 100 200 10 > >(tee "${output_log}") 2> >(tee "${error_log}" >&2)
+      "${base_app_dir}/src/${app_name}" 100 100 200 10 True > >(tee "${output_log}") 2> >(tee "${error_log}" >&2)
 
 
   done

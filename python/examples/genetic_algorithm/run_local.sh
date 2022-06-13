@@ -17,16 +17,17 @@
     --tracing=$tracing \
     --classpath=$appClasspath \
     --pythonpath=$appPythonpath \
-    --lang=python \
+    --lang=python -g \
+    --python_interpreter=python3 \
     $execFile $@
 
 
 ######################################################
 # APPLICATION EXECUTION EXAMPLE
 # Call:
-#       ./run_local.sh <TRACING> <NUM_IND> <SIZE_IND> <TARGET> <CYCLES>
+#       ./run_local.sh <TRACING> <NUM_IND> <SIZE_IND> <TARGET> <CYCLES> <GET_FITNESS>
 #
 # Example:
-#       ./run_local.sh false 10 10 20 10
+#       ./run_local.sh false 10 10 20 10 True
 
 #
