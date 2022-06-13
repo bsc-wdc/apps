@@ -10,14 +10,14 @@ Genetic Algorithm
 == Description ==
 Genetic algorithm
 
-NOTE: Only for Python 2.x
+NOTE: Only for Python >= 3.6
 
 
 == Execution instructions ==
 
 * Usage in local machine:
 
-    ./run_local.sh <TRACING> <NUM_IND> <SIZE_IND> <TARGET> <CYCLES>
+    ./run_local.sh <TRACING> <NUM_IND> <SIZE_IND> <TARGET> <CYCLES> <GET_FITNESS>
 
     - Where:
         <TRACING>............... Enable or disable tracing ( true | false )
@@ -25,12 +25,13 @@ NOTE: Only for Python 2.x
         <SIZE_IND>.............. Size of individual (len(individual))
         <TARGET>................ Boal sum(sum(individual)-target)/len(populations) aprox 0
         <CYCLES>................ Steps
+        <GET_FITNESS>........... Show fitness value
 
-     - Example: ./run_local.sh false 10 10 20 10
+     - Example: ./run_local.sh false 10 10 20 10 True
 
 * Usage in supercomputer:
 
-    ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <NUM_IND> <SIZE_IND> <TARGET> <CYCLES>
+    ./launch.sh <JOB_DEPENDENCY> <NUM_NODES> <EXECUTION_TIME> <TRACING> <NUM_IND> <SIZE_IND> <TARGET> <CYCLES> <GET_FITNESS>
 
     - Where:
         <JOB_DEPENDENCY>........ Job dependency (run after the given jobid - None if not needed)
@@ -41,8 +42,9 @@ NOTE: Only for Python 2.x
         <SIZE_IND>.............. Size of individual (len(individual))
         <TARGET>................ Boal sum(sum(individual)-target)/len(populations) aprox 0
         <CYCLES>................ Steps
+        <GET_FITNESS>........... Show fitness value
 
-    - Example: ./launch.sh None 2 5 false 100 100 200 10
+    - Example: ./launch.sh None 2 5 false 100 100 200 10 True
 
 == Build ==
 No build is required
