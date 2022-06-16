@@ -39,14 +39,14 @@
     <scm>
         <connection>scm:git:http://compss.bsc.es/gitlab/bar/apps.git</connection>
         <developerConnection>scm:git:http://compss.bsc.es/gitlab/bar/apps.git</developerConnection>
-        <url>http://compss.bsc.es/gitlab/bar/apps.git</url>
+        <url>http://gitlab.bsc.es/wdc/bar/apps.git</url>
     </scm>
 
     <distributionManagement>
         <repository>
             <id>compss-repo</id>
             <name>BSC Workflows and Distributed Computing group</name>
-            <url>http://compss.bsc.es/artifactory/libs-release</url>
+            <url>https://compss.bsc.es/artifactory/libs-release</url>
         </repository>
     </distributionManagement>
 

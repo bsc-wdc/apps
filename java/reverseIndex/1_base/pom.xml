@@ -12,13 +12,6 @@
     <name>reverse</name>
     <packaging>jar</packaging>
     <description>reverse</description>
-    <repositories>
-        <repository>
-            <id>ebi</id>
-            <name>EBI Repository</name>
-            <url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
