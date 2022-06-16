@@ -7,24 +7,9 @@ the implementation of new applications and share them with the rest of users.
 
 ## Datasets
 
-The datasets for the applications can be downloaded at:
-
-* http://compss.bsc.es/repo/datasets
-
-## Datasets
-
 The datasets for the applications can be downloaded using the following link:
 
 * http://compss.bsc.es/repo/datasets
-
-## The Distributed Computing Library (python only)
-
-The Distributed Computing Library (dislib) provides distributed algorithms ready to use as a library. So far, dislib is highly focused on machine learning algorithms, and is greatly inspired by scikit-learn. However, other types of numerical algorithms might be added in the future. The main objective of dislib is to facilitate the execution of big data analytics algorithms in distributed platforms, such as clusters, clouds, and supercomputers.
-
-You can find out more at:
-
-* https://dislib.bsc.es/en/stable/
-
 
 ## Application's Folder Structure
 
@@ -53,10 +38,13 @@ apps
 
 ```
 
+## The Distributed Computing Library (python only)
 
-## Datasets
+The Distributed Computing Library (dislib) provides distributed algorithms ready to use as a library. So far, dislib is highly focused on machine learning algorithms, and is greatly inspired by scikit-learn. However, other types of numerical algorithms might be added in the future. The main objective of dislib is to facilitate the execution of big data analytics algorithms in distributed platforms, such as clusters, clouds, and supercomputers.
 
-The datasets for the applications are on the Capella VM (*bsccs1000.int.bsc.es*). You can access them through SSH or via browser using the link: http://compss.bsc.es/repo/datasets.
+You can find out more at:
+
+* https://dislib.bsc.es/en/stable/
 
 
 ## Warnings and MN instructions
