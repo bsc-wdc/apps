@@ -44,7 +44,7 @@
     specific_log_dir="${target_log_folder}/${app_name}_${exec_env}_0"
     mkdir -p "${specific_log_dir}"
 
-    master_working_dir=${target_log_folder}
+    job_execution_dir=${target_log_folder}
     if [ "$exec_env" == 'shared_disk' ]; then
         worker_working_dir=${specific_log_dir}
     fi
@@ -58,7 +58,7 @@
       --num_nodes=2 \
       --worker_in_master_cpus=8 \
       --comm="$comm" \
-      --master_working_dir=${master_working_dir} \
+      --job_execution_dir=${job_execution_dir} \
       --worker_working_dir=${worker_working_dir} \
       --base_log_dir=${target_log_folder} \
       --debug \

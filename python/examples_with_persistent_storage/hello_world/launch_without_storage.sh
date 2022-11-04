@@ -27,7 +27,7 @@
 
   # Create workers sandbox
   # mkdir -p "${WORK_DIR}/COMPSs_Sandbox"
-  # --master_working_dir="${WORK_DIR}" \
+  # --job_execution_dir="${WORK_DIR}" \
   # --worker_working_dir="${WORK_DIR}/COMPSs_Sandbox" \
 
   CPUS_PER_NODE=48

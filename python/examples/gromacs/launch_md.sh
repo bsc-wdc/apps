@@ -34,7 +34,7 @@
     #--reservation=PATC20-COMPSs \
     --num_nodes=$numNodes \
     --exec_time=$executionTime \
-   # --master_working_dir=. \
+   # --job_execution_dir=. \
     --worker_working_dir=scratch \
     --tracing=$tracing \
     --graph=true \

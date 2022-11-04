@@ -41,7 +41,7 @@
     --node_memory=50000 \
     --worker_in_master_cpus=1 \
     \
-    --master_working_dir="${SCRIPT_DIR}"/../../output/ \
+    --job_execution_dir="${SCRIPT_DIR}"/../../output/ \
     --worker_working_dir=/gpfs/scratch/bsc19/bsc19533 \
     --base_log_dir="${SCRIPT_DIR}"/../../output \
     --classpath="${SCRIPT_DIR}"/../target/agents_files.jar \

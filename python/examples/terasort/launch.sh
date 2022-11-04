@@ -20,7 +20,7 @@
     --job_dependency=$jobDependency \
     --num_nodes=$numNodes \
     --exec_time=$executionTime \
-    --master_working_dir=. \
+    --job_execution_dir=. \
     --worker_working_dir=gpfs \
     --tracing=$tracing \
     --classpath=$appClasspath \

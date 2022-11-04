@@ -21,7 +21,7 @@
     --exec_time=$EXEC_TIME \
     --num_nodes=$NUM_NODES \
     --tasks_per_node=16 \
-    --master_working_dir=. \
+    --job_execution_dir=. \
     --worker_working_dir=scratch \
     --classpath=${scriptDir}/bin/matmul.jar \
     --network=infiniband \

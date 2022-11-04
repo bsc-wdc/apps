@@ -47,7 +47,7 @@ enqueue_compss \
   --worker_in_master_memory=80000 \
   --worker_in_master_cpus=48 \
   --exec_time=$max_time \
-  --master_working_dir=. \
+  --job_execution_dir=. \
   --worker_working_dir=/gpfs/projects/bsc19/COMPSs_APPS/ngsa_mini/ngsa-mini-py/ \
   --tracing=false \
   --classpath=$appClasspath \

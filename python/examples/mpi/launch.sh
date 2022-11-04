@@ -47,7 +47,7 @@
     --summary \
     --log_level="${log_level}" \
     \
-    --master_working_dir="${OUTPUT_DIR}" \
+    --job_execution_dir="${OUTPUT_DIR}" \
     --worker_working_dir="${OUTPUT_DIR}" \
     --base_log_dir="${OUTPUT_DIR}" \
     --pythonpath="${LOCAL_PYTHONPATH}" \
