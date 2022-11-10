@@ -7,7 +7,7 @@
     <groupId>es.bsc.compss.apps</groupId>
     <artifactId>compss-apps-all</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.rc2211</version>
+    <version>3.1</version>
 
     <!-- PROJECT INFORMATION -->
     <name>COMP Superscalar Apps all</name>
