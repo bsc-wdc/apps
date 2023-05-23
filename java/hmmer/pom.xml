@@ -10,7 +10,7 @@
     <parent>
         <groupId>es.bsc.compss.apps.java</groupId>
         <artifactId>compss-apps-java</artifactId>
-        <version>3.2</version>
+        <version>3.2.rc2305</version>
         <relativePath>..</relativePath>
     </parent>
 
