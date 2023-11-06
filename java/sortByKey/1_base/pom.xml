@@ -9,7 +9,7 @@
     <parent>
         <groupId>es.bsc.compss.apps.java</groupId>
         <artifactId>compss-apps-java-sort</artifactId>
-        <version>3.2.rc2311</version>
+        <version>3.3</version>
         <relativePath>..</relativePath>
     </parent>
 
