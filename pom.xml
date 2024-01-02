@@ -31,7 +31,7 @@
 	<compss.version>${project.version}</compss.version>
 
         <!-- JUNIT Test -->
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
 
         <!-- Log4j version -->
         <log4j.version>2.7</log4j.version>
