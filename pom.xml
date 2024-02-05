@@ -34,7 +34,7 @@
         <junit.version>4.12</junit.version>
 
         <!-- Log4j version -->
-        <log4j.version>2.7</log4j.version>
+        <log4j.version>2.12.4</log4j.version>
 
         <!-- Apache commons versions -->
         <apache-commons-configuration.version>1.10</apache-commons-configuration.version>
