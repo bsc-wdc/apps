@@ -2,7 +2,7 @@
 
   # THIS MUST BE INCLUDED INTO .bashrc
   echo "PLEASE, MAKE SURE THAT THE FOLLOWING LINES ARE IN YOUR .bashrc"
-  echo "export COMPSS_PYTHON_VERSION=3-ML"
+  echo "export COMPSS_PYTHON_VERSION=3"
   echo "module use /apps/modules/modulefiles/tools/COMPSs/.custom"
   echo "module load TrunkJCB"
   # echo "module load COMPSs/2.7"
@@ -17,7 +17,7 @@
   #     [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
   # fi
 
-  export COMPSS_PYTHON_VERSION=3-ML
+  export COMPSS_PYTHON_VERSION=3
   module use /apps/modules/modulefiles/tools/COMPSs/.custom
   module load TrunkJCB
   # module load COMPSs/2.7
@@ -72,7 +72,7 @@
     \
     "${workers_flag}" \
     \
-    --worker_working_dir=/gpfs/scratch/bsc19/bsc19234/ \
+    --worker_working_dir=/gpfs/scratch/bsc19/bsc019234/ \
     \
     --constraints=${constraints} \
     --tracing="${tracing}" \

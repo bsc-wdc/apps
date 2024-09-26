@@ -13,7 +13,7 @@ The datasets for the applications can be downloaded using the following link:
 
 ## Application's Folder Structure
 
-Application are grouped by language.  
+Application are grouped by language.
 For instance, the matmul application that has version for PyCOMPSs, COMPSs with files,
 COMPSs using objects and COMPSs with byte arrays and has the following tree directory.
 
@@ -34,7 +34,7 @@ apps
   |    |    | ...
   |- c
   |    |- ...
-  |- datasets				Small datasets for examples
+  |- datasets                      Small datasets for examples
 
 ```
 
