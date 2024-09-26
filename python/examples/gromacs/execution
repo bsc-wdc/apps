@@ -9,38 +9,44 @@
   compss_module=$6
   queue=$7
   qos=$8
+  project_name=$9
   #Execution_envs should be the last parameter because it is a list
-  execution_envs=$9
+  execution_envs=${10}
   if [ "$queue" != 'none' ]; then
-          runcompss_opts="${runcompss_opts} --queue=${queue}"
+    runcompss_opts="${runcompss_opts} --queue=${queue}"
   fi
   if [ "$qos" != 'none' ]; then
-          runcompss_opts="${runcompss_opts} --qos=${qos}"
+    runcompss_opts="${runcompss_opts} --qos=${qos}"
   fi
-
+  if [ "$project_name" != 'none' ]; then
+    runcompss_opts="${runcompss_opts} --project_name=${project_name}"
+  fi
 
   # Global variables
   app_name="lysozyme_in_water_singularityExecution.py"
 
   #----------------------------------------------------------------------------------
   # Load COMPSs module + application
-  export COMPSS_PYTHON_VERSION=3
+
+  export COMPSS_PYTHON_VERSION=3.12.1
   module load ${compss_module}
 
-  # module load xxx
-  if [ "$BSC_MACHINE" == "mn4" ]; then
+  if [ "$BSC_MACHINE" == "mn5" ]; then
+    export MDCU=112
+	  module load singularity/3.11.5
+  elif [ "$BSC_MACHINE" == "mn4" ]; then
   	export MDCU=48
-	module load singularity/3.5.2
+	  module load singularity/3.5.2
   elif [ "$BSC_MACHINE" == "nvidia" ]; then
-	export MDCU=16
-       module load singularity/3.5.2
+	  export MDCU=16
+    module load singularity/3.5.2
   elif [ "$BSC_MACHINE" == "nord3" ]; then
-        export MDCU=24
-	module load SINGULARITY/3.2.0
+    export MDCU=24
+	  module load SINGULARITY/3.2.0
   elif [ "$BSC_MACHINE" == "p9" ]; then
-        export MDCU=96
-        module load singularity/3.4.1
-  fi	
+    export MDCU=96
+    module load singularity/3.4.1
+  fi
 
   #----------------------------------------------------------------------------------
   # Run application

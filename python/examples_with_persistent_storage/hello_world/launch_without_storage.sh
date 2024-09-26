@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-  export COMPSS_PYTHON_VERSION=3-ML
+  export COMPSS_PYTHON_VERSION=3
   module use /apps/modules/modulefiles/tools/COMPSs/.custom
   module load TrunkJCB
   # module load COMPSs/Trunk

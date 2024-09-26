@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-  export COMPSS_PYTHON_VERSION=3-ML
+  export COMPSS_PYTHON_VERSION=3
   module use /apps/modules/modulefiles/tools/COMPSs/.custom
   module load TrunkJCB
   # module load COMPSs/Trunk
@@ -51,7 +51,7 @@
     \
     "${workers_flag}" \
     \
-    --worker_working_dir=/gpfs/scratch/bsc19/bsc19234/ \
+    --worker_working_dir=/gpfs/scratch/bsc19/bsc019234/ \
     \
     --constraints=${constraints} \
     --tracing="${tracing}" \

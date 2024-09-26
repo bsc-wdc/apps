@@ -21,7 +21,7 @@ following lines to your ```.bashrc```:
 
 ```bash
 module load gcc/8.1.0
- export COMPSS_PYTHON_VERSION=3-ML
+ export COMPSS_PYTHON_VERSION=3
  module load COMPSs/2.6.3
  module load mkl/2018.1
  module load impi/2018.1
@@ -36,7 +36,7 @@ In order to use PyCOMPSs with Hecuba in MN4, it is necessary to add the
 following lines to your ```.bashrc```:
 
 ```bash
- export COMPSS_PYTHON_VERSION=3-ML
+ export COMPSS_PYTHON_VERSION=3
  module load COMPSs/2.6.3
  module load hecuba/0.1.3_ML
 ```
