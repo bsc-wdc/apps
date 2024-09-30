@@ -264,7 +264,7 @@ def main(dataset_path, output_path, config_path):
     # Merge all images into a single one
     result = join(output_path, 'POTENTIAL_RESULTS.png')
     merge_results(result_image_paths, result)
-    
+
     compss_barrier()
     elapsed_time = time() - start_time
     print("Elapsed time: %0.10f seconds." % elapsed_time)
@@ -278,4 +278,3 @@ if __name__=='__main__':
     # from pwd ~/gromacs/src/
     # execute the next command
     # runcompss -m -d --python_interpreter=python3 ./lysozyme_in_water_@containerSingularity.py /home/compss/gromacs/config /home/compss/gromacs/dataset /home/compss/gromacs/output
-   
