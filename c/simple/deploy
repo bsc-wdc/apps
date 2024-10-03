@@ -11,4 +11,3 @@
   cp -r "${source_base_dir}"/src "${target_base_dir}"/src
   cp "${source_base_dir}"/*.cc "${target_base_dir}"/
   cp "${source_base_dir}"/*.idl "${target_base_dir}"/
-  cp "${source_base_dir}"/skip "${target_base_dir}"/
