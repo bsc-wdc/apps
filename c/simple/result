@@ -45,7 +45,7 @@
     exit 1
   fi
 
-  #---------------------------------------------------------------------------------- 
+  #----------------------------------------------------------------------------------
   # Compute result status
   init_counter=$(grep "Initial counter value" "${output_file}" | cut -c 26-)
   final_counter_got=$(grep "Final counter value" "${output_file}" | cut -c 24-)

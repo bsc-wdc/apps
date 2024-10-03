@@ -9,13 +9,17 @@
   compss_module=$6
   queue=$7
   qos=$8
+  project_name=$9
   #Execution_envs should be the last parameter because it is a list
-  execution_envs=$9
+  execution_envs=${10}
   if [ "$queue" != 'none' ]; then
-          runcompss_opts="${runcompss_opts} --queue=${queue}"
+    runcompss_opts="${runcompss_opts} --queue=${queue}"
   fi
   if [ "$qos" != 'none' ]; then
-          runcompss_opts="${runcompss_opts} --qos=${qos}"
+    runcompss_opts="${runcompss_opts} --qos=${qos}"
+  fi
+  if [ "$project_name" != 'none' ]; then
+    runcompss_opts="${runcompss_opts} --project_name=${project_name}"
   fi
 
   # Global variables
@@ -27,19 +31,20 @@
   module load ${compss_module}
   module load boost/1.75.0
   module load ompss
+
   #----------------------------------------------------------------------------------
   # Compiling C app
   echo
   echo "*** COMPILING C APPLICATION SIMPLE"
   cd "${base_app_dir}" || exit 1
-  if [ "$BSC_MACHINE" == "mn4" ] || [ "$BSC_MACHINE" == "nord3" ]; then
-	gpus=0
+  if [ "$BSC_MACHINE" == "mn5" ] || [ "$BSC_MACHINE" == "mn4" ] || [ "$BSC_MACHINE" == "nord3" ]; then
+	  gpus=0
   	./compile.sh --ompss ${app_name}
-	ev=$?
-  else 
-	gpus=4
-	./compile.sh --ompss --cuda ${app_name}
-	ev=$?
+	  ev=$?
+  else
+	  gpus=4
+	  ./compile.sh --ompss --cuda ${app_name}
+	  ev=$?
   fi
   if [ $ev -ne 0 ]; then
      echo "[ERROR] Cannot compile C app. See errors above."
@@ -62,7 +67,7 @@
     if [ "$exec_env" == 'local_disk' ]; then
         worker_working_dir="local_disk"
     fi
-    
+
     expectedTime=30
 
     "${COMPSs_exec}" --exec_time=${expectedTime} \
@@ -77,5 +82,6 @@
      --base_log_dir=${target_log_folder} \
      ${runcompss_opts} \
      --appdir="${base_app_dir}" \
+     --cpu_affinity=disabled \
      "${base_app_dir}/master/${app_name}" -i /gpfs/projects/bsc19/COMPSs_APPS/c/K-means/generator/N200000_K50_d50_0.txt -n 200000 -f 2 -l 4 -k 50 -d 50 -o > >(tee "${output_log}") 2> >(tee "${error_log}" >&2)
   done

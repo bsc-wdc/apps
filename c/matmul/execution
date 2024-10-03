@@ -72,6 +72,6 @@
      --base_log_dir=${target_log_folder} \
      ${runcompss_opts} \
      --appdir="${base_app_dir}" \
+     --cpu_affinity=disabled \
      "${base_app_dir}/master/${app_name}" 4 4 1  > >(tee "${output_log}") 2> >(tee "${error_log}" >&2)
-
   done
