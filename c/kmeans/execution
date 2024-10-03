@@ -30,7 +30,7 @@
 
   module load ${compss_module}
   module load boost/1.75.0
-  module load ompss
+  module load ompss-2
 
   #----------------------------------------------------------------------------------
   # Compiling C app
@@ -39,7 +39,7 @@
   cd "${base_app_dir}" || exit 1
   if [ "$BSC_MACHINE" == "mn5" ] || [ "$BSC_MACHINE" == "mn4" ] || [ "$BSC_MACHINE" == "nord3" ]; then
 	  gpus=0
-  	./compile.sh --ompss ${app_name}
+  	./compile.sh --ompss-2 ${app_name}
 	  ev=$?
   else
 	  gpus=4
