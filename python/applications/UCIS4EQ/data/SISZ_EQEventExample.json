@@ -1,0 +1,22 @@
+{
+  "sources": {
+    "INGV": {
+      "data": "/tmp/ucis4eq-aas-listener//temporary_data/INGV.response",
+      "timestamp": 1590650324.044,
+      "query": "http://webservices.ingv.it/fdsnws/event/1/query?format=xml&starttime=2020-05-27T10:00:00&minmag=6.0&orderby=time"
+    }
+  },
+  "uuid": "cabc0e50-a0ec-11ea-9ec0-982cbc26f967",
+  "alerts": [
+    {
+      "agency": "INGV",
+      "time": "2020/05/28, 07:18:44",
+      "latitude": 63.982,
+      "longitude": -20.703,
+      "magnitude": 6.4,
+      "depth": 6300,
+      "elapsedtime": 24621,
+      "description": "SISZ EQ Example"
+    }
+  ]
+}

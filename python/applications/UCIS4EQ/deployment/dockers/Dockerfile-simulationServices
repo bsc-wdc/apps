@@ -1,0 +1,21 @@
+###############################################################################
+###########################    BUILD STAGE     ################################
+###############################################################################
+
+# syntax=docker/dockerfile:experimental
+FROM registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/base:latest AS build
+
+# Install dependencies
+RUN pip install --upgrade setuptools; pip install numpy flask pymongo pyyaml requests; pip install obspy webdavclient3
+
+# Expose the Flask application port
+EXPOSE 5004
+
+# Obtain the SalvusService App
+ADD code/services/simulationService.py /root/services/simulationService.py
+
+# Prepare an script able to start the slip-generator service
+RUN echo "python /root/services/simulationService.py" >> /root/services/start.sh
+ 
+# Start a shell
+ENTRYPOINT ["/bin/bash", "/root/services/start.sh"]

@@ -1,0 +1,141 @@
+###
+###   Docker file for the ucis4eq services
+###
+version: '3'
+
+services:
+  # UCIS4EQ Simulation Generator service  
+  simulation:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/simulation 
+    network_mode: "host"
+    environment:
+      - PYTHONUNBUFFERED=1
+        #- SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
+      - HPC_RUN_PYCOMPSS=$HPC_RUN_PYCOMPSS      
+    volumes:
+      - ./data/DAL.json:/opt/DAL.json
+      - ./data/Sites.json:/opt/Sites.json
+      - ./code/services/simulationService.py:/root/services/simulationService.py
+      - ./code/components/:/usr/local/lib/python3.8/dist-packages/ucis4eq
+      - ./code/components/:/usr/local/lib/python3.7/dist-packages/ucis4eq
+      - ./code/components/:/usr/local/lib/python3.8/site-packages/ucis4eq
+        #- $SSH_AUTH_SOCK:$SSH_AUTH_SOCK  
+      - ~/.ssh/known_hosts:/root/.ssh/known_hosts
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
+        
+  # UCIS4EQ Slip Generator service  
+  slipgen:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/slipgen
+    network_mode: "host"
+    environment:
+      - PYTHONUNBUFFERED=1
+        #- SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
+    volumes:
+      - ./data/DAL.json:/opt/DAL.json
+      - ./data/Sites.json:/opt/Sites.json
+      - ./code/services/slipGenService.py:/root/services/slipGenService.py
+      - ./code/components/:/usr/lib/python3/dist-packages/ucis4eq
+        #- $SSH_AUTH_SOCK:$SSH_AUTH_SOCK
+      - ~/.ssh/known_hosts:/root/.ssh/known_hosts
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa  
+
+  # UCIS4EQ Salvus
+  salvus:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/salvus
+    network_mode: "host"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
+    volumes:
+      - ./data/DAL.json:/opt/DAL.json
+      - ./data/Sites.json:/opt/Sites.json
+      - ./code/services/salvusService.py:/root/services/salvusService.py
+      - ./code/components/:/usr/local/lib/python3.8/site-packages/ucis4eq
+      - $SSH_AUTH_SOCK:$SSH_AUTH_SOCK
+      - ~/.ssh/known_hosts:/root/.ssh/known_hosts
+
+  # UCIS4EQ Micro-services
+  microservices:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/microservices
+    network_mode: "host"
+    environment:
+      - PYTHONUNBUFFERED=1
+        #- SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
+    volumes:
+      - ./data/DAL.json:/opt/DAL.json
+      - ./data/Sites.json:/opt/Sites.json
+      - ./code/components/:/usr/local/lib/python3.8/site-packages/ucis4eq
+      - ./code/services/microServices.py:/root/services/microServices.py
+        #- $SSH_AUTH_SOCK:$SSH_AUTH_SOCK
+      - ~/.ssh/known_hosts:/root/.ssh/known_hosts
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
+    depends_on:
+      - DAL
+
+  # UCIS4EQ Workflow Manager service
+  workflowmanager:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/workflowmanager
+    network_mode: "host"
+    environment:
+      - UCIS4EQ_LOCATION=${LOCATION}
+      - PYTHONUNBUFFERED=1
+      - COMPSS_HTTP_POOL_SIZE=100
+      - HPC_RUN_PYCOMPSS=$HPC_RUN_PYCOMPSS
+        #- SSH_AUTH_SOCK=${SSH_AUTH_SOCK}  
+    volumes:
+      - ./data/project.xml:/opt/project.xml
+      - ./data/resources.xml:/opt/resources.xml
+      - ./data/GCMT_updated_info_ok.json:/opt/GCMT_updated_info_ok.json
+      - ./code/components/:/usr/local/lib/python3.8/site-packages/ucis4eq
+      - ./code/services/workflowManagerService.py:/root/services/workflowManagerService.py
+      - ./data/resources.xml:/usr/local/lib/python3.8/site-packages/pycompss/COMPSs/Runtime/configuration/xml/resources/default_resources.xml
+      - ./data/project.xml:/usr/local/lib/python3.8/site-packages/pycompss/COMPSs/Runtime/configuration/xml/projects/default_project.xml
+      - ./results/pycompss/.COMPSs/:/root/.COMPSs/
+      - ./results/kafka-logs/:/tmp/kafka-logs/  
+      - ./results/zookeeper/:/tmp/zookeeper/
+        #- $SSH_AUTH_SOCK:$SSH_AUTH_SOCK
+      - ~/.ssh/known_hosts:/root/.ssh/known_hosts
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa  
+        
+  # Mongo DataBase 
+  DAL:
+    image: mongo:4.2
+    command: mongod --quiet --logpath /dev/null
+    ports:
+      - "27017:27017"
+    restart: always
+
+  # UCIS4EQ Listener service
+  listener:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/listener
+    network_mode: "host"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./data/DAL.json:/opt/DAL.json
+      - ./data/Sites.json:/opt/Sites.json
+      - ./code/components/:/usr/local/lib/python3.5/site-packages/ucis4eq
+      - ./code/services/listener.py:/root/services/listener.py
+      - ./results/listener:/tmp/ucis4eq-aas-listener/temporary_data/
+    restart: always
+    depends_on:
+      - DAL
+      - workflowmanager
+      - microservices
+
+  # UCIS4EQ Dashboard service
+  dashboard:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/dashboard
+    network_mode: "host"
+    environment:
+      - PYTHONUNBUFFERED=1
+        #- SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
+      - HPC_RUN_PYCOMPSS=$HPC_RUN_PYCOMPSS 
+    volumes:
+      - ./data/DAL.json:/opt/DAL.json
+      - ./code/components/:/usr/local/lib/python3.8/site-packages/ucis4eq
+      - ./code/services/dashboard.py:/root/services/dashboard.py
+      - ./deployment/dockers/dashboard/assets:/root/services/assets
+        #- $SSH_AUTH_SOCK:$SSH_AUTH_SOCK
+      - ~/.ssh/known_hosts:/root/.ssh/known_hosts
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa  

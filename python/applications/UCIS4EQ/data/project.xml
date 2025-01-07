@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project>
+	<Http BaseUrl="http://127.0.0.1:5000/">
+		<LimitOfTasks>1</LimitOfTasks>
+	</Http>
+
+	<Http BaseUrl="http://127.0.0.1:5004/">
+		<LimitOfTasks>10</LimitOfTasks>
+	</Http>
+
+	<Http BaseUrl="http://127.0.0.1:5003/">
+		<LimitOfTasks>1</LimitOfTasks>
+	</Http>
+  
+        <Http BaseUrl="http://127.0.0.1:5002/">
+		<LimitOfTasks>1</LimitOfTasks>
+	</Http>	
+
+	<MasterNode>
+	        <Processor Name="MainProcessor">
+	            <ComputingUnits>4</ComputingUnits>
+	        </Processor>
+	        <Memory>
+	            <Size>16</Size>
+	        </Memory>
+	        <Storage>
+	            <Size>200.0</Size>
+	        </Storage>
+	</MasterNode>
+    <ComputingCluster Name="mn2.bsc.es">
+        <Adaptors>
+            <Adaptor Name="es.bsc.compss.gos.master.GOSAdaptor">
+                <SubmissionSystem>
+                    <Batch>
+                        <Queue>slurm</Queue>
+                        <BatchProperties>
+                            <Port>22</Port>
+                            <MaxExecTime>2</MaxExecTime>
+                            <Reservation>disabled</Reservation>
+                            <QOS>bsc_cs</QOS>
+                            <FileCFG>mn.cfg</FileCFG>
+                        </BatchProperties>
+                    </Batch>
+                </SubmissionSystem>
+            </Adaptor>
+        </Adaptors>
+        <InstallDir>/apps/COMPSs/TrunkJEA/</InstallDir>
+        <WorkingDir>/home/bsc19/bsc19611/gos_tmp/</WorkingDir>
+        <LimitOfTasks>300</LimitOfTasks>
+        <User>bsc19611</User>
+        <Application>
+                <EnvironmentScript>/gpfs/projects/bsc44/earthquake/pycompss/env.sh</EnvironmentScript>
+        </Application>
+        <ClusterNode Name="compute_node_type">
+            <NumberOfNodes>300</NumberOfNodes>
+        </ClusterNode>
+    </ComputingCluster>	
+</Project>

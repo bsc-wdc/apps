@@ -1,0 +1,36 @@
+{
+  "sources": {
+    "INGV": {
+      "data": "/tmp/ucis4eq-aas-listener//temporary_data/INGV.response",
+      "timestamp": 1590650324.044,
+      "query": "http://service.iris.edu/fdsnws/event/1/query?format=xml&starttime=2020-10-30T00:00:00&endtime=2020-10-31T00:00:00&minmag=7.0"
+    }
+  },
+  "uuid": "cabc0e50-a0ec-11ea-9ec0-982cbc26f967",
+  "alerts": [
+    {
+      "agency": "USER EVENT",
+      "time": "2020/10/30, 11:51:27",
+      "latitude": 37.918,
+      "longitude": 26.79,
+      "magnitude": 7,
+      "depth": 21000,
+      "elapsedtime": 24621,
+      "description": "Samos EQ Example",
+      "cmt": {
+        "GCMT": {
+          "strike": 270,
+          "dip": 37,
+          "rake": -95,
+          "initSlip": "Samos_init_slip_np1"
+        },
+        "GCMT_AuxPlane": {
+          "strike": 96,
+          "dip": 53,
+          "rake": -86,
+          "initSlip": "Samos_init_slip_np2"
+        }
+      }
+    }
+  ]
+}

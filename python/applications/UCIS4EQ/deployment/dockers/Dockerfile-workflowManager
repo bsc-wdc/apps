@@ -1,0 +1,73 @@
+###############################################################################
+###########################    BUILD STAGE     ################################
+###############################################################################
+
+# Obtain a clean Ubuntu distribution
+FROM registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/base:latest AS build
+
+# Expose the Flask application port
+EXPOSE 5001
+
+# Install dependencies
+RUN apt-get update && apt-get install -y lzma
+RUN pip install webdavclient3
+
+# Install Dask
+# TODO: Experimental
+#RUN python -m pip install "dask[complete]"
+
+# Install PyCompss
+# ... dependencies
+RUN apt-get update && apt-get install -y openjdk-11-jdk graphviz xdg-utils \
+    libtool automake build-essential python python-dev libpython2.7 python3 \
+    python3-dev libboost-serialization-dev libboost-iostreams-dev  libxml2 \
+    libxml2-dev csh gfortran libgmp3-dev flex bison texinfo python3-pip \
+    libpapi-dev unzip uuid-runtime gawk && \
+    gawk -i inplace 'NR==4{print "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/"}1' ~/.bashrc
+
+# ... Gradle
+RUN wget -nv https://services.gradle.org/distributions/gradle-5.4.1-bin.zip -O /opt/gradle-5.4.1-bin.zip; \
+    unzip /opt/gradle-5.4.1-bin.zip -d /opt; \
+    echo 'export GRADLE_HOME=/opt/gradle-5.4.1' >> ~/.bashrc; \
+    echo 'export PATH=/opt/gradle-5.4.1/bin:$PATH' >> ~/.bashrc
+
+# ... PyCompss
+RUN apt-get update && apt-get install -y git; \
+    export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/; \
+    export GRADLE_HOME=/opt/gradle-5.4.1; \
+    export PATH=/opt/gradle-5.4.1/bin:$PATH; \
+    pip install maven
+
+RUN pip install --no-cache-dir dill kafka-python==2.0.2
+# ... and COMPSs
+#RUN wget http://compss.bsc.es/repo/sc/stable/COMPSs_2.10.1.tar.gz; \
+#    tar -xvzf COMPSs_2.10.1.tar.gz;\
+#RUN wget -nv http://compss.bsc.es/repo/sc/unstable/COMPSs_feature-enable-wildcards-in-binaries.tar.gz;  \
+#    tar -xvzf COMPSs_feature-enable-wildcards-in-binaries.tar.gz;\
+RUN wget -nv http://compss.bsc.es/repo/sc/unstable/COMPSs_fixes_gos.tar.gz && \
+    tar -xvzf COMPSs_fixes_gos.tar.gz && \
+    cd COMPSs && \
+    export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/ && \
+    ./install -T -C /opt/COMPSs/ && \
+    cd .. && \
+    rm -r COMPSs && \
+    rm COMPSs_*.tar.gz
+
+# Make PyCOMPSs to reach right python version
+RUN rm /usr/bin/python3; \
+    ln -s /usr/local/bin/python3.8 /usr/bin/python3
+
+# Obtain the EQ Temporal Workflow Manager Emulator
+ADD code/services/workflowManagerService.py /root/services/workflowManagerService.py
+
+# Prepare an script able to start the service
+#RUN echo "/opt/COMPSs/Runtime/scripts/user/runcompss /root/services/workflowManagerService.py" >> /root/services/start.sh
+#RUN echo "/usr/local/lib/python3.8/site-packages/pycompss/COMPSs/Runtime/scripts/user/runcompss --graph=true --log_level=info -d --project=/opt/project.xml --resources=/opt/resources.xml /root/services/workflowManagerService.py" >> /root/services/start.sh
+RUN echo "/opt/COMPSs/Runtime/scripts/user/runcompss -m --log_level=api --streaming=OBJECTS --project=/opt/project.xml --resources=/opt/resources.xml --comm=es.bsc.compss.gos.master.GOSAdaptor /root/services/workflowManagerService.py" >> /root/services/start.sh
+
+#RUN echo "/usr/local/lib/python3.8/site-packages/pycompss/COMPSs/Runtime/scripts/user/runcompss --graph=true --log_level=info -d /root/services/workflowManagerService.py" >> /root/services/start.sh
+
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
+
+# Entry point
+ENTRYPOINT ["sh", "/root/services/start.sh"]

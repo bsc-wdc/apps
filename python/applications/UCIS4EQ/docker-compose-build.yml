@@ -1,0 +1,78 @@
+###
+###   Docker file for the ucis4eq services
+###
+version: '3.7'
+
+services:
+
+  # UCIS4EQ Base
+  base:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/base
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-base
+
+  # UCIS4EQ Micro services
+  microservices:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/microservices
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-microServices
+    depends_on:
+      - base
+
+  # UCIS4EQ Workflow manager services
+  workflowmanager:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/workflowmanager
+    environment:
+      - COMPSS_HTTP_POOL_SIZE=100
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-workflowManager
+    depends_on:
+      - base
+
+  # UCIS4EQ Dashboard service
+  dashboard:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/dashboard
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-dashboard
+    depends_on:
+      - base
+
+  # UCIS4EQ Listener service
+  listener:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/listener
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-listener
+    depends_on:
+      - base
+
+  # UCIS4EQ Salvus service
+  salvus:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/salvus
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-salvusServices
+    depends_on:
+      - base
+
+  # PyCOMPSs Simulation
+  simulation:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/simulation
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-simulationServices
+    depends_on:
+      - base
+
+  # UCIS4EQ Slipgen service
+  slipgen:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/slipgen
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-slipGen
+
+

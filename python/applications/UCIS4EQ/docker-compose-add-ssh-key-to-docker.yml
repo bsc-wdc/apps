@@ -1,0 +1,117 @@
+###
+###   Docker file for the ucis4eq services
+###
+version: '3.7'
+
+services:
+  # UCIS4EQ Simulation service
+  simulation:
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-credentials
+      args:
+        SSH_PRV: $SSH_PRV
+        PD_USER: $PD_USER
+        IMAGE: registry.gitlab.com/martapien/ucis4eq-containers/simulation
+    network_mode: "host"
+    volumes:
+      - ./data/DAL.json:/opt/DAL.json
+      - ./data/Sites.json:/opt/Sites.json
+    restart: always
+    depends_on:
+      - DAL
+
+  # UCIS4EQ Slip Generator service  
+  slipgen:
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-credentials
+      args:
+        SSH_PRV: $SSH_PRV
+        PD_USER: $PD_USER
+        IMAGE: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/slipgen
+    network_mode: "host"
+    volumes:
+      - ./data/DAL.json:/opt/DAL.json
+      - ./data/Sites.json:/opt/Sites.json
+    restart: always
+    depends_on:
+      - DAL
+
+  # UCIS4EQ Salvus
+  salvus:
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-credentials
+      args:
+        SSH_PRV: $SSH_PRV
+        PD_USER: $PD_USER
+        IMAGE: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/salvus
+    network_mode: "host"
+    volumes:
+      - ./data/DAL.json:/opt/DAL.json
+      - ./data/Sites.json:/opt/Sites.json
+    restart: always
+    depends_on:
+      - DAL
+
+  # UCIS4EQ Micro-services
+  microservices:
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-credentials
+      args:
+        SSH_PRV: $SSH_PRV
+        PD_USER: $PD_USER
+        IMAGE: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/microservices
+    network_mode: "host"
+    volumes:
+      - ./data/DAL.json:/opt/DAL.json
+      - ./data/Sites.json:/opt/Sites.json
+    restart: always
+    depends_on:
+      - DAL
+
+  # UCIS4EQ Workflow Manager service
+  workflowmanager:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/workflowmanager
+    environment:
+      - UCIS4EQ_LOCATION=${LOCATION}
+    volumes:
+      - ./data/project.xml:/opt/project.xml
+      - ./data/resources.xml:/opt/resources.xml
+    network_mode: "host"
+    restart: always
+
+  # Mongo DataBase
+  DAL:
+    image: mongo:4.2
+    command: mongod --quiet --logpath /dev/null
+    ports:
+      - "27017:27017"
+    restart: always
+
+  # UCIS4EQ Listener service
+  listener:
+    image: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/listener
+    network_mode: "host"
+    volumes:
+      - ./data/DAL.json:/opt/DAL.json
+      - ./data/Sites.json:/opt/Sites.json
+    restart: always
+    depends_on:
+      - DAL
+      - microservices
+
+  # UCIS4EQ Dashboard service
+  dashboard:
+    build:
+      context: .
+      dockerfile: deployment/dockers/Dockerfile-credentials
+      args:
+        SSH_PRV: $SSH_PRV
+        PD_USER: $PD_USER
+        IMAGE: registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/dashboard
+    network_mode: "host"
+    volumes:
+      - ./data/DAL.json:/opt/DAL.json

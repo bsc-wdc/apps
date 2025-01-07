@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ResourcesList>
+
+	<Http BaseUrl="http://127.0.0.1:5000/">
+		<ServiceName>microServices</ServiceName>
+	</Http>
+
+	<Http BaseUrl="http://127.0.0.1:5003/">
+		<ServiceName>salvus</ServiceName>
+	</Http>
+  
+  <Http BaseUrl="http://127.0.0.1:5002/">
+		<ServiceName>slipgen</ServiceName>
+	</Http>
+
+  <Http BaseUrl="http://127.0.0.1:5004/">
+		<ServiceName>simulation</ServiceName>
+	</Http>
+<ComputingCluster Name="mn2.bsc.es">
+    <Adaptors>
+        <Adaptor Name="es.bsc.compss.gos.master.GOSAdaptor">
+            <SubmissionSystem>
+                <Batch>
+                    <Queue>slurm</Queue>
+                </Batch>
+            </SubmissionSystem>
+        </Adaptor>
+    </Adaptors>
+    <ClusterNode Name="compute_node_type">
+        <MaxNumNodes>50</MaxNumNodes>
+        <Processor Name="P1">
+            <ComputingUnits>48</ComputingUnits>
+            <Type>CPU</Type>
+        </Processor>
+    </ClusterNode>
+</ComputingCluster>
+
+</ResourcesList>

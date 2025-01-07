@@ -1,0 +1,26 @@
+{
+  "BSC_B2DROP": {
+    "user": "your_b2drop_username",
+    "pass": "your_b2drop",
+    "url": "https://b2drop.bsc.es/remote.php/webdav/",
+    "datamapping": "UCIS4EQ/StaticDataMappingV2_nihad.json",
+    "output": "UCIS4EQ/Runs"
+  },
+  "local": {
+    "path": "/workspace/"
+  },
+  "BSC_DT":{
+    "user": "your_bsc_username",
+    "url": "dt01.bsc.es",
+    "path": "/gpfs/scratch/your_bsc_group/your_bsc_username/Eflows4hpc/Ucis4eq/"
+    "user": "bsc19139",
+    "url": "dt01.bsc.es",
+    "path": "/gpfs/projects/bsc44/earthquake/UCIS4EQ/runs"
+  },
+  "ETH_DAINT":{
+    "user": "your_pd_username",
+    "url": "daint.cscs.ch",
+    "proxy": "your_pd_username@ela.cscs.ch",
+    "path": "/path/on/Piz-Daint/to/UCIS4EQ/"
+  }
+}

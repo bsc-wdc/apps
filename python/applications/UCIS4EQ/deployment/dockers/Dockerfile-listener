@@ -1,0 +1,30 @@
+###############################################################################
+###########################    BUILD STAGE     ################################
+###############################################################################
+
+# Obtain a clean Ubuntu distribution
+#FROM registry.gitlab.com/martapien/ucis4eq-containers/base:latest AS build
+FROM registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/base:latest AS build
+
+# Install Python 3.5.6
+RUN cd /usr/src; wget -nv --show-progress --progress=bar:force:noscroll https://www.python.org/ftp/python/3.5.6/Python-3.5.6.tgz; tar xzf Python-3.5.6.tgz
+RUN cd /usr/src/Python-3.5.6; ./configure --enable-optimizations; make altinstall
+
+# Prepare Python
+RUN rm /usr/local/bin/python; ln -s /usr/local/bin/python3.5 /usr/local/bin/python
+RUN rm /usr/local/bin/pip; ln -s /usr/local/bin/pip3.5 /usr/local/bin/pip
+
+# Install dependencies
+RUN pip install webdavclient3 numpy flask pymongo pyyaml; pip install requests obspy #ucis4eq
+
+# Obtain the EQ events listener service
+ADD code/services/listener.py /root/services/listener.py
+
+# Prepare an script able to start MongoDB and run the events listener service
+RUN echo "python /root/services/listener.py config_events" >> /root/services/start.sh
+
+# Add UCIS4EQ Code
+RUN mv /usr/local/lib/python3.8/site-packages/ucis4eq /usr/local/lib/python3.5/site-packages/ucis4eq
+
+# Entry point
+ENTRYPOINT ["sh", "/root/services/start.sh"]

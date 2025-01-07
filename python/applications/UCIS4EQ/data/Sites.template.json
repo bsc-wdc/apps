@@ -1,0 +1,118 @@
+{ "MN4": {
+    "user": "your_bsc_username",
+    "url": "mn3.bsc.es",
+    "path": "/gpfs/scratch/your_bsc_group/your_bsc_username/Eflows4hpc/Ucis4eq/",
+    "resources": {
+      "SimulationRun": {
+        "name": "urgent___192837",
+        "wtime": 100,
+        "nodes": 7,
+        "tasks-per-node": 48,
+        "qos": "debug",
+        "environment": [
+          "module purge",
+          "module load singularity",
+          "module load ANACONDA/5.0.1",
+          "module load intel impi",
+          "module load COMPSs/3.1",
+          "module load fabric",
+          "export I_MPI_EXTRA_FILESYSTEM_LIST=gpfs",
+          "export I_MPI_EXTRA_FILESYSTEM=on",
+          "source activate salvus",
+          "export SALVUS_BINARY=/gpfs/projects/bsc44/earthquake/UCIS4EQ/Salvus/bin/salvus",
+          "export SALVUS_PROCESSES=288",
+          "export SALVUS_PPN=48",
+          "export SLIPGEN_IMAGE=/gpfs/projects/bsc44/earthquake/UCIS4EQ/slipgen/slipgen.simg"
+        ]
+      },
+
+      "SimulationPost": {
+        "name": "urgent___192837",
+        "wtime": 100,
+        "nodes": 1,
+        "tasks-per-node": 48,
+        "qos": "debug",
+        "environment": [
+          "module purge",
+          "module load ANACONDA/5.0.1",
+          "module load singularity",
+          "module load intel impi",
+          "module use /apps/modules/modulefiles/tools/COMPSs/.custom/",
+          "export COMPSS_PYTHON_VERSION=none",
+          "module load Trunkness",
+          "source activate salvus"
+        ]
+      },
+
+      "SlipGenGP": {
+        "wtime": 360,
+        "nodes": 1,
+        "tasks-per-node": 1,
+        "qos": "debug",
+        "environment": [
+          "module load singularity"
+        ]
+      },
+      "SalvusPrepare": {
+        "wtime": 1800,
+        "nodes": 1,
+        "tasks-per-node": 1,
+        "constraint_optional": "highmem",
+        "qos": "debug",
+        "environment": [
+          "module purge",
+          "module load ANACONDA/5.0.1",
+          "source activate salvus"
+        ]
+      },
+      "SalvusRun": {
+        "wtime": 2400,
+        "wtime": 3600,
+        "nodes": 7,
+        "tasks-per-node": 48,
+        "qos": "debug",
+        "environment":[
+          "module load fabric",
+          "export I_MPI_EXTRA_FILESYSTEM_LIST=gpfs",
+          "export I_MPI_EXTRA_FILESYSTEM=on"
+        ]
+      },
+      "SalvusPost": {
+        "wtime": 1800,
+        "nodes": 1,
+        "tasks-per-node": 48,
+        "qos": "debug",
+        "environment": [
+          "module purge",
+          "module load ANACONDA/5.0.1",
+          "module load intel impi",
+          "source activate salvus"
+        ]
+      },
+      "SalvusPostSwarm": {
+        "wtime": 1800,
+        "nodes": 1,
+        "tasks-per-node": 48,
+        "qos": "debug",
+        "environment": [
+          "module purge",
+          "module load ANACONDA/5.0.1",
+          "module load intel impi",
+          "source activate salvus"
+        ]
+      },
+      "SalvusPlots": {
+        "wtime": 1800,
+        "nodes": 1,
+        "tasks-per-node": 48,
+        "qos": "debug",
+        "environment": [
+          "module purge",
+          "module load ANACONDA/5.0.1",
+          "module load intel impi",
+          "source activate salvus"
+        ]
+      }
+    }
+  }
+}

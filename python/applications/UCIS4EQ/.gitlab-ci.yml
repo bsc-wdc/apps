@@ -1,0 +1,90 @@
+image: docker:19.03.0
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+services:
+  - docker:19.03.0-dind
+
+stages:
+  - publish
+  - build_base
+  - build_components
+  - build_tools
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - docker pull registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/base
+
+pypi_publication:
+  stage: publish
+  variables:
+    TWINE_USERNAME: $TWINE_USER
+    TWINE_PASSWORD: $TWINE_PASS
+  script:
+    - docker run -v "$PWD:/workspace" -e CI_COMMIT_TAG=$CI_COMMIT_TAG -e TWINE_USERNAME=$TWINE_USERNAME -e TWINE_PASSWORD=$TWINE_PASSWORD --entrypoint=bash  registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/base  -c deployment/pypi/configure.sh
+  only:
+    - tags
+
+build_base:
+  stage: build_base
+  dependencies:
+    - pypi_publication
+  script:
+    - docker build -f deployment/dockers/Dockerfile-base -t registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/base .
+    - docker push registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/base
+  only:
+    - tags
+
+build_slipgen:
+  stage: build_tools
+  variables:
+    DOCKER_BUILDKIT: 1
+    COMPOSE_DOCKER_CLI_BUILD: 1
+  script:
+    - docker build --ssh default -f deployment/dockers/Dockerfile-slipGen -t registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/slipgen .
+    - docker push registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/slipgen
+  only:
+    - tags
+
+.build_salvus:
+  stage: build_tools
+  variables:
+    DOCKER_BUILDKIT: 1
+    COMPOSE_DOCKER_CLI_BUILD: 1
+  script:
+    - docker build --ssh default -f deployment/dockers/Dockerfile-salvusServices --build-arg SALVUS_USERNAME=$SALVUS_USERNAME --build-arg SALVUS_PASSWORD=$SALVUS_PASSWORD -t registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/salvus .
+    - docker push registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/salvus
+  only:
+    - tags
+
+build_microservices:
+  stage: build_components
+  dependencies:
+  - build_base
+  script:
+    - docker build -f deployment/dockers/Dockerfile-microServices -t registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/microservices .
+    - docker push registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/microservices
+  only:
+    - tags
+
+build_workflowmanager:
+  stage: build_components
+  dependencies:
+  - build_base
+  script:
+    - docker build -f deployment/dockers/Dockerfile-workflowManager -t registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/workflowmanager .
+    - docker push registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/workflowmanager
+  only:
+    - tags
+
+build_listener:
+  stage: build_components
+  dependencies:
+  - build_base
+  script:
+    - docker build -f deployment/dockers/Dockerfile-listener -t  registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/listener .
+    - docker push  registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/listener
+  only:
+    - tags

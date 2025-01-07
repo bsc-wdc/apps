@@ -1,0 +1,6 @@
+# RESTful server for event treatment
+pymongo==3.6.1
+flask==0.12.2
+
+# FDSN-WebService Listener
+obspy==1.1.1

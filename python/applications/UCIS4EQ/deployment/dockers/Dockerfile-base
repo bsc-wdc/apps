@@ -1,0 +1,52 @@
+###############################################################################
+###########################    BUILD STAGE     ################################
+###############################################################################
+
+# Obtain a clean Ubuntu distribution
+FROM ubuntu:20.04 AS build
+
+# Set the working director
+WORKDIR /workspace
+
+# Import the public key used by the MongoDB package management system
+RUN apt-get update && apt-get install -y gnupg gnupg2 gnupg1 systemd
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+RUN echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" >> /etc/apt/sources.list.d/mongodb-org-4.0.list
+
+# Install some packages
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -qq -y wget vim libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev mongodb-org iputils-ping libffi-dev
+RUN apt-get -qq install mongodb openssh-server curl
+
+# Install Python 3.8.0
+RUN cd /usr/src; wget -nv --show-progress --progress=bar:force:noscroll https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tgz; tar xzf Python-3.8.0.tgz
+RUN cd /usr/src/Python-3.8.0; ./configure --enable-optimizations; make altinstall
+
+# Install Python 3.7.6
+#RUN cd /usr/src; wget -nv --show-progress --progress=bar:force:noscroll https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tgz; tar xzf Python-3.7.6.tgz
+#RUN cd /usr/src/Python-3.7.6; ./configure --enable-optimizations; make altinstall
+
+# Install Python 3.5.6
+#RUN cd /usr/src; wget -nv --show-progress --progress=bar:force:noscroll https://www.python.org/ftp/python/3.5.6/Python-3.5.6.tgz; tar xzf Python-3.5.6.tgz
+#RUN cd /usr/src/Python-3.5.6; ./configure --enable-optimizations; make altinstall
+
+# Install some packages
+#RUN apt-get -qq update && apt-get -qq install -y python3-pip wget vim > /dev/nul
+
+# Prepare Python
+RUN ln -s /usr/local/bin/python3.8 /usr/local/bin/python
+RUN ln -s /usr/local/bin/pip3.8 /usr/local/bin/pip
+
+# Install ucis4eq and dependencies
+RUN pip install --upgrade pip
+
+ARG CACHEBUST=1 
+RUN pip install --upgrade setuptools; pip install numpy flask pymongo pyyaml requests; pip install obspy;
+
+# Prepare the service to run
+RUN mkdir /root/services;
+
+# Add UCIS4EQ Code
+ADD code/components /usr/local/lib/python3.8/site-packages/ucis4eq
+
+# Entry point
+ENTRYPOINT ["echo", "Base Docker image for building UCIS4EQ services"]

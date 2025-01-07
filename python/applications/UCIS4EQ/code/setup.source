@@ -1,0 +1,4 @@
+# This file just configure the environment for running the services
+
+# Add the 'ucis4eq' package to the PYTHONPATH
+export PYTHONPATH=$PWD:$PYTHONPATH

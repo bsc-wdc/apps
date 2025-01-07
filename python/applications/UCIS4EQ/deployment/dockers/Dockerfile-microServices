@@ -1,0 +1,21 @@
+###############################################################################
+###########################    BUILD STAGE     ################################
+###############################################################################
+
+# Start building the Docker image from the UCIS4EQ base image
+FROM registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/base:latest AS build
+
+# Install dependencies
+RUN pip install haversine shapely pandas scikit-learn pickle-mixin xgboost kneed webdavclient3
+
+# Expose the Flask application port
+EXPOSE 5000
+
+# Obtain the microServices App
+ADD code/services/microServices.py /root/services/microServices.py
+
+# Prepare an script able to start the service
+RUN echo "python /root/services/microServices.py" >> /root/services/start.sh
+
+# Entry point
+ENTRYPOINT ["sh", "/root/services/start.sh"]

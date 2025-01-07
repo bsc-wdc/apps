@@ -1,0 +1,29 @@
+{
+  "sources": {
+    "INGV": {
+      "data": "/tmp/ucis4eq-aas-listener//temporary_data/INGV.response",
+      "timestamp": 1590650324.044,
+      "query": "xx"
+    }
+  },
+  "uuid": "MED_SAMOS_IZMIR_EMSC",
+  "alerts": [
+    {
+      "agency": "USER EVENT",
+      "time": "2020/10/30, 11:51:34",
+      "latitude": 37.91,
+      "longitude": 26.84,
+      "magnitude": 7,
+      "depth": 10000,
+      "elapsedtime": 2456,
+      "description": "Samos Izmir manual trigger",
+      "cmt": {
+        "GCMT": {
+          "strike": 270,
+          "dip": 37,
+          "rake": -95
+        }
+      }
+    }
+  ]
+}

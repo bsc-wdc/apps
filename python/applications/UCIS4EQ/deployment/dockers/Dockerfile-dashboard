@@ -1,0 +1,28 @@
+###############################################################################
+###########################    BUILD STAGE     ################################
+###############################################################################
+
+# Obtain a clean Ubuntu distribution
+FROM registry.gitlab.bsc.es/wavephenomenagroup/ucis4eq/base:latest AS build
+
+# Expose the Flask application port
+EXPOSE 6001
+
+ADD  deployment/dockers/dashboard/requirements.txt /root/services/requirements.txt
+
+RUN pip install -r /root/services/requirements.txt
+# Install dependencies
+#RUN pip install pandas dash flask dash_leaflet dash_bootstrap_components
+#RUN pip install webdavclient3 shapely dash-cytoscape reverse_geocoder
+
+# Obtain the dashboard service
+ADD code/services/dashboard.py /root/services/dashboard.py
+
+# Prepare an script able to start the service
+RUN echo "python /root/services/dashboard.py" >> /root/services/start.sh
+
+# Copy and decompress the dashboard minimum files
+ADD deployment/dockers/dashboard/assets /root/services/assets
+
+# Entry point
+ENTRYPOINT ["sh", "/root/services/start.sh"]

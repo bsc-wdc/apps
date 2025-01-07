@@ -1,0 +1,54 @@
+###############################################################################
+###########################    BUILD STAGE     ################################
+###############################################################################
+
+# Obtain a clean python capable distribution
+FROM python:2.7 AS build
+
+# Set the working directory
+WORKDIR /workspace
+
+# Clone the BBP project 
+#RUN git clone https://github.com/SCECcode/bbp.git bbp-19.4.0
+
+# Install BBP
+#RUN cd bbp-19.4.0/setup; ./easy_install_bbp_19.4.0.sh
+
+# Install FFTW3
+RUN apt-get update && apt-get install -y fftw3 libfftw3-dev gfortran
+
+# Install Python dependencies
+RUN pip install numpy matplotlib;
+
+# Install some packages
+RUN apt-get -qq update && apt-get -qq install -y python3-pip wget vim > /dev/null
+
+# Install lapack and blas
+RUN apt-get install -y gfortran libopenblas-dev liblapack-dev
+
+# Install UCIS4EQ
+RUN pip3 install --upgrade setuptools; 
+RUN pip3 install scipy obspy --no-cache-dir
+#RUN pip3 install numpy --no-cache-dir
+RUN pip3 install flask pymongo requests; pip3 install webdavclient3 
+
+# Copy and decompress the slip generator code into /opt directory
+ADD deployment/dockers/thirdparties/gp-slip-gen.tar.gz /opt/
+
+# Prepare the service to run
+RUN mkdir /root/services;
+
+# Expose the Flask application port
+EXPOSE 5002
+
+# Obtain the slipGenService App
+ADD code/services/slipGenService.py /root/services/slipGenService.py
+
+# Prepare an script able to start the slip-generator service
+RUN echo "python3 /root/services/slipGenService.py" >> /root/services/start.sh
+
+# Add UCIS4EQ Code
+ADD code/components /usr/lib/python3/dist-packages/ucis4eq
+
+# Start a shell
+ENTRYPOINT ["/bin/bash", "/root/services/start.sh"]

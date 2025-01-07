@@ -1,0 +1,30 @@
+{
+  "sources": {
+    "GCMT": {
+      "data": "xx",
+      "timestamp": 0,
+      "query": "xx"
+    }
+  },
+  "uuid": "my-test-event-33-statisticalCMT",
+  "alerts": [
+    {
+      "agency": "USER EVENT",
+      "time": "2020/10/30, 11:51:27",
+      "latitude": 37.918,
+      "longitude": 26.79,
+      "magnitude": 7,
+      "depth": 21000,
+      "elapsedtime": 2456,
+      "description": "Samos Izmir manual trigger",
+      "cmt": {
+        "GCMT": {
+          "strike": 270,
+          "dip": 37,
+          "rake": -95
+        }
+      }
+    }
+  ]
+}
+
