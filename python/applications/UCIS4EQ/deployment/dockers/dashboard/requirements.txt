@@ -43,7 +43,7 @@ Shapely==1.8.4
 six==1.16.0
 SQLAlchemy==1.4.36
 tenacity==8.1.0
-urllib3==1.26.9
+urllib3==2.5.0
 webdavclient3==3.14.6
 Werkzeug==2.1.1
 zipp==3.8.0 
