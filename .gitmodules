@@ -1,0 +1,3 @@
+[submodule "python/applications/DT-LAVA-WF"]
+	path = python/applications/DT-LAVA-WF
+	url = https://gitlab.com/louise.cordrie/DT-LAVA-WF/
